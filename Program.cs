@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Gold_Diggerzz
 {
@@ -51,31 +52,27 @@ namespace Gold_Diggerzz
     {
         public static void Main(string[] args)
         {
-            RunGame();
+            // pregame:
+            Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
+            Console.WriteLine("Created initial resource dictionary:");
+            PrintResources(resourceDictionary);
+            
+            RunGame(resourceDictionary);
         }
 
-        public static void RunGame()
+        public static void RunGame(Dictionary<string, int> resourceDictionary)
         {
-            UserMenuOption();
-        }
-
-        public static int UserMenuOption()
-        {
-            Console.WriteLine("Welcome to Gold Diggerzz!");
-            Console.WriteLine("Please select an option:");
-            Console.WriteLine("1 - Dig one day");
-            Console.WriteLine("2 - Go to market");
-            Console.WriteLine("3 - Quit game");
+            int MenuOption = UserMenuOption(resourceDictionary);
             
-            int UserOption = int.Parse(Console.ReadLine());
-            
-            switch (UserOption)
+            switch (MenuOption)
             {
                 case 1:
                     Console.WriteLine("You have chosen to dig one day");
+                    DigOneDay(resourceDictionary);
                     break;
                 case 2:
                     Console.WriteLine("You have chosen to go to the market");
+                    GoToMarket();
                     break;
                 case 3:
                     Console.WriteLine("You have chosen to quit the game");
@@ -84,19 +81,43 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Please enter a valid option");
                     break;
             }
-
-            return UserOption;
-
+            
         }
 
-        public static void DigOneDay()
+        public static int UserMenuOption(Dictionary<string,int> resources)
         {
+            Console.WriteLine("Welcome to Gold Diggerzz!");
+            Console.WriteLine("Please select an option:");
+            Console.WriteLine("1 - Dig one day");
+            Console.WriteLine("2 - Go to market");
+            Console.WriteLine("3 - Quit game");
             
+            int UserOption = int.Parse(Console.ReadLine());
+            return UserOption;
+        }
+
+        public static void DigOneDay(Dictionary<string,int> resources)
+        {
+            Console.WriteLine("You have chosen to dig one day");
+            Console.WriteLine("We are about to dig shit");
+            Console.WriteLine(("Digging..................."));
+            Console.WriteLine("Digging done for the day");
+            
+            Console.WriteLine("Here are the changes to your resources:");
+            int numberOfEmployees = resources["Workers"];
+            int totalWages = numberOfEmployees * 10;
+            int beforeDayDollars = resources["Dollars"];
+            int afterDayDollars = beforeDayDollars - totalWages;
+            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today. You now have ${afterDayDollars}");
+            
+            PrintResources(resources);
+            
+            // update values within the resources dictionary
         }
         
         public static void GoToMarket()
         {
-            
+            Console.WriteLine("You've chosen to go to the market");
         }
         
         // passed in the variable of the resource to change, followed by the new value
@@ -105,11 +126,34 @@ namespace Gold_Diggerzz
             
         }
         
-        public static string[,] CreateNewResourceArray()
+        public static Dictionary<string,int> CreateResourceDictionary()
         {
-            string[,] resourceArray = new string[5, 5];
-            // going along the x axis
-            return resourceArray;
+            /*
+             * commands i can use:
+             * resources.Add("Rubies", 0);
+             * resources.Remove("Rubies");
+             * resources["Rubies"] = 0;
+             * resources["Rubies"] += 1;
+             */
+            
+            Dictionary<string, int> resources = new Dictionary<string, int>()
+            {
+                {"Gold", 0},
+                {"Diamonds", 0},
+                {"Dollars", 100},
+                {"Workers", 1},
+                {"Worker Level", 1}
+            };
+            return resources;
+        }
+        
+        public static void PrintResources(Dictionary<string,int> resources)
+        {
+            Console.WriteLine("Here are your resources.\nAre you a gold digger yet?");
+            foreach (KeyValuePair<string, int> resource in resources)
+            {
+                Console.WriteLine($"You have {resource.Value} {resource.Key}");
+            }
         }
 
     }
