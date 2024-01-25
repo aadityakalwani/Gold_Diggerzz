@@ -112,7 +112,7 @@ namespace Gold_Diggerzz
             
             PrintResources(resources);
             
-            // update values within the resources dictionary
+            // update values within the resources dictionary ok
         }
         
         public static void GoToMarket()
