@@ -24,9 +24,33 @@ namespace Gold_Diggerzz
         
         // "Thread.Sleep(3000);" = time.sleep(3)
         
-        // add in functionality to check if you're in debt and if you are,
-        // the government will come and sell all your resources for 50% the rate
-        
+        private static bool CheckIfInDebt(Dictionary<string,int> resources)
+        {
+            bool inDebt = false;
+            if (resources["Dollars"] < 0)
+            {
+                inDebt = true;
+                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\n");
+                Console.WriteLine("You are in debt\n");
+                Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
+                Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
+                Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
+                
+                Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
+                
+                Console.WriteLine("After bossman stole your resources, you now have:");
+
+                resources["Dollars"] += resources["Gold"] * 6;
+                resources["Dollars"] += resources["Diamonds"] * 30; 
+                
+                resources["Gold"] = 0;
+                resources["Diamonds"] = 0;
+                
+                PrintResources(resources);
+            }
+
+            return inDebt;
+        }
         
         private static void Main(string[] args)
         {
@@ -51,7 +75,11 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen to dig one day");
-                        DigOneDay(resourceDictionary);
+                        bool notAllowedToDig = CheckIfInDebt(resourceDictionary);
+                        if (notAllowedToDig == false)
+                        {
+                            DigOneDay(resourceDictionary);
+                        }
                         break;
                     case 2:
                         GoToMarket(resourceDictionary);
@@ -181,7 +209,7 @@ namespace Gold_Diggerzz
                         }
                         else
                         {
-                            resources["Gold"] -= diamondsToSell;
+                            resources["Diamonds"] -= diamondsToSell;
                             resources["Dollars"] += diamondsToSell * 75;
                         }
 
@@ -225,6 +253,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
+            Console.WriteLine("");
         }
 
         private static void QuitGame(Dictionary<string,int> resources)
@@ -234,7 +263,6 @@ namespace Gold_Diggerzz
             PrintResources(resources);
             Console.WriteLine("\nGoodbye!");
         }
-
-
+        
     }
 }
