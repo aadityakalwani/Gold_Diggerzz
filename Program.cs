@@ -73,13 +73,12 @@ namespace Gold_Diggerzz
             
                 switch (menuOption)
                 {
+                    case 0:
+                        Console.WriteLine("You are in debt, you cannot do anything until you pay off your debt");
+                        break;
                     case 1:
                         Console.WriteLine("You have chosen to dig one day");
-                        bool notAllowedToDig = CheckIfInDebt(resourceDictionary);
-                        if (notAllowedToDig == false)
-                        {
-                            DigOneDay(resourceDictionary);
-                        }
+                        DigOneDay(resourceDictionary);
                         break;
                     case 2:
                         GoToMarket(resourceDictionary);
@@ -100,16 +99,21 @@ namespace Gold_Diggerzz
 
         private static int UserMenuOption(Dictionary<string,int> resources)
         {
-            Console.WriteLine("Please select an option:");
-            Console.WriteLine("_________________________");
-            Console.WriteLine("1 - Dig one day");
-            Console.WriteLine("2 - Go to market");
-            Console.WriteLine("3 - Quit game");
-            Console.WriteLine("4 - Print game mechanics");
+            if (CheckIfInDebt(resources) == false)
+            {
+                Console.WriteLine("Please select an option:");
+                Console.WriteLine("_________________________");
+                Console.WriteLine("1 - Dig one day");
+                Console.WriteLine("2 - Go to market");
+                Console.WriteLine("3 - Print game mechanics");
+                Console.WriteLine("4 - Quit game");
             
-            int userOption = int.Parse(Console.ReadLine());
-            Console.Clear();
-            return userOption;
+                int userOption = int.Parse(Console.ReadLine());
+                Console.Clear();
+                return userOption;
+            }
+
+            return 0;
         }
 
         private static void PrintRules()
