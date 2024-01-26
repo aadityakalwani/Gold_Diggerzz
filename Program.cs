@@ -48,6 +48,7 @@ namespace Gold_Diggerzz
      * trouble is i have to pass in arguments and parameters for every single item?
      * or i can just pass in the "item to change" and its "new value"
      */
+    
 
     {
         public static void Main(string[] args)
@@ -98,29 +99,53 @@ namespace Gold_Diggerzz
 
         public static void DigOneDay(Dictionary<string,int> resources)
         {
-            Console.WriteLine("You have chosen to dig one day");
             Console.WriteLine("We are about to dig shit");
-            Console.WriteLine(("Digging..................."));
+            Console.WriteLine("\nDigging...................\n");
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
+            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
+            
             int numberOfEmployees = resources["Workers"];
             int totalWages = numberOfEmployees * 10;
-            int beforeDayDollars = resources["Dollars"];
-            int afterDayDollars = beforeDayDollars - totalWages;
-            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today. You now have ${afterDayDollars}");
+            
+            // 80% chance of finding gold
+            Random random = new Random();
+            int finalRandom = random.Next(0, 10);
+
+            bool goldFound = false;
+
+            if (finalRandom < 8)
+            {
+                goldFound = true;
+            }
+            
+            // update values within the resources dictionary
+            if (goldFound)
+            {
+                Console.WriteLine("OMG bro you found gold \ud83d\udc8e");
+                resources["Gold"] += 1;
+            }
+            resources["Dollars"] -= totalWages;
+            
+            
+            
+            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today." +
+                              $"You now have ${resources["Dollars"]}");
+            
             
             PrintResources(resources);
-            
-            // update values within the resources dictionary ok
         }
         
         public static void GoToMarket()
         {
             Console.WriteLine("You've chosen to go to the market");
+            // some code goes here
         }
         
         // passed in the variable of the resource to change, followed by the new value
+        // icl tho theres no need for this i can just update it when i need to on the fly
+        // because realistically all subroutines already have the resourceDict passed in already
         public static void ManageResources()
         {
             
@@ -149,11 +174,19 @@ namespace Gold_Diggerzz
         
         public static void PrintResources(Dictionary<string,int> resources)
         {
-            Console.WriteLine("Here are your resources.\nAre you a gold digger yet?");
+            Console.WriteLine("\nHere are your resources.\nAre you a gold digger yet?\n");
             foreach (KeyValuePair<string, int> resource in resources)
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
+        }
+
+        // subroutine i can use to get the daily rates of things liek employee wage
+        public static int GetRates()
+        {
+            int EmployeeWage = 10;
+
+            return EmployeeWage;
         }
 
     }
