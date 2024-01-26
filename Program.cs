@@ -7,9 +7,7 @@ namespace Gold_Diggerzz
 
     {
         
-        # region idea dumping ground
-        
-        /*
+        /* idea dumping ground
          * This is my digging simulator guys
          * initial ideas:
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
@@ -23,18 +21,7 @@ namespace Gold_Diggerzz
          * (like prestige in all the idle miner games i played)
          */
         
-        /*
-         * basic functionality first:
-         * menu option:
-         * 1 - dig one day
-         * simulates 1 day's worth of digging
-         * 2 - go to market
-         * later, the ability to trade in the market
-         */
-        
-        # endregion
-        
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // pregame:
             Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
@@ -46,7 +33,7 @@ namespace Gold_Diggerzz
             RunGame(resourceDictionary);
         }
 
-        public static void RunGame(Dictionary<string, int> resourceDictionary)
+        private static void RunGame(Dictionary<string, int> resourceDictionary)
         {
             int menuOption;
             do
@@ -76,7 +63,7 @@ namespace Gold_Diggerzz
             
         }
 
-        public static int UserMenuOption(Dictionary<string,int> resources)
+        private static int UserMenuOption(Dictionary<string,int> resources)
         {
             Console.WriteLine("Please select an option:");
             Console.WriteLine("_________________________");
@@ -90,7 +77,7 @@ namespace Gold_Diggerzz
             return userOption;
         }
 
-        public static void PrintRules()
+        private static void PrintRules()
         {
             Console.WriteLine("Each employee of yours charges $10 in wages for the day");
             Console.WriteLine("Each day, there is an 80% chance of finding gold");
@@ -99,7 +86,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
         }
 
-        public static void DigOneDay(Dictionary<string,int> resources)
+        private static void DigOneDay(Dictionary<string,int> resources)
         {
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
@@ -138,7 +125,7 @@ namespace Gold_Diggerzz
             PrintResources(resources);
         }
         
-        public static void GoToMarket(Dictionary<string, int> resources)
+        private static void GoToMarket(Dictionary<string, int> resources)
         {
             Console.WriteLine("You've chosen to go to the market");
             Console.WriteLine("Here are the rates for today:");
@@ -203,7 +190,7 @@ namespace Gold_Diggerzz
             
         }
         
-        public static Dictionary<string,int> CreateResourceDictionary()
+        private static Dictionary<string,int> CreateResourceDictionary()
         {
             /*
              * commands i can use:
@@ -224,7 +211,7 @@ namespace Gold_Diggerzz
             return resources;
         }
         
-        public static void PrintResources(Dictionary<string,int> resources)
+        private static void PrintResources(Dictionary<string,int> resources)
         {
             Console.WriteLine("\nHere are your resources.\n");
             foreach (KeyValuePair<string, int> resource in resources)
@@ -233,7 +220,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        public static void QuitGame(Dictionary<string,int> resources)
+        private static void QuitGame(Dictionary<string,int> resources)
         {
             Console.WriteLine("You have chosen to quit the game");
             Console.WriteLine($"Your final stats were:");
