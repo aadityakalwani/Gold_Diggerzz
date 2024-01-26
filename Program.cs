@@ -60,7 +60,7 @@ namespace Gold_Diggerzz
                         DigOneDay(resourceDictionary);
                         break;
                     case 2:
-                        GoToMarket();
+                        GoToMarket(resourceDictionary);
                         break;
                     case 3:
                         PrintRules();
@@ -94,46 +94,113 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Each employee of yours charges $10 in wages for the day");
             Console.WriteLine("Each day, there is an 80% chance of finding gold");
+            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
+            Console.WriteLine("Each day, there is a 20% chance of finding diamonds");
+            Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
         }
 
         public static void DigOneDay(Dictionary<string,int> resources)
         {
-            Console.WriteLine("We are about to di, let us cook");
+            Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
             
-            
             int numberOfEmployees = resources["Workers"];
             int totalWages = numberOfEmployees * 10;
             
-            // 80% chance of finding gold
+            // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
             int finalRandom = random.Next(0, 10);
             
+            // 80% chance of finding gold
             bool goldFound = finalRandom < 8;
             
+            // 20% chance of finding diamonds
+            bool diamondFound = finalRandom < 2;
+            
             // update values within the resources dictionary
+            if (diamondFound)
+            {
+                Console.WriteLine("OMG bro you found diamond \ud83d\udc8e");
+                resources["Diamonds"] += 1;
+            }
+            
             if (goldFound)
             {
-                Console.WriteLine("OMG bro you found gold \ud83d\udc8e");
+                Console.WriteLine("OMG bro you found gold \ud83c\udf1f");
                 resources["Gold"] += 1;
-                
             }
             resources["Dollars"] -= totalWages;
-            
-            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today." +
-                              $"You now have ${resources["Dollars"]}");
-            
+
+            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today.");
             PrintResources(resources);
         }
         
-        public static void GoToMarket()
+        public static void GoToMarket(Dictionary<string, int> resources)
         {
             Console.WriteLine("You've chosen to go to the market");
-            // some code goes here
-            // probably a fat switch case with all the options
+            Console.WriteLine("Here are the rates for today:");
+            Console.WriteLine("1 gold = 15 dollars");
+            Console.WriteLine("1 diamond = 75 dollars");
+
+            int marketOption;
+            do
+            {
+                Console.WriteLine("Here is the menu for the market:");
+                Console.WriteLine("1 - Sell Gold for dollars");
+                Console.WriteLine("2 - Sell Diamonds for dollars");
+                Console.WriteLine("3 - Hire More Employees");
+                Console.WriteLine("4 - Exit market");
+
+                marketOption = int.Parse(Console.ReadLine());
+
+                switch (marketOption)
+                {
+                    case 1:
+                        Console.WriteLine("You have chosen to sell gold for dollars");
+                        Console.WriteLine($"How much gold do you want to sell? You have {resources["Gold"]} gold");
+                        int goldToSell = int.Parse(Console.ReadLine());
+                        if (goldToSell > resources["Gold"])
+                        {
+                            Console.WriteLine("You don't have enough gold to sell that much");
+                        }
+                        else
+                        {
+                            resources["Gold"] -= goldToSell;
+                            resources["Dollars"] += goldToSell * 15;
+                        }
+
+                        Console.WriteLine("Here are your update resources:");
+                        PrintResources(resources);
+
+                        break;
+                    case 2:
+                        Console.WriteLine("Your have chosen to sell diamonds for dollars");
+                        Console.WriteLine(
+                            $"How many diamonds do you want to sell? You have {resources["Diamonds"]} diamonds");
+                        int diamondsToSell = int.Parse(Console.ReadLine());
+                        if (diamondsToSell > resources["Diamonds"])
+                        {
+                            Console.WriteLine("You don't have enough gold to sell that much");
+                        }
+                        else
+                        {
+                            resources["Gold"] -= diamondsToSell;
+                            resources["Dollars"] += diamondsToSell * 75;
+                        }
+
+                        Console.WriteLine("Here are your update resources:");
+                        PrintResources(resources);
+
+                        break;
+                    case 4:
+                        Console.WriteLine("Thanks for coming to the market! Goodbye");
+                        break;
+                }
+            } while (marketOption != 4);
+            
         }
         
         public static Dictionary<string,int> CreateResourceDictionary()
@@ -164,14 +231,6 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
-        }
-
-        // subroutine i can use to get the daily rates of things like employee wage later on
-        public static int GetRates()
-        {
-            int employeeWage = 10;
-
-            return employeeWage;
         }
 
         public static void QuitGame(Dictionary<string,int> resources)
