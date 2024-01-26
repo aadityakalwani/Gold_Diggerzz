@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Gold_Diggerzz
 {
@@ -20,6 +21,8 @@ namespace Gold_Diggerzz
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
          */
+        
+        // "Thread.Sleep(3000);" = time.sleep(3)
         
         private static void Main(string[] args)
         {
