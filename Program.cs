@@ -24,6 +24,10 @@ namespace Gold_Diggerzz
         
         // "Thread.Sleep(3000);" = time.sleep(3)
         
+        // add in functionality to check if you're in debt and if you are,
+        // the government will come and sell all your resources for 50% the rate
+        
+        
         private static void Main(string[] args)
         {
             // pregame:
