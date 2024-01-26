@@ -33,30 +33,14 @@ namespace Gold_Diggerzz
          */
         
         # endregion
-    
-        /*
-         i plan to use a 2d array to store the resources
-         the resources are:
-             gold
-             diamonds
-             $$$
-             employees
-             etc etc we'll get to the rest later on
-        */
-
-        /* system for managing resources
-         * i have a 2d array for the resources
-         * i can run these into a subroutine that updates the resources
-         * this saves me having to pass in the 2d array every single place where its needed
-         * trouble is i have to pass in arguments and parameters for every single item?
-         * or i can just pass in the "item to change" and its "new value"
-         */
         
         public static void Main(string[] args)
         {
             // pregame:
             Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
-            Console.WriteLine("Created initial resource dictionary:");
+            Console.WriteLine("Welcome to Gold Diggerzz!");
+            Console.WriteLine("Created your initial resource dictionary, we're cooking:");
+            
             PrintResources(resourceDictionary);
             
             RunGame(resourceDictionary);
@@ -64,7 +48,7 @@ namespace Gold_Diggerzz
 
         public static void RunGame(Dictionary<string, int> resourceDictionary)
         {
-            int menuOption = 0;
+            int menuOption;
             do
             {
                 menuOption = UserMenuOption(resourceDictionary);
@@ -76,40 +60,50 @@ namespace Gold_Diggerzz
                         DigOneDay(resourceDictionary);
                         break;
                     case 2:
-                        Console.WriteLine("You have chosen to go to the market");
                         GoToMarket();
                         break;
                     case 3:
-                        Console.WriteLine("You have chosen to quit the game");
+                        PrintRules();
+                        break;
+                    case 4:
+                        QuitGame(resourceDictionary);
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
                 }
-            } while (menuOption != 3);
+            } while (menuOption != 4);
             
         }
 
         public static int UserMenuOption(Dictionary<string,int> resources)
         {
-            Console.WriteLine("Welcome to Gold Diggerzz!");
             Console.WriteLine("Please select an option:");
+            Console.WriteLine("_________________________");
             Console.WriteLine("1 - Dig one day");
             Console.WriteLine("2 - Go to market");
             Console.WriteLine("3 - Quit game");
+            Console.WriteLine("4 - Print game mechanics");
             
             int userOption = int.Parse(Console.ReadLine());
+            Console.Clear();
             return userOption;
+        }
+
+        public static void PrintRules()
+        {
+            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
+            Console.WriteLine("Each day, there is an 80% chance of finding gold");
         }
 
         public static void DigOneDay(Dictionary<string,int> resources)
         {
-            Console.WriteLine("We are about to dig shit");
+            Console.WriteLine("We are about to di, let us cook");
             Console.WriteLine("\nDigging...................\n");
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
-            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
+            
             
             int numberOfEmployees = resources["Workers"];
             int totalWages = numberOfEmployees * 10;
@@ -139,13 +133,7 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("You've chosen to go to the market");
             // some code goes here
-        }
-        
-        // passed in the variable of the resource to change, followed by the new value
-        // icl tho theres no need for this i can just update it when i need to on the fly
-        // because realistically all subroutines already have the resourceDict passed in already
-        public static void ManageResources()
-        {
+            // probably a fat switch case with all the options
         }
         
         public static Dictionary<string,int> CreateResourceDictionary()
@@ -171,21 +159,29 @@ namespace Gold_Diggerzz
         
         public static void PrintResources(Dictionary<string,int> resources)
         {
-            Console.WriteLine("\nHere are your resources.\nAre you a gold digger yet?\n");
+            Console.WriteLine("\nHere are your resources.\n");
             foreach (KeyValuePair<string, int> resource in resources)
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
         }
 
-        // subroutine i can use to get the daily rates of things like employee wage
+        // subroutine i can use to get the daily rates of things like employee wage later on
         public static int GetRates()
         {
             int employeeWage = 10;
 
             return employeeWage;
         }
-        
+
+        public static void QuitGame(Dictionary<string,int> resources)
+        {
+            Console.WriteLine("You have chosen to quit the game");
+            Console.WriteLine($"Your final stats were:");
+            PrintResources(resources);
+            Console.WriteLine("\nGoodbye!");
+        }
+
 
     }
 }
