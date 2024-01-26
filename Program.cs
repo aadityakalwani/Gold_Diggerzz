@@ -23,6 +23,8 @@ namespace Gold_Diggerzz
          */
         
         // "Thread.Sleep(3000);" = time.sleep(3)
+
+        private static DateTime currentDate = new DateTime(2024, 1, 1);
         
         private static bool CheckIfInDebt(Dictionary<string,int> resources)
         {
@@ -101,6 +103,7 @@ namespace Gold_Diggerzz
         {
             if (CheckIfInDebt(resources) == false)
             {
+                Console.WriteLine($"Today is {currentDate.ToString("dddd, d MMMM, yyyy")}");
                 Console.WriteLine("Please select an option:");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("1 - Dig one day");
@@ -162,6 +165,8 @@ namespace Gold_Diggerzz
 
             Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today.");
             PrintResources(resources);
+            
+            currentDate = currentDate.AddDays(1);
         }
         
         private static void GoToMarket(Dictionary<string, int> resources)
