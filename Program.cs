@@ -283,17 +283,18 @@ namespace Gold_Diggerzz
         private static string CheckIfInDebt(Dictionary<string,int> resources)
         {
             string inDebt = "false";
-            bool bankrupt = false;
             bool gameFailed = false;
             if (resources["Dollars"] < 0)
             {
                 inDebt = "true";
+                
                 if (inDebt == "true" && resources["Gold"] == 0 && resources["Diamonds"] == 0)
                 {
-                    bankrupt = true;
+                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    return "bankrupt";
                 }
 
-                if (bankrupt == false)
+                if (inDebt == "true")
                 {
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Console.WriteLine("You are in debt, bossman is coming for you");
@@ -313,13 +314,6 @@ namespace Gold_Diggerzz
                 
                     PrintResources(resources);
                 }
-
-                else if (bankrupt);
-                {
-                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
-                    return "bankrupt";
-                }
-
             }
             
             return inDebt;
