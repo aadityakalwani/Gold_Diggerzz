@@ -22,17 +22,18 @@ namespace Gold_Diggerzz
         {
             // pregame:
             Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
+            Dictionary<string,int> priceDictionary = CreatePricesDictionary();
             Console.WriteLine("Welcome to Gold Diggerzz!");
             Console.WriteLine("Created your initial resource dictionary, we're cooking:");
             
             PrintResources(resourceDictionary);
             
-            RunGame(resourceDictionary);
+            RunGame(resourceDictionary, priceDictionary);
         }
         
         private static DateTime currentDate = new DateTime(2024, 1, 1);
         
-        private static void RunGame(Dictionary<string, int> resourceDictionary)
+        private static void RunGame(Dictionary<string, int> resourceDictionary, Dictionary<string, int> priceDictionary)
         {
             int menuOption;
             do
@@ -49,7 +50,7 @@ namespace Gold_Diggerzz
                         DigOneDay(resourceDictionary);
                         break;
                     case 2:
-                        GoToMarket(resourceDictionary);
+                        GoToMarket(resourceDictionary, priceDictionary);
                         break;
                     case 3:
                         PrintRules();
@@ -85,7 +86,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
-            Console.WriteLine("");
+            Console.WriteLine();
         }
         
         private static Dictionary<string,int> CreateResourceDictionary()
@@ -107,6 +108,18 @@ namespace Gold_Diggerzz
                 {"Worker Level", 1}
             };
             return resources;
+        }
+        
+        private static Dictionary<string,int> CreatePricesDictionary()
+        {
+            Dictionary<string, int> prices = new Dictionary<string, int>()
+            {
+                { "Gold", 15 },
+                { "Diamonds", 75 },
+                { "Workers", 100 }
+            };
+            
+            return prices;
         }
         
         private static int UserMenuOption(Dictionary<string,int> resources)
@@ -175,7 +188,7 @@ namespace Gold_Diggerzz
             currentDate = currentDate.AddDays(1);
         }
         
-        private static void GoToMarket(Dictionary<string, int> resources)
+        private static void GoToMarket(Dictionary<string, int> resources, Dictionary<string, int> priceDictionary)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -183,10 +196,13 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             Console.WriteLine($"Here are the rates for {currentDate:dddd dd MMMM, yyyy}:");
-            Console.WriteLine("1 gold = 15 dollars");
-            Console.WriteLine("1 diamond = 75 dollars");
-            Console.WriteLine("1 employee = 100 dollars\n");
-
+            
+            foreach (KeyValuePair<string, int> item in priceDictionary)
+            {
+                Console.WriteLine($"1 {item.Key} = ${item.Value}");
+            }
+            
+            
             int marketOption;
             do
             {
