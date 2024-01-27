@@ -31,14 +31,14 @@ namespace Gold_Diggerzz
             RunGame(resourceDictionary, priceDictionary);
         }
         
-        private static DateTime currentDate = new DateTime(2024, 1, 1);
+        private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
         private static void RunGame(Dictionary<string, int> resourceDictionary, Dictionary<string, int> priceDictionary)
         {
             int menuOption;
             do
             {
-                menuOption = UserMenuOption(resourceDictionary);
+                menuOption = UserMenuOption(resourceDictionary, priceDictionary);
             
                 switch (menuOption)
                 {
@@ -47,7 +47,7 @@ namespace Gold_Diggerzz
                         break;
                     case 1:
                         Console.WriteLine("You have chosen to dig one day");
-                        DigOneDay(resourceDictionary);
+                        DigOneDay(resourceDictionary, resourceDictionary);
                         break;
                     case 2:
                         GoToMarket(resourceDictionary, priceDictionary);
@@ -86,7 +86,6 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
-            Console.WriteLine();
         }
         
         private static Dictionary<string,int> CreateResourceDictionary()
@@ -114,20 +113,24 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, int> prices = new Dictionary<string, int>()
             {
-                { "Gold", 15 },
-                { "Diamonds", 75 },
-                { "Workers", 100 }
+                {"Gold", 15},
+                {"Diamonds", 75},
+                {"Workers", 100},
+                {"Wage", 10}
             };
             
             return prices;
         }
         
-        private static int UserMenuOption(Dictionary<string,int> resources)
+        private static int UserMenuOption(Dictionary<string,int> resources, Dictionary<string, int> prices)
         {
             string takeUserInput = CheckIfInDebt(resources);
+            
+            CalendarEffects(resources, prices, _currentDate);
+            
             if (takeUserInput == "false")
             {
-                Console.WriteLine($"Today is {currentDate:dddd, d MMMM, yyyy}");
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("Please select an option:");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("1 - Dig one day");
@@ -148,7 +151,7 @@ namespace Gold_Diggerzz
             return 0;
         }
         
-        private static void DigOneDay(Dictionary<string,int> resources)
+        private static void DigOneDay(Dictionary<string,int> resources, Dictionary<string, int> prices)
         {
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
@@ -156,7 +159,7 @@ namespace Gold_Diggerzz
             
             Console.WriteLine("Here are the changes to your resources:");
             
-            int totalWages = resources["Workers"] * 10;
+            int totalWages = resources["Workers"] * prices["Wage"];
             
             // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
@@ -185,7 +188,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
             PrintResources(resources);
             
-            currentDate = currentDate.AddDays(1);
+            _currentDate = _currentDate.AddDays(1);
         }
         
         private static void GoToMarket(Dictionary<string, int> resources, Dictionary<string, int> priceDictionary)
@@ -195,7 +198,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("║                    WELCOME TO THE MARKET                   ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
-            Console.WriteLine($"Here are the rates for {currentDate:dddd dd MMMM, yyyy}:");
+            Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
             foreach (KeyValuePair<string, int> item in priceDictionary)
             {
@@ -263,7 +266,7 @@ namespace Gold_Diggerzz
                         break;
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine("Remember each employee charges $10 in wages per day");
+                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day");
                         int employeesToHire = int.Parse(Console.ReadLine());
                         if (employeesToHire * 100 > resources["Dollars"])
                         {
@@ -293,7 +296,6 @@ namespace Gold_Diggerzz
         private static string CheckIfInDebt(Dictionary<string,int> resources)
         {
             string inDebt = "false";
-            bool gameFailed = false;
             if (resources["Dollars"] < 0)
             {
                 inDebt = "true";
@@ -345,6 +347,40 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             QuitGame(resources);
+        }
+        
+        private static void CalendarEffects(Dictionary<string,int> resources, Dictionary<string,int> prices, DateTime currentDate)
+        {
+            
+            // double pay on weekends
+            if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                Console.WriteLine("It's the weekend, your employees want 50% more pay");
+                prices["Wage"] *= 3/2;
+            }
+            
+            // stock market crash once per month
+            Random random = new Random();
+            int crashDate = random.Next(0, 28);
+            
+            if (currentDate.Day == crashDate)
+            {
+                Console.WriteLine("The stock market has crashed, your gold and diamond prices have plummeted but you can hire employees for cheaper");
+                
+                prices["Gold"] /= 2;
+                prices["Diamonds"] /= 2;
+                prices["Workers"] /= 2;
+            }
+
+            if (currentDate.Month != 1)
+            {
+                if (currentDate.Day == 1)
+                {
+                    Console.WriteLine("It's the first of the month, your employees want a 10% raise");
+                    prices["Wage"] *= 11/10;
+                }
+            }
+            
         }
 
     }
