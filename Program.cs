@@ -65,7 +65,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Please enter a valid option");
                         break;
                 }
-            } while (menuOption != 4);
+            } while (menuOption != 4 && menuOption != 5);
             
         }
         
@@ -331,7 +331,6 @@ namespace Gold_Diggerzz
 
         private static void QuitGame(Dictionary<string,int> resources)
         {
-            Console.WriteLine("You have chosen to quit the game");
             Console.WriteLine("Your final stats were:");
             PrintResources(resources);
             Console.WriteLine("\nGoodbye!");
