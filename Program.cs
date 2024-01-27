@@ -76,7 +76,7 @@ namespace Gold_Diggerzz
                 switch (menuOption)
                 {
                     case 0:
-                        Console.WriteLine("You are in debt, you cannot do anything until you pay off your debt");
+                        Console.WriteLine("You were in debt, bossman have paid that off so we good now");
                         break;
                     case 1:
                         Console.WriteLine("You have chosen to dig one day");
@@ -191,8 +191,12 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen to sell gold for dollars");
-                        Console.WriteLine($"How much gold do you want to sell? You have {resources["Gold"]} gold");
+                        Console.WriteLine($"How much gold do you want to sell?\nEnter '-1' to sell all your gold\nYou have {resources["Gold"]} gold");
                         int goldToSell = int.Parse(Console.ReadLine());
+                        if (goldToSell == -1)
+                        {
+                            goldToSell = resources["Gold"];
+                        }
                         if (goldToSell > resources["Gold"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
@@ -209,9 +213,12 @@ namespace Gold_Diggerzz
                         break;
                     case 2:
                         Console.WriteLine("Your have chosen to sell diamonds for dollars");
-                        Console.WriteLine(
-                            $"How many diamonds do you want to sell? You have {resources["Diamonds"]} diamonds");
+                        Console.WriteLine($"How many diamonds do you want to sell?\nEnter '-1' to sell all your diamonds.\nYou have {resources["Diamonds"]} diamonds");
                         int diamondsToSell = int.Parse(Console.ReadLine());
+                        if (diamondsToSell == -1)
+                        {
+                            diamondsToSell = resources["Diamonds"];
+                        }
                         if (diamondsToSell > resources["Diamonds"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
