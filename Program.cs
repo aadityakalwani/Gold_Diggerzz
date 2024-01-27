@@ -75,9 +75,10 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Each employee of yours charges $10 in wages for the day");
             Console.WriteLine("Each day, there is an 80% chance of finding gold");
-            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
             Console.WriteLine("Each day, there is a 20% chance of finding diamonds");
+            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
             Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
+            Console.WriteLine("If you are in debt, the bossman comes and takes all your resources and sells them for 2/5 the rate");
         }
         
         private static void PrintResources(Dictionary<string,int> resources)
@@ -139,8 +140,7 @@ namespace Gold_Diggerzz
             
             Console.WriteLine("Here are the changes to your resources:");
             
-            int numberOfEmployees = resources["Workers"];
-            int totalWages = numberOfEmployees * 10;
+            int totalWages = resources["Workers"] * 10;
             
             // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
@@ -156,17 +156,17 @@ namespace Gold_Diggerzz
             if (diamondFound)
             {
                 Console.WriteLine("OMG bro you found diamond \ud83d\udc8e");
-                resources["Diamonds"] += 1;
+                resources["Diamonds"] += resources["Workers"];
             }
             
             if (goldFound)
             {
                 Console.WriteLine("OMG bro you found gold \ud83c\udf1f");
-                resources["Gold"] += 1;
+                resources["Gold"] += resources["Workers"];
             }
             resources["Dollars"] -= totalWages;
 
-            Console.WriteLine($"Your {numberOfEmployees} employees charged a wage of ${totalWages} today.");
+            Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
             PrintResources(resources);
             
             currentDate = currentDate.AddDays(1);
@@ -179,9 +179,10 @@ namespace Gold_Diggerzz
             Console.WriteLine("║                    WELCOME TO THE MARKET                   ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
-            Console.WriteLine("Here are the rates for today:");
+            Console.WriteLine($"Here are the rates for {currentDate:dddd dd MMMM, yyyy}:");
             Console.WriteLine("1 gold = 15 dollars");
             Console.WriteLine("1 diamond = 75 dollars");
+            Console.WriteLine("1 employee = 100 dollars\n");
 
             int marketOption;
             do
@@ -191,6 +192,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Sell Diamonds for dollars");
                 Console.WriteLine("3 - Hire More Employees");
                 Console.WriteLine("4 - Exit market");
+                Console.WriteLine("5 - Sell all gold and diamonds for dollars");
 
                 marketOption = int.Parse(Console.ReadLine());
 
@@ -240,8 +242,30 @@ namespace Gold_Diggerzz
                         PrintResources(resources);
 
                         break;
+                    case 3:
+                        Console.WriteLine("Enter how many employees you want to hire:");
+                        Console.WriteLine("Remember each employee charges $10 in wages per day");
+                        int employeesToHire = int.Parse(Console.ReadLine());
+                        if (employeesToHire * 100 > resources["Dollars"])
+                        {
+                            Console.WriteLine("You don't have enough dollars to hire that many employees");
+                        }
+                        else
+                        {
+                            resources["Workers"] += employeesToHire;
+                            resources["Dollars"] -= employeesToHire * 100;
+                        }
+                        break;
                     case 4:
                         Console.WriteLine("Thanks for coming to the market! Goodbye");
+                        break;
+                    case 5:
+                        Console.WriteLine("We're selling all your gold and diamonds for dollars");
+                        resources["Dollars"] += resources["Gold"] * 15;
+                        resources["Dollars"] += resources["Diamonds"] * 75;
+                        resources["Gold"] = 0;
+                        resources["Diamonds"] = 0;
+                        PrintResources(resources);
                         break;
                 }
             } while (marketOption != 4);
@@ -253,8 +277,8 @@ namespace Gold_Diggerzz
             if (resources["Dollars"] < 0)
             {
                 inDebt = true;
-                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\n");
-                Console.WriteLine("You are in debt\n");
+                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                Console.WriteLine("You are in debt, bossman is coming for you");
                 Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
                 Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
                 Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
