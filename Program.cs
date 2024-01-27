@@ -63,6 +63,9 @@ namespace Gold_Diggerzz
                     case 4:
                         QuitGame(resourceDictionary);
                         break;
+                    case 5:
+                        GameFailed(resourceDictionary);
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -74,8 +77,8 @@ namespace Gold_Diggerzz
         private static void PrintRules()
         {
             Console.WriteLine("Each employee of yours charges $10 in wages for the day");
-            Console.WriteLine("Each day, there is an 80% chance of finding gold");
-            Console.WriteLine("Each day, there is a 20% chance of finding diamonds");
+            Console.WriteLine("Each day, there is an 60% chance of finding gold");
+            Console.WriteLine("Each day, there is a 10% chance of finding diamonds");
             Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
             Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
             Console.WriteLine("If you are in debt, the bossman comes and takes all your resources and sells them for 2/5 the rate");
@@ -114,7 +117,8 @@ namespace Gold_Diggerzz
         
         private static int UserMenuOption(Dictionary<string,int> resources)
         {
-            if (CheckIfInDebt(resources) == false)
+            string takeUserInput = CheckIfInDebt(resources);
+            if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {currentDate.ToString("dddd, d MMMM, yyyy")}");
                 Console.WriteLine("Please select an option:");
@@ -127,6 +131,11 @@ namespace Gold_Diggerzz
                 int userOption = int.Parse(Console.ReadLine());
                 Console.Clear();
                 return userOption;
+            }
+
+            if(takeUserInput == "bankrupt")
+            { 
+                return 5;
             }
 
             return 0;
@@ -146,11 +155,11 @@ namespace Gold_Diggerzz
             Random random = new Random();
             int finalRandom = random.Next(0, 10);
             
-            // 80% chance of finding gold
-            bool goldFound = finalRandom < 8;
+            // 60% chance of finding gold
+            bool goldFound = finalRandom < 6;
             
-            // 20% chance of finding diamonds
-            bool diamondFound = finalRandom < 2;
+            // 10% chance of finding diamonds
+            bool diamondFound = finalRandom < 1;
             
             // update values within the resources dictionary
             if (diamondFound)
@@ -271,41 +280,69 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
         
-        private static bool CheckIfInDebt(Dictionary<string,int> resources)
+        private static string CheckIfInDebt(Dictionary<string,int> resources)
         {
-            bool inDebt = false;
+            string inDebt = "false";
+            bool bankrupt = false;
+            bool gameFailed = false;
             if (resources["Dollars"] < 0)
             {
-                inDebt = true;
-                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                Console.WriteLine("You are in debt, bossman is coming for you");
-                Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
-                
-                Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
-                
-                Console.WriteLine("After bossman stole your resources, you now have:");
+                inDebt = "true";
+                if (inDebt == "true" && resources["Gold"] == 0 && resources["Diamonds"] == 0)
+                {
+                    bankrupt = true;
+                }
 
-                resources["Dollars"] += resources["Gold"] * 6;
-                resources["Dollars"] += resources["Diamonds"] * 30; 
+                if (bankrupt == false)
+                {
+                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Console.WriteLine("You are in debt, bossman is coming for you");
+                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
+                    Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
+                    Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
                 
-                resources["Gold"] = 0;
-                resources["Diamonds"] = 0;
+                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
                 
-                PrintResources(resources);
+                    Console.WriteLine("After bossman stole your resources, you now have:");
+
+                    resources["Dollars"] += resources["Gold"] * 6;
+                    resources["Dollars"] += resources["Diamonds"] * 30; 
+                
+                    resources["Gold"] = 0;
+                    resources["Diamonds"] = 0;
+                
+                    PrintResources(resources);
+                }
+
+                else if (bankrupt);
+                {
+                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    return "bankrupt";
+                }
+
             }
-
+            
             return inDebt;
         }
 
         private static void QuitGame(Dictionary<string,int> resources)
         {
             Console.WriteLine("You have chosen to quit the game");
-            Console.WriteLine($"Your final stats were:");
+            Console.WriteLine("Your final stats were:");
             PrintResources(resources);
             Console.WriteLine("\nGoodbye!");
         }
-        
+
+        private static void GameFailed(Dictionary<string,int> resources)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                         YOU FAILED                          ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            
+            QuitGame(resources);
+        }
+
     }
 }
