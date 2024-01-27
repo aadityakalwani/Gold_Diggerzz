@@ -238,7 +238,6 @@ namespace Gold_Diggerzz
                         break;
                 }
             } while (marketOption != 4);
-            
         }
         
         private static Dictionary<string,int> CreateResourceDictionary()
