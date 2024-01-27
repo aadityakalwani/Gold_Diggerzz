@@ -21,8 +21,8 @@ namespace Gold_Diggerzz
         private static void Main()
         {
             // pregame:
-            Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
-            Dictionary<string,int> priceDictionary = CreatePricesDictionary();
+            Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
+            Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Console.WriteLine("Welcome to Gold Diggerzz!");
             Console.WriteLine("Created your initial resource dictionary, we're cooking:");
             
@@ -33,7 +33,7 @@ namespace Gold_Diggerzz
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
-        private static void RunGame(Dictionary<string, int> resourceDictionary, Dictionary<string, int> priceDictionary)
+        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
         {
             int menuOption;
             do
@@ -79,16 +79,16 @@ namespace Gold_Diggerzz
             Console.WriteLine("If you are in debt, the bossman comes and takes all your resources and sells them for 2/5 the rate");
         }
         
-        private static void PrintResources(Dictionary<string,int> resources)
+        private static void PrintResources(Dictionary<string, double> resources)
         {
             Console.WriteLine("\nHere are your resources.\n");
-            foreach (KeyValuePair<string, int> resource in resources)
+            foreach (KeyValuePair<string, double> resource in resources)
             {
                 Console.WriteLine($"You have {resource.Value} {resource.Key}");
             }
         }
         
-        private static Dictionary<string,int> CreateResourceDictionary()
+        private static Dictionary<string, double> CreateResourceDictionary()
         {
             /*
              * commands i can use:
@@ -98,7 +98,7 @@ namespace Gold_Diggerzz
              * resources["Rubies"] += 1;
              */
             
-            Dictionary<string, int> resources = new Dictionary<string, int>()
+            Dictionary<string, double> resources = new Dictionary<string, double>()
             {
                 {"Gold", 0},
                 {"Diamonds", 0},
@@ -109,9 +109,9 @@ namespace Gold_Diggerzz
             return resources;
         }
         
-        private static Dictionary<string,int> CreatePricesDictionary()
+        private static Dictionary<string, double> CreatePricesDictionary()
         {
-            Dictionary<string, int> prices = new Dictionary<string, int>()
+            Dictionary<string, double> prices = new Dictionary<string, double>()
             {
                 {"Gold", 15},
                 {"Diamonds", 75},
@@ -122,7 +122,7 @@ namespace Gold_Diggerzz
             return prices;
         }
         
-        private static int UserMenuOption(Dictionary<string,int> resources, Dictionary<string, int> prices)
+        private static int UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             string takeUserInput = CheckIfInDebt(resources);
             
@@ -151,7 +151,7 @@ namespace Gold_Diggerzz
             return 0;
         }
         
-        private static void DigOneDay(Dictionary<string,int> resources, Dictionary<string, int> prices)
+        private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
@@ -159,7 +159,7 @@ namespace Gold_Diggerzz
             
             Console.WriteLine("Here are the changes to your resources:");
             
-            int totalWages = resources["Workers"] * prices["Wage"];
+            double totalWages = resources["Workers"] * prices["Wage"];
             
             // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
@@ -191,7 +191,7 @@ namespace Gold_Diggerzz
             _currentDate = _currentDate.AddDays(1);
         }
         
-        private static void GoToMarket(Dictionary<string, int> resources, Dictionary<string, int> priceDictionary)
+        private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -200,7 +200,7 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
-            foreach (KeyValuePair<string, int> item in priceDictionary)
+            foreach (KeyValuePair<string, double> item in priceDictionary)
             {
                 Console.WriteLine($"1 {item.Key} = ${item.Value}");
             }
@@ -223,7 +223,7 @@ namespace Gold_Diggerzz
                     case 1:
                         Console.WriteLine("You have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nEnter '-1' to sell all your gold\nYou have {resources["Gold"]} gold");
-                        int goldToSell = int.Parse(Console.ReadLine());
+                        double goldToSell = double.Parse(Console.ReadLine());
                         if (goldToSell == -1)
                         {
                             goldToSell = resources["Gold"];
@@ -245,7 +245,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell diamonds for dollars");
                         Console.WriteLine($"How many diamonds do you want to sell?\nEnter '-1' to sell all your diamonds.\nYou have {resources["Diamonds"]} diamonds");
-                        int diamondsToSell = int.Parse(Console.ReadLine());
+                        double diamondsToSell = double.Parse(Console.ReadLine());
                         if (diamondsToSell == -1)
                         {
                             diamondsToSell = resources["Diamonds"];
@@ -293,7 +293,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
         
-        private static string CheckIfInDebt(Dictionary<string,int> resources)
+        private static string CheckIfInDebt(Dictionary<string, double> resources)
         {
             string inDebt = "false";
             if (resources["Dollars"] < 0)
@@ -331,14 +331,14 @@ namespace Gold_Diggerzz
             return inDebt;
         }
 
-        private static void QuitGame(Dictionary<string,int> resources)
+        private static void QuitGame(Dictionary<string, double> resources)
         {
             Console.WriteLine("Your final stats were:");
             PrintResources(resources);
             Console.WriteLine("\nGoodbye!");
         }
 
-        private static void GameFailed(Dictionary<string,int> resources)
+        private static void GameFailed(Dictionary<string, double> resources)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -349,7 +349,7 @@ namespace Gold_Diggerzz
             QuitGame(resources);
         }
         
-        private static void CalendarEffects(Dictionary<string,int> resources, Dictionary<string,int> prices, DateTime currentDate)
+        private static void CalendarEffects(Dictionary<string, double> resources, Dictionary<string, double> prices, DateTime currentDate)
         {
             
             // double pay on weekends
