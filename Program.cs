@@ -8,6 +8,8 @@ namespace Gold_Diggerzz
 
     {
         
+        #nullable disable
+        
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * it follows the gregorian calendar
