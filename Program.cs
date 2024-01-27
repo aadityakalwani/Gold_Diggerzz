@@ -47,7 +47,7 @@ namespace Gold_Diggerzz
                         break;
                     case 1:
                         Console.WriteLine("You have chosen to dig one day");
-                        DigOneDay(resourceDictionary, resourceDictionary);
+                        DigOneDay(resourceDictionary, priceDictionary);
                         break;
                     case 2:
                         GoToMarket(resourceDictionary, priceDictionary);
