@@ -7,7 +7,7 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
-        
+         
         #nullable disable
         
         /* to-do ideas
