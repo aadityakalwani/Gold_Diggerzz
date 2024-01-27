@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Gold_Diggerzz
 {
-    internal class Program
+    internal abstract class Program
 
     {
         
@@ -24,7 +24,7 @@ namespace Gold_Diggerzz
         
         // "Thread.Sleep(3000);" = time.sleep(3)
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             // pregame:
             Dictionary<string,int> resourceDictionary = CreateResourceDictionary();
@@ -120,7 +120,7 @@ namespace Gold_Diggerzz
             string takeUserInput = CheckIfInDebt(resources);
             if (takeUserInput == "false")
             {
-                Console.WriteLine($"Today is {currentDate.ToString("dddd, d MMMM, yyyy")}");
+                Console.WriteLine($"Today is {currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("Please select an option:");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("1 - Dig one day");
