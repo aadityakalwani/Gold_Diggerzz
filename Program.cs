@@ -24,36 +24,6 @@ namespace Gold_Diggerzz
         
         // "Thread.Sleep(3000);" = time.sleep(3)
 
-        private static DateTime currentDate = new DateTime(2024, 1, 1);
-        
-        private static bool CheckIfInDebt(Dictionary<string,int> resources)
-        {
-            bool inDebt = false;
-            if (resources["Dollars"] < 0)
-            {
-                inDebt = true;
-                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\n");
-                Console.WriteLine("You are in debt\n");
-                Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
-                
-                Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
-                
-                Console.WriteLine("After bossman stole your resources, you now have:");
-
-                resources["Dollars"] += resources["Gold"] * 6;
-                resources["Dollars"] += resources["Diamonds"] * 30; 
-                
-                resources["Gold"] = 0;
-                resources["Diamonds"] = 0;
-                
-                PrintResources(resources);
-            }
-
-            return inDebt;
-        }
-        
         private static void Main(string[] args)
         {
             // pregame:
@@ -65,7 +35,9 @@ namespace Gold_Diggerzz
             
             RunGame(resourceDictionary);
         }
-
+        
+        private static DateTime currentDate = new DateTime(2024, 1, 1);
+        
         private static void RunGame(Dictionary<string, int> resourceDictionary)
         {
             int menuOption;
@@ -98,7 +70,47 @@ namespace Gold_Diggerzz
             } while (menuOption != 4);
             
         }
-
+        
+        private static void PrintRules()
+        {
+            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
+            Console.WriteLine("Each day, there is an 80% chance of finding gold");
+            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
+            Console.WriteLine("Each day, there is a 20% chance of finding diamonds");
+            Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
+        }
+        
+        private static void PrintResources(Dictionary<string,int> resources)
+        {
+            Console.WriteLine("\nHere are your resources.\n");
+            foreach (KeyValuePair<string, int> resource in resources)
+            {
+                Console.WriteLine($"You have {resource.Value} {resource.Key}");
+            }
+            Console.WriteLine("");
+        }
+        
+        private static Dictionary<string,int> CreateResourceDictionary()
+        {
+            /*
+             * commands i can use:
+             * resources.Add("Rubies", 0);
+             * resources.Remove("Rubies");
+             * resources["Rubies"] = 0;
+             * resources["Rubies"] += 1;
+             */
+            
+            Dictionary<string, int> resources = new Dictionary<string, int>()
+            {
+                {"Gold", 0},
+                {"Diamonds", 0},
+                {"Dollars", 100},
+                {"Workers", 1},
+                {"Worker Level", 1}
+            };
+            return resources;
+        }
+        
         private static int UserMenuOption(Dictionary<string,int> resources)
         {
             if (CheckIfInDebt(resources) == false)
@@ -118,16 +130,7 @@ namespace Gold_Diggerzz
 
             return 0;
         }
-
-        private static void PrintRules()
-        {
-            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
-            Console.WriteLine("Each day, there is an 80% chance of finding gold");
-            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
-            Console.WriteLine("Each day, there is a 20% chance of finding diamonds");
-            Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
-        }
-
+        
         private static void DigOneDay(Dictionary<string,int> resources)
         {
             Console.WriteLine("We are about to dig, let us cook");
@@ -171,7 +174,11 @@ namespace Gold_Diggerzz
         
         private static void GoToMarket(Dictionary<string, int> resources)
         {
-            Console.WriteLine("You've chosen to go to the market");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                    WELCOME TO THE MARKET                   ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
             Console.WriteLine("Here are the rates for today:");
             Console.WriteLine("1 gold = 15 dollars");
             Console.WriteLine("1 diamond = 75 dollars");
@@ -240,35 +247,32 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
         
-        private static Dictionary<string,int> CreateResourceDictionary()
+        private static bool CheckIfInDebt(Dictionary<string,int> resources)
         {
-            /*
-             * commands i can use:
-             * resources.Add("Rubies", 0);
-             * resources.Remove("Rubies");
-             * resources["Rubies"] = 0;
-             * resources["Rubies"] += 1;
-             */
-            
-            Dictionary<string, int> resources = new Dictionary<string, int>()
+            bool inDebt = false;
+            if (resources["Dollars"] < 0)
             {
-                {"Gold", 0},
-                {"Diamonds", 0},
-                {"Dollars", 100},
-                {"Workers", 1},
-                {"Worker Level", 1}
-            };
-            return resources;
-        }
-        
-        private static void PrintResources(Dictionary<string,int> resources)
-        {
-            Console.WriteLine("\nHere are your resources.\n");
-            foreach (KeyValuePair<string, int> resource in resources)
-            {
-                Console.WriteLine($"You have {resource.Value} {resource.Key}");
+                inDebt = true;
+                Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\n");
+                Console.WriteLine("You are in debt\n");
+                Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
+                Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
+                Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
+                
+                Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
+                
+                Console.WriteLine("After bossman stole your resources, you now have:");
+
+                resources["Dollars"] += resources["Gold"] * 6;
+                resources["Dollars"] += resources["Diamonds"] * 30; 
+                
+                resources["Gold"] = 0;
+                resources["Diamonds"] = 0;
+                
+                PrintResources(resources);
             }
-            Console.WriteLine("");
+
+            return inDebt;
         }
 
         private static void QuitGame(Dictionary<string,int> resources)
