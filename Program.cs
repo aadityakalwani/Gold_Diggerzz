@@ -7,13 +7,12 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
-         
-        #nullable disable
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
-         * it follows the gregorian calendar
-         * so for example, on weekends the employees want extra pay and once per few months the stock market crashes and your gold rates plummet
+         * input validation for all inputs
+         * fancy nice animations eg. to see very clearly that you're in the market or you're digging
+         * fix the idea that on weekends 1.5x pay doesnt is undone during the weekdays
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
          */
@@ -128,7 +127,7 @@ namespace Gold_Diggerzz
         {
             string takeUserInput = CheckIfInDebt(resources);
             
-            CalendarEffects(resources, prices, _currentDate);
+            CalendarEffects(prices, _currentDate);
             
             if (takeUserInput == "false")
             {
@@ -140,7 +139,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("3 - Print game mechanics");
                 Console.WriteLine("4 - Quit game");
             
-                int userOption = int.Parse(Console.ReadLine());
+                int userOption = GetValidInt();
                 Console.Clear();
                 return userOption;
             }
@@ -218,14 +217,14 @@ namespace Gold_Diggerzz
                 Console.WriteLine("4 - Exit market");
                 Console.WriteLine("5 - Sell all gold and diamonds for dollars");
 
-                marketOption = int.Parse(Console.ReadLine());
+                marketOption = GetValidInt();
 
                 switch (marketOption)
                 {
                     case 1:
                         Console.WriteLine("You have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nEnter '-1' to sell all your gold\nYou have {resources["Gold"]} gold");
-                        double goldToSell = double.Parse(Console.ReadLine());
+                        double goldToSell = GetValidDouble();
                         if (goldToSell == -1)
                         {
                             goldToSell = resources["Gold"];
@@ -247,7 +246,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell diamonds for dollars");
                         Console.WriteLine($"How many diamonds do you want to sell?\nEnter '-1' to sell all your diamonds.\nYou have {resources["Diamonds"]} diamonds");
-                        double diamondsToSell = double.Parse(Console.ReadLine());
+                        double diamondsToSell = GetValidDouble();
                         if (diamondsToSell == -1)
                         {
                             diamondsToSell = resources["Diamonds"];
@@ -269,7 +268,7 @@ namespace Gold_Diggerzz
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day");
-                        int employeesToHire = int.Parse(Console.ReadLine());
+                        int employeesToHire = GetValidInt();
                         if (employeesToHire * 100 > resources["Dollars"])
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
@@ -344,21 +343,21 @@ namespace Gold_Diggerzz
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                         YOU FAILED                          ║");
+            Console.WriteLine("║                         YOU FAILED                         ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             
             QuitGame(resources);
         }
         
-        private static void CalendarEffects(Dictionary<string, double> resources, Dictionary<string, double> prices, DateTime currentDate)
+        private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
         {
             
             // double pay on weekends
             if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 Console.WriteLine("It's the weekend, your employees want 50% more pay");
-                prices["Wage"] *= 3/2;
+                prices["Wage"] *= 1.5;
             }
             
             // stock market crash once per month
@@ -379,10 +378,36 @@ namespace Gold_Diggerzz
                 if (currentDate.Day == 1)
                 {
                     Console.WriteLine("It's the first of the month, your employees want a 10% raise");
-                    prices["Wage"] *= 11/10;
+                    prices["Wage"] *= 1.1;
                 }
             }
             
+        }
+
+        private static int GetValidInt()
+        {
+            if (int.TryParse(Console.ReadLine(), out int validInt))
+            {
+                return validInt;
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid integer");
+                return GetValidInt();
+            }
+        }
+        
+        private static double GetValidDouble()
+        {
+            if (double.TryParse(Console.ReadLine(), out double validDouble))
+            {
+                return validDouble;
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid double");
+                return GetValidDouble();
+            }
         }
 
     }
