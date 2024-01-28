@@ -17,8 +17,6 @@ namespace Gold_Diggerzz
          * (like prestige in all the idle miner games i played)
          */
         
-        // "Thread.Sleep(3000);" = time.sleep(3)
-
         private static void Main()
         {
             // pregame:
@@ -156,6 +154,8 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
+            // equivalent to a time.sleep(3)
+            Thread.Sleep(3000);
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
