@@ -354,7 +354,9 @@ namespace Gold_Diggerzz
         {
             
             // double pay on weekends
-            if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+            // originally i used (below), but turns out i can do (2 below)
+            // if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+            if (currentDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 Console.WriteLine("It's the weekend, your employees want 50% more pay");
                 prices["Wage"] *= 1.5;
