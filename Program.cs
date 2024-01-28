@@ -10,7 +10,6 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
-         * input validation for all inputs
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * fix the idea that on weekends 1.5x pay doesnt is undone during the weekdays
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
