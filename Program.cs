@@ -14,7 +14,7 @@ namespace Gold_Diggerzz
          * fix the idea that on weekends 1.5x pay doesnt is undone during the weekdays
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
-         */
+         */ 
         
         private static void Main()
         {
