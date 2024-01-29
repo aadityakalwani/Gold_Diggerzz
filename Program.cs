@@ -57,6 +57,18 @@ namespace Gold_Diggerzz
                         QuitGame(resourceDictionary);
                         break;
                     case 5:
+                        Console.WriteLine("Skipping one day");
+                        _currentDate = _currentDate.AddDays(1);
+                        break;
+                    case 6:
+                        Console.WriteLine("Enter number of days to dig in one go");
+                        int daysToDig = GetValidInt();
+                        for (int i = 0; i <= daysToDig; i++)
+                        {
+                            DigOneDay(resourceDictionary, priceDictionary);
+                        }
+                        break;
+                    case -1:
                         GameFailed(resourceDictionary);
                         break;
                     default:
@@ -135,6 +147,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Go to market");
                 Console.WriteLine("3 - Print game mechanics");
                 Console.WriteLine("4 - Quit game");
+                Console.WriteLine("5 - Skip one day");
             
                 int userOption = GetValidInt();
                 Console.Clear();
@@ -143,7 +156,7 @@ namespace Gold_Diggerzz
 
             if(takeUserInput == "bankrupt")
             { 
-                return 5;
+                return -1;
             }
             
             return 0;
