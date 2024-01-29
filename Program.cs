@@ -154,7 +154,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
             // equivalent to a time.sleep(3)
-            Thread.Sleep(3000);
+            Thread.Sleep(2500);
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
@@ -359,6 +359,10 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("It's the weekend, your employees want 50% more pay");
                 prices["Wage"] *= 1.5;
+            }
+            else
+            {
+                prices["Wage"] *= 0.8;
             }
             
             // stock market crash once per month
