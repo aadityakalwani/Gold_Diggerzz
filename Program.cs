@@ -352,17 +352,18 @@ namespace Gold_Diggerzz
         private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
         {
             
-            // double pay on weekends
-            // originally i used (below), but turns out i can do (2 below)
-            // if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
-            if (currentDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            // +30% pay on weekends
+            // wage is increased on saturday, then reduced again on monday
+            if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
                 Console.WriteLine("It's the weekend, your employees want 50% more pay");
-                prices["Wage"] *= 1.5;
+                prices["Wage"] *= 1.3;
             }
-            else
+            
+            // to undo the effect of above
+            else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
-                prices["Wage"] *= 0.8;
+                prices["Wage"] = prices["Wage"] * 10/13;
             }
             
             // stock market crash once per month
