@@ -12,7 +12,9 @@ namespace Gold_Diggerzz
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
-         * fix the idea that on weekends 1.5x pay doesnt is undone during the weekdays
+         * more resources eg. iron, coal, etc.
+         * a power-up item that you can choose your special ability eg. 100% chance of finding gold for three day or flat $200
+         * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
          */ 
