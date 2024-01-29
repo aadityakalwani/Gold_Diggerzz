@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -148,6 +149,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("3 - Print game mechanics");
                 Console.WriteLine("4 - Quit game");
                 Console.WriteLine("5 - Skip one day");
+                Console.WriteLine("6 - Dig multiple days");
             
                 int userOption = GetValidInt();
                 Console.Clear();
@@ -167,7 +169,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
             // equivalent to a time.sleep(3)
-            Thread.Sleep(2500);
+            Thread.Sleep(2000);
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
@@ -376,7 +378,10 @@ namespace Gold_Diggerzz
             // to undo the effect of above
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
-                prices["Wage"] = prices["Wage"] * 10/13;
+                if (currentDate.Month != 1)
+                {
+                    prices["Wage"] = prices["Wage"] * 10/13;
+                }
             }
             
             // stock market crash once per month
