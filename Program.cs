@@ -455,14 +455,14 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per da right now");
                         int employeesToHire = GetValidInt();
-                        if (employeesToHire * 100 > resources["Dollars"])
+                        if (employeesToHire * priceDictionary["Workers"] > resources["Dollars"])
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
                         }
                         else
                         {
                             resources["Workers"] += employeesToHire;
-                            resources["Dollars"] -= employeesToHire * 100;
+                            resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
                         }
                         break;
                     case 4:
@@ -543,7 +543,7 @@ namespace Gold_Diggerzz
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
-                Console.WriteLine("It's the weekend, your employees want 50% more pay");
+                Console.WriteLine("It's the weekend, your employees want 30% more pay");
                 prices["Wage"] *= 1.3;
             }
             
@@ -591,10 +591,11 @@ namespace Gold_Diggerzz
             }
             
             // to undo the effects of above
-            if (lessWorkerDate.Day == currentDate.Day + 1)
+            if (lessWorkerDate.Date == currentDate.Date.AddDays(1))
             {
                 resources["Workers"] += 1;
                 Console.WriteLine("Your employee is back at work today");
+                lessWorkerDate.AddDays(-1000);
             }
             
             
