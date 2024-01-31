@@ -20,8 +20,7 @@ namespace Gold_Diggerzz
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * more resources eg. iron, coal, etc.
-         * a bribe function:
-           bribe the government with $100 and you dont have to pay wages for the next 5 days
+         * profit sharing: on 15th of every month, each employee gets 10% of your current $$$ stash
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
@@ -66,8 +65,8 @@ namespace Gold_Diggerzz
             RunGame(resourceDictionary, priceDictionary);
         }
         
+        // imagine this as like global variables i think?
         private static int _increasedDiamondChanceDays;
-
         private static int _noWageDaysLeft;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
@@ -190,7 +189,7 @@ namespace Gold_Diggerzz
         {
             string takeUserInput = CheckIfInDebt(resources);
             
-            CalendarEffects(prices, _currentDate);
+            CalendarEffects(prices, _currentDate, resources);
             
             if (takeUserInput == "false")
             {
@@ -528,7 +527,7 @@ namespace Gold_Diggerzz
             QuitGame(resources);
         }
         
-        private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
+        private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
         {
             
             // +30% pay on weekends
@@ -566,6 +565,23 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("It's the first of the month, your employees want a 10% raise");
                 prices["Wage"] *= 1.1;
+            }
+
+            DateTime lessWorkerDate = currentDate.AddDays(-1000000);
+            
+            // 10% chance an employee is unwell and doesnt come in
+            if (random.Next(0, 100) < 10)
+            {
+                Console.WriteLine("One of your employees is unwell and doesn't come in today");
+                resources["Workers"] -= 1;
+                lessWorkerDate = currentDate;
+            }
+            
+            // to undo the effects of above
+            if (lessWorkerDate.Day == currentDate.Day + 1)
+            {
+                resources["Workers"] += 1;
+                Console.WriteLine("Your employee is back at work today");
             }
         }
 
