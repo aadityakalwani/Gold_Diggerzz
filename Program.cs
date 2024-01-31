@@ -552,7 +552,7 @@ namespace Gold_Diggerzz
             Random random = new Random();
             int crashDate = random.Next(0, 28);
             
-            if (currentDate.Day == crashDate)
+            if (currentDate.Day == crashDate || currentDate.Day == crashDate + 1)
             {
                 Console.WriteLine("The stock market has crashed, your gold and diamond prices have plummeted but you can hire employees for cheaper");
                 
@@ -561,15 +561,12 @@ namespace Gold_Diggerzz
                 prices["Workers"] /= 2;
             }
 
-            if (currentDate.Month != 1)
+            // 10% raise on the first of every month (apart from January)
+            if (currentDate.Month != 1 && currentDate.Day == 1)
             {
-                if (currentDate.Day == 1)
-                {
-                    Console.WriteLine("It's the first of the month, your employees want a 10% raise");
-                    prices["Wage"] *= 1.1;
-                }
+                Console.WriteLine("It's the first of the month, your employees want a 10% raise");
+                prices["Wage"] *= 1.1;
             }
-            
         }
 
         private static int GetValidInt()
