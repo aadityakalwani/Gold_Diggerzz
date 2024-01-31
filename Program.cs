@@ -530,8 +530,7 @@ namespace Gold_Diggerzz
         private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
         {
             
-            // +30% pay on weekends
-            // wage is increased on saturday, then reduced again on monday
+            // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
                 Console.WriteLine("It's the weekend, your employees want 50% more pay");
@@ -547,6 +546,7 @@ namespace Gold_Diggerzz
                 }
             }
             
+            
             // stock market crash once per month
             Random random = new Random();
             int crashDate = random.Next(0, 28);
@@ -560,13 +560,16 @@ namespace Gold_Diggerzz
                 prices["Workers"] /= 2;
             }
 
+            
             // 10% raise on the first of every month (apart from January)
             if (currentDate.Month != 1 && currentDate.Day == 1)
             {
                 Console.WriteLine("It's the first of the month, your employees want a 10% raise");
                 prices["Wage"] *= 1.1;
             }
-
+            
+            
+            // set lessWorkerDate to like a million days ago so it doesnt affect anything 
             DateTime lessWorkerDate = currentDate.AddDays(-1000000);
             
             // 10% chance an employee is unwell and doesnt come in
