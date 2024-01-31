@@ -171,6 +171,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nDigging...................\n");
         
             /*
+             ascii art animations
              *  string[] diggingMessages = { "Digging through the dirt...", "Found a rock, moving it aside...", "Something shiny up ahead...", "Almost there..." };
                   Random random = new Random();
 
