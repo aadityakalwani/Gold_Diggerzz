@@ -8,6 +8,14 @@ namespace Gold_Diggerzz
 
     {
         
+        /*
+         * current issues
+         * (test run and fix increasedDiamondChance mechanics)
+         * when you 'skip a day' the game stops
+            * this is probably because in some switch case i'd need to return a different value or something
+         * when you go bankrupt it is in a while true look and infinitely printing "YOU FAILED" - maybe turn to a do while? idfk
+         */
+        
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
@@ -19,6 +27,31 @@ namespace Gold_Diggerzz
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
          */ 
+        
+        /*
+         * hierarchy
+         
+           - `Main()`
+                 - `CreateResourceDictionary()`
+                 - `CreatePricesDictionary()`
+                 - `PrintResources(Dictionary<string, double> resources)`
+                 - `RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)`
+                       - `UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)`
+                                - `CheckIfInDebt(Dictionary<string, double> resources)`
+                                - `CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)`
+                       - `DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)`
+                                - `PrintResources(Dictionary<string, double> resources)`
+                       - `GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)`
+                                - `PrintResources(Dictionary<string, double> resources)`
+                       - `PrintRules()`
+                       - `QuitGame(Dictionary<string, double> resources)`
+                       - `GameFailed(Dictionary<string, double> resources)`
+                                - `QuitGame(Dictionary<string, double> resources)`
+           - `GetValidInt()`
+           - `GetValidDouble()`
+           
+           This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
+         */
         
         private static void Main()
         {
@@ -32,6 +65,8 @@ namespace Gold_Diggerzz
             
             RunGame(resourceDictionary, priceDictionary);
         }
+        
+        private static int increasedDiamondChanceDays = 0;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -71,7 +106,10 @@ namespace Gold_Diggerzz
                         int daysToDig = GetValidInt();
                         for (int i = 0; i <= daysToDig; i++)
                         {
-                            DigOneDay(resourceDictionary, priceDictionary);
+                            if (CheckIfInDebt(resourceDictionary) !=  "true")
+                            {
+                                DigOneDay(resourceDictionary, priceDictionary);
+                            }
                         }
                         break;
                     case -1:
@@ -171,7 +209,7 @@ namespace Gold_Diggerzz
         
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
-            int increasedDiamondChanceDays = 0;
+            
             bool diamondFound = true;
             
             Console.WriteLine("We are about to dig, let us cook");
@@ -240,7 +278,7 @@ namespace Gold_Diggerzz
                 
              */
             
-            Thread.Sleep(2000);
+            Thread.Sleep(1500);
             Console.WriteLine("Digging done for the day");
             
             Console.WriteLine("Here are the changes to your resources:");
@@ -259,17 +297,17 @@ namespace Gold_Diggerzz
             
             if (magicStarFound)
             {
-                Console.Write("\\ud83c\\udf1f You found the magic star power-up \ud83c\udf1f");
+                Console.Write("\ud83c\udf1f You found the magic star power-up \ud83c\udf1f");
                 Console.WriteLine("Choose a powerup:");
-                Console.WriteLine("1 - 50% chance of finding diamond for the next three days");
+                Console.WriteLine("1 - 50% chance of finding diamond for the next five days");
                 Console.WriteLine("2 - $250 instantly");
                 int userInput = GetValidInt();
 
                 switch (userInput)
                 {
                     case 1:
-                        Console.WriteLine("You have chosen the 50% chance of finding diamond for the next three days");
-                        increasedDiamondChanceDays = 3;
+                        Console.WriteLine("You have chosen the 50% chance of finding diamond for the next five days");
+                        increasedDiamondChanceDays = 5;
                         break;
                     case 2:
                         Console.WriteLine("You have chosen the $250 instantly");
@@ -280,18 +318,18 @@ namespace Gold_Diggerzz
             }
             
             // if there is a changed chance of finding diamonds due to the magic star powerup
-            if (increasedDiamondChanceDays > 0)
+            if (increasedDiamondChanceDays != 0)
             {
-                increasedDiamondChanceDays -= 1;
                 Console.WriteLine($"You have the magic star powerup, you have a 50% chance of finding diamonds for the next {increasedDiamondChanceDays} days");
                 diamondFound = finalRandom < 50;
+                increasedDiamondChanceDays -= 1;
             }
             else
             {
                 // 15% chance of finding diamonds
                 diamondFound = finalRandom < 15;
             }
-            
+
             // update values within the resources dictionary
             if (diamondFound)
             {
@@ -457,6 +495,7 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Your final stats were:");
             PrintResources(resources);
+            Console.WriteLine($"You lasted until {_currentDate.Date: dddd, dd mmmm, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
 
