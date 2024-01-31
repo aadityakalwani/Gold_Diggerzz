@@ -20,7 +20,7 @@ namespace Gold_Diggerzz
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * more resources eg. iron, coal, etc.
-         * profit sharing: on 15th of every month, each employee gets 10% of your current $$$ stash
+         * another magic item that increases selling price by 10%, and you can hold upto 3 of them
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
@@ -68,6 +68,7 @@ namespace Gold_Diggerzz
         // imagine this as like global variables i think?
         private static int _increasedDiamondChanceDays;
         private static int _noWageDaysLeft;
+        private static int _magicTokens;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -108,7 +109,7 @@ namespace Gold_Diggerzz
                         int daysToDig = GetValidInt();
                         for (int i = 0; i <= daysToDig; i++)
                         {
-                            if (CheckIfInDebt(resourceDictionary) !=  "true")
+                            if (CheckIfInDebt(resourceDictionary, priceDictionary) !=  "true")
                             {
                                 DigOneDay(resourceDictionary, priceDictionary);
                             }
@@ -160,14 +161,13 @@ namespace Gold_Diggerzz
              * resources["Rubies"] = 0;
              * resources["Rubies"] += 1;
              */
-            
+
             Dictionary<string, double> resources = new Dictionary<string, double>()
             {
-                {"Gold", 0},
-                {"Diamonds", 0},
-                {"Dollars", 100},
-                {"Workers", 1},
-                {"Worker Level", 1}
+                { "Gold", 0 },
+                { "Diamonds", 0 },
+                { "Dollars", 100 },
+                { "Workers", 1 }
             };
             return resources;
         }
@@ -187,7 +187,7 @@ namespace Gold_Diggerzz
         
         private static int UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
-            string takeUserInput = CheckIfInDebt(resources);
+            string takeUserInput = CheckIfInDebt(resources, prices);
             
             CalendarEffects(prices, _currentDate, resources);
             
@@ -336,6 +336,16 @@ namespace Gold_Diggerzz
                 // 15% chance of finding diamonds
                 diamondFound = finalRandom < 15;
             }
+            
+            // 5% chance of getting a magicToken
+            bool magicTokenFound = finalRandom < 5;
+            if (magicTokenFound && _magicTokens < 3)
+            {
+                _magicTokens += 1;
+                Console.WriteLine($"You've acquired another magic token. You have {_magicTokens} magic tokens now, increasing selling price by {_magicTokens * 10}%");
+                prices["Gold"] *= 1.1;
+                prices["Diamonds"] *= 1.1;
+            }
 
             // update values within the resources dictionary
             if (diamondFound)
@@ -412,7 +422,7 @@ namespace Gold_Diggerzz
                         else
                         {
                             resources["Gold"] -= goldToSell;
-                            resources["Dollars"] += goldToSell * 15;
+                            resources["Dollars"] += goldToSell * priceDictionary["Gold"];
                         }
 
                         Console.WriteLine("Here are your update resources:");
@@ -434,7 +444,7 @@ namespace Gold_Diggerzz
                         else
                         {
                             resources["Diamonds"] -= diamondsToSell;
-                            resources["Dollars"] += diamondsToSell * 75;
+                            resources["Dollars"] += diamondsToSell * priceDictionary["Diamonds"];
                         }
 
                         Console.WriteLine("Here are your updated resources:");
@@ -460,8 +470,8 @@ namespace Gold_Diggerzz
                         break;
                     case 5:
                         Console.WriteLine("We're selling all your gold and diamonds for dollars");
-                        resources["Dollars"] += resources["Gold"] * 15;
-                        resources["Dollars"] += resources["Diamonds"] * 75;
+                        resources["Dollars"] += resources["Gold"] * priceDictionary["Gold"];
+                        resources["Dollars"] += resources["Diamonds"] * priceDictionary["Diamonds"];;
                         resources["Gold"] = 0;
                         resources["Diamonds"] = 0;
                         PrintResources(resources);
@@ -470,7 +480,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
         
-        private static string CheckIfInDebt(Dictionary<string, double> resources)
+        private static string CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             string inDebt = "false";
             if (resources["Dollars"] < 0)
@@ -495,8 +505,8 @@ namespace Gold_Diggerzz
                 
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
-                    resources["Dollars"] += resources["Gold"] * 6;
-                    resources["Dollars"] += resources["Diamonds"] * 30; 
+                    resources["Dollars"] += resources["Gold"] * prices["Gold"];
+                    resources["Dollars"] += resources["Diamonds"] * prices["Gold"]; 
                 
                     resources["Gold"] = 0;
                     resources["Diamonds"] = 0;
@@ -570,7 +580,7 @@ namespace Gold_Diggerzz
             
             
             // set lessWorkerDate to like a million days ago so it doesnt affect anything 
-            DateTime lessWorkerDate = currentDate.AddDays(-1000000);
+            DateTime lessWorkerDate = currentDate.AddDays(-1000);
             
             // 10% chance an employee is unwell and doesnt come in
             if (random.Next(0, 100) < 10)
