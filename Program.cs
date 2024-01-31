@@ -68,7 +68,7 @@ namespace Gold_Diggerzz
         // imagine this as like global variables i think?
         private static int _increasedDiamondChanceDays;
         private static int _noWageDaysLeft;
-        private static int _magicTokens;
+        private static int _LessWorkerDays;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -113,6 +113,11 @@ namespace Gold_Diggerzz
                             {
                                 DigOneDay(resourceDictionary, priceDictionary);
                             }
+                            else
+                            {
+                                break;
+                                // If the user is in debt, stop the digging process
+                            }
                         }
                         break;
                     case 7:
@@ -129,7 +134,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Please enter a valid option");
                         break;
                 }
-            } while (menuOption != 4 && menuOption != 5);
+            } while (menuOption != 4);
             
         }
         
@@ -167,7 +172,8 @@ namespace Gold_Diggerzz
                 { "Gold", 0 },
                 { "Diamonds", 0 },
                 { "Dollars", 100 },
-                { "Workers", 1 }
+                { "Workers", 1 },
+                { "magicTokens", 0}
             };
             return resources;
         }
@@ -339,10 +345,10 @@ namespace Gold_Diggerzz
             
             // 5% chance of getting a magicToken
             bool magicTokenFound = finalRandom < 5;
-            if (magicTokenFound && _magicTokens < 3)
+            if (magicTokenFound && resources["magicTokens"] < 3)
             {
-                _magicTokens += 1;
-                Console.WriteLine($"You've acquired another magic token. You have {_magicTokens} magic tokens now, increasing selling price by {_magicTokens * 10}%");
+                resources["magicTokens"] += 1;
+                Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now, increasing selling price by {resources["magicTokens"] * 10}%");
                 prices["Gold"] *= 1.1;
                 prices["Diamonds"] *= 1.1;
             }
@@ -363,6 +369,7 @@ namespace Gold_Diggerzz
             if (_noWageDaysLeft != 0)
             {
                 Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
+                _noWageDaysLeft -= 1;
             }
 
             else
@@ -453,7 +460,7 @@ namespace Gold_Diggerzz
                         break;
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per da right now");
+                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
                         int employeesToHire = GetValidInt();
                         if (employeesToHire * priceDictionary["Workers"] > resources["Dollars"])
                         {
@@ -461,8 +468,10 @@ namespace Gold_Diggerzz
                         }
                         else
                         {
+                            Console.WriteLine("You have hired 1 more employee");
                             resources["Workers"] += employeesToHire;
                             resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
+                            Console.WriteLine($"You now have {resources["Workers"]} employees");
                         }
                         break;
                     case 4:
@@ -579,23 +588,23 @@ namespace Gold_Diggerzz
             }
             
             
-            // set lessWorkerDate to like a million days ago so it doesnt affect anything 
-            DateTime lessWorkerDate = currentDate.AddDays(-1000);
+            // set _LessWorkerDays to like a million days ago so it doesnt affect anything 
+            _LessWorkerDays = 0;
             
             // 10% chance an employee is unwell and doesnt come in
             if (random.Next(0, 100) < 10)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 resources["Workers"] -= 1;
-                lessWorkerDate = currentDate;
+                _LessWorkerDays = 1;
             }
             
             // to undo the effects of above
-            if (lessWorkerDate.Date == currentDate.Date.AddDays(1))
+            if (_LessWorkerDays == 1)
             {
                 resources["Workers"] += 1;
                 Console.WriteLine("Your employee is back at work today");
-                lessWorkerDate.AddDays(-1000);
+                _LessWorkerDays = 0;
             }
             
             
