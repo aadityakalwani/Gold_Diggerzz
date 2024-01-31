@@ -60,6 +60,8 @@ namespace Gold_Diggerzz
                         break;
                     case 5:
                         Console.WriteLine("Skipping one day");
+                        Console.WriteLine("You have been charged $30 for the costs of skipping a day");
+                        resourceDictionary["Dollars"] -= 30;
                         _currentDate = _currentDate.AddDays(1);
                         break;
                     case 6:
