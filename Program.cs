@@ -10,17 +10,16 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * (test run and fix increasedDiamondChance mechanics)
          * when you 'skip a day' the game stops
             * this is probably because in some switch case i'd need to return a different value or something
          * when you go bankrupt it is in a while true look and infinitely printing "YOU FAILED" - maybe turn to a do while? idfk
+         * pre-bankruptcy, it should sell your workers for $100 each
          */
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * more resources eg. iron, coal, etc.
-         * a power-up item that you can choose your special ability eg. 100% chance of finding gold for three day or flat $200
          * a bribe function:
            bribe the government with $100 and you dont have to pay wages for the next 5 days
          * managers that do shit
@@ -59,6 +58,7 @@ namespace Gold_Diggerzz
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Console.WriteLine("Welcome to Gold Diggerzz!");
+            Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("Created your initial resource dictionary, we're cooking:");
             
             PrintResources(resourceDictionary);
@@ -66,7 +66,7 @@ namespace Gold_Diggerzz
             RunGame(resourceDictionary, priceDictionary);
         }
         
-        private static int increasedDiamondChanceDays = 0;
+        private static int _increasedDiamondChanceDays;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -210,7 +210,7 @@ namespace Gold_Diggerzz
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             
-            bool diamondFound = true;
+            bool diamondFound;
             
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
@@ -289,8 +289,8 @@ namespace Gold_Diggerzz
             Random random = new Random();
             int finalRandom = random.Next(0, 100);
             
-            // 60% chance of finding gold
-            bool goldFound = finalRandom < 60;
+            // 65% chance of finding gold
+            bool goldFound = finalRandom < 65;
             
             // 5% chance of finding the magic star superpower
             bool magicStarFound = finalRandom < 5;
@@ -307,7 +307,7 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen the 50% chance of finding diamond for the next five days");
-                        increasedDiamondChanceDays = 5;
+                        _increasedDiamondChanceDays = 5;
                         break;
                     case 2:
                         Console.WriteLine("You have chosen the $250 instantly");
@@ -318,11 +318,11 @@ namespace Gold_Diggerzz
             }
             
             // if there is a changed chance of finding diamonds due to the magic star powerup
-            if (increasedDiamondChanceDays != 0)
+            if (_increasedDiamondChanceDays != 0)
             {
-                Console.WriteLine($"You have the magic star powerup, you have a 50% chance of finding diamonds for the next {increasedDiamondChanceDays} days");
+                Console.WriteLine($"You have the magic star powerup, you have a 50% chance of finding diamonds for the next {_increasedDiamondChanceDays} days");
                 diamondFound = finalRandom < 50;
-                increasedDiamondChanceDays -= 1;
+                _increasedDiamondChanceDays -= 1;
             }
             else
             {
@@ -405,7 +405,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell diamonds for dollars");
                         Console.WriteLine($"How many diamonds do you want to sell?\nEnter '-1' to sell all your diamonds.\nYou have {resources["Diamonds"]} diamonds");
-                        double diamondsToSell = GetValidDouble();
+                        double diamondsToSell = GetValidInt();
                         if (diamondsToSell == -1)
                         {
                             diamondsToSell = resources["Diamonds"];
@@ -420,13 +420,13 @@ namespace Gold_Diggerzz
                             resources["Dollars"] += diamondsToSell * 75;
                         }
 
-                        Console.WriteLine("Here are your update resources:");
+                        Console.WriteLine("Here are your updated resources:");
                         PrintResources(resources);
 
                         break;
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day");
+                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per da right now");
                         int employeesToHire = GetValidInt();
                         if (employeesToHire * 100 > resources["Dollars"])
                         {
@@ -495,7 +495,7 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Your final stats were:");
             PrintResources(resources);
-            Console.WriteLine($"You lasted until {_currentDate.Date: dddd, dd mmmm, yyyy}");
+            Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
 
