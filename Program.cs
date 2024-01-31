@@ -67,6 +67,8 @@ namespace Gold_Diggerzz
         }
         
         private static int _increasedDiamondChanceDays;
+
+        private static int _noWageDaysLeft;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -100,6 +102,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You have been charged $30 for the costs of skipping a day");
                         resourceDictionary["Dollars"] -= 30;
                         _currentDate = _currentDate.AddDays(1);
+                        DigOneDay(resourceDictionary, priceDictionary);
                         break;
                     case 6:
                         Console.WriteLine("Enter number of days to dig in one go");
@@ -111,6 +114,13 @@ namespace Gold_Diggerzz
                                 DigOneDay(resourceDictionary, priceDictionary);
                             }
                         }
+                        break;
+                    case 7:
+                        Console.WriteLine("You have chosen to bribe the government");
+                        Console.WriteLine("You have been charged $150 for the bribe");
+                        resourceDictionary["Dollars"] -= 150;
+                        Console.WriteLine("You don't have to pay wages for the next three days");
+                        _noWageDaysLeft = 3;
                         break;
                     case -1:
                         GameFailed(resourceDictionary);
@@ -193,6 +203,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("4 - Quit game");
                 Console.WriteLine("5 - Skip one day");
                 Console.WriteLine("6 - Dig multiple days");
+                Console.WriteLine("7 - Bribe the government");
             
                 int userOption = GetValidInt();
                 Console.Clear();
@@ -280,10 +291,7 @@ namespace Gold_Diggerzz
             
             Thread.Sleep(1500);
             Console.WriteLine("Digging done for the day");
-            
             Console.WriteLine("Here are the changes to your resources:");
-            
-            double totalWages = resources["Workers"] * prices["Wage"];
             
             // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
@@ -342,10 +350,20 @@ namespace Gold_Diggerzz
                 Console.WriteLine("OMG bro you found gold \ud83c\udf1f");
                 resources["Gold"] += resources["Workers"];
             }
-            
-            resources["Dollars"] -= totalWages;
 
-            Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+            if (_noWageDaysLeft != 0)
+            {
+                Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
+            }
+
+            else
+            {
+                double totalWages = resources["Workers"] * prices["Wage"];
+                resources["Dollars"] -= totalWages;
+            
+                Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+            }
+            
             PrintResources(resources);
             
             _currentDate = _currentDate.AddDays(1);
