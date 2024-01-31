@@ -13,6 +13,8 @@ namespace Gold_Diggerzz
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * more resources eg. iron, coal, etc.
          * a power-up item that you can choose your special ability eg. 100% chance of finding gold for three day or flat $200
+         * a bribe function:
+           bribe the government with $100 and you dont have to pay wages for the next 5 days
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
@@ -169,6 +171,9 @@ namespace Gold_Diggerzz
         
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
+            int increasedDiamondChanceDays = 0;
+            bool diamondFound = true;
+            
             Console.WriteLine("We are about to dig, let us cook");
             Console.WriteLine("\nDigging...................\n");
         
@@ -191,7 +196,7 @@ namespace Gold_Diggerzz
                   ___________________________
                   
                   
-                  ALTERNAIVE OPTION
+                  ALTERNATIVE OPTION
                   
                   
                   
@@ -235,8 +240,6 @@ namespace Gold_Diggerzz
                 
              */
             
-            
-            
             Thread.Sleep(2000);
             Console.WriteLine("Digging done for the day");
             
@@ -246,13 +249,48 @@ namespace Gold_Diggerzz
             
             // creating randoms for the chance of finding gold and diamonds
             Random random = new Random();
-            int finalRandom = random.Next(0, 10);
+            int finalRandom = random.Next(0, 100);
             
             // 60% chance of finding gold
-            bool goldFound = finalRandom < 6;
+            bool goldFound = finalRandom < 60;
             
-            // 10% chance of finding diamonds
-            bool diamondFound = finalRandom < 1;
+            // 5% chance of finding the magic star superpower
+            bool magicStarFound = finalRandom < 5;
+            
+            if (magicStarFound)
+            {
+                Console.Write("\\ud83c\\udf1f You found the magic star power-up \ud83c\udf1f");
+                Console.WriteLine("Choose a powerup:");
+                Console.WriteLine("1 - 50% chance of finding diamond for the next three days");
+                Console.WriteLine("2 - $250 instantly");
+                int userInput = GetValidInt();
+
+                switch (userInput)
+                {
+                    case 1:
+                        Console.WriteLine("You have chosen the 50% chance of finding diamond for the next three days");
+                        increasedDiamondChanceDays = 3;
+                        break;
+                    case 2:
+                        Console.WriteLine("You have chosen the $250 instantly");
+                        resources["Dollars"] += 250;
+                        break;
+                }
+                
+            }
+            
+            // if there is a changed chance of finding diamonds due to the magic star powerup
+            if (increasedDiamondChanceDays > 0)
+            {
+                increasedDiamondChanceDays -= 1;
+                Console.WriteLine($"You have the magic star powerup, you have a 50% chance of finding diamonds for the next {increasedDiamondChanceDays} days");
+                diamondFound = finalRandom < 50;
+            }
+            else
+            {
+                // 15% chance of finding diamonds
+                diamondFound = finalRandom < 15;
+            }
             
             // update values within the resources dictionary
             if (diamondFound)
@@ -266,6 +304,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("OMG bro you found gold \ud83c\udf1f");
                 resources["Gold"] += resources["Workers"];
             }
+            
             resources["Dollars"] -= totalWages;
 
             Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
@@ -501,6 +540,6 @@ namespace Gold_Diggerzz
                 return GetValidDouble();
             }
         }
-
+        
     }
 }
