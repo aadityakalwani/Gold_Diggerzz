@@ -586,6 +586,17 @@ namespace Gold_Diggerzz
                 resources["Workers"] += 1;
                 Console.WriteLine("Your employee is back at work today");
             }
+            
+            
+            // 10% profit sharing to each employee on the 15th of every month
+            if (currentDate.Day == 15)
+            {
+                Console.WriteLine("Profit sharing, each employee gets 10% of your current $$$ stash");
+                Console.WriteLine($"Your {resources["Workers"]} employees get ${resources["Dollars"] * 0.1} each");
+                double dollarsToLose = resources["Dollars"] * 0.1 * resources["Workers"];
+                resources["Dollars"] -= dollarsToLose;
+                Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+            }
         }
 
         private static int GetValidInt()
