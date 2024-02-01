@@ -10,9 +10,6 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * when you 'skip a day' the game stops
-            * this is probably because in some switch case i'd need to return a different value or something
-         * when you go bankrupt it is in a while true look and infinitely printing "YOU FAILED" - maybe turn to a do while? idfk
          * pre-bankruptcy, it should sell your workers for $100 each
          */
         
@@ -519,12 +516,6 @@ namespace Gold_Diggerzz
             {
                 inDebt = "true";
                 
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
-                    return "bankrupt";
-                }
-
                 if (inDebt == "true")
                 {
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
@@ -544,6 +535,18 @@ namespace Gold_Diggerzz
                     resources["gold"] = 0;
                 
                     PrintResources(resources);
+                }
+                
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] != 0)
+                {
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
+                    resources["Dollars"] += resources["Workers"] * 100;
+                }
+                
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
+                {
+                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    return "bankrupt";
                 }
             }
             
