@@ -265,6 +265,7 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("We are about to dig, let us cook");
 
+            // ASCII art animation for digging
             string[] shovel = new string[]                                                                              
             {                                                                                                           
                  "    ______",                                                                                           
@@ -281,7 +282,7 @@ namespace Gold_Diggerzz
                                                                                                                          
             for (int i = 0; i < 10; i++)                                                                                
             {                                                                                                           
-                Thread.Sleep(250); // Wait for half a second to simulate the digging process                            
+                Thread.Sleep(250);                            
                 Console.Clear();                                                                                        
                 for (int j = 0; j < shovel.Length; j++)                                                                 
                 {                                                                                                       
@@ -291,13 +292,32 @@ namespace Gold_Diggerzz
                      }                                                                                                   
                      else                                                                                                
                      {                                                                                                   
-                         Console.WriteLine(new string(' ', i) + shovel[j]);                                              
+                         string spaces = "";
+                         for (int k = 0; k < i; k++)
+                         {
+                             spaces += " ";
+                         }
+                         Console.WriteLine(spaces + shovel[j]);                                            
                      }                                                                                                   
-                }                                                                                                       
-                Console.WriteLine("Progress: " + new string('#', i) + new string(' ', 10 - i) + "|");                   
+                }
+
+                Console.WriteLine("Progress:");
+                for (int j = 0; j < 10; j++)
+                {
+                    if (j < i)
+                    {
+                        Console.Write("##");
+                    }
+                    else
+                    {
+                        Console.Write("  ");
+                    }
+                }
+                Console.WriteLine("|");       
             }      
             
             Thread.Sleep(500);
+            
             Console.WriteLine("Digging done for the day");
             Console.WriteLine("Here are the changes to your resources:");
             
