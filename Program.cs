@@ -333,7 +333,7 @@ namespace Gold_Diggerzz
             
             if (ancientArtefactFound)
             {
-                Console.Write("\ud83e\uddc8 You found the Ancient Artefact power-up \ud83e\uddc8");
+                Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
                 Console.WriteLine("Choose a powerup:");
                 Console.WriteLine("1 - 50% chance of finding gold for the next five days");
                 Console.WriteLine("2 - $250 instantly");
@@ -385,7 +385,7 @@ namespace Gold_Diggerzz
             
             if (ironFound)
             {
-                Console.WriteLine("OMG bro you found iron \ud83e\uddc8");
+                Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
                 resources["iron"] += resources["Workers"];
             }
 
