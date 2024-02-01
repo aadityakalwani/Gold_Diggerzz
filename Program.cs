@@ -93,7 +93,6 @@ namespace Gold_Diggerzz
             Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
             
             PrintResources(resourceDictionary);
-            
             RunGame(resourceDictionary, priceDictionary);
         }
         
