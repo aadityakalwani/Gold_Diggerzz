@@ -264,8 +264,8 @@ namespace Gold_Diggerzz
             bool diamondFound;
             
             Console.WriteLine("We are about to dig, let us cook");
-            Console.WriteLine("\nDigging...................\n");
         
+             
             /*
              ascii art animations
              *  string[] diggingMessages = { "Digging through the dirt...", "Found a rock, moving it aside...", "Something shiny up ahead...", "Almost there..." };
@@ -281,55 +281,48 @@ namespace Gold_Diggerzz
                   }
 
                   Console.WriteLine("Digging complete!");
-                  
+
                   ___________________________
-                  
-                  
-                  ALTERNATIVE OPTION
-                  
-                  
-                  
-                  Console.WriteLine("We are about to dig, let us cook");
-               Console.WriteLine("\nDigging...................\n");
 
-               string[] shovel = new string[]
-               {
-                   "    ______",
-                   "   /      \\",
-                   "  /        \\",
-                   "  |        |",
-                   "  \\________/",
-                   "       ||",
-                   "       ||",
-                   "       ||"
-               };
 
-               Random random = new Random();
+                  ALTERNATIVE OPTION is being used rn
 
-               Console.WriteLine("Starting to dig...");
+            */
 
-               for (int i = 0; i < 10; i++)
-               {
-                   Thread.Sleep(500); // Wait for half a second to simulate the digging process
-                   Console.Clear();
-                   for (int j = 0; j < shovel.Length; j++)
-                   {
-                       if (j < shovel.Length - i)
-                       {
-                           Console.WriteLine(shovel[j]);
-                       }
-                       else
-                       {
-                           Console.WriteLine(new string(' ', i) + shovel[j]);
-                       }
-                   }
-                   Console.WriteLine("Progress: " + new string('#', i) + new string(' ', 10 - i) + "|");
-               }
-
-                
-             */
             
-            Thread.Sleep(1500);
+             string[] shovel = new string[]                                                                              
+             {                                                                                                           
+                 "    ______",                                                                                           
+                 "   /      \\",                                                                                         
+                 "  /        \\",                                                                                        
+                 "  |        |",                                                                                         
+                 "  \\________/",                                                                                        
+                 "       ||",                                                                                            
+                 "       ||",                                                                                            
+                 "       ||"                                                                                             
+             };                                                                                                          
+             
+             Console.WriteLine("Starting to dig...");                                                                    
+                                                                                                                         
+             for (int i = 0; i < 10; i++)                                                                                
+             {                                                                                                           
+                 Thread.Sleep(500); // Wait for half a second to simulate the digging process                            
+                 Console.Clear();                                                                                        
+                 for (int j = 0; j < shovel.Length; j++)                                                                 
+                 {                                                                                                       
+                     if (j < shovel.Length - i)                                                                          
+                     {                                                                                                   
+                         Console.WriteLine(shovel[j]);                                                                   
+                     }                                                                                                   
+                     else                                                                                                
+                     {                                                                                                   
+                         Console.WriteLine(new string(' ', i) + shovel[j]);                                              
+                     }                                                                                                   
+                 }                                                                                                       
+                 Console.WriteLine("Progress: " + new string('#', i) + new string(' ', 10 - i) + "|");                   
+             }      
+            
+            Thread.Sleep(250);
             Console.WriteLine("Digging done for the day");
             Console.WriteLine("Here are the changes to your resources:");
             
