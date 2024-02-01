@@ -101,7 +101,7 @@ namespace Gold_Diggerzz
         }
         
         // imagine this as like global variables
-        private static int _increasedgoldChanceDays;
+        private static int _increasedGoldChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         
@@ -343,7 +343,7 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
-                        _increasedgoldChanceDays = 5;
+                        _increasedGoldChanceDays = 5;
                         break;
                     case 2:
                         Console.WriteLine("You have chosen the $250 instantly");
@@ -354,11 +354,11 @@ namespace Gold_Diggerzz
             }
             
             // if there is a changed chance of finding gold due to the Ancient Artefact powerup
-            if (_increasedgoldChanceDays != 0)
+            if (_increasedGoldChanceDays != 0)
             {
-                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedgoldChanceDays} days");
+                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
                 goldFound = finalRandom < 50;
-                _increasedgoldChanceDays -= 1;
+                _increasedGoldChanceDays -= 1;
             }
             else
             {
@@ -654,11 +654,10 @@ namespace Gold_Diggerzz
             {
                 return validDouble;
             }
-            else
-            {
-                Console.WriteLine("Please enter a valid double");
-                return GetValidDouble();
-            }
+        
+            Console.WriteLine("Please enter a valid double");
+            return GetValidDouble();
+            
         }
         
     }
