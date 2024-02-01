@@ -623,7 +623,7 @@ namespace Gold_Diggerzz
             }
             
             // 10% chance an employee is unwell and doesnt come in
-            if (random.Next(0, 100) < 50)
+            if (random.Next(0, 100) < 10)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 resources["Workers"] -= 1;
