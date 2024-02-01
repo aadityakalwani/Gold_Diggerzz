@@ -262,36 +262,11 @@ namespace Gold_Diggerzz
         {
             
             bool diamondFound;
-            
+
             Console.WriteLine("We are about to dig, let us cook");
-        
-             
-            /*
-             ascii art animations
-             *  string[] diggingMessages = { "Digging through the dirt...", "Found a rock, moving it aside...", "Something shiny up ahead...", "Almost there..." };
-                  Random random = new Random();
 
-                  Console.WriteLine("Starting to dig...");
-
-                  for (int i = 0; i < 10; i++)
-                  {
-                      Thread.Sleep(500); // Wait for half a second to simulate the digging process
-                      Console.Write(new string('#', i) + "\r");
-                      Console.WriteLine(diggingMessages[random.Next(diggingMessages.Length)]);
-                  }
-
-                  Console.WriteLine("Digging complete!");
-
-                  ___________________________
-
-
-                  ALTERNATIVE OPTION is being used rn
-
-            */
-
-            
-             string[] shovel = new string[]                                                                              
-             {                                                                                                           
+            string[] shovel = new string[]                                                                              
+            {                                                                                                           
                  "    ______",                                                                                           
                  "   /      \\",                                                                                         
                  "  /        \\",                                                                                        
@@ -300,16 +275,16 @@ namespace Gold_Diggerzz
                  "       ||",                                                                                            
                  "       ||",                                                                                            
                  "       ||"                                                                                             
-             };                                                                                                          
+            };                                                                                                          
              
-             Console.WriteLine("Starting to dig...");                                                                    
+            Console.WriteLine("Starting to dig...");                                                                    
                                                                                                                          
-             for (int i = 0; i < 10; i++)                                                                                
-             {                                                                                                           
-                 Thread.Sleep(500); // Wait for half a second to simulate the digging process                            
-                 Console.Clear();                                                                                        
-                 for (int j = 0; j < shovel.Length; j++)                                                                 
-                 {                                                                                                       
+            for (int i = 0; i < 10; i++)                                                                                
+            {                                                                                                           
+                Thread.Sleep(250); // Wait for half a second to simulate the digging process                            
+                Console.Clear();                                                                                        
+                for (int j = 0; j < shovel.Length; j++)                                                                 
+                {                                                                                                       
                      if (j < shovel.Length - i)                                                                          
                      {                                                                                                   
                          Console.WriteLine(shovel[j]);                                                                   
@@ -318,11 +293,11 @@ namespace Gold_Diggerzz
                      {                                                                                                   
                          Console.WriteLine(new string(' ', i) + shovel[j]);                                              
                      }                                                                                                   
-                 }                                                                                                       
-                 Console.WriteLine("Progress: " + new string('#', i) + new string(' ', 10 - i) + "|");                   
-             }      
+                }                                                                                                       
+                Console.WriteLine("Progress: " + new string('#', i) + new string(' ', 10 - i) + "|");                   
+            }      
             
-            Thread.Sleep(250);
+            Thread.Sleep(500);
             Console.WriteLine("Digging done for the day");
             Console.WriteLine("Here are the changes to your resources:");
             
