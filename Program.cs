@@ -379,7 +379,7 @@ namespace Gold_Diggerzz
             // update values within the resources dictionary
             if (goldFound)
             {
-                Console.WriteLine("OMG bro you found gold \ud83d\udd29");
+                Console.WriteLine("OMG bro you found gold \ud83d\udc51");
                 resources["gold"] += resources["Workers"];
             }
             
@@ -610,19 +610,7 @@ namespace Gold_Diggerzz
                 prices["Wage"] *= 1.1;
             }
             
-            
-            // set _lessWorkerDays to like a million days ago so it doesnt affect anything 
-            _lessWorkerDays = 0;
-            
-            // 10% chance an employee is unwell and doesnt come in
-            if (random.Next(0, 100) < 10)
-            {
-                Console.WriteLine("One of your employees is unwell and doesn't come in today");
-                resources["Workers"] -= 1;
-                _lessWorkerDays = 1;
-            }
-            
-            // to undo the effects of above
+            // to undo the effects of below
             if (_lessWorkerDays == 1)
             {
                 resources["Workers"] += 1;
@@ -630,6 +618,13 @@ namespace Gold_Diggerzz
                 _lessWorkerDays = 0;
             }
             
+            // 10% chance an employee is unwell and doesnt come in
+            if (random.Next(0, 100) < 50)
+            {
+                Console.WriteLine("One of your employees is unwell and doesn't come in today");
+                resources["Workers"] -= 1;
+                _lessWorkerDays = 1;
+            }
             
             // 10% profit sharing to each employee on the 15th of every month
             if (currentDate.Day == 15)
@@ -648,11 +643,9 @@ namespace Gold_Diggerzz
             {
                 return validInt;
             }
-            else
-            {
-                Console.WriteLine("Please enter a valid integer");
-                return GetValidInt();
-            }
+
+            Console.WriteLine("Please enter a valid integer");
+            return GetValidInt();
         }
         
         private static double GetValidDouble()
