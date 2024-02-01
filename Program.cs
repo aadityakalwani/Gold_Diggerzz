@@ -53,15 +53,15 @@ namespace Gold_Diggerzz
         /*
          current features:
          chance of finding gold = 65%
-         chance of finding diamond = 15%
+         chance of finding iron = 15%
            chance of finding Ancient Artefact = 5%
            
            cost of hiring employee = $100
            gold value =  $15
-           diamond value = $75
+           iron value = $75
            
            Ancient Artefact has two powerup options:
-           $200 instantly, or a 5% chance of finding diamonds for the next 5 days
+           $200 instantly, or a 5% chance of finding iron for the next 5 days
            
            the resources you gain are equal to the number of employees you have
            eg. 7 employees = 7 gold found on that day
@@ -75,7 +75,7 @@ namespace Gold_Diggerzz
            
            on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
            
-           one x date every month, there is a stock market crash where gold, diamond, and employee hiring prices halve
+           one x date every month, there is a stock market crash where gold, iron, and employee hiring prices halve
            
            you can bribe the govt with $150 and not pay any wages for the next 3 days
            
@@ -101,7 +101,7 @@ namespace Gold_Diggerzz
         }
         
         // imagine this as like global variables
-        private static int _increasedDiamondChanceDays;
+        private static int _increasedironChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         
@@ -177,8 +177,8 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Each employee of yours charges $10 in wages for the day");
             Console.WriteLine("Each day, there is an 60% chance of finding gold");
-            Console.WriteLine("Each day, there is a 10% chance of finding diamonds");
-            Console.WriteLine("If you find gold or diamonds, you gain the number of employees you have of the resource");
+            Console.WriteLine("Each day, there is a 10% chance of finding iron");
+            Console.WriteLine("If you find gold or iron, you gain the number of employees you have of the resource");
             Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
             Console.WriteLine("If you are in debt, the bossman comes and takes all your resources and sells them for 2/5 the rate");
         }
@@ -205,7 +205,7 @@ namespace Gold_Diggerzz
             Dictionary<string, double> resources = new Dictionary<string, double>()
             {
                 { "Gold", 0 },
-                { "Diamonds", 0 },
+                { "iron", 0 },
                 { "Dollars", 100 },
                 { "Workers", 1 },
                 { "magicTokens", 0}
@@ -218,7 +218,7 @@ namespace Gold_Diggerzz
             Dictionary<string, double> prices = new Dictionary<string, double>()
             {
                 {"Gold", 15},
-                {"Diamonds", 75},
+                {"iron", 75},
                 {"Workers", 100},
                 {"Wage", 10}
             };
@@ -261,7 +261,7 @@ namespace Gold_Diggerzz
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             
-            bool diamondFound;
+            bool ironFound;
 
             Console.WriteLine("We are about to dig, let us cook");
 
@@ -321,7 +321,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("Digging done for the day");
             Console.WriteLine("Here are the changes to your resources:");
             
-            // creating randoms for the chance of finding gold and diamonds
+            // creating randoms for the chance of finding gold and iron
             Random random = new Random();
             int finalRandom = random.Next(0, 100);
             
@@ -335,15 +335,15 @@ namespace Gold_Diggerzz
             {
                 Console.Write("\ud83c\udf1f You found the Ancient Artefact power-up \ud83c\udf1f");
                 Console.WriteLine("Choose a powerup:");
-                Console.WriteLine("1 - 50% chance of finding diamond for the next five days");
+                Console.WriteLine("1 - 50% chance of finding iron for the next five days");
                 Console.WriteLine("2 - $250 instantly");
                 int userInput = GetValidInt();
 
                 switch (userInput)
                 {
                     case 1:
-                        Console.WriteLine("You have chosen the 50% chance of finding diamond for the next five days");
-                        _increasedDiamondChanceDays = 5;
+                        Console.WriteLine("You have chosen the 50% chance of finding iron for the next five days");
+                        _increasedironChanceDays = 5;
                         break;
                     case 2:
                         Console.WriteLine("You have chosen the $250 instantly");
@@ -353,17 +353,17 @@ namespace Gold_Diggerzz
                 
             }
             
-            // if there is a changed chance of finding diamonds due to the Ancient Artefact powerup
-            if (_increasedDiamondChanceDays != 0)
+            // if there is a changed chance of finding iron due to the Ancient Artefact powerup
+            if (_increasedironChanceDays != 0)
             {
-                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding diamonds for the next {_increasedDiamondChanceDays} days");
-                diamondFound = finalRandom < 50;
-                _increasedDiamondChanceDays -= 1;
+                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding iron for the next {_increasedironChanceDays} days");
+                ironFound = finalRandom < 50;
+                _increasedironChanceDays -= 1;
             }
             else
             {
-                // 15% chance of finding diamonds
-                diamondFound = finalRandom < 15;
+                // 15% chance of finding iron
+                ironFound = finalRandom < 15;
             }
             
             // 5% chance of getting a magicToken
@@ -373,14 +373,14 @@ namespace Gold_Diggerzz
                 resources["magicTokens"] += 1;
                 Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now, increasing selling price by {resources["magicTokens"] * 10}%");
                 prices["Gold"] *= 1.1;
-                prices["Diamonds"] *= 1.1;
+                prices["iron"] *= 1.1;
             }
 
             // update values within the resources dictionary
-            if (diamondFound)
+            if (ironFound)
             {
-                Console.WriteLine("OMG bro you found diamond \ud83d\udc8e");
-                resources["Diamonds"] += resources["Workers"];
+                Console.WriteLine("OMG bro you found iron \ud83d\udc8e");
+                resources["iron"] += resources["Workers"];
             }
             
             if (goldFound)
@@ -428,10 +428,10 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Here is the menu for the market:");
                 Console.WriteLine("1 - Sell Gold for dollars");
-                Console.WriteLine("2 - Sell Diamonds for dollars");
+                Console.WriteLine("2 - Sell iron for dollars");
                 Console.WriteLine("3 - Hire More Employees");
                 Console.WriteLine("4 - Exit market");
-                Console.WriteLine("5 - Sell all gold and diamonds for dollars");
+                Console.WriteLine("5 - Sell all gold and iron for dollars");
 
                 marketOption = GetValidInt();
 
@@ -460,21 +460,21 @@ namespace Gold_Diggerzz
 
                         break;
                     case 2:
-                        Console.WriteLine("Your have chosen to sell diamonds for dollars");
-                        Console.WriteLine($"How many diamonds do you want to sell?\nEnter '-1' to sell all your diamonds.\nYou have {resources["Diamonds"]} diamonds");
-                        double diamondsToSell = GetValidInt();
-                        if (diamondsToSell == -1)
+                        Console.WriteLine("Your have chosen to sell iron for dollars");
+                        Console.WriteLine($"How many iron do you want to sell?\nEnter '-1' to sell all your iron.\nYou have {resources["iron"]} iron");
+                        double ironToSell = GetValidInt();
+                        if (ironToSell == -1)
                         {
-                            diamondsToSell = resources["Diamonds"];
+                            ironToSell = resources["iron"];
                         }
-                        if (diamondsToSell > resources["Diamonds"])
+                        if (ironToSell > resources["iron"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
                         }
                         else
                         {
-                            resources["Diamonds"] -= diamondsToSell;
-                            resources["Dollars"] += diamondsToSell * priceDictionary["Diamonds"];
+                            resources["iron"] -= ironToSell;
+                            resources["Dollars"] += ironToSell * priceDictionary["iron"];
                         }
 
                         Console.WriteLine("Here are your updated resources:");
@@ -501,11 +501,11 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Thanks for coming to the market! Goodbye");
                         break;
                     case 5:
-                        Console.WriteLine("We're selling all your gold and diamonds for dollars");
+                        Console.WriteLine("We're selling all your gold and iron for dollars");
                         resources["Dollars"] += resources["Gold"] * priceDictionary["Gold"];
-                        resources["Dollars"] += resources["Diamonds"] * priceDictionary["Diamonds"];
+                        resources["Dollars"] += resources["iron"] * priceDictionary["iron"];
                         resources["Gold"] = 0;
-                        resources["Diamonds"] = 0;
+                        resources["iron"] = 0;
                         PrintResources(resources);
                         break;
                 }
@@ -519,7 +519,7 @@ namespace Gold_Diggerzz
             {
                 inDebt = "true";
                 
-                if (inDebt == "true" && resources["Gold"] == 0 && resources["Diamonds"] == 0)
+                if (inDebt == "true" && resources["Gold"] == 0 && resources["iron"] == 0)
                 {
                     Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
                     return "bankrupt";
@@ -533,15 +533,15 @@ namespace Gold_Diggerzz
                     Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
                     Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
                 
-                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["Diamonds"]} diamonds and {resources["Gold"]} gold");
+                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["iron"]} iron and {resources["Gold"]} gold");
                 
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
                     resources["Dollars"] += resources["Gold"] * prices["Gold"];
-                    resources["Dollars"] += resources["Diamonds"] * prices["Gold"]; 
+                    resources["Dollars"] += resources["iron"] * prices["Gold"]; 
                 
                     resources["Gold"] = 0;
-                    resources["Diamonds"] = 0;
+                    resources["iron"] = 0;
                 
                     PrintResources(resources);
                 }
@@ -595,10 +595,10 @@ namespace Gold_Diggerzz
             
             if (currentDate.Day == crashDate || currentDate.Day == crashDate + 1)
             {
-                Console.WriteLine("The stock market has crashed, your gold and diamond prices have plummeted but you can hire employees for cheaper");
+                Console.WriteLine("The stock market has crashed, your gold and iron prices have plummeted but you can hire employees for cheaper");
                 
                 prices["Gold"] /= 2;
-                prices["Diamonds"] /= 2;
+                prices["iron"] /= 2;
                 prices["Workers"] /= 2;
             }
 
