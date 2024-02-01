@@ -20,7 +20,6 @@ namespace Gold_Diggerzz
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * fancy nice animations eg. to see very clearly that you're in the market or you're digging
          * more resources eg. iron, coal, etc.
-         * another magic item that increases selling price by 10%, and you can hold upto 3 of them
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better gold payments per day
          * (like prestige in all the idle miner games i played)
@@ -55,13 +54,13 @@ namespace Gold_Diggerzz
          current features:
          chance of finding gold = 65%
          chance of finding diamond = 15%
-           chance of finding magic star = 5%
+           chance of finding Ancient Artefact = 5%
            
            cost of hiring employee = $100
            gold value =  $15
            diamond value = $75
            
-           magic star has two powerup options:
+           Ancient Artefact has two powerup options:
            $200 instantly, or a 5% chance of finding diamonds for the next 5 days
            
            the resources you gain are equal to the number of employees you have
@@ -341,12 +340,12 @@ namespace Gold_Diggerzz
             // 65% chance of finding gold
             bool goldFound = finalRandom < 65;
             
-            // 5% chance of finding the magic star superpower
-            bool magicStarFound = finalRandom < 5;
+            // 5% chance of finding the Ancient Artefact superpower
+            bool ancientArtefactFound = finalRandom < 5;
             
-            if (magicStarFound)
+            if (ancientArtefactFound)
             {
-                Console.Write("\ud83c\udf1f You found the magic star power-up \ud83c\udf1f");
+                Console.Write("\ud83c\udf1f You found the Ancient Artefact power-up \ud83c\udf1f");
                 Console.WriteLine("Choose a powerup:");
                 Console.WriteLine("1 - 50% chance of finding diamond for the next five days");
                 Console.WriteLine("2 - $250 instantly");
@@ -366,10 +365,10 @@ namespace Gold_Diggerzz
                 
             }
             
-            // if there is a changed chance of finding diamonds due to the magic star powerup
+            // if there is a changed chance of finding diamonds due to the Ancient Artefact powerup
             if (_increasedDiamondChanceDays != 0)
             {
-                Console.WriteLine($"You have the magic star powerup, you have a 50% chance of finding diamonds for the next {_increasedDiamondChanceDays} days");
+                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding diamonds for the next {_increasedDiamondChanceDays} days");
                 diamondFound = finalRandom < 50;
                 _increasedDiamondChanceDays -= 1;
             }
@@ -683,3 +682,4 @@ namespace Gold_Diggerzz
         
     }
 }
+                
