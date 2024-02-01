@@ -10,13 +10,12 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * pre-bankruptcy, it should sell your workers for $100 each
-         */
+        */
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
-         * fancy nice animations eg. to see very clearly that you're in the market or you're digging
-         * more resources eg. gold, coal, etc.
+         * fancy nice animations eg. to see very clearly that you're in the market
+         * more resources eg. diamonds, coal, etc.
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
@@ -78,6 +77,7 @@ namespace Gold_Diggerzz
            
         
            at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
+           if you have no resources to sell, they sell your employees for $100 each
            
            if your $$$ balance is negative and you have no resource, you fail the game
          */
@@ -541,6 +541,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
                     resources["Dollars"] += resources["Workers"] * 100;
+                    resources["Workers"] = 0;
                 }
                 
                 if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
