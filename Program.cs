@@ -51,6 +51,41 @@ namespace Gold_Diggerzz
            This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
          */
         
+        /*
+         current features:
+         chance of finding gold = 65%
+         chance of finding diamond = 15%
+           chance of finding magic star = 5%
+           
+           cost of hiring employee = $100
+           gold value =  $15
+           diamond value = $75
+           
+           magic star has two powerup options:
+           $200 instantly, or a 5% chance of finding diamonds for the next 5 days
+           
+           the resources you gain are equal to the number of employees you have
+           eg. 7 employees = 7 gold found on that day
+           
+           baseline wage = $10 per employee per day
+           
+           10% chance an employee is ill and doesnt come in to work
+           
+           30% pay increase on weekends only
+           on the first of every month, employee wage increases by 10%
+           
+           on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
+           
+           one x date every month, there is a stock market crash where gold, diamond, and employee hiring prices halve
+           
+           you can bribe the govt with $150 and not pay any wages for the enxt 3 days
+           
+        
+           at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
+           
+           if your $$$ balance is negative and you have no resource, you fail the game
+         */
+        
         private static void Main()
         {
             // pregame:
@@ -65,7 +100,7 @@ namespace Gold_Diggerzz
             RunGame(resourceDictionary, priceDictionary);
         }
         
-        // imagine this as like global variables i think?
+        // imagine this as like global variables
         private static int _increasedDiamondChanceDays;
         private static int _noWageDaysLeft;
         private static int _LessWorkerDays;
