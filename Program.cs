@@ -78,7 +78,7 @@ namespace Gold_Diggerzz
            
            one x date every month, there is a stock market crash where gold, diamond, and employee hiring prices halve
            
-           you can bribe the govt with $150 and not pay any wages for the enxt 3 days
+           you can bribe the govt with $150 and not pay any wages for the next 3 days
            
         
            at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
@@ -91,9 +91,10 @@ namespace Gold_Diggerzz
             // pregame:
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
+            
             Console.WriteLine("Welcome to Gold Diggerzz!");
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("Created your initial resource dictionary, we're cooking:");
+            Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
             
             PrintResources(resourceDictionary);
             
@@ -103,7 +104,7 @@ namespace Gold_Diggerzz
         // imagine this as like global variables
         private static int _increasedDiamondChanceDays;
         private static int _noWageDaysLeft;
-        private static int _LessWorkerDays;
+        private static int _lessWorkerDays;
         
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
@@ -137,7 +138,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You have been charged $30 for the costs of skipping a day");
                         resourceDictionary["Dollars"] -= 30;
                         _currentDate = _currentDate.AddDays(1);
-                        DigOneDay(resourceDictionary, priceDictionary);
+                        PrintResources(resourceDictionary);
                         break;
                     case 6:
                         Console.WriteLine("Enter number of days to dig in one go");
@@ -515,7 +516,7 @@ namespace Gold_Diggerzz
                     case 5:
                         Console.WriteLine("We're selling all your gold and diamonds for dollars");
                         resources["Dollars"] += resources["Gold"] * priceDictionary["Gold"];
-                        resources["Dollars"] += resources["Diamonds"] * priceDictionary["Diamonds"];;
+                        resources["Dollars"] += resources["Diamonds"] * priceDictionary["Diamonds"];
                         resources["Gold"] = 0;
                         resources["Diamonds"] = 0;
                         PrintResources(resources);
@@ -623,23 +624,23 @@ namespace Gold_Diggerzz
             }
             
             
-            // set _LessWorkerDays to like a million days ago so it doesnt affect anything 
-            _LessWorkerDays = 0;
+            // set _lessWorkerDays to like a million days ago so it doesnt affect anything 
+            _lessWorkerDays = 0;
             
             // 10% chance an employee is unwell and doesnt come in
             if (random.Next(0, 100) < 10)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 resources["Workers"] -= 1;
-                _LessWorkerDays = 1;
+                _lessWorkerDays = 1;
             }
             
             // to undo the effects of above
-            if (_LessWorkerDays == 1)
+            if (_lessWorkerDays == 1)
             {
                 resources["Workers"] += 1;
                 Console.WriteLine("Your employee is back at work today");
-                _LessWorkerDays = 0;
+                _lessWorkerDays = 0;
             }
             
             
