@@ -47,39 +47,39 @@ namespace Gold_Diggerzz
          */
         
         /*
-         current features:
-         chance of finding iron = 65%
-         chance of finding gold = 15%
-           chance of finding Ancient Artefact = 5%
-           
-           cost of hiring employee = $100
-           iron value =  $15
-           gold value = $75
-           
-           Ancient Artefact has two powerup options:
-           $200 instantly, or a 5% chance of finding gold for the next 5 days
-           
-           the resources you gain are equal to the number of employees you have
-           eg. 7 employees = 7 iron found on that day
-           
-           baseline wage = $10 per employee per day
-           
-           10% chance an employee is ill and doesnt come in to work
-           
-           30% pay increase on weekends only
-           on the first of every month, employee wage increases by 10%
-           
-           on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
-           
-           one x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve
-           
-           you can bribe the govt with $150 and not pay any wages for the next 3 days
-           
-        
-           at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
-           if you have no resources to sell, they sell your employees for $100 each
-           
-           if your $$$ balance is negative and you have no resource, you fail the game
+        current features:
+        chance of finding iron = 65%
+        chance of finding gold = 15%
+        chance of finding Ancient Artefact = 5%
+
+        cost of hiring employee = $100
+        iron value =  $15
+        gold value = $75
+
+        Ancient Artefact has two powerup options:
+        $200 instantly, or a 50% chance of finding gold for the next 5 days
+
+        the resources you gain are equal to the number of employees you have
+        eg. 7 employees = 7 iron found on that day
+
+        baseline wage = $10 per employee per day
+
+        10% chance an employee is ill and doesnt come in to work
+
+        30% pay increase on weekends only
+        on the first of every month, employee wage increases by 10%
+
+        on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
+
+        one x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve
+
+        you can bribe the govt with $150 and not pay any wages for the next 3 days
+
+
+        at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
+        if you have no resources to sell, they sell your employees for $100 each
+
+        if your $$$ balance is negative and you have no resource, you fail the game
          */
         
         private static void Main()
