@@ -143,7 +143,7 @@ namespace Gold_Diggerzz
                     case 6:
                         Console.WriteLine("Enter number of days to dig in one go");
                         int daysToDig = GetValidInt();
-                        for (int i = 0; i <= daysToDig; i++)
+                        for (int i = 0; i < daysToDig; i++)
                         {
                             if (CheckIfInDebt(resourceDictionary, priceDictionary) !=  "true")
                             {
@@ -170,7 +170,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Please enter a valid option");
                         break;
                 }
-            } while (menuOption != 4);
+            } while (menuOption != 4 && menuOption != -1);
             
         }
         
