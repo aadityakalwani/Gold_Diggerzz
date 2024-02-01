@@ -612,7 +612,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("It's the first of the month, your employees want a 10% raise");
                 prices["Wage"] *= 1.1;
-            }
+            } 
             
             // to undo the effects of below
             if (_lessWorkerDays == 1)
