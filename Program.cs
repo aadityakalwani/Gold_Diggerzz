@@ -15,8 +15,10 @@ namespace Gold_Diggerzz
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * i can have a “pay for information” where you pay $50 and it tells you when the market is going to crash
-         * fancy nice animations eg. to see very clearly that you're in the market
          * more resources eg. diamonds, coal, etc.
+         * changing chance of finding gold
+         * per-employee stats
+         * stock market feature
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
@@ -101,7 +103,12 @@ namespace Gold_Diggerzz
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             
             
-            Console.WriteLine("Welcome to Gold Diggerzz!");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                 Welcome to Gold Diggerzz                   ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
             
@@ -172,6 +179,7 @@ namespace Gold_Diggerzz
             
         }
         
+        // pass in resources and prices to ge tup to date shit
         private static void PrintGameMechanics()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -180,7 +188,6 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             
-            Console.WriteLine("\nCurrent features:");
             Console.WriteLine("Chance of finding iron = 65%");
             Console.WriteLine("Chance of finding gold = 15%");
             Console.WriteLine("Chance of finding Ancient Artefact = 5%");
@@ -205,11 +212,14 @@ namespace Gold_Diggerzz
         
         private static void PrintResources(Dictionary<string, double> resources)
         {
-            Console.WriteLine("\nHere are your resources.\n");
+            Console.WriteLine("\nHere are your resources:3" +
+                              "");
+            Console.WriteLine("______________________________");
             foreach (KeyValuePair<string, double> resource in resources)
             {
-                Console.WriteLine($"You have {resource.Value} {resource.Key}");
+                Console.WriteLine($"|  You have {resource.Value} {resource.Key}");
             }
+            Console.WriteLine("______________________________");
         }
         
         private static Dictionary<string, double> CreateResourceDictionary()
@@ -264,6 +274,8 @@ namespace Gold_Diggerzz
                 Console.WriteLine("5 - Skip one day");
                 Console.WriteLine("6 - Dig multiple days");
                 Console.WriteLine("7 - Bribe the government");
+                Console.WriteLine("_________________________");
+                Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt();
                 Console.Clear();
@@ -446,10 +458,12 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
+            Console.WriteLine("______________________________");
             foreach (KeyValuePair<string, double> item in priceDictionary)
             {
-                Console.WriteLine($"1 {item.Key} = ${item.Value}");
+                Console.WriteLine($"|  1 {item.Key} = ${item.Value}  |");
             }
+            Console.WriteLine("______________________________");
             
             
             int marketOption;
