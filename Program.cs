@@ -278,7 +278,7 @@ namespace Gold_Diggerzz
                                                                                                                          
             for (int i = 0; i < 10; i++)                                                                                
             {                                                                                                           
-                Thread.Sleep(250);                            
+                Thread.Sleep(150);                            
                 Console.Clear();                                                                                        
                 for (int j = 0; j < shovel.Length; j++)                                                                 
                 {                                                                                                       
