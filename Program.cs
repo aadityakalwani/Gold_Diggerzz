@@ -14,6 +14,7 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
+         * i can have a “pay for information” where you pay $50 and it tells you when the market is going to crash
          * fancy nice animations eg. to see very clearly that you're in the market
          * more resources eg. diamonds, coal, etc.
          * managers that do shit
@@ -23,7 +24,7 @@ namespace Gold_Diggerzz
         
         /*
          * hierarchy
-         
+
            - `Main()`
                  - `CreateResourceDictionary()`
                  - `CreatePricesDictionary()`
@@ -42,7 +43,7 @@ namespace Gold_Diggerzz
                                 - `QuitGame(Dictionary<string, double> resources)`
            - `GetValidInt()`
            - `GetValidDouble()`
-           
+
            This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
          */
         
@@ -257,7 +258,6 @@ namespace Gold_Diggerzz
         
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
-            Console.WriteLine($"expect a fr market crash on {crashDate}");
             if (CheckIfInDebt(resources, prices) !=  "true")
             {
                 if (_animation)
@@ -277,7 +277,9 @@ namespace Gold_Diggerzz
                      "       ||"                                                                                             
                 };                                                                                                          
                  
-                Console.WriteLine("Starting to dig...");                                                                    
+                Console.WriteLine("Starting to dig...");   
+                
+                Thread.Sleep(1000);
                                                                                                                              
                 for (int i = 0; i < 10; i++)                                                                                
                 {                                                                                                           
