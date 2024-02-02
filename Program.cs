@@ -287,7 +287,7 @@ namespace Gold_Diggerzz
                          Console.WriteLine(shovel[j]);                                                                   
                      }                                                                                                   
                      else                                                                                                
-                     {                                                                          
+                     {                                                                                                   
                          string spaces = "";
                          for (int k = 0; k < i; k++)
                          {
