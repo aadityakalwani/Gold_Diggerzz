@@ -102,7 +102,7 @@ namespace Gold_Diggerzz
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static bool _animation = true;
-        
+        private static DateTime _revertPricesDate;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
         private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
@@ -495,7 +495,7 @@ namespace Gold_Diggerzz
                         }
                         break;
                     case 4:
-                        Console.WriteLine("Thanks for coming to the market! Goodbye");
+                        Console.WriteLine("Thanks for coming to the market!");
                         break;
                     case 5:
                         Console.WriteLine("We're selling all your iron and gold for dollars");
@@ -602,6 +602,14 @@ namespace Gold_Diggerzz
                 prices["iron"] /= 2;
                 prices["gold"] /= 2;
                 prices["Workers"] /= 2;
+                _revertPricesDate = currentDate.AddDays(2);
+            }
+            if (currentDate == _revertPricesDate)
+            {
+                Console.WriteLine("The stock market has recovered");
+                prices["iron"] *= 2;
+                prices["gold"] *= 2;
+                prices["Workers"] *= 2;
             }
 
             
