@@ -144,16 +144,8 @@ namespace Gold_Diggerzz
                         int daysToDig = GetValidInt();
                         for (int i = 0; i < daysToDig; i++)
                         {
-                            if (CheckIfInDebt(resourceDictionary, priceDictionary) !=  "true")
-                            {
-                                DigOneDay(resourceDictionary, priceDictionary);
-                                Thread.Sleep(1500);
-                            }
-                            else
-                            {
-                                break;
-                                // If the user is in debt, stop the digging process
-                            }
+                            DigOneDay(resourceDictionary, priceDictionary);
+                            Thread.Sleep(1500);
                         }
                         break;
                     case 7:
@@ -261,10 +253,11 @@ namespace Gold_Diggerzz
         
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
-            
             bool goldFound;
-
-            if (_animation)
+            
+            if (CheckIfInDebt(resources, prices) !=  "true")
+            {
+                if (_animation)
             {
                 Console.WriteLine("We are about to dig, let us cook");
 
@@ -410,6 +403,8 @@ namespace Gold_Diggerzz
             PrintResources(resources);
             
             _currentDate = _currentDate.AddDays(1);
+            }
+            
         }
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
