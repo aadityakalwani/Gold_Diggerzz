@@ -255,7 +255,7 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("Please select an option:");
+                Console.WriteLine("\nPlease select an option:");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("1 - Dig one day");
                 Console.WriteLine("2 - Go to market");
@@ -284,62 +284,62 @@ namespace Gold_Diggerzz
             {
                 if (_animation)
                 {
-                Console.WriteLine("We are about to dig, let us cook");
+                    Console.WriteLine("We are about to dig, let us cook");
 
-                // ASCII art animation for digging
-                string[] shovel = new string[]                                                                              
-                {                                                                                                           
-                     "    ______",                                                                                           
-                     "   /      \\",                                                                                         
-                     "  /        \\",                                                                                        
-                     "  |        |",                                                                                         
-                     "  \\________/",                                                                                        
-                     "       ||",                                                                                            
-                     "       ||",                                                                                            
-                     "       ||"                                                                                             
-                };                                                                                                          
-                 
-                Console.WriteLine("Starting to dig...");   
-                
-                Thread.Sleep(1000);
-                                                                                                                             
-                for (int i = 0; i < 10; i++)                                                                                
-                {                                                                                                           
-                    Thread.Sleep(150);                            
-                    Console.Clear();                                                                                        
-                    for (int j = 0; j < shovel.Length; j++)                                                                 
-                    {                                                                                                       
-                         if (j < shovel.Length - i)                                                                          
-                         {                                                                                                   
-                             Console.WriteLine(shovel[j]);                                                                   
-                         }                                                                                                   
-                         else                                                                                                
-                         {                                                                                                   
-                             string spaces = "";
-                             for (int k = 0; k < i; k++)
-                             {
-                                 spaces += " ";
-                             }
-                             Console.WriteLine(spaces + shovel[j]);                                                
-                         }                                                                                                   
-                    }
+                    // ASCII art animation for digging
+                    string[] shovel = new string[]                                                                              
+                    {                                                                                                           
+                         "    ______",                                                                                           
+                         "   /      \\",                                                                                         
+                         "  /        \\",                                                                                        
+                         "  |        |",                                                                                         
+                         "  \\________/",                                                                                        
+                         "       ||",                                                                                            
+                         "       ||",                                                                                            
+                         "       ||"                                                                                             
+                    };                                                                                                          
+                     
+                    Console.WriteLine("Starting to dig...");   
+                    
+                    Thread.Sleep(1000);
+                                                                                                                                 
+                    for (int i = 0; i < 10; i++)                                                                                
+                    {                                                                                                           
+                        Thread.Sleep(150);                            
+                        Console.Clear();                                                                                        
+                        for (int j = 0; j < shovel.Length; j++)                                                                 
+                        {                                                                                                       
+                             if (j < shovel.Length - i)                                                                          
+                             {                                                                                                   
+                                 Console.WriteLine(shovel[j]);                                                                   
+                             }                                                                                                   
+                             else                                                                                                
+                             {                                                                                                   
+                                 string spaces = "";
+                                 for (int k = 0; k < i; k++)
+                                 {
+                                     spaces += " ";
+                                 }
+                                 Console.WriteLine(spaces + shovel[j]);                                                
+                             }                                                                                                   
+                        }
 
-                    Console.WriteLine("Progress:");
-                    for (int j = 0; j < 10; j++)
-                    {
-                        if (j < i)
+                        Console.WriteLine("Progress:");
+                        for (int j = 0; j < 10; j++)
                         {
-                            Console.Write("##");
+                            if (j < i)
+                            {
+                                Console.Write("##");
+                            }
+                            else
+                            {
+                                Console.Write(" ");
+                            }
                         }
-                        else
-                        {
-                            Console.Write(" ");
-                        }
-                    }
-                    Console.WriteLine("|");       
-                }      
+                        Console.WriteLine("|");       
+                    }      
                 
-                Thread.Sleep(500);
+                    Thread.Sleep(500);
                 }
             
                 Console.WriteLine("Digging done for the day");
@@ -678,11 +678,10 @@ namespace Gold_Diggerzz
                 {
                     return validInt;
                 }
-                else
-                {
-                    Console.WriteLine("No bro dont try and enter negative numbers");
-                    GetValidInt();
-                }
+            
+                Console.WriteLine("No bro dont try and enter negative numbers");
+                GetValidInt();
+               
                 
             }
 
@@ -698,18 +697,14 @@ namespace Gold_Diggerzz
                 {
                     return validDouble;
                 }
-                else
-                {
-                    Console.WriteLine("No bro dont try and enter negative numbers");
-                    GetValidDouble();
-                }
+            
+                Console.WriteLine("No bro dont try and enter negative numbers");
+                GetValidDouble();
+                
             }
         
             Console.WriteLine("Please enter a valid double");
             return GetValidDouble();
-            
         }
-        
     }
 }
-                
