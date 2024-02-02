@@ -10,6 +10,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * when stock market crash brings down prices, they're never raised back up
         */
         
         /* to-do ideas
@@ -442,12 +443,9 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen to sell iron for dollars");
-                        Console.WriteLine($"How much iron do you want to sell?\nEnter '-1' to sell all your iron\nYou have {resources["iron"]} iron");
+                        Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]} iron");
                         double ironToSell = GetValidDouble();
-                        if (ironToSell == -1)
-                        {
-                            ironToSell = resources["iron"];
-                        }
+                        
                         if (ironToSell > resources["iron"])
                         {
                             Console.WriteLine("You don't have enough iron to sell that much");
@@ -464,12 +462,8 @@ namespace Gold_Diggerzz
                         break;
                     case 2:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
-                        Console.WriteLine($"How many gold do you want to sell?\nEnter '-1' to sell all your gold.\nYou have {resources["gold"]} gold");
+                        Console.WriteLine($"How many gold do you want to sell?\nYou have {resources["gold"]} gold");
                         double goldToSell = GetValidInt();
-                        if (goldToSell == -1)
-                        {
-                            goldToSell = resources["gold"];
-                        }
                         if (goldToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough iron to sell that much");
@@ -528,10 +522,8 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
                     Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                    Console.WriteLine("Bossman is coming for ur shit, unlucky bro...");
-                
                     Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["gold"]} gold and {resources["iron"]} iron");
-                
+                    Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
                     resources["Dollars"] += resources["iron"] * prices["iron"];
