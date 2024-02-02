@@ -264,7 +264,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("5 - Skip one day");
                 Console.WriteLine("6 - Dig multiple days");
                 Console.WriteLine("7 - Bribe the government");
-            
+             
                 int userOption = GetValidInt();
                 Console.Clear();
                 return userOption;
