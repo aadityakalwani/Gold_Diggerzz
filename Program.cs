@@ -82,27 +82,32 @@ namespace Gold_Diggerzz
         if your $$$ balance is negative and you have no resource, you fail the game
          */
         
+        // imagine these as like global variables
+        private static int _increasedGoldChanceDays;
+        private static int _noWageDaysLeft;
+        private static int _lessWorkerDays;
+        private static bool _animation = true;
+        private static int _crashDaysLeft = 0;
+        private static DateTime _currentDate = new DateTime(2024, 1, 1);
+        static Random random = new Random();
+        private static int crashDate = random.Next(0, 28);
+        
         private static void Main()
         {
             // pregame:
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             
+            
             Console.WriteLine("Welcome to Gold Diggerzz!");
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
             
+            Console.WriteLine($"Expect a stock market crash on the {crashDate}th of every month");
+            
             PrintResources(resourceDictionary);
             RunGame(resourceDictionary, priceDictionary);
         }
-        
-        // imagine this as like global variables
-        private static int _increasedGoldChanceDays;
-        private static int _noWageDaysLeft;
-        private static int _lessWorkerDays;
-        private static bool _animation = true;
-        private static int _crashDaysLeft;
-        private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
         private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
         {
@@ -252,12 +257,11 @@ namespace Gold_Diggerzz
         
         private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
-            bool goldFound;
-            
+            Console.WriteLine($"expect a fr market crash on {crashDate}");
             if (CheckIfInDebt(resources, prices) !=  "true")
             {
                 if (_animation)
-            {
+                {
                 Console.WriteLine("We are about to dig, let us cook");
 
                 // ASCII art animation for digging
@@ -312,96 +316,99 @@ namespace Gold_Diggerzz
                 }      
                 
                 Thread.Sleep(500);
-            }
-            
-            Console.WriteLine("Digging done for the day");
-            Console.WriteLine("Here are the changes to your resources:");
-            
-            // creating randoms for the chance of finding iron and gold
-            Random random = new Random();
-            int finalRandom = random.Next(0, 100);
-            
-            // 65% chance of finding iron
-            bool ironFound = finalRandom < 65;
-            
-            // 5% chance of finding the Ancient Artefact superpower
-            bool ancientArtefactFound = finalRandom < 5;
-            
-            if (ancientArtefactFound)
-            {
-                Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                Console.WriteLine("Choose a powerup:");
-                Console.WriteLine("1 - 50% chance of finding gold for the next five days");
-                Console.WriteLine("2 - $250 instantly");
-                int userInput = GetValidInt();
-
-                switch (userInput)
-                {
-                    case 1:
-                        Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
-                        _increasedGoldChanceDays = 5;
-                        break;
-                    case 2:
-                        Console.WriteLine("You have chosen the $250 instantly");
-                        resources["Dollars"] += 250;
-                        break;
                 }
+            
+                Console.WriteLine("Digging done for the day");
+                Console.WriteLine("Here are the changes to your resources:");
+            
+                // creating randoms for the chance of finding iron and gold
+                Random random = new Random();
+                int finalRandom = random.Next(0, 100);
+            
+                // 65% chance of finding iron
+                bool ironFound = finalRandom < 65;
+            
+                // 5% chance of finding the Ancient Artefact superpower
+                bool ancientArtefactFound = finalRandom < 5;
+            
+                if (ancientArtefactFound)
+                {
+                    Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
+                    Console.WriteLine("Choose a powerup:");
+                    Console.WriteLine("1 - 50% chance of finding gold for the next five days");
+                    Console.WriteLine("2 - $250 instantly");
+                    int userInput = GetValidInt();
+
+                    switch (userInput)
+                    {
+                        case 1:
+                            Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
+                            _increasedGoldChanceDays = 5;
+                            break;
+                        case 2:
+                            Console.WriteLine("You have chosen the $250 instantly");
+                            resources["Dollars"] += 250;
+                            break;
+                    }
                 
-            }
+                }
             
-            // if there is a changed chance of finding gold due to the Ancient Artefact powerup
-            if (_increasedGoldChanceDays != 0)
-            {
-                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
-                goldFound = finalRandom < 50;
-                _increasedGoldChanceDays -= 1;
-            }
-            else
-            {
-                // 15% chance of finding gold
-                goldFound = finalRandom < 15;
-            }
+                // if there is a changed chance of finding gold due to the Ancient Artefact powerup
+                
+                bool goldFound;
+                
+                if (_increasedGoldChanceDays != 0)
+                {
+                    Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
+                    goldFound = finalRandom < 50;
+                    _increasedGoldChanceDays -= 1;
+                }
+                else
+                {
+                    // 15% chance of finding gold
+                    goldFound = finalRandom < 15;
+                }
             
-            // 5% chance of getting a magicToken
-            bool magicTokenFound = finalRandom < 5;
-            if (magicTokenFound && resources["magicTokens"] < 3)
-            {
-                resources["magicTokens"] += 1;
-                Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now, increasing selling price by {resources["magicTokens"] * 10}%");
-                prices["iron"] *= 1.1;
-                prices["gold"] *= 1.1;
-            }
+                // 5% chance of getting a magicToken
+                bool magicTokenFound = finalRandom < 5;
+                if (magicTokenFound && resources["magicTokens"] < 3)
+                {
+                    resources["magicTokens"] += 1;
+                    Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now, increasing selling price by {resources["magicTokens"] * 10}%");
+                    prices["iron"] *= 1.1;
+                    prices["gold"] *= 1.1;
+                }
 
-            // update values within the resources dictionary
-            if (goldFound)
-            {
-                Console.WriteLine("OMG bro you found gold \ud83d\udc51");
-                resources["gold"] += resources["Workers"];
-            }
+                // update values within the resources dictionary
+                if (goldFound)
+                {
+                    Console.WriteLine("OMG bro you found gold \ud83d\udc51");
+                    resources["gold"] += resources["Workers"];
+                }
             
-            if (ironFound)
-            {
-                Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
-                resources["iron"] += resources["Workers"];
-            }
+                if (ironFound)
+                {
+                    Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
+                    resources["iron"] += resources["Workers"];
+                }
 
-            if (_noWageDaysLeft != 0)
-            {
-                Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
-                _noWageDaysLeft -= 1;
-            }
+                if (_noWageDaysLeft != 0)
+                {
+                    Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
+                    _noWageDaysLeft -= 1;
+                }
 
-            else
-            {
-                double totalWages = resources["Workers"] * prices["Wage"];
-                resources["Dollars"] -= totalWages;
+                else
+                {
+                    double totalWages = resources["Workers"] * prices["Wage"];
+                    resources["Dollars"] -= totalWages;
             
-                Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
-            }
+                    Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+                }
             
-            PrintResources(resources);
+                PrintResources(resources);
             
-            _currentDate = _currentDate.AddDays(1);
+                _currentDate = _currentDate.AddDays(1);
             }
             
         }
@@ -584,10 +591,15 @@ namespace Gold_Diggerzz
                 }
             }
             
-            
-            // stock market crash once per month
-            Random random = new Random();
-            int crashDate = random.Next(0, 28);
+            // stock market code below
+            if (_crashDaysLeft > 1)
+            {
+                Console.WriteLine("The stock market has recovered");
+                prices["iron"] *= 2;
+                prices["gold"] *= 2;
+                prices["Workers"] *= 2;
+                _crashDaysLeft = 0;
+            }
             
             if (currentDate.Day == crashDate && _crashDaysLeft == 0)
             {
@@ -598,21 +610,7 @@ namespace Gold_Diggerzz
                 prices["Workers"] /= 2;
                 _crashDaysLeft = 2;
             }
-            if (_crashDaysLeft == 1)
-            {
-                Console.WriteLine("The stock market has recovered");
-                prices["iron"] *= 2;
-                prices["gold"] *= 2;
-                prices["Workers"] *= 2;
-                _crashDaysLeft -= 1;
-            }
-            {
-                Console.WriteLine("The stock market has recovered");
-                prices["iron"] *= 2;
-                prices["gold"] *= 2;
-                prices["Workers"] *= 2;
-            }
-
+            
             
             // 10% raise on the first of every month (apart from January)
             if (currentDate.Month != 1 && currentDate.Day == 1)
