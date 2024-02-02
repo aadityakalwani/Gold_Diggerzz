@@ -644,7 +644,16 @@ namespace Gold_Diggerzz
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
             {
-                return validInt;
+                if (validInt >= 0)
+                {
+                    return validInt;
+                }
+                else
+                {
+                    Console.WriteLine("No bro dont try and enter negative numbers");
+                    GetValidInt();
+                }
+                
             }
 
             Console.WriteLine("Please enter a valid integer");
@@ -655,7 +664,15 @@ namespace Gold_Diggerzz
         {
             if (double.TryParse(Console.ReadLine(), out double validDouble))
             {
-                return validDouble;
+                if (validDouble >= 0)
+                {
+                    return validDouble;
+                }
+                else
+                {
+                    Console.WriteLine("No bro dont try and enter negative numbers");
+                    GetValidDouble();
+                }
             }
         
             Console.WriteLine("Please enter a valid double");
