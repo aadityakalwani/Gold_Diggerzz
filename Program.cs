@@ -662,7 +662,7 @@ namespace Gold_Diggerzz
         
         private static double GetValidDouble()
         {
-            if (double.TryParse(Console.ReadLine(), out double validDouble))
+            if (double.TryParse(Console.ReadLine(), out double validDouble)) 
             {
                 if (validDouble >= 0)
                 {
