@@ -293,7 +293,7 @@ namespace Gold_Diggerzz
                          {
                              spaces += " ";
                          }
-                         Console.WriteLine(spaces + shovel[j]);                                              
+                         Console.WriteLine(spaces + shovel[j]);                                               
                      }                                                                                                   
                 }
 
