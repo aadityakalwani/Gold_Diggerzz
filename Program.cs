@@ -10,7 +10,6 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * when stock market crash brings down prices, they're never raised back up
         */
         
         /* to-do ideas
@@ -102,7 +101,7 @@ namespace Gold_Diggerzz
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static bool _animation = true;
-        private static DateTime _revertPricesDate;
+        private static int _crashDaysLeft;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         
         private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
@@ -590,16 +589,23 @@ namespace Gold_Diggerzz
             Random random = new Random();
             int crashDate = random.Next(0, 28);
             
-            if (currentDate.Day == crashDate || currentDate.Day == crashDate + 1)
+            if (currentDate.Day == crashDate && _crashDaysLeft == 0)
             {
                 Console.WriteLine("The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
                 
                 prices["iron"] /= 2;
                 prices["gold"] /= 2;
                 prices["Workers"] /= 2;
-                _revertPricesDate = currentDate.AddDays(2);
+                _crashDaysLeft = 2;
             }
-            if (currentDate == _revertPricesDate)
+            if (_crashDaysLeft == 1)
+            {
+                Console.WriteLine("The stock market has recovered");
+                prices["iron"] *= 2;
+                prices["gold"] *= 2;
+                prices["Workers"] *= 2;
+                _crashDaysLeft -= 1;
+            }
             {
                 Console.WriteLine("The stock market has recovered");
                 prices["iron"] *= 2;
