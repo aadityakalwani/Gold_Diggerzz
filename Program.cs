@@ -174,25 +174,31 @@ namespace Gold_Diggerzz
         
         private static void PrintGameMechanics()
         {
-            Console.WriteLine("Current features:");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                    GAME MECHANICS                          ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            
+            Console.WriteLine("\nCurrent features:");
             Console.WriteLine("Chance of finding iron = 65%");
             Console.WriteLine("Chance of finding gold = 15%");
             Console.WriteLine("Chance of finding Ancient Artefact = 5%");
-            Console.WriteLine("Cost of hiring employee = $100");
+            Console.WriteLine("\nCost of hiring employee = $100");
             Console.WriteLine("Iron value = $15");
             Console.WriteLine("Gold value = $75");
-            Console.WriteLine("Ancient Artefact has two powerup options:");
+            Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
-            Console.WriteLine("The resources you gain are equal to the number of employees you have");
+            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have");
             Console.WriteLine("Eg. 7 employees = 7 iron found on that day");
-            Console.WriteLine("Baseline wage = $10 per employee per day");
+            Console.WriteLine("\nBaseline wage = $10 per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10%");
             Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
-            Console.WriteLine("You can bribe the govt with $150 and not pay any wages for the next 3 days");
-            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("\nYou can bribe the govt with $150 and not pay any wages for the next 3 days");
+            Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
         }
