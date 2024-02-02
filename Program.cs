@@ -37,7 +37,7 @@ namespace Gold_Diggerzz
                                 - `PrintResources(Dictionary<string, double> resources)`
                        - `GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)`
                                 - `PrintResources(Dictionary<string, double> resources)`
-                       - `PrintRules()`
+                       - `PrintGameMechanics()`
                        - `QuitGame(Dictionary<string, double> resources)`
                        - `GameFailed(Dictionary<string, double> resources)`
                                 - `QuitGame(Dictionary<string, double> resources)`
@@ -58,7 +58,7 @@ namespace Gold_Diggerzz
         gold value = $75
 
         Ancient Artefact has two powerup options:
-        $200 instantly, or a 50% chance of finding gold for the next 5 days
+        $250 instantly, or a 50% chance of finding gold for the next 5 days
 
         the resources you gain are equal to the number of employees you have
         eg. 7 employees = 7 iron found on that day
@@ -68,6 +68,7 @@ namespace Gold_Diggerzz
         10% chance an employee is ill and doesnt come in to work
 
         30% pay increase on weekends only
+        
         on the first of every month, employee wage increases by 10%
 
         on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
@@ -76,12 +77,12 @@ namespace Gold_Diggerzz
 
         you can bribe the govt with $150 and not pay any wages for the next 3 days
 
-
         at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
+        
         if you have no resources to sell, they sell your employees for $100 each
 
         if your $$$ balance is negative and you have no resource, you fail the game
-         */
+        */
         
         // imagine these as like global variables
         private static int _increasedGoldChanceDays;
@@ -131,7 +132,7 @@ namespace Gold_Diggerzz
                         GoToMarket(resourceDictionary, priceDictionary);
                         break;
                     case 3:
-                        PrintRules();
+                        PrintGameMechanics();
                         break;
                     case 4:
                         QuitGame(resourceDictionary);
@@ -171,14 +172,29 @@ namespace Gold_Diggerzz
             
         }
         
-        private static void PrintRules()
+        private static void PrintGameMechanics()
         {
-            Console.WriteLine("Each employee of yours charges $10 in wages for the day");
-            Console.WriteLine("Each day, there is an 60% chance of finding iron");
-            Console.WriteLine("Each day, there is a 10% chance of finding gold");
-            Console.WriteLine("If you find iron or gold, you gain the number of employees you have of the resource");
-            Console.WriteLine("When you go to the market, you are given the rates of resource conversions");
-            Console.WriteLine("If you are in debt, the bossman comes and takes all your resources and sells them for 2/5 the rate");
+            Console.WriteLine("Current features:");
+            Console.WriteLine("Chance of finding iron = 65%");
+            Console.WriteLine("Chance of finding gold = 15%");
+            Console.WriteLine("Chance of finding Ancient Artefact = 5%");
+            Console.WriteLine("Cost of hiring employee = $100");
+            Console.WriteLine("Iron value = $15");
+            Console.WriteLine("Gold value = $75");
+            Console.WriteLine("Ancient Artefact has two powerup options:");
+            Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
+            Console.WriteLine("The resources you gain are equal to the number of employees you have");
+            Console.WriteLine("Eg. 7 employees = 7 iron found on that day");
+            Console.WriteLine("Baseline wage = $10 per employee per day");
+            Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
+            Console.WriteLine("30% pay increase on weekends only");
+            Console.WriteLine("On the first of every month, employee wage increases by 10%");
+            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
+            Console.WriteLine("You can bribe the govt with $150 and not pay any wages for the next 3 days");
+            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each");
+            Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
         }
         
         private static void PrintResources(Dictionary<string, double> resources)
