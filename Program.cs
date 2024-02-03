@@ -14,9 +14,10 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
+         * stats for total amount of stuff found (totalGoldFound, totalIronFound, etc.)
          * more resources eg. diamonds, coal, etc.
          * per-employee stats
-         * stock market feature
+         * stock market feature (kinda done?)
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
