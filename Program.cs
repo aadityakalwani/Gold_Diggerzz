@@ -16,6 +16,13 @@ namespace Gold_Diggerzz
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
          * stats for total amount of stuff found (totalGoldFound, totalIronFound, etc.)
          * more resources eg. diamonds, coal, etc.
+         * loans - you can take a loan from the bank and pay it back with interest
+         * load/save game by saving the dictionaries to a file
+         * more power-ups
+         * send employees for training course that then boosts their productivity
+         * -- implying a complete redesign of the resource-gaining system
+         * add a weather system that changes the probabilities of finding resources
+         * workers retire after x days
          * per-employee stats
          * stock market feature (kinda done?)
          * managers that do shit
@@ -89,15 +96,19 @@ namespace Gold_Diggerzz
         
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
+        
         private static int _increasedGoldChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static bool _animation = true;
         private static int _crashDaysLeft;
+        private static int _trainingCourseDaysLeft;
         private static double _totalIronFound;
         private static double _totalGoldFound;
         private static double _totalDaysDug;
         private static double _totalEmployeesHired;
+        private static double _employeeEfficiency = 1;
+        private static int _employeesSent;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
@@ -186,6 +197,11 @@ namespace Gold_Diggerzz
                     case 9:
                         PrintStats();
                         break;
+                    case 10:
+                        Console.WriteLine("Enter number of employees to send on a training course for $200 (7 days)");
+                        _employeesSent = GetValidInt();
+                        EmployeeTrainingCourse(resourceDictionary);
+                        break;
                     case -1:
                         GameFailed(resourceDictionary);
                         break;
@@ -216,7 +232,8 @@ namespace Gold_Diggerzz
             Console.WriteLine("Each magic token increases selling price by 20%, and you can obtain upto 3 of these");
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
-            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have");
+            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have times their efficiency");
+            Console.WriteLine("Sending an employee on a training course increases their efficiency by 50%");
             Console.WriteLine("Eg. 7 employees = 7 iron found on that day");
             Console.WriteLine("\nBaseline wage = $10 per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
@@ -296,6 +313,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
+                Console.WriteLine("10 - Send an employee for a training course for $200 (7 days)");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("Your choice:");
              
@@ -375,6 +393,8 @@ namespace Gold_Diggerzz
                 
                     Thread.Sleep(500);
                 }
+
+                double newResourcesFound = resources["Workers"] * _employeeEfficiency;
             
                 Console.WriteLine("Digging done for the day");
                 Console.WriteLine("Here are the changes to your resources:");
@@ -442,15 +462,15 @@ namespace Gold_Diggerzz
                 if (goldFound)
                 {
                     Console.WriteLine("OMG bro you found gold \ud83d\udc51");
-                    resources["gold"] += resources["Workers"];
-                    _totalGoldFound += resources["Workers"];
+                    resources["gold"] += newResourcesFound;
+                    _totalGoldFound += newResourcesFound;
                 }
             
                 if (ironFound)
                 {
                     Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
-                    resources["iron"] += resources["Workers"];
-                    _totalIronFound += resources["Workers"];
+                    resources["iron"] += newResourcesFound;
+                    _totalIronFound += newResourcesFound;
                 }
 
                 if (_noWageDaysLeft != 0)
@@ -474,6 +494,16 @@ namespace Gold_Diggerzz
             
             ChangePrices(prices);
             _totalDaysDug += 1;
+            
+            if (_trainingCourseDaysLeft != -1)
+            {
+                _trainingCourseDaysLeft -= 1;
+            }
+            
+            if (_trainingCourseDaysLeft == 0)
+            {
+                resources["Workers"] += _employeesSent;
+            }
 
         }
         
@@ -731,6 +761,18 @@ namespace Gold_Diggerzz
             }
         }
 
+        private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
+        {
+            // to boost the productivity of employees
+            Console.WriteLine($"You have sent {_employeesSent} employees for a training course for 7 days");
+            Console.WriteLine($"This course charged you {200 * _employeesSent} in fees");
+            resources["Dollars"] -= 200 * _employeesSent;
+            _employeeEfficiency *= 1.5;
+            
+            resources["Workers"] -= _employeesSent;
+            _trainingCourseDaysLeft = 7;
+        }
+        
         private static void PrintStats()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
