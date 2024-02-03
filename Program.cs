@@ -19,15 +19,17 @@ namespace Gold_Diggerzz
          * loans - you can take a loan from the bank and pay it back with interest
          * load/save game by saving the dictionaries to a file
          * more power-ups
-         * send employees for training course that then boosts their productivity
-         * -- implying a complete redesign of the resource-gaining system
          * add a weather system that changes the probabilities of finding resources
-         * workers retire after x days
-         * per-employee stats
          * stock market feature (kinda done?)
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
+         
+         * can't do until i have an individual employee stat:
+         * per-employee stats
+         * workers retire after x days
+         * add a 'luck' stat for each employee that changes the probabilities of finding resources
+         * send individual number of employees for training course that then boosts their productivity
          */ 
         
         /*
@@ -196,8 +198,17 @@ namespace Gold_Diggerzz
                         PrintStats();
                         break;
                     case 10:
-                        Console.WriteLine("Sending all of your employees on a training course for 7 days - charged $1000");
-                        EmployeeTrainingCourse(resourceDictionary);
+                        if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"])
+                        {
+                            Console.WriteLine("You have chosen to send all employees on a training course");
+                            Console.WriteLine("You have been charged $200 per employee");
+                            Console.WriteLine("Your employees will be back in 7 days");
+                            EmployeeTrainingCourse(resourceDictionary);
+                        }
+                        else
+                        {
+                            Console.WriteLine("You don't have enough money to send all employees on a training course");
+                        }
                         break;
                     case -1:
                         GameFailed(resourceDictionary);
@@ -310,7 +321,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
-                Console.WriteLine("10 - Send all employees for a training course for $1000 (7 days)");
+                Console.WriteLine("10 - Send all employees for a training course for $200 per employee (7 days)");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("Your choice:");
              
