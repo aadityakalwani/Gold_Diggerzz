@@ -260,10 +260,13 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nHere are your resources: " +
                               "");
             Console.WriteLine("______________________________");
-            foreach (KeyValuePair<string, double> resource in resources)
-            {
-                Console.WriteLine($"|  You have {resource.Value} {resource.Key}");
-            }
+            
+            Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
+            Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
+            Console.WriteLine($"| You have {resources["Dollars"]} dollars           |");
+            Console.WriteLine($"| You have {resources["Workers"]} employees         |");
+            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens  |");
+            
             Console.WriteLine("______________________________");
         }
         
