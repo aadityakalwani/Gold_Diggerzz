@@ -49,7 +49,7 @@ namespace Gold_Diggerzz
          */
         
         /*
-        current features:
+        current features: (also in PrintMechanics())
         chance of finding iron = 65%
         chance of finding gold = 15%
         chance of finding Ancient Artefact = 5%
