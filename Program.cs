@@ -88,7 +88,7 @@ namespace Gold_Diggerzz
         */
         
         // imagine these as like global variables
-        // the ints are for the number of days left for the effect to wear off - set to 0 in Main()
+        // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         private static int _increasedGoldChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
@@ -104,7 +104,7 @@ namespace Gold_Diggerzz
         
         private static void Main()
         {
-            // pregame:
+            // pregame
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
 
@@ -120,9 +120,12 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
+            Console.WriteLine("This are your initial resources...Good luck!");
             
             PrintResources(resourceDictionary);
+            // pregame ends
+            
+            // game starts
             RunGame(resourceDictionary, priceDictionary);
         }
         
@@ -709,7 +712,7 @@ namespace Gold_Diggerzz
                 _lessWorkerDays = 0;
             }
             
-            // 10% chance an employee is unwell and doesnt come in
+            // 10% chance an employee is unwell and doesn't come in
             if (_random.Next(0, 100) < 10)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
