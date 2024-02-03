@@ -42,7 +42,7 @@ namespace Gold_Diggerzz
                          - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
                                   - CheckIfInDebt(Dictionary<string, double> resources)
                                   - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
-                         - DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                         - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices)
                                   - PrintResources(Dictionary<string, double> resources)
                          - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
                                   - PrintResources(Dictionary<string, double> resources)
@@ -154,7 +154,7 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        DigOneDay(resourceDictionary, priceDictionary);
+                        Dig(resourceDictionary, priceDictionary, 1);
                         break;
                     case 2:
                         GoToMarket(resourceDictionary, priceDictionary);
@@ -176,18 +176,7 @@ namespace Gold_Diggerzz
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go");
                         int daysToDig = GetValidInt();
-                        for (int i = 0; i < daysToDig; i++)
-                        {
-                            if (CheckIfInDebt(resourceDictionary, priceDictionary) == "true")
-                            {
-                                CalendarEffects(priceDictionary, _currentDate, resourceDictionary);
-                                
-                                Console.WriteLine("You are in debt, your multi-dig has been stopped");
-                                break;
-                            }
-                            DigOneDay(resourceDictionary, priceDictionary);
-                            Thread.Sleep(1500);
-                        }
+                        Dig(resourceDictionary, priceDictionary, daysToDig);
                         break;
                     case 7:
                         Console.WriteLine("You have chosen to bribe the government");
@@ -345,9 +334,11 @@ namespace Gold_Diggerzz
             return 0;
         }
         
-        private static void DigOneDay(Dictionary<string, double> resources, Dictionary<string, double> prices)
+        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig)
         {
-            if (CheckIfInDebt(resources, prices) !=  "true")
+            for (int days = 0; days <= daysToDig; days++)
+            {
+                if (CheckIfInDebt(resources, prices) !=  "true")
             {
                 if (_animation)
                 {
@@ -507,8 +498,9 @@ namespace Gold_Diggerzz
                 _currentDate = _currentDate.AddDays(1);
             }
             
-            ChangePrices(prices);
-            _totalDaysDug += 1;
+                ChangePrices(prices);
+                _totalDaysDug += 1;
+            }
             
         }
         
