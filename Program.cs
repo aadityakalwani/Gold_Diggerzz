@@ -7,14 +7,13 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
+        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
         
         /*
          * current issues
         */
         
         /* to-do ideas
-         * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
-         * stats for total amount of stuff found (totalGoldFound, totalIronFound, etc.)
          * more resources eg. diamonds, coal, etc.
          * loans - you can take a loan from the bank and pay it back with interest
          * load/save game by saving the dictionaries to a file
@@ -98,11 +97,10 @@ namespace Gold_Diggerzz
         
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
-        
+        private static bool _animation = true;
         private static int _increasedGoldChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
-        private static bool _animation = true;
         private static int _crashDaysLeft;
         private static int _totalBribes;
         private static double _totalIronFound;
@@ -180,6 +178,13 @@ namespace Gold_Diggerzz
                         int daysToDig = GetValidInt();
                         for (int i = 0; i < daysToDig; i++)
                         {
+                            if (CheckIfInDebt(resourceDictionary, priceDictionary) == "true")
+                            {
+                                CalendarEffects(priceDictionary, _currentDate, resourceDictionary);
+                                
+                                Console.WriteLine("You are in debt, your multi-dig has been stopped");
+                                break;
+                            }
                             DigOneDay(resourceDictionary, priceDictionary);
                             Thread.Sleep(1500);
                         }
@@ -634,17 +639,17 @@ namespace Gold_Diggerzz
                     PrintResources(resources);
                 }
                 
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
+                {
+                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    return "bankrupt";
+                }
+                
                 if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] != 0)
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
                     resources["Dollars"] += resources["Workers"] * 100;
                     resources["Workers"] = 0;
-                }
-                
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
-                    return "bankrupt";
                 }
             }
             
