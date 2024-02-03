@@ -56,6 +56,8 @@ namespace Gold_Diggerzz
         cost of hiring employee = $100
         iron value =  $15
         gold value = $75
+        
+        iron and gold values fluctuate by upto ±10% per day
 
         Ancient Artefact has two powerup options:
         $250 instantly, or a 50% chance of finding gold for the next 5 days
@@ -197,6 +199,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nCost of hiring employee = $100");
             Console.WriteLine("Iron value = $15");
             Console.WriteLine("Gold value = $75");
+            Console.WriteLine("Iron and gold values fluctuate by upto ± 10% per day");
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
             Console.WriteLine("\nThe resources you gain are equal to the number of employees you have");
