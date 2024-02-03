@@ -257,7 +257,6 @@ namespace Gold_Diggerzz
         
         private static void PrintResources(Dictionary<string, double> resources)
         {
-            Console.WriteLine("\nHere are your resources:");
             Console.WriteLine("______________________________");
             Console.WriteLine($"| You have ${resources["Dollars"]}           |");
             Console.WriteLine($"| You have {resources["iron"]}kg of iron    |");
@@ -513,13 +512,14 @@ namespace Gold_Diggerzz
             Console.WriteLine("║                    WELCOME TO THE MARKET                   ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
+            
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
             Console.WriteLine("______________________________");
-            foreach (KeyValuePair<string, double> item in priceDictionary)
-            {
-                Console.WriteLine($"|  1 {item.Key} = ${item.Value}  |");
-            }
+            Console.WriteLine($"| Iron: ${priceDictionary["iron"]} per kg");
+            Console.WriteLine($"| Gold: ${priceDictionary["gold"]} per kg");
+            Console.WriteLine($"| Employees: ${priceDictionary["Workers"]} per employee");
+            Console.WriteLine($"| Wages: ${priceDictionary["Wage"]} per employee per day");
             Console.WriteLine("______________________________");
             
             
