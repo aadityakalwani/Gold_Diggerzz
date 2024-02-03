@@ -102,13 +102,11 @@ namespace Gold_Diggerzz
         private static int _lessWorkerDays;
         private static bool _animation = true;
         private static int _crashDaysLeft;
-        private static int _trainingCourseDaysLeft;
         private static double _totalIronFound;
         private static double _totalGoldFound;
         private static double _totalDaysDug;
         private static double _totalEmployeesHired;
         private static double _employeeEfficiency = 1;
-        private static int _employeesSent;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
@@ -198,8 +196,7 @@ namespace Gold_Diggerzz
                         PrintStats();
                         break;
                     case 10:
-                        Console.WriteLine("Enter number of employees to send on a training course for $200 (7 days)");
-                        _employeesSent = GetValidInt();
+                        Console.WriteLine("Sending all of your employees on a training course for 7 days - charged $1000");
                         EmployeeTrainingCourse(resourceDictionary);
                         break;
                     case -1:
@@ -313,7 +310,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
-                Console.WriteLine("10 - Send an employee for a training course for $200 (7 days)");
+                Console.WriteLine("10 - Send all employees for a training course for $1000 (7 days)");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("Your choice:");
              
@@ -495,16 +492,6 @@ namespace Gold_Diggerzz
             ChangePrices(prices);
             _totalDaysDug += 1;
             
-            if (_trainingCourseDaysLeft != -1)
-            {
-                _trainingCourseDaysLeft -= 1;
-            }
-            
-            if (_trainingCourseDaysLeft == 0)
-            {
-                resources["Workers"] += _employeesSent;
-            }
-
         }
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
@@ -764,13 +751,14 @@ namespace Gold_Diggerzz
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
         {
             // to boost the productivity of employees
-            Console.WriteLine($"You have sent {_employeesSent} employees for a training course for 7 days");
-            Console.WriteLine($"This course charged you {200 * _employeesSent} in fees");
-            resources["Dollars"] -= 200 * _employeesSent;
+            Console.WriteLine($"This course charged you {200 * resources["Workers"]} in fees");
+            resources["Dollars"] -= 200 * resources["Workers"];
             _employeeEfficiency *= 1.5;
             
-            resources["Workers"] -= _employeesSent;
-            _trainingCourseDaysLeft = 7;
+            _currentDate.AddDays(7);
+            Console.WriteLine("Training employees...");
+            Thread.Sleep(1500);
+            Console.WriteLine("7 Days have now passed");
         }
         
         private static void PrintStats()
