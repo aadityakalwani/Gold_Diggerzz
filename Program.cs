@@ -94,6 +94,10 @@ namespace Gold_Diggerzz
         private static int _lessWorkerDays;
         private static bool _animation = true;
         private static int _crashDaysLeft;
+        private static double _totalIronFound;
+        private static double _totalGoldFound;
+        private static double _totalDaysDug;
+        private static double _totalEmployeesHired;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
@@ -175,6 +179,9 @@ namespace Gold_Diggerzz
                     case 8:
                         Console.WriteLine("Giving you the information now...");
                         Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                        break;
+                    case 9:
+                        PrintStats();
                         break;
                     case -1:
                         GameFailed(resourceDictionary);
@@ -285,6 +292,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("6 - Dig multiple days");
                 Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
+                Console.WriteLine("9 - Print stats");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("Your choice:");
              
@@ -432,12 +440,14 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("OMG bro you found gold \ud83d\udc51");
                     resources["gold"] += resources["Workers"];
+                    _totalGoldFound += resources["Workers"];
                 }
             
                 if (ironFound)
                 {
                     Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
                     resources["iron"] += resources["Workers"];
+                    _totalIronFound += resources["Workers"];
                 }
 
                 if (_noWageDaysLeft != 0)
@@ -460,7 +470,8 @@ namespace Gold_Diggerzz
             }
             
             ChangePrices(prices);
-            
+            _totalDaysDug += 1;
+
         }
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
@@ -545,6 +556,7 @@ namespace Gold_Diggerzz
                             resources["Workers"] += employeesToHire;
                             resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
                             Console.WriteLine($"You now have {resources["Workers"]} employees");
+                            _totalEmployeesHired += employeesToHire;
                         }
                         break;
                     case 4:
@@ -716,6 +728,21 @@ namespace Gold_Diggerzz
             }
         }
 
+        private static void PrintStats()
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                        YOUR STATS                          ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            
+            Console.WriteLine($"Here are your stats as of {_currentDate.Date: dddd, dd MMMM yyyy}:");
+            Console.WriteLine($"Total iron found {_totalIronFound}");
+            Console.WriteLine($"Total gold found {_totalGoldFound}");
+            Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
+            Console.WriteLine($"Total days dug: {_totalDaysDug}");
+        }
+        
         private static int GetValidInt()
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
