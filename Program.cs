@@ -104,6 +104,7 @@ namespace Gold_Diggerzz
         private static int _lessWorkerDays;
         private static bool _animation = true;
         private static int _crashDaysLeft;
+        private static int _totalBribes;
         private static double _totalIronFound;
         private static double _totalGoldFound;
         private static double _totalDaysDug;
@@ -189,6 +190,7 @@ namespace Gold_Diggerzz
                         resourceDictionary["Dollars"] -= 150;
                         Console.WriteLine("You don't have to pay wages for the next three days");
                         _noWageDaysLeft = 3;
+                        _totalBribes += 1;
                         break;
                     case 8:
                         Console.WriteLine("Giving you the information now...");
@@ -257,14 +259,14 @@ namespace Gold_Diggerzz
         
         private static void PrintResources(Dictionary<string, double> resources)
         {
-            Console.WriteLine("______________________________");
-            Console.WriteLine($"| You have ${resources["Dollars"]}           |");
-            Console.WriteLine($"| You have {resources["iron"]}kg of iron    |");
-            Console.WriteLine($"| You have {resources["gold"]}kg of gold    |");
-            Console.WriteLine($"| You have {resources["Workers"]} employees    |");
-            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens |");
-            Console.WriteLine($"\nYour employee efficiency is currently at {_employeeEfficiency}");
-            Console.WriteLine("______________________________");
+            Console.WriteLine("__________________________________");
+            Console.WriteLine($"| You have ${resources["Dollars"]}                   |");
+            Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
+            Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
+            Console.WriteLine($"| You have {resources["Workers"]} employees            |");
+            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens         |");
+            Console.WriteLine($"| Your employees' efficiency is {_employeeEfficiency} |");
+            Console.WriteLine("_________________________________\n");
         }
         
         private static Dictionary<string, double> CreateResourceDictionary()
@@ -310,8 +312,8 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("\nPlease select an option:");
-                Console.WriteLine("_________________________");
+                Console.WriteLine("___________________________________");
+                Console.WriteLine("Please select an option:");
                 Console.WriteLine("1 - Dig one day");
                 Console.WriteLine("2 - Go to market");
                 Console.WriteLine("3 - Print game mechanics");
@@ -322,7 +324,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
                 Console.WriteLine("10 - Send all employees for a training course for $200 per employee (7 days)");
-                Console.WriteLine("_________________________");
+                Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt();
@@ -653,6 +655,7 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("Your final stats were:");
             PrintResources(resources);
+            PrintStats();
             Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
@@ -786,6 +789,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total gold found {_totalGoldFound}");
             Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
             Console.WriteLine($"Total days dug: {_totalDaysDug}");
+            Console.WriteLine($"Total bribes paid: {_totalBribes}");
         }
         
         private static int GetValidInt()
