@@ -87,6 +87,7 @@ namespace Gold_Diggerzz
         */
         
         // imagine these as like global variables
+        // the ints are for the number of days left for the effect to wear off - set to 0 in Main()
         private static int _increasedGoldChanceDays;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
@@ -196,10 +197,12 @@ namespace Gold_Diggerzz
             Console.WriteLine("Chance of finding iron = 65%");
             Console.WriteLine("Chance of finding gold = 15%");
             Console.WriteLine("Chance of finding Ancient Artefact = 5%");
+            Console.WriteLine("Chance of finding a magic token = 5%");
             Console.WriteLine("\nCost of hiring employee = $100");
             Console.WriteLine("Iron value = $15");
             Console.WriteLine("Gold value = $75");
             Console.WriteLine("Iron and gold values fluctuate by upto ± 10% per day");
+            Console.WriteLine("Each magic token increases selling price by 20%, and you can obtain upto 3 of these");
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
             Console.WriteLine("\nThe resources you gain are equal to the number of employees you have");
@@ -218,7 +221,7 @@ namespace Gold_Diggerzz
         
         private static void PrintResources(Dictionary<string, double> resources)
         {
-            Console.WriteLine("\nHere are your resources:3" +
+            Console.WriteLine("\nHere are your resources: " +
                               "");
             Console.WriteLine("______________________________");
             foreach (KeyValuePair<string, double> resource in resources)
@@ -417,9 +420,10 @@ namespace Gold_Diggerzz
                 if (magicTokenFound && resources["magicTokens"] < 3)
                 {
                     resources["magicTokens"] += 1;
-                    Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now, increasing selling price by {resources["magicTokens"] * 10}%");
-                    prices["iron"] *= 1.1;
-                    prices["gold"] *= 1.1;
+                    Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
+                    Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
+                    prices["iron"] *= 1.2;
+                    prices["gold"] *= 1.2;
                 }
 
                 // update values within the resources dictionary
@@ -630,10 +634,10 @@ namespace Gold_Diggerzz
             Random random = new Random();
             int randomChange = random.Next(-10, 10);
 
-            prices["Iron"] += randomChange;
-            prices["Gold"] += randomChange;
+            prices["iron"] += randomChange;
+            prices["gold"] += randomChange;
             
-            Console.WriteLine("The prices of Iron and Gold have been changed in line with stock market movements");
+            Console.WriteLine("The prices of iron and Gold have been changed in line with stock market movements");
 
         }
         
