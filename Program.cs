@@ -261,11 +261,12 @@ namespace Gold_Diggerzz
                               "");
             Console.WriteLine("______________________________");
             
-            Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
-            Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
-            Console.WriteLine($"| You have {resources["Dollars"]} dollars           |");
-            Console.WriteLine($"| You have {resources["Workers"]} employees         |");
-            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens  |");
+            Console.WriteLine($"| You have ${resources["Dollars"]}           |");
+            Console.WriteLine($"| You have {resources["iron"]}kg of iron    |");
+            Console.WriteLine($"| You have {resources["gold"]}kg of gold    |");
+            Console.WriteLine($"| You have {resources["Workers"]} employees    |");
+            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens |");
+            Console.WriteLine($"\nYour employee efficiency is currently at {_employeeEfficiency}");
             
             Console.WriteLine("______________________________");
         }
@@ -472,14 +473,14 @@ namespace Gold_Diggerzz
                 // update values within the resources dictionary
                 if (goldFound)
                 {
-                    Console.WriteLine("OMG bro you found gold \ud83d\udc51");
+                    Console.WriteLine($"You found {newResourcesFound}kg of gold \ud83d\udc51");
                     resources["gold"] += newResourcesFound;
                     _totalGoldFound += newResourcesFound;
                 }
             
                 if (ironFound)
                 {
-                    Console.WriteLine("OMG bro you found iron \ud83e\uddbe ");
+                    Console.WriteLine($"You found {newResourcesFound}kg of iron \ud83e\uddbe ");
                     resources["iron"] += newResourcesFound;
                     _totalIronFound += newResourcesFound;
                 }
