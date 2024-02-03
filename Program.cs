@@ -72,7 +72,7 @@ namespace Gold_Diggerzz
         Ancient Artefact has two powerup options:
         $250 instantly, or a 50% chance of finding gold for the next 5 days
 
-        the resources you gain are equal to the number of employees you have
+        the resources you gain are equal to the number of employees you have times their efficiency
         eg. 7 employees = 7 iron found on that day
 
         baseline wage = $10 per employee per day
@@ -539,7 +539,7 @@ namespace Gold_Diggerzz
                 {
                     case 1:
                         Console.WriteLine("You have chosen to sell iron for dollars");
-                        Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]} iron");
+                        Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
                         double ironToSell = GetValidDouble();
                         
                         if (ironToSell > resources["iron"])
@@ -558,11 +558,11 @@ namespace Gold_Diggerzz
                         break;
                     case 2:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
-                        Console.WriteLine($"How many gold do you want to sell?\nYou have {resources["gold"]} gold");
+                        Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
                         double goldToSell = GetValidInt();
                         if (goldToSell > resources["gold"])
                         {
-                            Console.WriteLine("You don't have enough iron to sell that much");
+                            Console.WriteLine("You don't have enough gold to sell that much");
                         }
                         else
                         {
