@@ -14,9 +14,7 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * (initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py)
-         * i can have a “pay for information” where you pay $50 and it tells you when the market is going to crash
          * more resources eg. diamonds, coal, etc.
-         * changing chance of finding gold
          * per-employee stats
          * stock market feature
          * managers that do shit
@@ -91,17 +89,21 @@ namespace Gold_Diggerzz
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static bool _animation = true;
-        private static int _crashDaysLeft = 0;
+        private static int _crashDaysLeft;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
-        static Random random = new Random();
-        private static int crashDate = random.Next(0, 28);
+        static Random _random = new Random();
+        private static int _crashDate = _random.Next(0, 28);
         
         private static void Main()
         {
             // pregame:
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
-            
+
+            _lessWorkerDays = 0;
+            _increasedGoldChanceDays = 0;
+            _noWageDaysLeft = 0;
+            _crashDaysLeft = 0;
             
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -111,8 +113,6 @@ namespace Gold_Diggerzz
             
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("We have created your initial resource dictionary, we're cooking:");
-            
-            Console.WriteLine($"Expect a stock market crash on the {crashDate}th of every month");
             
             PrintResources(resourceDictionary);
             RunGame(resourceDictionary, priceDictionary);
@@ -168,6 +168,10 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have to pay wages for the next three days");
                         _noWageDaysLeft = 3;
                         break;
+                    case 8:
+                        Console.WriteLine("Giving you the information now...");
+                        Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                        break;
                     case -1:
                         GameFailed(resourceDictionary);
                         break;
@@ -179,7 +183,6 @@ namespace Gold_Diggerzz
             
         }
         
-        // pass in resources and prices to ge tup to date shit
         private static void PrintGameMechanics()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -271,9 +274,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Go to market");
                 Console.WriteLine("3 - Print game mechanics");
                 Console.WriteLine("4 - Quit game");
-                Console.WriteLine("5 - Skip one day");
+                Console.WriteLine("5 - Skip one day - $30 cost");
                 Console.WriteLine("6 - Dig multiple days");
-                Console.WriteLine("7 - Bribe the government");
+                Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
+                Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("_________________________");
                 Console.WriteLine("Your choice:");
              
@@ -447,6 +451,8 @@ namespace Gold_Diggerzz
                 _currentDate = _currentDate.AddDays(1);
             }
             
+            ChangePrices(prices);
+            
         }
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
@@ -610,6 +616,24 @@ namespace Gold_Diggerzz
             QuitGame(resources);
         }
         
+        private static void ChangeProbabilities(Dictionary<string, double> prices)
+        {
+            // to change the probabilities of finding iron and gold
+        }
+
+        private static void ChangePrices(Dictionary<string, double> prices)
+        {
+            // upto a 30% fluctuation in prices based on random probability
+            Random random = new Random();
+            int randomChange = random.Next(-10, 10);
+
+            prices["Iron"] += randomChange;
+            prices["Gold"] += randomChange;
+            
+            Console.WriteLine("The prices of Iron and Gold have been changed in line with stock market movements");
+
+        }
+        
         private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
         {
             
@@ -639,7 +663,7 @@ namespace Gold_Diggerzz
                 _crashDaysLeft = 0;
             }
             
-            if (currentDate.Day == crashDate && _crashDaysLeft == 0)
+            if (currentDate.Day == _crashDate && _crashDaysLeft == 0)
             {
                 Console.WriteLine("The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
                 
@@ -666,7 +690,7 @@ namespace Gold_Diggerzz
             }
             
             // 10% chance an employee is unwell and doesnt come in
-            if (random.Next(0, 100) < 10)
+            if (_random.Next(0, 100) < 10)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 resources["Workers"] -= 1;
