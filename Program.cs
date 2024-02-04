@@ -11,13 +11,14 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * testing needed to find logic errors
+         * after many days of digging the prices of stuff are negative
+         * after many days of digging the employee efficiency is v v low
+         * probably both to do with logic in ChangePrices() and ChangeProbabilities() of undoing effects
         */
         
         /* to-do ideas
          * achievements - eg. find 10kg total iron
          * more resources eg. diamonds, coal, etc.
-         * time machine powerup
          * tutorial mode
          * loans - you can take a loan from the bank and pay it back with interest
          * option to invest in the stock market
@@ -769,7 +770,7 @@ namespace Gold_Diggerzz
                     case 1:
                         Console.WriteLine("You have chosen to sell iron for dollars");
                         Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
-                        double ironToSell = GetValidDouble(0, resources["iron"]);
+                        double ironToSell = GetValidDouble(0, 100000000);
                         
                         if (ironToSell > resources["iron"])
                         {
@@ -789,7 +790,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
-                        double goldToSell = GetValidDouble(0, resources["gold"]);
+                        double goldToSell = GetValidDouble(0, 10000000);
                         if (goldToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
@@ -839,7 +840,7 @@ namespace Gold_Diggerzz
                     case 6:
                         Console.WriteLine("Your have chosen to sell stone for dollars");
                         Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
-                        double stoneToSell = GetValidDouble(0, resources["stone"]);
+                        double stoneToSell = GetValidDouble(0, 1000000);
                         if (stoneToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough stone to sell that much");
@@ -891,6 +892,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
                     Console.WriteLine("This will give you 10 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
+                    _animation = false;
                     Dig(resources, prices, 10, probabilities, powerUpDictionary);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
