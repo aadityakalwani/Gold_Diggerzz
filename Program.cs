@@ -371,9 +371,9 @@ namespace Gold_Diggerzz
                 { "stone", 90 },
                 { "iron", 65 },
                 { "gold", 15 },
-                { "AncientArtefact", 5 },
-                { "TimeMachine", 5 },
-                { "magicToken", 5 },
+                { "AncientArtefact", 8 },
+                { "magicToken", 7 },
+                { "TimeMachine", 6 },
                 { "employeeIll", 10 },
                 { "stockMarketCrash", 5 }
             };
@@ -564,16 +564,21 @@ namespace Gold_Diggerzz
             
                     // creating randoms for the chance of finding iron and gold and stone
                     Random random = new Random();
-                    int finalRandom = random.Next(0, 100);
+                    int randomForStone = random.Next(0, 100);
+                    int randomForIron = random.Next(0, 100);
+                    int randomForGold = random.Next(0, 100);
+                    int randomForAncientArtefact = _random.Next(0, 100);
+                    int randomForTimeMachine = _random.Next(0, 100);
+                    int randomForMagicToken = _random.Next(0, 100);
             
                     // baseline 65% chance of finding iron
-                    bool ironFound = finalRandom < probabilities["iron"];
+                    bool ironFound = randomForIron < probabilities["iron"];
 
                     // baseline 90% chance of finding stone
-                    bool stoneFound = finalRandom < probabilities["stone"];
+                    bool stoneFound = randomForStone < probabilities["stone"];
             
                     // baseline 5% chance of finding the Ancient Artefact superpower
-                    bool ancientArtefactFound = finalRandom < probabilities["AncientArtefact"];
+                    bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
             
                     if (ancientArtefactFound)
                     {
@@ -596,7 +601,7 @@ namespace Gold_Diggerzz
                     }
                     
                     // baseline 5% chance of finding the Time Machine superpower
-                    bool timeMachineFound = finalRandom < probabilities["TimeMachine"];
+                    bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
             
                     if (timeMachineFound)
                     {
@@ -633,10 +638,10 @@ namespace Gold_Diggerzz
                         probabilities["gold"] = 15;
                     }
                     
-                    bool goldFound = finalRandom < probabilities["gold"];
+                    bool goldFound = randomForGold < probabilities["gold"];
             
                     // 5% chance of getting a magicToken
-                    bool magicTokenFound = finalRandom < 5;
+                    bool magicTokenFound = randomForMagicToken < 5;
                     if (magicTokenFound && resources["magicTokens"] < probabilities["magicToken"])
                     {
                         resources["magicTokens"] += 1;
