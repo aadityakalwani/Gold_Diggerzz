@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * testing needed to find logic errors
         */
         
         /* to-do ideas
@@ -146,12 +147,20 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("This are your initial resources...Good luck!");
+            Console.WriteLine("This are your initial resources...");
             
             PrintResources(resourceDictionary);
-            // pregame ends
+            
+            Console.WriteLine("Do you want a tutorial? (y/n)");
+            if (Console.ReadLine() == "y")
+            {
+                RunTutorial();
+                PrintGameMechanics();
+            }
+            
             
             // game starts
+            Console.WriteLine("The game is about to start, good luck...");
             RunGame(resourceDictionary, priceDictionary, probabilityDictionary);
         }
         
@@ -347,6 +356,23 @@ namespace Gold_Diggerzz
             };
             
             return probabilities;
+        }
+
+        private static void RunTutorial()
+        {
+            Console.WriteLine("Welcome to the tutorial");
+            Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
+            Console.WriteLine("You have a few resources to start with:");
+            Console.WriteLine("You have $100, 0kg of iron, 0kg of gold, and 1 employee");
+            Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
+            Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
+            Console.WriteLine("You can also pay $50 for information on the next stock market crash");
+            Console.WriteLine("You can also send all employees for a training course for $200 per employee (7 days)");
+            Console.WriteLine("You can also sell all your iron and gold for dollars");
+            Console.WriteLine("You can also skip one day for $30");
+            Console.WriteLine("You can also quit the game");
+            Console.WriteLine("You can also dig for multiple days");
+            Console.WriteLine("Here are the game mechanics:");
         }
         
         private static int UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
