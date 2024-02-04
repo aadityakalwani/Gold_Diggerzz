@@ -12,6 +12,7 @@ namespace Gold_Diggerzz
         /*
          * current issues
          * testing needed to find logic errors
+         * resources are being printed at the end of every day during a multiple day dig - stop this
         */
         
         /* to-do ideas
@@ -661,9 +662,9 @@ namespace Gold_Diggerzz
             
                 ChangePrices(prices);
                 _totalDaysDug += 1;
-                Thread.Sleep(1000);
             }
-            
+        
+            Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             PrintResources(resources);
         }
         
