@@ -588,19 +588,24 @@ namespace Gold_Diggerzz
 
                     if (_badWeatherDaysLeft != 0)
                     {
+                        Console.WriteLine($"{_badWeatherDaysLeft} days left of torrential rain");
                         _badWeatherDaysLeft -= 1;
                     }
                     
                     if (_hurricaneDaysLeft != 0)
                     {
+                        Console.WriteLine($"{_hurricaneDaysLeft} days left of hurricane");
                         _hurricaneDaysLeft -= 1;
                     }
                     
                     if (_beautifulSkyDaysLeft != 0)
                     {
+                        Console.WriteLine($"{_beautifulSkyDaysLeft} days left of beautiful sky");
                         _beautifulSkyDaysLeft -= 1;
                     }
                     
+                    
+                    // print resources at the end of a dig session
                     if (daysToDig == 1)
                     { 
                         PrintResources(resources);
@@ -838,7 +843,7 @@ namespace Gold_Diggerzz
                 _employeeEfficiency = _employeeEfficiency * 10/7;
             }
             
-            if (_random.Next(0, 100) < 30)
+            if (_random.Next(0, 100) < 30 && _badWeatherDaysLeft == 0)
             {
                 Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
                 _employeeEfficiency *= 0.7;
@@ -854,7 +859,7 @@ namespace Gold_Diggerzz
             }
             
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
-            if (_random.Next(0, 100) < 5)
+            if (_random.Next(0, 100) < 5 && _hurricaneDaysLeft == 0)
             {
                 Console.WriteLine("A hurricane is coming, efficiency is now 30% the next five days");
                 _employeeEfficiency *= 0.3;
@@ -868,11 +873,12 @@ namespace Gold_Diggerzz
                 _employeeEfficiency = _employeeEfficiency * 2/3;
             }
 
-            if (_random.Next(0, 100) < 40)
+            if (_random.Next(0, 100) < 40 && _beautifulSkyDaysLeft == 0)
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 50% more efficient for two days");
                 _employeeEfficiency *= 1.5;
                 _beautifulSkyDaysLeft = 3;
+                
             }
             
         }
@@ -886,8 +892,6 @@ namespace Gold_Diggerzz
             prices["iron"] += randomChange;
             prices["gold"] += randomChange;
             
-            Console.WriteLine("The prices of iron and Gold have been changed in line with stock market movements");
-
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
