@@ -129,6 +129,15 @@ namespace Gold_Diggerzz
             _noWageDaysLeft = 0;
             _crashDaysLeft = 0;
             _badWeatherDaysLeft = 0;
+            _hurricaneDaysLeft = 0;
+            _beautifulSkyDaysLeft = 0;
+            _totalBribes = 0;
+            _totalIronFound = 0;
+            _totalGoldFound = 0;
+            _totalDaysDug = 0;
+            _totalEmployeesHired = 1;
+            _employeeEfficiency = 1;
+            
             
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -417,7 +426,7 @@ namespace Gold_Diggerzz
         
         private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
         {
-            for (int days = 0; days <= daysToDig; days++)
+            for (int days = 0; days < daysToDig; days++)
             {
                 if (CheckIfInDebt(resources, prices) !=  "true")
                 {
@@ -823,7 +832,7 @@ namespace Gold_Diggerzz
 
             // rain reducing efficiency
             // undo the effects of rain reduced efficiency
-            if (_badWeatherDaysLeft == 0)
+            if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
                 _employeeEfficiency = _employeeEfficiency * 10/7;
@@ -833,12 +842,12 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
                 _employeeEfficiency *= 0.7;
-                _badWeatherDaysLeft = 2;
+                _badWeatherDaysLeft = 3;
             }
             
             
             // to undo effects of hurricane
-            if (_hurricaneDaysLeft == 0)
+            if (_hurricaneDaysLeft == 1)
             {
                 Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
                 _employeeEfficiency = _employeeEfficiency * 10/3;
@@ -849,14 +858,21 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("A hurricane is coming, efficiency is now 30% the next five days");
                 _employeeEfficiency *= 0.3;
-                _hurricaneDaysLeft = 5;
+                _hurricaneDaysLeft = 6;
+            }
+            
+            // 40% chance beautiful sky increasing efficiency
+            if (_beautifulSkyDaysLeft == 1)
+            {
+                Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
+                _employeeEfficiency = _employeeEfficiency * 2/3;
             }
 
             if (_random.Next(0, 100) < 40)
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 50% more efficient for two days");
                 _employeeEfficiency *= 1.5;
-                _beautifulSkyDaysLeft = 2;
+                _beautifulSkyDaysLeft = 3;
             }
             
         }
