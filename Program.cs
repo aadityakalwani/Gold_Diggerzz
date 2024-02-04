@@ -35,26 +35,27 @@ namespace Gold_Diggerzz
          */ 
         
         /*
-         * hierarchy
+         * hierarchy:
          
-             - Main()
-                   - CreateResourceDictionary()
-                   - CreatePricesDictionary()
-                   - PrintResources(Dictionary<string, double> resources)
-                   - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
-                         - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
-                                  - CheckIfInDebt(Dictionary<string, double> resources)
-                                  - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
-                         - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices)
-                                  - PrintResources(Dictionary<string, double> resources)
-                         - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
-                                  - PrintResources(Dictionary<string, double> resources)
-                         - PrintGameMechanics()
-                         - QuitGame(Dictionary<string, double> resources)
-                         - GameFailed(Dictionary<string, double> resources)
-                                  - QuitGame(Dictionary<string, double> resources)
-             - GetValidInt()
-             - GetValidDouble()
+         - Main()
+               - CreateResourceDictionary()
+               - CreatePricesDictionary()
+               - CreateProbabilityDictionary()
+               - PrintResources(Dictionary<string, double> resources)
+               - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
+                     - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                              - CheckIfInDebt(Dictionary<string, double> resources)
+                              - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
+                     - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
+                              - PrintResources(Dictionary<string, double> resources)
+                     - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
+                              - PrintResources(Dictionary<string, double> resources)
+                     - PrintGameMechanics()
+                     - QuitGame(Dictionary<string, double> resources)
+                     - GameFailed(Dictionary<string, double> resources)
+                              - QuitGame(Dictionary<string, double> resources)
+               - GetValidInt()
+               - GetValidDouble()
 
            This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
          */
@@ -148,7 +149,7 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("This are your initial resources...");
+            Console.WriteLine("These are your initial resources...");
             
             PrintResources(resourceDictionary);
             
@@ -157,6 +158,7 @@ namespace Gold_Diggerzz
             {
                 RunTutorial();
                 PrintGameMechanics();
+                Thread.Sleep(2000);
             }
             
             
@@ -282,6 +284,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
+            Thread.Sleep(2000);
         }
         
         private static void PrintStats()
@@ -305,7 +308,7 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("__________________________________");
             Console.WriteLine($"| You have ${resources["Dollars"]}                   |");
-            Console.WriteLine($"| You have {resources["stone"]}kg of stone            |");
+            Console.WriteLine($"| You have {resources["stone"]}kg of stone           |");
             Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
             Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
             Console.WriteLine($"| You have {resources["Workers"]} employees            |");
@@ -565,19 +568,20 @@ namespace Gold_Diggerzz
             
                     // if there is a changed chance of finding gold due to the Ancient Artefact powerup
                 
-                    bool goldFound;
-                
                     if (_increasedGoldChanceDays != 0)
                     {
                         Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
-                        goldFound = finalRandom < 50;
+                        probabilities["gold"] = 50;
                         _increasedGoldChanceDays -= 1;
                     }
+                    
                     else
                     {
-                        // 15% chance of finding gold
-                        goldFound = finalRandom < probabilities["gold"];
+                        // restore 15% chance of finding gold
+                        probabilities["gold"] = 15;
                     }
+                    
+                    bool goldFound = finalRandom < probabilities["gold"];
             
                     // 5% chance of getting a magicToken
                     bool magicTokenFound = finalRandom < 5;
@@ -652,25 +656,15 @@ namespace Gold_Diggerzz
                         _beautifulSkyDaysLeft -= 1;
                     }
                     
-                    
-                    // print resources at the end of a dig session
-                    if (daysToDig == 1)
-                    { 
-                        PrintResources(resources);
-                    }
-            
                     _currentDate = _currentDate.AddDays(1);
                 }
             
                 ChangePrices(prices);
                 _totalDaysDug += 1;
+                Thread.Sleep(1000);
             }
             
-            if (daysToDig > 1)
-            {
-                PrintResources(resources);
-            }
-            
+            PrintResources(resources);
         }
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
@@ -962,7 +956,6 @@ namespace Gold_Diggerzz
             prices["stone"] += randomChange;
             prices["iron"] += randomChange;
             prices["gold"] += randomChange;
-            
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
