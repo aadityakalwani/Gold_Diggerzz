@@ -25,10 +25,11 @@ namespace Gold_Diggerzz
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
          
-         * can't do until i have an individual employee stat:
+         * features i can't do until i have an individual employee stat:
          * per-employee stats
          * workers retire after x days
          * add a 'luck' stat for each employee that changes the probabilities of finding resources
+             * when you hire an employee they're given a 'luck' rating between 20-80%
          * send individual number of employees for training course that then boosts their productivity
          */ 
         
@@ -121,6 +122,7 @@ namespace Gold_Diggerzz
             // pregame
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
+            Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
 
             _lessWorkerDays = 0;
             _increasedGoldChanceDays = 0;
@@ -141,10 +143,10 @@ namespace Gold_Diggerzz
             // pregame ends
             
             // game starts
-            RunGame(resourceDictionary, priceDictionary);
+            RunGame(resourceDictionary, priceDictionary, probabilityDictionary);
         }
         
-        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary)
+        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
         {
             int menuOption;
             do
@@ -159,7 +161,7 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(resourceDictionary, priceDictionary, 1);
+                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary);
                         break;
                     case 2:
                         GoToMarket(resourceDictionary, priceDictionary);
@@ -181,7 +183,7 @@ namespace Gold_Diggerzz
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go");
                         int daysToDig = GetValidInt();
-                        Dig(resourceDictionary, priceDictionary, daysToDig);
+                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary);
                         break;
                     case 7:
                         Console.WriteLine("You have chosen to bribe the government");
@@ -413,7 +415,7 @@ namespace Gold_Diggerzz
             return inDebt;
         }
         
-        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig)
+        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
         {
             for (int days = 0; days <= daysToDig; days++)
             {
@@ -488,11 +490,11 @@ namespace Gold_Diggerzz
                     Random random = new Random();
                     int finalRandom = random.Next(0, 100);
             
-                    // 65% chance of finding iron
-                    bool ironFound = finalRandom < 65;
+                    // baseline 65% chance of finding iron
+                    bool ironFound = finalRandom < probabilities["iron"];
             
-                    // 5% chance of finding the Ancient Artefact superpower
-                    bool ancientArtefactFound = finalRandom < 5;
+                    // baseline 5% chance of finding the Ancient Artefact superpower
+                    bool ancientArtefactFound = finalRandom < probabilities["AncientArtefact"];
             
                     if (ancientArtefactFound)
                     {
@@ -529,12 +531,12 @@ namespace Gold_Diggerzz
                     else
                     {
                         // 15% chance of finding gold
-                        goldFound = finalRandom < 15;
+                        goldFound = finalRandom < probabilities["gold"];
                     }
             
                     // 5% chance of getting a magicToken
                     bool magicTokenFound = finalRandom < 5;
-                    if (magicTokenFound && resources["magicTokens"] < 3)
+                    if (magicTokenFound && resources["magicTokens"] < probabilities["magicToken"])
                     {
                         resources["magicTokens"] += 1;
                         Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
