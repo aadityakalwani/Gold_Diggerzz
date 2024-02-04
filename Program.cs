@@ -20,7 +20,6 @@ namespace Gold_Diggerzz
          * option to invest in the stock market
          * load/save game by saving the dictionaries to a file
          * more power-ups
-         * add a weather system that changes the probabilities of finding resources
          * stock market feature (kinda done?)
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
@@ -559,6 +558,9 @@ namespace Gold_Diggerzz
                         _totalIronFound += newResourcesFound;
                     }
 
+                    
+                    // calendar/weather etc effects 
+                    
                     if (_noWageDaysLeft != 0)
                     {
                         Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
@@ -814,7 +816,7 @@ namespace Gold_Diggerzz
             }
             
             
-            // weather effects: rain reducing efficiency, hurricane, beautifulSky increasing efficiency
+            // weather effects: rain or hurricane reducing efficiency, beautifulSky increasing efficiency
             
 
             // rain reducing efficiency
