@@ -882,6 +882,7 @@ namespace Gold_Diggerzz
                 case 2:
                 {
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
+                    Console.WriteLine("This feature is not yet implemented");
                     // whatever the time machine finna do bro
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
