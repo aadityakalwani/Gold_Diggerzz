@@ -882,8 +882,9 @@ namespace Gold_Diggerzz
                 case 2:
                 {
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
-                    Console.WriteLine("This feature is not yet implemented");
-                    // whatever the time machine finna do bro
+                    Console.WriteLine("This will give you 10 days' worth of rewards without costing you anything");
+                    _noWageDaysLeft = 10;
+                    Dig(resources, prices, 10, probabilities, powerUpDictionary);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
                 }
