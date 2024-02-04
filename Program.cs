@@ -721,6 +721,7 @@ namespace Gold_Diggerzz
             
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing
             
+            
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
@@ -728,7 +729,7 @@ namespace Gold_Diggerzz
                 prices["Wage"] *= 1.3;
             }
             
-            // to undo the effect of above
+            // to undo the effect of weekend pay
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
                 if (currentDate.Month != 1)
@@ -738,6 +739,7 @@ namespace Gold_Diggerzz
             }
             
             // stock market code below
+            // to undo the effects of the crash
             if (_crashDaysLeft > 1)
             {
                 Console.WriteLine("The stock market has recovered");
@@ -764,7 +766,7 @@ namespace Gold_Diggerzz
                 prices["Wage"] *= 1.1;
             } 
             
-            // to undo the effects of below
+            // to undo the effects of unwell workers
             if (_lessWorkerDays == 1)
             {
                 resources["Workers"] += 1;
@@ -799,21 +801,23 @@ namespace Gold_Diggerzz
                 resources["Dollars"] *= 0.4;
             }
             
-            // weather effects
+            
+            // weather effects: rain reducing efficiency, 
+            
 
-            // undo the effects of below
+            // rain reducing efficiency
+            // undo the effects of rain reduced efficiency
             if (_badWeatherDaysLeft == 0)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
                 _employeeEfficiency = _employeeEfficiency * 10/7;
             }
             
-            // rain reducing efficiency
             if (_random.Next(0, 100) < 30)
             {
-                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
+                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next three days");
                 _employeeEfficiency *= 0.7;
-                _badWeatherDaysLeft = 2;
+                _badWeatherDaysLeft = 3;
             }
             
         }
