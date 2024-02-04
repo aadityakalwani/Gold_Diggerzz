@@ -105,6 +105,7 @@ namespace Gold_Diggerzz
         private static int _lessWorkerDays;
         private static int _crashDaysLeft;
         private static int _badWeatherDaysLeft;
+        private static int _hurricaneDaysLeft;
         private static int _totalBribes;
         private static double _totalIronFound;
         private static double _totalGoldFound;
@@ -576,6 +577,11 @@ namespace Gold_Diggerzz
                         _badWeatherDaysLeft -= 1;
                     }
                     
+                    if (_hurricaneDaysLeft != 0)
+                    {
+                        _hurricaneDaysLeft -= 1;
+                    }
+                    
                     if (daysToDig == 1)
                     { 
                         PrintResources(resources);
@@ -815,9 +821,25 @@ namespace Gold_Diggerzz
             
             if (_random.Next(0, 100) < 30)
             {
-                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next three days");
+                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
                 _employeeEfficiency *= 0.7;
-                _badWeatherDaysLeft = 3;
+                _badWeatherDaysLeft = 2;
+            }
+            
+            
+            // to undo effects of hurricane
+            if (_hurricaneDaysLeft == 0)
+            {
+                Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
+                _employeeEfficiency = _employeeEfficiency * 10/3;
+            }
+            
+            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
+            if (_random.Next(0, 100) < 5)
+            {
+                Console.WriteLine("A hurricane is coming, efficiency is now 30% the next five days");
+                _employeeEfficiency *= 0.3;
+                _hurricaneDaysLeft = 5;
             }
             
         }
