@@ -27,7 +27,7 @@ namespace Gold_Diggerzz
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
          * (like prestige in all the idle miner games i played)
          
-         * features i can't do until i have an individual employee stat:
+         features i can't do until i have an individual employee stat:
          * per-employee stats
          * workers retire after x days
          * add a 'luck' stat for each employee that changes the probabilities of finding resources
@@ -207,7 +207,7 @@ namespace Gold_Diggerzz
                     case 6:
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go");
-                        int daysToDig = GetValidInt();
+                        int daysToDig = GetValidInt(1, 100);
                         Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary);
                         break;
                     case 7:
@@ -248,7 +248,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
                         Console.WriteLine("1 - Ancient Artefact");
                         Console.WriteLine("2 - Time Machine");
-                        int powerUpChoice = GetValidInt();
+                        int powerUpChoice = GetValidInt(1, 2);
                         if (powerUpChoice == 1)
                         {
                             UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
@@ -433,7 +433,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
-                int userOption = GetValidInt();
+                int userOption = GetValidInt(1, 11);
                 Console.Clear();
                 return userOption;
             }
@@ -581,7 +581,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Choose an option:");
                         Console.WriteLine("1 - Use now");
                         Console.WriteLine("2 - Save for later");
-                        int userInput = GetValidInt();
+                        int userInput = GetValidInt(1, 2);
 
                         switch (userInput)
                         {
@@ -604,7 +604,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Choose an option:");
                         Console.WriteLine("1 - Use now");
                         Console.WriteLine("2 - Save for later");
-                        int userInput = GetValidInt();
+                        int userInput = GetValidInt(1, 2);
 
                         switch (userInput)
                         {
@@ -759,14 +759,14 @@ namespace Gold_Diggerzz
                 Console.WriteLine("6 - Sell stone for dollars");
                 
 
-                marketOption = GetValidInt();
+                marketOption = GetValidInt(1, 6);
 
                 switch (marketOption)
                 {
                     case 1:
                         Console.WriteLine("You have chosen to sell iron for dollars");
                         Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
-                        double ironToSell = GetValidDouble();
+                        double ironToSell = GetValidDouble(0, resources["iron"]);
                         
                         if (ironToSell > resources["iron"])
                         {
@@ -785,7 +785,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
-                        double goldToSell = GetValidInt();
+                        double goldToSell = GetValidDouble(0, resources["gold"]);
                         if (goldToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
@@ -803,7 +803,7 @@ namespace Gold_Diggerzz
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
-                        int employeesToHire = GetValidInt();
+                        int employeesToHire = GetValidInt(0, 100000);
                         if (employeesToHire * priceDictionary["Workers"] > resources["Dollars"])
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
@@ -833,7 +833,7 @@ namespace Gold_Diggerzz
                     case 6:
                         Console.WriteLine("Your have chosen to sell stone for dollars");
                         Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
-                        double stoneToSell = GetValidInt();
+                        double stoneToSell = GetValidDouble(0, resources["stone"]);
                         if (stoneToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough stone to sell that much");
@@ -861,7 +861,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Choose your option:");
                     Console.WriteLine("1 - 50% chance of finding gold for the next five days");
                     Console.WriteLine("2 - $250 instantly");
-                    int ancientArtefactChoice = GetValidInt();
+                    int ancientArtefactChoice = GetValidInt(1, 2);
                 
                     if (ancientArtefactChoice == 1)
                     {
@@ -1095,7 +1095,7 @@ namespace Gold_Diggerzz
             return GetValidInt(min, max);
         }
         
-        private static double GetValidDouble(int min, int max)
+        private static double GetValidDouble(double min, double max)
         {
             if (double.TryParse(Console.ReadLine(), out double validDouble))
             {
