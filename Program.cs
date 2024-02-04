@@ -1081,7 +1081,7 @@ namespace Gold_Diggerzz
             {
                 if (validInt >= min && validInt <= max)
                 {
-                    return validInt;
+                    return validInt; 
                 }
                 
                 Console.WriteLine($"No bro enter a number between {min} and {max}");
