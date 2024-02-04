@@ -15,7 +15,9 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * more resources eg. diamonds, coal, etc.
+         * tutorial mode
          * loans - you can take a loan from the bank and pay it back with interest
+         * option to invest in the stock market
          * load/save game by saving the dictionaries to a file
          * more power-ups
          * add a weather system that changes the probabilities of finding resources
@@ -102,6 +104,7 @@ namespace Gold_Diggerzz
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static int _crashDaysLeft;
+        private static int _badWeatherDaysLeft;
         private static int _totalBribes;
         private static double _totalIronFound;
         private static double _totalGoldFound;
@@ -122,6 +125,7 @@ namespace Gold_Diggerzz
             _increasedGoldChanceDays = 0;
             _noWageDaysLeft = 0;
             _crashDaysLeft = 0;
+            _badWeatherDaysLeft = 0;
             
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -251,6 +255,22 @@ namespace Gold_Diggerzz
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
         }
         
+        private static void PrintStats()
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                        YOUR STATS                          ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            
+            Console.WriteLine($"Here are your stats as of {_currentDate.Date: dddd, dd MMMM yyyy}:");
+            Console.WriteLine($"Total iron found {_totalIronFound}");
+            Console.WriteLine($"Total gold found {_totalGoldFound}");
+            Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
+            Console.WriteLine($"Total days dug: {_totalDaysDug}");
+            Console.WriteLine($"Total bribes paid: {_totalBribes}");
+        }
+        
         private static void PrintResources(Dictionary<string, double> resources)
         {
             Console.WriteLine("__________________________________");
@@ -296,12 +316,27 @@ namespace Gold_Diggerzz
             
             return prices;
         }
+
+        private static Dictionary<string, double> CreateProbabilityDictionary()
+        {
+            Dictionary<string, double> probabilities = new Dictionary<string, double>()
+            {
+                { "iron", 65 },
+                { "gold", 15 },
+                { "AncientArtefact", 5 },
+                { "magicToken", 5 },
+                { "employeeIll", 10 },
+                { "stockMarketCrash", 5 }
+            };
+            
+            return probabilities;
+        }
         
         private static int UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             string takeUserInput = CheckIfInDebt(resources, prices);
             
-            CalendarEffects(prices, _currentDate, resources);
+            ChangeProbabilities(prices, _currentDate, resources);
             
             if (takeUserInput == "false")
             {
@@ -332,6 +367,49 @@ namespace Gold_Diggerzz
             }
             
             return 0;
+        }
+        
+        private static string CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
+        {
+            string inDebt = "false";
+            if (resources["Dollars"] < 0)
+            {
+                inDebt = "true";
+                
+                if (inDebt == "true")
+                {
+                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Console.WriteLine("You are in debt, bossman is coming for you");
+                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
+                    Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
+                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["gold"]} gold and {resources["iron"]} iron");
+                    Console.WriteLine("Unlucky bro...");
+                    Console.WriteLine("After bossman stole your resources, you now have:");
+
+                    resources["Dollars"] += resources["iron"] * prices["iron"];
+                    resources["Dollars"] += resources["gold"] * prices["iron"]; 
+                
+                    resources["iron"] = 0;
+                    resources["gold"] = 0;
+                
+                    PrintResources(resources);
+                }
+                
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
+                {
+                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    return "bankrupt";
+                }
+                
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] != 0)
+                {
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
+                    resources["Dollars"] += resources["Workers"] * 100;
+                    resources["Workers"] = 0;
+                }
+            }
+            
+            return inDebt;
         }
         
         private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig)
@@ -493,6 +571,11 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
                     }
 
+                    if (_badWeatherDaysLeft != 0)
+                    {
+                        _badWeatherDaysLeft -= 1;
+                    }
+                    
                     if (daysToDig == 1)
                     { 
                         PrintResources(resources);
@@ -612,49 +695,6 @@ namespace Gold_Diggerzz
                 }
             } while (marketOption != 4);
         }
-        
-        private static string CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
-        {
-            string inDebt = "false";
-            if (resources["Dollars"] < 0)
-            {
-                inDebt = "true";
-                
-                if (inDebt == "true")
-                {
-                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                    Console.WriteLine("You are in debt, bossman is coming for you");
-                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["gold"]} gold and {resources["iron"]} iron");
-                    Console.WriteLine("Unlucky bro...");
-                    Console.WriteLine("After bossman stole your resources, you now have:");
-
-                    resources["Dollars"] += resources["iron"] * prices["iron"];
-                    resources["Dollars"] += resources["gold"] * prices["iron"]; 
-                
-                    resources["iron"] = 0;
-                    resources["gold"] = 0;
-                
-                    PrintResources(resources);
-                }
-                
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] == 0)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
-                    return "bankrupt";
-                }
-                
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["Workers"] != 0)
-                {
-                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
-                    resources["Dollars"] += resources["Workers"] * 100;
-                    resources["Workers"] = 0;
-                }
-            }
-            
-            return inDebt;
-        }
 
         private static void QuitGame(Dictionary<string, double> resources)
         {
@@ -676,26 +716,10 @@ namespace Gold_Diggerzz
             QuitGame(resources);
         }
         
-        private static void ChangeProbabilities(Dictionary<string, double> prices)
+        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
         {
-            // to change the probabilities of finding iron and gold
-        }
-
-        private static void ChangePrices(Dictionary<string, double> prices)
-        {
-            // upto a 30% fluctuation in prices based on random probability
-            Random random = new Random();
-            int randomChange = random.Next(-10, 10);
-
-            prices["iron"] += randomChange;
-            prices["gold"] += randomChange;
             
-            Console.WriteLine("The prices of iron and Gold have been changed in line with stock market movements");
-
-        }
-        
-        private static void CalendarEffects(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
-        {
+            // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing
             
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
@@ -732,7 +756,6 @@ namespace Gold_Diggerzz
                 prices["Workers"] /= 2;
                 _crashDaysLeft = 2;
             }
-            
             
             // 10% raise on the first of every month (apart from January)
             if (currentDate.Month != 1 && currentDate.Day == 1)
@@ -775,6 +798,37 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
                 resources["Dollars"] *= 0.4;
             }
+            
+            // weather effects
+
+            // undo the effects of below
+            if (_badWeatherDaysLeft == 0)
+            {
+                Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
+                _employeeEfficiency = _employeeEfficiency * 10/7;
+            }
+            
+            // rain reducing efficiency
+            if (_random.Next(0, 100) < 30)
+            {
+                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
+                _employeeEfficiency *= 0.7;
+                _badWeatherDaysLeft = 2;
+            }
+            
+        }
+
+        private static void ChangePrices(Dictionary<string, double> prices)
+        {
+            // upto a 30% fluctuation in prices based on random probability
+            Random random = new Random();
+            int randomChange = random.Next(-10, 10);
+
+            prices["iron"] += randomChange;
+            prices["gold"] += randomChange;
+            
+            Console.WriteLine("The prices of iron and Gold have been changed in line with stock market movements");
+
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
@@ -788,22 +842,6 @@ namespace Gold_Diggerzz
             Console.WriteLine("Training employees...");
             Thread.Sleep(1500);
             Console.WriteLine("7 Days have now passed");
-        }
-        
-        private static void PrintStats()
-        {
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                        YOUR STATS                          ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
-            Console.ResetColor();
-            
-            Console.WriteLine($"Here are your stats as of {_currentDate.Date: dddd, dd MMMM yyyy}:");
-            Console.WriteLine($"Total iron found {_totalIronFound}");
-            Console.WriteLine($"Total gold found {_totalGoldFound}");
-            Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
-            Console.WriteLine($"Total days dug: {_totalDaysDug}");
-            Console.WriteLine($"Total bribes paid: {_totalBribes}");
         }
         
         private static int GetValidInt()
