@@ -12,11 +12,11 @@ namespace Gold_Diggerzz
         /*
          * current issues
          * testing needed to find logic errors
-         * resources are being printed at the end of every day during a multiple day dig - stop this
         */
         
         /* to-do ideas
          * more resources eg. diamonds, coal, etc.
+         * save ancient artefact and use it later
          * tutorial mode
          * loans - you can take a loan from the bank and pay it back with interest
          * option to invest in the stock market
@@ -127,6 +127,7 @@ namespace Gold_Diggerzz
             Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
+            Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
 
             _lessWorkerDays = 0;
             _increasedGoldChanceDays = 0;
@@ -165,10 +166,10 @@ namespace Gold_Diggerzz
             
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
-            RunGame(resourceDictionary, priceDictionary, probabilityDictionary);
+            RunGame(resourceDictionary, priceDictionary, probabilityDictionary, powerUpDictionary);
         }
         
-        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
+        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary)
         {
             int menuOption;
             do
@@ -238,6 +239,21 @@ namespace Gold_Diggerzz
                         else
                         {
                             Console.WriteLine("You don't have enough money to send all employees on a training course");
+                        }
+                        break;
+                    case 11:
+                        Console.WriteLine("What powerup do you want to use?");
+                        Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
+                        Console.WriteLine("1 - Ancient Artefact");
+                        Console.WriteLine("2 - Time Machine");
+                        int powerUpChoice = GetValidInt();
+                        if (powerUpChoice == 1)
+                        {
+                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                        }
+                        else if (powerUpChoice == 2)
+                        {
+                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
                         }
                         break;
                     case -1:
@@ -362,6 +378,16 @@ namespace Gold_Diggerzz
             return probabilities;
         }
 
+        private static Dictionary<string, double> CreatePowerUpDictionary()
+        {
+            Dictionary<string, double> powerUps = new Dictionary<string, double>()
+            {
+                { "Ancient Artefact", 0 },
+                { "Time Machine", 0 }
+            };
+            return powerUps;
+        }
+
         private static void RunTutorial()
         {
             Console.WriteLine("Welcome to the tutorial");
@@ -400,6 +426,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
                 Console.WriteLine("10 - Send all employees for a training course for $200 per employee (7 days)");
+                Console.WriteLine("11 - Use powerup");
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
@@ -551,6 +578,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Choose a powerup:");
                         Console.WriteLine("1 - 50% chance of finding gold for the next five days");
                         Console.WriteLine("2 - $250 instantly");
+                        Console.WriteLine("3 - Save for later");
                         int userInput = GetValidInt();
 
                         switch (userInput)
@@ -562,6 +590,10 @@ namespace Gold_Diggerzz
                             case 2:
                                 Console.WriteLine("You have chosen the $250 instantly");
                                 resources["Dollars"] += 250;
+                                break;
+                            case 3:
+                                Console.WriteLine("You have chosen to save the Ancient Artefact for later");
+                                
                                 break;
                         }
                 
@@ -800,6 +832,37 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
+        private static void UsePowerUp(Dictionary<string, double> resources, Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary)
+        {
+            if (powerUpChoice == 1)
+            {
+                Console.WriteLine("You have chosen to use the Ancient Artefact powerup");
+                Console.WriteLine("Choose your option:");
+                Console.WriteLine("1 - 50% chance of finding gold for the next five days");
+                Console.WriteLine("2 - $250 instantly");
+                int ancientArtefactChoice = GetValidInt();
+                
+                if (ancientArtefactChoice == 1)
+                {
+                    Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
+                    _increasedGoldChanceDays = 5;
+                }
+                else if (ancientArtefactChoice == 2)
+                {
+                    Console.WriteLine("You have chosen the $250 instantly");
+                    resources["Dollars"] += 250;
+                }
+                
+                powerUpDictionary["Ancient Artefact"] -= 1;
+            }
+            else if (powerUpChoice == 2)
+            {
+                Console.WriteLine("You have chosen to use the Time Machine powerup");
+                // whatever the time machine finna do bro
+                powerUpDictionary["Time Machine"] -= 1;
+            }
+        }
+        
         private static void QuitGame(Dictionary<string, double> resources)
         {
             Console.WriteLine("Your final stats were:");
