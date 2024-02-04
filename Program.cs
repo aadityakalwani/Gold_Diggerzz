@@ -578,7 +578,7 @@ namespace Gold_Diggerzz
                     if (ancientArtefactFound)
                     {
                         Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                        Console.WriteLine("Choose a powerup:");
+                        Console.WriteLine("Choose an option:");
                         Console.WriteLine("1 - Use now");
                         Console.WriteLine("2 - Save for later");
                         int userInput = GetValidInt();
@@ -600,8 +600,8 @@ namespace Gold_Diggerzz
             
                     if (timeMachineFound)
                     {
-                        Console.Write("\ud83c\udffa You found the Time Machine power-up \ud83c\udffa");
-                        Console.WriteLine("Choose a powerup:");
+                        Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
+                        Console.WriteLine("Choose an option:");
                         Console.WriteLine("1 - Use now");
                         Console.WriteLine("2 - Save for later");
                         int userInput = GetValidInt();
@@ -873,7 +873,6 @@ namespace Gold_Diggerzz
                 }
                 
                 powerUpDictionary["Ancient Artefact"] -= 1;
-                _totalPowerUpsUsed += 1;
             }
             else if (powerUpChoice == 2)
             {
@@ -881,6 +880,7 @@ namespace Gold_Diggerzz
                 // whatever the time machine finna do bro
                 powerUpDictionary["Time Machine"] -= 1;
             }
+            _totalPowerUpsUsed += 1;
         }
         
         private static void QuitGame(Dictionary<string, double> resources)
