@@ -15,6 +15,7 @@ namespace Gold_Diggerzz
         */
         
         /* to-do ideas
+         * getValidInt and getValidDoube take in a range of min and max values
          * more resources eg. diamonds, coal, etc.
          * time machine powerup
          * tutorial mode
@@ -853,33 +854,41 @@ namespace Gold_Diggerzz
 
         private static void UsePowerUp(Dictionary<string, double> resources, Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary)
         {
-            if (powerUpChoice == 1)
+            switch (powerUpChoice)
             {
-                Console.WriteLine("You have chosen to use the Ancient Artefact powerup");
-                Console.WriteLine("Choose your option:");
-                Console.WriteLine("1 - 50% chance of finding gold for the next five days");
-                Console.WriteLine("2 - $250 instantly");
-                int ancientArtefactChoice = GetValidInt();
-                
-                if (ancientArtefactChoice == 1)
+                case 1:
                 {
-                    Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
-                    _increasedGoldChanceDays = 5;
-                }
-                else if (ancientArtefactChoice == 2)
-                {
-                    Console.WriteLine("You have chosen the $250 instantly");
-                    resources["Dollars"] += 250;
+                    Console.WriteLine("You have chosen to use the Ancient Artefact powerup");
+                    Console.WriteLine("Choose your option:");
+                    Console.WriteLine("1 - 50% chance of finding gold for the next five days");
+                    Console.WriteLine("2 - $250 instantly");
+                    int ancientArtefactChoice = GetValidInt();
+                
+                    if (ancientArtefactChoice == 1)
+                    {
+                        Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
+                        _increasedGoldChanceDays = 5;
+                    }
+                    else if (ancientArtefactChoice == 2)
+                    {
+                        Console.WriteLine("You have chosen the $250 instantly");
+                        resources["Dollars"] += 250;
+                    }
+                
+                    powerUpDictionary["Ancient Artefact"] -= 1;
+                    break;
                 }
                 
-                powerUpDictionary["Ancient Artefact"] -= 1;
+                case 2:
+                {
+                    Console.WriteLine("You have chosen to use the Time Machine powerup");
+                    // whatever the time machine finna do bro
+                    powerUpDictionary["Time Machine"] -= 1;
+                    break;
+                }
+                
             }
-            else if (powerUpChoice == 2)
-            {
-                Console.WriteLine("You have chosen to use the Time Machine powerup");
-                // whatever the time machine finna do bro
-                powerUpDictionary["Time Machine"] -= 1;
-            }
+            
             _totalPowerUpsUsed += 1;
         }
         
