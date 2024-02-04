@@ -210,12 +210,17 @@ namespace Gold_Diggerzz
                         PrintStats();
                         break;
                     case 10:
-                        if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"])
+                        if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
                             Console.WriteLine("You have been charged $200 per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
                             EmployeeTrainingCourse(resourceDictionary);
+                        }
+                        else if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"] && resourceDictionary["Workers"] == 0)
+                        {
+                            Console.WriteLine("You don't have any employees to send on a training course");
+                            Console.WriteLine("This could be because of employee illness - try again later");
                         }
                         else
                         {
