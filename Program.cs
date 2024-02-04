@@ -556,8 +556,6 @@ namespace Gold_Diggerzz
                     
                         Thread.Sleep(500); 
                     }
-
-                    double newResourcesFound = resources["Workers"] * _employeeEfficiency;
             
                     Console.WriteLine("Digging done for the day");
                     Console.WriteLine("Here are the changes to your resources:");
@@ -570,59 +568,8 @@ namespace Gold_Diggerzz
                     int randomForAncientArtefact = _random.Next(0, 100);
                     int randomForTimeMachine = _random.Next(0, 100);
                     int randomForMagicToken = _random.Next(0, 100);
-            
-                    // baseline 65% chance of finding iron
-                    bool ironFound = randomForIron < probabilities["iron"];
-
-                    // baseline 90% chance of finding stone
-                    bool stoneFound = randomForStone < probabilities["stone"];
-            
-                    // baseline 5% chance of finding the Ancient Artefact superpower
-                    bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
-            
-                    if (ancientArtefactFound)
-                    {
-                        Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                        Console.WriteLine("Choose an option:");
-                        Console.WriteLine("1 - Use now");
-                        Console.WriteLine("2 - Save for later");
-                        int userInput = GetValidInt(1, 2);
-
-                        switch (userInput)
-                        {
-                            case 1:
-                                UsePowerUp(resources, prices, probabilities, 1, powerUpDictionary);
-                                break;
-                            case 2:
-                                Console.WriteLine("You have chosen to save the Ancient Artefact for later");
-                                powerUpDictionary["Ancient Artefact"] += 1;
-                                break;
-                        }
-                    }
                     
-                    // baseline 5% chance of finding the Time Machine superpower
-                    bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
-            
-                    if (timeMachineFound)
-                    {
-                        Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
-                        Console.WriteLine("Choose an option:");
-                        Console.WriteLine("1 - Use now");
-                        Console.WriteLine("2 - Save for later");
-                        int userInput = GetValidInt(1, 2);
-
-                        switch (userInput)
-                        {
-                            case 1:
-                                UsePowerUp(resources, prices, probabilities, 2, powerUpDictionary);
-                                break;
-                            case 2:
-                                Console.WriteLine("You have chosen to save the Time Machine for later");
-                                powerUpDictionary["Time Machine"] += 1;
-                                break;
-                        }
-                    }
-            
+                    
                     // if there is a changed chance of finding gold due to the Ancient Artefact powerup
                 
                     if (_increasedGoldChanceDays != 0)
@@ -637,22 +584,18 @@ namespace Gold_Diggerzz
                         // restore 15% chance of finding gold
                         probabilities["gold"] = 15;
                     }
-                    
-                    bool goldFound = randomForGold < probabilities["gold"];
             
-                    // 5% chance of getting a magicToken
-                    bool magicTokenFound = randomForMagicToken < 5;
-                    if (magicTokenFound && resources["magicTokens"] < probabilities["magicToken"])
-                    {
-                        resources["magicTokens"] += 1;
-                        Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
-                        Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
-                        prices["iron"] *= 1.2;
-                        prices["gold"] *= 1.2;
-                        prices["stone"] *= 1.2;
-                    }
-
+                    bool stoneFound = randomForStone < probabilities["stone"];
+                    bool ironFound = randomForIron < probabilities["iron"];
+                    bool goldFound = randomForGold < probabilities["gold"];
+                    bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
+                    bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
+                    bool magicTokenFound = randomForMagicToken < probabilities["magicToken"];
+                    
                     // update values within the resources dictionary
+                    
+                    double newResourcesFound = resources["Workers"] * _employeeEfficiency;
+                    
                     if (stoneFound)
                     {
                         Console.WriteLine($"You found {newResourcesFound}kg of stone \ud83e\udea8");
@@ -679,8 +622,57 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You found nothing today \ud83d\udeab");
                     }
                     
-                    // calendar/weather etc effects 
+                    if (ancientArtefactFound)
+                    {
+                        Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
+                        Console.WriteLine("Choose an option:");
+                        Console.WriteLine("1 - Use now");
+                        Console.WriteLine("2 - Save for later");
+                        int userInput = GetValidInt(1, 2);
+
+                        switch (userInput)
+                        {
+                            case 1:
+                                UsePowerUp(resources, prices, probabilities, 1, powerUpDictionary);
+                                break;
+                            case 2:
+                                Console.WriteLine("You have chosen to save the Ancient Artefact for later");
+                                powerUpDictionary["Ancient Artefact"] += 1;
+                                break;
+                        }
+                    }
+            
+                    if (timeMachineFound)
+                    {
+                        Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
+                        Console.WriteLine("Choose an option:");
+                        Console.WriteLine("1 - Use now");
+                        Console.WriteLine("2 - Save for later");
+                        int userInput = GetValidInt(1, 2);
+
+                        switch (userInput)
+                        {
+                            case 1:
+                                UsePowerUp(resources, prices, probabilities, 2, powerUpDictionary);
+                                break;
+                            case 2:
+                                Console.WriteLine("You have chosen to save the Time Machine for later");
+                                powerUpDictionary["Time Machine"] += 1;
+                                break;
+                        }
+                    }
                     
+                    if (magicTokenFound && resources["magicTokens"] < 4)
+                    {
+                        resources["magicTokens"] += 1;
+                        Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
+                        Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
+                        prices["iron"] *= 1.2;
+                        prices["gold"] *= 1.2;
+                        prices["stone"] *= 1.2;
+                    }
+                    
+                    // calendar/weather etc effects 
                     Console.WriteLine("Here are the current active effects affecting your game:");
                     
                     if (_noWageDaysLeft != 0)
