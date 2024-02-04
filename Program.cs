@@ -15,6 +15,7 @@ namespace Gold_Diggerzz
         */
         
         /* to-do ideas
+         * achievements - eg. find 10kg total iron
          * more resources eg. diamonds, coal, etc.
          * time machine powerup
          * tutorial mode
@@ -117,6 +118,7 @@ namespace Gold_Diggerzz
         private static double _totalGoldFound;
         private static double _totalDaysDug;
         private static double _totalEmployeesHired;
+        private static double _totalDollarsEarned;
         private static double _employeeEfficiency = 1;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         static Random _random = new Random();
@@ -318,9 +320,11 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total stone found: {_totalStoneFound}kg");
             Console.WriteLine($"Total iron found: {_totalIronFound}kg");
             Console.WriteLine($"Total gold found: {_totalGoldFound}kg");
+            Console.WriteLine($"Total powerups used: {_totalPowerUpsUsed}");
             Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
-            Console.WriteLine($"Total days dug: {_totalDaysDug}");
             Console.WriteLine($"Total bribes paid: {_totalBribes}");
+            Console.WriteLine($"\nTotal dollars earned: ${_totalDollarsEarned}");
+            Console.WriteLine($"Total days dug: {_totalDaysDug}");
         }
         
         private static void PrintResources(Dictionary<string, double> resources)
@@ -464,8 +468,9 @@ namespace Gold_Diggerzz
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
                     resources["Dollars"] += resources["iron"] * prices["iron"];
-                    resources["Dollars"] += resources["gold"] * prices["iron"]; 
+                    resources["Dollars"] += resources["gold"] * prices["gold"]; 
                     resources["Dollars"] += resources["stone"] * prices["stone"];
+                    _totalDollarsEarned += resources["iron"] * prices["iron"] + resources["gold"] * prices["gold"] + resources["stone"] * prices["stone"];
                 
                     resources["iron"] = 0;
                     resources["gold"] = 0;
@@ -484,6 +489,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
                     resources["Dollars"] += resources["Workers"] * 100;
+                    _totalDollarsEarned += resources["Workers"] * 100;
                     resources["Workers"] = 1;
                 }
             }
@@ -773,6 +779,7 @@ namespace Gold_Diggerzz
                         {
                             resources["iron"] -= ironToSell;
                             resources["Dollars"] += ironToSell * priceDictionary["iron"];
+                            _totalDollarsEarned += ironToSell * priceDictionary["iron"];
                         }
 
                         Console.WriteLine("Here are your update resources:");
@@ -791,6 +798,7 @@ namespace Gold_Diggerzz
                         {
                             resources["gold"] -= goldToSell;
                             resources["Dollars"] += goldToSell * priceDictionary["gold"];
+                            _totalDollarsEarned += goldToSell * priceDictionary["gold"];
                         }
 
                         Console.WriteLine("Here are your updated resources:");
@@ -822,6 +830,7 @@ namespace Gold_Diggerzz
                         resources["Dollars"] += resources["iron"] * priceDictionary["iron"];
                         resources["Dollars"] += resources["gold"] * priceDictionary["gold"];
                         resources["Dollars"] += resources["stone"] * priceDictionary["stone"];
+                        _totalDollarsEarned += resources["iron"] * priceDictionary["iron"] + resources["gold"] * priceDictionary["gold"] + resources["stone"] * priceDictionary["stone"];
                         resources["iron"] = 0;
                         resources["gold"] = 0;
                         resources["stone"] = 0;
@@ -839,6 +848,7 @@ namespace Gold_Diggerzz
                         {
                             resources["stone"] -= stoneToSell;
                             resources["Dollars"] += stoneToSell * priceDictionary["stone"];
+                            _totalDollarsEarned += stoneToSell * priceDictionary["stone"];
                         }
 
                         Console.WriteLine("Here are your updated resources:");
@@ -869,6 +879,7 @@ namespace Gold_Diggerzz
                     {
                         Console.WriteLine("You have chosen the $250 instantly");
                         resources["Dollars"] += 250;
+                        _totalDollarsEarned += 250;
                     }
                 
                     powerUpDictionary["Ancient Artefact"] -= 1;
