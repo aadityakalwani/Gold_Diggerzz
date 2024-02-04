@@ -15,7 +15,6 @@ namespace Gold_Diggerzz
         */
         
         /* to-do ideas
-         * getValidInt and getValidDoube take in a range of min and max values
          * more resources eg. diamonds, coal, etc.
          * time machine powerup
          * tutorial mode
@@ -1079,41 +1078,38 @@ namespace Gold_Diggerzz
             Console.WriteLine("7 Days have now passed");
         }
         
-        private static int GetValidInt()
+        private static int GetValidInt(int min, int max)
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
             {
-                if (validInt >= 0)
+                if (validInt >= min && validInt <= max)
                 {
                     return validInt;
                 }
-            
-                Console.WriteLine("No bro dont try and enter negative numbers");
-                GetValidInt();
-               
                 
+                Console.WriteLine($"No bro enter a number between {min} and {max}");
+                GetValidInt(min, max);
             }
 
             Console.WriteLine("Please enter a valid integer");
-            return GetValidInt();
+            return GetValidInt(min, max);
         }
         
-        private static double GetValidDouble()
+        private static double GetValidDouble(int min, int max)
         {
-            if (double.TryParse(Console.ReadLine(), out double validDouble)) 
+            if (double.TryParse(Console.ReadLine(), out double validDouble))
             {
-                if (validDouble >= 0)
+                if (validDouble >= min && validDouble <= max)
                 {
                     return validDouble;
                 }
-            
-                Console.WriteLine("No bro dont try and enter negative numbers");
-                GetValidDouble();
                 
+                Console.WriteLine($"No bro enter a number between {min} and {max}");
+                GetValidDouble(min, max);
             }
-        
-            Console.WriteLine("Please enter a valid double");
-            return GetValidDouble();
+
+            Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
+            return GetValidDouble(min, max);
         }
     }
 }
