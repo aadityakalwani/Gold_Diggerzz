@@ -339,167 +339,175 @@ namespace Gold_Diggerzz
             for (int days = 0; days <= daysToDig; days++)
             {
                 if (CheckIfInDebt(resources, prices) !=  "true")
-            {
-                if (_animation)
                 {
-                    Console.WriteLine("We are about to dig, let us cook");
-
-                    // ASCII art animation for digging
-                    string[] shovel = new string[]                                                                              
-                    {                                                                                                           
-                         "    ______",                                                                                           
-                         "   /      \\",                                                                                         
-                         "  /        \\",                                                                                        
-                         "  |        |",                                                                                         
-                         "  \\________/",                                                                                        
-                         "       ||",                                                                                            
-                         "       ||",                                                                                            
-                         "       ||"                                                                                             
-                    };                                                                                                          
-                     
-                    Console.WriteLine("Starting to dig...");   
-                    
-                    Thread.Sleep(1000);
-                                                                                                                                 
-                    for (int i = 0; i < 10; i++)                                                                                
-                    {                                                                                                           
-                        Thread.Sleep(150);                            
-                        Console.Clear();                                                                                        
-                        for (int j = 0; j < shovel.Length; j++)                                                                 
-                        {                                                                                                       
-                             if (j < shovel.Length - i)                                                                          
-                             {                                                                                                   
-                                 Console.WriteLine(shovel[j]);                                                                   
-                             }                                                                                                   
-                             else                                                                                                
-                             {                                                                                                   
-                                 string spaces = "";
-                                 for (int k = 0; k < i; k++)
-                                 {
-                                     spaces += " ";
-                                 }
-                                 Console.WriteLine(spaces + shovel[j]);                                                
-                             }                                                                                                   
-                        }
-
-                        Console.WriteLine("Progress:");
-                        for (int j = 0; j < 10; j++)
-                        {
-                            if (j < i)
-                            {
-                                Console.Write("##");
-                            }
-                            else
-                            {
-                                Console.Write(" ");
-                            }
-                        }
-                        Console.WriteLine("|");       
-                    }      
-                
-                    Thread.Sleep(500);
-                }
-
-                double newResourcesFound = resources["Workers"] * _employeeEfficiency;
-            
-                Console.WriteLine("Digging done for the day");
-                Console.WriteLine("Here are the changes to your resources:");
-            
-                // creating randoms for the chance of finding iron and gold
-                Random random = new Random();
-                int finalRandom = random.Next(0, 100);
-            
-                // 65% chance of finding iron
-                bool ironFound = finalRandom < 65;
-            
-                // 5% chance of finding the Ancient Artefact superpower
-                bool ancientArtefactFound = finalRandom < 5;
-            
-                if (ancientArtefactFound)
-                {
-                    Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                    Console.WriteLine("Choose a powerup:");
-                    Console.WriteLine("1 - 50% chance of finding gold for the next five days");
-                    Console.WriteLine("2 - $250 instantly");
-                    int userInput = GetValidInt();
-
-                    switch (userInput)
+                    if (_animation)
                     {
-                        case 1:
-                            Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
-                            _increasedGoldChanceDays = 5;
-                            break;
-                        case 2:
-                            Console.WriteLine("You have chosen the $250 instantly");
-                            resources["Dollars"] += 250;
-                            break;
+                        Console.WriteLine("We are about to dig, let us cook");
+
+                        // ASCII art animation for digging
+                        string[] shovel = new string[]                                                                              
+                        {                                                                                                           
+                             "    ______",                                                                                           
+                             "   /      \\",                                                                                         
+                             "  /        \\",                                                                                        
+                             "  |        |",                                                                                         
+                             "  \\________/",                                                                                        
+                             "       ||",                                                                                            
+                             "       ||",                                                                                            
+                             "       ||"                                                                                             
+                        };                                                                                                          
+                         
+                        Console.WriteLine("Starting to dig...");   
+                        
+                        Thread.Sleep(1000);
+                                                                                                                                     
+                        for (int i = 0; i < 10; i++)                                                                                
+                        {                                                                                                           
+                            Thread.Sleep(150);                            
+                            Console.Clear();                                                                                        
+                            for (int j = 0; j < shovel.Length; j++)                                                                 
+                            {                                                                                                       
+                                 if (j < shovel.Length - i)                                                                          
+                                 {                                                                                                   
+                                     Console.WriteLine(shovel[j]);                                                                   
+                                 }                                                                                                   
+                                 else                                                                                                
+                                 {                                                                                                   
+                                     string spaces = "";
+                                     for (int k = 0; k < i; k++)
+                                     {
+                                         spaces += " ";
+                                     }
+                                     Console.WriteLine(spaces + shovel[j]);                                                
+                                 }                                                                                                   
+                            }
+
+                            Console.WriteLine("Progress:");
+                            for (int j = 0; j < 10; j++)
+                            {
+                                if (j < i)
+                                {
+                                    Console.Write("##");
+                                }
+                                else
+                                {
+                                    Console.Write(" ");
+                                }
+                            }
+                            Console.WriteLine("|");       
+                        }      
+                    
+                        Thread.Sleep(500); 
                     }
-                
-                }
-            
-                // if there is a changed chance of finding gold due to the Ancient Artefact powerup
-                
-                bool goldFound;
-                
-                if (_increasedGoldChanceDays != 0)
-                {
-                    Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
-                    goldFound = finalRandom < 50;
-                    _increasedGoldChanceDays -= 1;
-                }
-                else
-                {
-                    // 15% chance of finding gold
-                    goldFound = finalRandom < 15;
-                }
-            
-                // 5% chance of getting a magicToken
-                bool magicTokenFound = finalRandom < 5;
-                if (magicTokenFound && resources["magicTokens"] < 3)
-                {
-                    resources["magicTokens"] += 1;
-                    Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
-                    Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
-                    prices["iron"] *= 1.2;
-                    prices["gold"] *= 1.2;
-                }
 
-                // update values within the resources dictionary
-                if (goldFound)
-                {
-                    Console.WriteLine($"You found {newResourcesFound}kg of gold \ud83d\udc51");
-                    resources["gold"] += newResourcesFound;
-                    _totalGoldFound += newResourcesFound;
-                }
+                    double newResourcesFound = resources["Workers"] * _employeeEfficiency;
             
-                if (ironFound)
-                {
-                    Console.WriteLine($"You found {newResourcesFound}kg of iron \ud83e\uddbe ");
-                    resources["iron"] += newResourcesFound;
-                    _totalIronFound += newResourcesFound;
-                }
+                    Console.WriteLine("Digging done for the day");
+                    Console.WriteLine("Here are the changes to your resources:");
+            
+                    // creating randoms for the chance of finding iron and gold
+                    Random random = new Random();
+                    int finalRandom = random.Next(0, 100);
+            
+                    // 65% chance of finding iron
+                    bool ironFound = finalRandom < 65;
+            
+                    // 5% chance of finding the Ancient Artefact superpower
+                    bool ancientArtefactFound = finalRandom < 5;
+            
+                    if (ancientArtefactFound)
+                    {
+                        Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
+                        Console.WriteLine("Choose a powerup:");
+                        Console.WriteLine("1 - 50% chance of finding gold for the next five days");
+                        Console.WriteLine("2 - $250 instantly");
+                        int userInput = GetValidInt();
 
-                if (_noWageDaysLeft != 0)
-                {
-                    Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
-                    _noWageDaysLeft -= 1;
-                }
+                        switch (userInput)
+                        {
+                            case 1:
+                                Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
+                                _increasedGoldChanceDays = 5;
+                                break;
+                            case 2:
+                                Console.WriteLine("You have chosen the $250 instantly");
+                                resources["Dollars"] += 250;
+                                break;
+                        }
+                
+                    }
+            
+                    // if there is a changed chance of finding gold due to the Ancient Artefact powerup
+                
+                    bool goldFound;
+                
+                    if (_increasedGoldChanceDays != 0)
+                    {
+                        Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
+                        goldFound = finalRandom < 50;
+                        _increasedGoldChanceDays -= 1;
+                    }
+                    else
+                    {
+                        // 15% chance of finding gold
+                        goldFound = finalRandom < 15;
+                    }
+            
+                    // 5% chance of getting a magicToken
+                    bool magicTokenFound = finalRandom < 5;
+                    if (magicTokenFound && resources["magicTokens"] < 3)
+                    {
+                        resources["magicTokens"] += 1;
+                        Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
+                        Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
+                        prices["iron"] *= 1.2;
+                        prices["gold"] *= 1.2;
+                    }
 
-                else
-                {
-                    double totalWages = resources["Workers"] * prices["Wage"];
-                    resources["Dollars"] -= totalWages;
+                    // update values within the resources dictionary
+                    if (goldFound)
+                    {
+                        Console.WriteLine($"You found {newResourcesFound}kg of gold \ud83d\udc51");
+                        resources["gold"] += newResourcesFound;
+                        _totalGoldFound += newResourcesFound;
+                    }
             
-                    Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+                    if (ironFound)
+                    {
+                        Console.WriteLine($"You found {newResourcesFound}kg of iron \ud83e\uddbe ");
+                        resources["iron"] += newResourcesFound;
+                        _totalIronFound += newResourcesFound;
+                    }
+
+                    if (_noWageDaysLeft != 0)
+                    {
+                        Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
+                        _noWageDaysLeft -= 1;
+                    }
+
+                    else
+                    {
+                        double totalWages = resources["Workers"] * prices["Wage"];
+                        resources["Dollars"] -= totalWages;
+            
+                        Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+                    }
+
+                    if (daysToDig == 1)
+                    { 
+                        PrintResources(resources);
+                    }
+            
+                    _currentDate = _currentDate.AddDays(1);
                 }
-            
-                PrintResources(resources);
-            
-                _currentDate = _currentDate.AddDays(1);
-            }
             
                 ChangePrices(prices);
                 _totalDaysDug += 1;
+            }
+            
+            if (daysToDig > 1)
+            {
+                PrintResources(resources);
             }
             
         }
@@ -752,11 +760,20 @@ namespace Gold_Diggerzz
             // 10% profit sharing to each employee on the 15th of every month
             if (currentDate.Day == 15)
             {
-                Console.WriteLine("Profit sharing, each employee gets 10% of your current $$$ stash");
-                Console.WriteLine($"Your {resources["Workers"]} employees get ${resources["Dollars"] * 0.1} each");
-                double dollarsToLose = resources["Dollars"] * 0.1 * resources["Workers"];
-                resources["Dollars"] -= dollarsToLose;
-                Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+                Console.WriteLine("Profit sharing time!");
+                    
+                if (resources["Workers"] < 8)
+                {
+                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
+                    Console.WriteLine($"Your {resources["Workers"]} employees get ${resources["Dollars"] * 0.1} each");
+                    double dollarsToLose = resources["Dollars"] * 0.1 * resources["Workers"];
+                    resources["Dollars"] -= dollarsToLose;
+                    Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+                }
+                
+                Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
+                Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
+                resources["Dollars"] *= 0.4;
             }
         }
 
