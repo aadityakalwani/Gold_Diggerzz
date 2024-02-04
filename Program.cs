@@ -444,17 +444,17 @@ namespace Gold_Diggerzz
                     PrintResources(resources);
                 }
                 
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["Workers"] == 0 )
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["Workers"] == 1)
                 {
                     Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
                     return "bankrupt";
                 }
                 
-                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["Workers"] != 0)
+                if (inDebt == "true" && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["Workers"] >= 2)
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
                     resources["Dollars"] += resources["Workers"] * 100;
-                    resources["Workers"] = 0;
+                    resources["Workers"] = 1;
                 }
             }
             
@@ -625,6 +625,8 @@ namespace Gold_Diggerzz
                     
                     // calendar/weather etc effects 
                     
+                    Console.WriteLine("Here are the current active effects affecting your game:");
+                    
                     if (_noWageDaysLeft != 0)
                     {
                         Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
@@ -662,6 +664,13 @@ namespace Gold_Diggerzz
             
                 ChangePrices(prices);
                 _totalDaysDug += 1;
+
+                if (daysToDig >= 2)
+                {
+                    Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
+                }
+                
+                Console.WriteLine("___________________________________");
             }
         
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
@@ -881,7 +890,7 @@ namespace Gold_Diggerzz
             if (currentDate.Day == 15)
             {
                 Console.WriteLine("Profit sharing time!");
-                    
+
                 if (resources["Workers"] < 8)
                 {
                     Console.WriteLine("Each employee gets 10% of your current $$$ stash");
@@ -890,10 +899,14 @@ namespace Gold_Diggerzz
                     resources["Dollars"] -= dollarsToLose;
                     Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
                 }
+
+                else
+                {
+                    Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
+                    Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
+                    resources["Dollars"] *= 0.4;
+                }
                 
-                Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
-                Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
-                resources["Dollars"] *= 0.4;
             }
             
             
