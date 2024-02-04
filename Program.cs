@@ -106,6 +106,7 @@ namespace Gold_Diggerzz
         private static int _crashDaysLeft;
         private static int _badWeatherDaysLeft;
         private static int _hurricaneDaysLeft;
+        private static int _beautifulSkyDaysLeft;
         private static int _totalBribes;
         private static double _totalIronFound;
         private static double _totalGoldFound;
@@ -582,6 +583,11 @@ namespace Gold_Diggerzz
                         _hurricaneDaysLeft -= 1;
                     }
                     
+                    if (_beautifulSkyDaysLeft != 0)
+                    {
+                        _beautifulSkyDaysLeft -= 1;
+                    }
+                    
                     if (daysToDig == 1)
                     { 
                         PrintResources(resources);
@@ -808,7 +814,7 @@ namespace Gold_Diggerzz
             }
             
             
-            // weather effects: rain reducing efficiency, 
+            // weather effects: rain reducing efficiency, hurricane, beautifulSky increasing efficiency
             
 
             // rain reducing efficiency
@@ -840,6 +846,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine("A hurricane is coming, efficiency is now 30% the next five days");
                 _employeeEfficiency *= 0.3;
                 _hurricaneDaysLeft = 5;
+            }
+
+            if (_random.Next(0, 100) < 40)
+            {
+                Console.WriteLine("The weather is beautiful today, your employees are 50% more efficient for two days");
+                _employeeEfficiency *= 1.5;
+                _beautifulSkyDaysLeft = 2;
             }
             
         }
