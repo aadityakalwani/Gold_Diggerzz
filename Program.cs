@@ -531,12 +531,6 @@ namespace Gold_Diggerzz
                 
                 if (CheckIfInDebt(resources, prices) !=  "true")
                 {
-                    // change the probabilities of finding resources - including calendar and weather effects
-                    ChangeProbabilities(prices, _currentDate, resources);
-            
-                    // apply a ±10% fluctuation to the prices of iron and gold
-                    ChangePrices(prices);
-                    
                     if (_animation)
                     {
                         Console.WriteLine("We are about to dig, let us cook");
@@ -778,6 +772,14 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"Current balance - {resources["Dollars"]}");
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
+                
+                Console.WriteLine("___________________________________");
+                
+                // change the probabilities of finding resources - including calendar and weather effects
+                ChangeProbabilities(prices, _currentDate, resources);
+            
+                // apply a ±10% fluctuation to the prices of iron and gold
+                ChangePrices(prices);
                 
                 Console.WriteLine("___________________________________");
             }
@@ -1168,12 +1170,15 @@ namespace Gold_Diggerzz
             // upto a 30% fluctuation in prices based on random probability
             Random random = new Random();
             int randomChange = random.Next(-10, 10);
+            
+            double percentageChange = randomChange + 100;
+            percentageChange /= 100;
 
-            prices["coal"] += randomChange;
-            prices["stone"] += randomChange;
-            prices["iron"] += randomChange;
-            prices["gold"] += randomChange;
-            prices["diamond"] += randomChange;
+            prices["coal"] *= percentageChange;
+            prices["stone"] *= percentageChange;
+            prices["iron"] *= percentageChange;
+            prices["gold"] *= percentageChange;
+            prices["diamond"] *= percentageChange;
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
