@@ -1162,7 +1162,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
                 _employeeEfficiency *= 1.2;
-                _beautifulSkyDaysLeft = 3;
+                _beautifulSkyDaysLeft = 3; 
             }
         }
 
