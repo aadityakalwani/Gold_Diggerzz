@@ -363,7 +363,7 @@ namespace Gold_Diggerzz
                 {"iron", 15},
                 {"gold", 75},
                 {"Workers", 100},
-                {"Wage", 10}
+                {"Wage", 13}
             };
             
             return prices;
@@ -504,7 +504,7 @@ namespace Gold_Diggerzz
                 
                 if (CheckIfInDebt(resources, prices) !=  "true")
                 {
-                    // change the probabilities of finding resources - including calendar and weather effectswe
+                    // change the probabilities of finding resources - including calendar and weather effects
                     ChangeProbabilities(prices, _currentDate, resources);
             
                     // apply a ±10% fluctuation to the prices of iron and gold
@@ -728,6 +728,7 @@ namespace Gold_Diggerzz
 
                 if (daysToDig >= 2)
                 {
+                    Console.WriteLine($"Current balance - {resources["Dollars"]}");
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
                 
@@ -945,10 +946,7 @@ namespace Gold_Diggerzz
             // to undo the effect of weekend pay
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
-                if (currentDate.Month != 1)
-                {
-                    prices["Wage"] /= 1.3;
-                }
+                prices["Wage"] /= 1.3;
             }
             
             // stock market code below
