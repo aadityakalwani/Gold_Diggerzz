@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * after a few days the employee efficiency is super high (like 70ish)
          * add in price of training course n shit to the price dictionary and undo hard-coding of values
          * print mechanics and shit is a) too long and b) incorrect values
          * same for tutorial
@@ -1144,8 +1145,8 @@ namespace Gold_Diggerzz
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (_random.Next(0, 100) < 5 && _hurricaneDaysLeft == 0)
             {
-                Console.WriteLine("A hurricane is coming, efficiency is now 30% the next five days");
-                _employeeEfficiency *= 0.3;
+                Console.WriteLine("A hurricane is coming, efficiency is now 40% the next five days");
+                _employeeEfficiency *= 0.4;
                 _hurricaneDaysLeft = 6;
             }
             
@@ -1157,10 +1158,10 @@ namespace Gold_Diggerzz
                 _beautifulSkyDaysLeft = 0;
             }
 
-            if (_random.Next(0, 100) < 40 && _beautifulSkyDaysLeft == 0)
+            if (_random.Next(0, 100) < 30 && _beautifulSkyDaysLeft == 0)
             {
-                Console.WriteLine("The weather is beautiful today, your employees are 50% more efficient for two days");
-                _employeeEfficiency *= 1.5;
+                Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
+                _employeeEfficiency *= 1.2;
                 _beautifulSkyDaysLeft = 3;
             }
         }
