@@ -11,9 +11,6 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * after many days of digging the prices of stuff are negative
-         * after many days of digging the employee efficiency is v v low
-         * probably both to do with logic in ChangePrices() and ChangeProbabilities() of undoing effects
         */
         
         /* to-do ideas
@@ -232,11 +229,11 @@ namespace Gold_Diggerzz
                         if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
-                            Console.WriteLine("You have been charged $200 per employee");
+                            Console.WriteLine("You have been charged $400 per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
                             EmployeeTrainingCourse(resourceDictionary);
                         }
-                        else if (resourceDictionary["Dollars"] > 200 * resourceDictionary["Workers"] && resourceDictionary["Workers"] == 0)
+                        else if (resourceDictionary["Dollars"] > 400 * resourceDictionary["Workers"] && resourceDictionary["Workers"] == 0)
                         {
                             Console.WriteLine("You don't have any employees to send on a training course");
                             Console.WriteLine("This could be because of employee illness - try again later");
@@ -294,7 +291,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
             Console.WriteLine("\nThe resources you gain are equal to the number of employees you have times their efficiency");
-            Console.WriteLine("Sending an employee on a training course increases their efficiency by 50%");
+            Console.WriteLine("Sending an employee on a training course increases their efficiency by 30%");
             Console.WriteLine("Eg. 7 employees = 7 iron found on that day");
             Console.WriteLine("\nBaseline wage = $10 per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
@@ -405,7 +402,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
             Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
             Console.WriteLine("You can also pay $50 for information on the next stock market crash");
-            Console.WriteLine("You can also send all employees for a training course for $200 per employee (7 days)");
+            Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
             Console.WriteLine("You can also sell all your iron and gold for dollars");
             Console.WriteLine("You can also skip one day for $30");
             Console.WriteLine("You can also quit the game");
@@ -431,7 +428,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
                 Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
                 Console.WriteLine("9 - Print stats");
-                Console.WriteLine("10 - Send all employees for a training course for $200 per employee (7 days)");
+                Console.WriteLine("10 - Send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
                 Console.WriteLine("11 - Use powerup");
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
@@ -1083,9 +1080,9 @@ namespace Gold_Diggerzz
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
         {
             // to boost the productivity of employees
-            Console.WriteLine($"This course charged you {200 * resources["Workers"]} in fees");
-            resources["Dollars"] -= 200 * resources["Workers"];
-            _employeeEfficiency *= 1.5;
+            Console.WriteLine($"This course charged you {400 * resources["Workers"]} in fees");
+            resources["Dollars"] -= 400 * resources["Workers"];
+            _employeeEfficiency *= 1.3;
             
             _currentDate.AddDays(7);
             Console.WriteLine("Training employees...");
