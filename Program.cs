@@ -417,8 +417,6 @@ namespace Gold_Diggerzz
         {
             string takeUserInput = CheckIfInDebt(resources, prices);
             
-            ChangeProbabilities(prices, _currentDate, resources);
-            
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
@@ -500,10 +498,18 @@ namespace Gold_Diggerzz
         
         private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary)
         {
+            
             for (int days = 0; days < daysToDig; days++)
             {
+                
                 if (CheckIfInDebt(resources, prices) !=  "true")
                 {
+                    // change the probabilities of finding resources - including calendar and weather effectswe
+                    ChangeProbabilities(prices, _currentDate, resources);
+            
+                    // apply a ±10% fluctuation to the prices of iron and gold
+                    ChangePrices(prices);
+                    
                     if (_animation)
                     {
                         Console.WriteLine("We are about to dig, let us cook");
@@ -564,7 +570,7 @@ namespace Gold_Diggerzz
                         Thread.Sleep(500); 
                     }
             
-                    Console.WriteLine("Digging done for the day");
+                    Console.WriteLine($"Digging done for the day {_currentDate.Date:dddd, dd MMMM, yyyy}");
                     Console.WriteLine("Here are the changes to your resources:");
             
                     // creating randoms for the chance of finding iron and gold and stone
@@ -941,7 +947,7 @@ namespace Gold_Diggerzz
             {
                 if (currentDate.Month != 1)
                 {
-                    prices["Wage"] = prices["Wage"] * 10/13;
+                    prices["Wage"] /= 1.3;
                 }
             }
             
@@ -1021,7 +1027,7 @@ namespace Gold_Diggerzz
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
-                _employeeEfficiency = _employeeEfficiency * 10/7;
+                _employeeEfficiency /= 0.3;
             }
             
             if (_random.Next(0, 100) < 30 && _badWeatherDaysLeft == 0)
@@ -1036,7 +1042,7 @@ namespace Gold_Diggerzz
             if (_hurricaneDaysLeft == 1)
             {
                 Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
-                _employeeEfficiency = _employeeEfficiency * 10/3;
+                _employeeEfficiency /= 0.3;
             }
             
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
@@ -1051,7 +1057,8 @@ namespace Gold_Diggerzz
             if (_beautifulSkyDaysLeft == 1)
             {
                 Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
-                _employeeEfficiency = _employeeEfficiency * 2/3;
+                _employeeEfficiency /= 1.5;
+                _beautifulSkyDaysLeft = 0;
             }
 
             if (_random.Next(0, 100) < 40 && _beautifulSkyDaysLeft == 0)
