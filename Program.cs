@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * you can use powerups without actually having them
          * after a few days the employee efficiency is super high (like 70ish)
          * add in price of training course n shit to the price dictionary and undo hard-coding of values
          * print mechanics and shit is a) too long and b) incorrect values
@@ -229,18 +230,40 @@ namespace Gold_Diggerzz
                         PrintResources(resourceDictionary);
                         break;
                     case 5:
+                        if (powerUpDictionary["Ancient Artefact"] == 0 && powerUpDictionary["Time Machine"] == 0)
+                        {
+                            Console.WriteLine("\u274c You don't have any powerups to use \u274c");
+                            break;
+                        }
                         Console.WriteLine("What powerup do you want to use?");
                         Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
                         Console.WriteLine("1 - Ancient Artefact");
                         Console.WriteLine("2 - Time Machine");
                         int powerUpChoice = GetValidInt(1, 2);
+                        
                         if (powerUpChoice == 1)
                         {
-                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                            if (powerUpDictionary["Ancient Artefact"] != 0)
+                            {
+                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);   
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have any Ancient Artefacts to use");
+                            }
+                            
                         }
                         else if (powerUpChoice == 2)
                         {
-                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                            if (powerUpDictionary["Time Machine"] != 0)
+                            {
+                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                                
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have any Time Machines to use");
+                            }
                         }
                         break;
                     case 6:
