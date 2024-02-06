@@ -222,9 +222,8 @@ namespace Gold_Diggerzz
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
-                        Console.WriteLine("You have been charged $30 for the costs of skipping a day");
-                        resourceDictionary["Dollars"] -= 30;
-                        // undo hardcoding here
+                        Console.WriteLine($"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
+                        resourceDictionary["Dollars"] -= priceDictionary["SkipDay"];
                         _currentDate = _currentDate.AddDays(1);
                         PrintResources(resourceDictionary);
                         break;
@@ -273,15 +272,14 @@ namespace Gold_Diggerzz
                         PrintStats();
                         break;
                     case 8:
-                        // undo hardcoding here
-                        if (resourceDictionary["Dollars"] > 400 * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
+                        if (resourceDictionary["Dollars"] > priceDictionary["trainingCourse"] * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
                             Console.WriteLine("You have been charged $400 per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
-                            EmployeeTrainingCourse(resourceDictionary);
+                            EmployeeTrainingCourse(resourceDictionary, priceDictionary);
                         }
-                        else if (resourceDictionary["Dollars"] > 400 * resourceDictionary["Workers"] && resourceDictionary["Workers"] == 0)
+                        else if (resourceDictionary["Dollars"] > priceDictionary["trainingCourse"] * resourceDictionary["Workers"] && resourceDictionary["Workers"] == 0)
                         {
                             Console.WriteLine("You don't have any employees to send on a training course");
                             Console.WriteLine("This could be because of employee illness - try again later");
@@ -310,9 +308,8 @@ namespace Gold_Diggerzz
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to bribe the government");
-                                Console.WriteLine("You have been charged 200 for the bribe");
-                                resourceDictionary["Dollars"] -= 200;
-                                // undo hardcoding here
+                                Console.WriteLine($"You have been charged {priceDictionary["bribe"]} for the bribe");
+                                resourceDictionary["Dollars"] -= priceDictionary["bribe"];
                                 Console.WriteLine("You don't have to pay wages for the next three days");
                                 _noWageDaysLeft = 3;
                                 _totalBribes += 1;
@@ -431,7 +428,10 @@ namespace Gold_Diggerzz
                 { "gold", 60},
                 { "diamond", 200},
                 { "Workers", 100},
-                { "Wage", 13}
+                { "Wage", 13},
+                { "SkipDay", 50},
+                { "bribe", 200},
+                { "trainingCourse", 400}
             };
             
             return prices;
@@ -1235,13 +1235,12 @@ namespace Gold_Diggerzz
             prices["diamond"] *= percentageChange;
         }
 
-        private static void EmployeeTrainingCourse(Dictionary<string, double> resources)
+        private static void EmployeeTrainingCourse(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             // to boost the productivity of employees
-            Console.WriteLine($"This course charged you {400 * resources["Workers"]} in fees");
-            resources["Dollars"] -= 400 * resources["Workers"];
+            Console.WriteLine($"This course charged you {prices["trainingCourse"] * resources["Workers"]} in fees");
+            resources["Dollars"] -= prices["trainingCourse"] * resources["Workers"];
             _employeeEfficiency *= 1.3;
-            // undo hardcoding here
             _currentDate.AddDays(7);
             Console.WriteLine("Training employees...");
             Thread.Sleep(1500);
