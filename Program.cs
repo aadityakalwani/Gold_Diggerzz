@@ -114,8 +114,8 @@ namespace Gold_Diggerzz
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         private static bool _animation = true;
-        private static int _increasedGoldChanceDays = 0;
-        private static int _noWageDaysLeft = 0;
+        private static int _increasedGoldChanceDays;
+        private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static int _crashDaysLeft;
         private static int _badWeatherDaysLeft;
@@ -197,8 +197,14 @@ namespace Gold_Diggerzz
             
                 switch (menuOption)
                 {
-                    case 0:
+                    case -2:
                         Console.WriteLine("You were in debt, bossman have paid that off so we good now");
+                        break;
+                    case -1:
+                        GameFailed(resourceDictionary);
+                        break;
+                    case 0:
+                        QuitGame(resourceDictionary);
                         break;
                     case 1:
                         _animation = true;
@@ -206,15 +212,15 @@ namespace Gold_Diggerzz
                         Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary);
                         break;
                     case 2:
-                        GoToMarket(resourceDictionary, priceDictionary);
+                        _animation = false;
+                        Console.WriteLine("Enter number of days to dig in one go (upto 30)");
+                        int daysToDig = GetValidInt(1, 30);
+                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary);
                         break;
                     case 3:
-                        PrintGameMechanics();
+                        GoToMarket(resourceDictionary, priceDictionary);
                         break;
                     case 4:
-                        QuitGame(resourceDictionary);
-                        break;
-                    case 5:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine("You have been charged $30 for the costs of skipping a day");
                         resourceDictionary["Dollars"] -= 30;
@@ -222,29 +228,28 @@ namespace Gold_Diggerzz
                         _currentDate = _currentDate.AddDays(1);
                         PrintResources(resourceDictionary);
                         break;
+                    case 5:
+                        Console.WriteLine("What powerup do you want to use?");
+                        Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
+                        Console.WriteLine("1 - Ancient Artefact");
+                        Console.WriteLine("2 - Time Machine");
+                        int powerUpChoice = GetValidInt(1, 2);
+                        if (powerUpChoice == 1)
+                        {
+                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                        }
+                        else if (powerUpChoice == 2)
+                        {
+                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                        }
+                        break;
                     case 6:
-                        _animation = false;
-                        Console.WriteLine("Enter number of days to dig in one go (upto 30)");
-                        int daysToDig = GetValidInt(1, 30);
-                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary);
+                        PrintGameMechanics();
                         break;
                     case 7:
-                        Console.WriteLine("You have chosen to bribe the government");
-                        Console.WriteLine("You have been charged $150 for the bribe");
-                        resourceDictionary["Dollars"] -= 150;
-                        // undo hardcoding here
-                        Console.WriteLine("You don't have to pay wages for the next three days");
-                        _noWageDaysLeft = 3;
-                        _totalBribes += 1;
-                        break;
-                    case 8:
-                        Console.WriteLine("Giving you the information now...");
-                        Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
-                        break;
-                    case 9:
                         PrintStats();
                         break;
-                    case 10:
+                    case 8:
                         // undo hardcoding here
                         if (resourceDictionary["Dollars"] > 400 * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
@@ -263,29 +268,41 @@ namespace Gold_Diggerzz
                             Console.WriteLine("You don't have enough money to send all employees on a training course");
                         }
                         break;
-                    case 11:
-                        Console.WriteLine("What powerup do you want to use?");
-                        Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
-                        Console.WriteLine("1 - Ancient Artefact");
-                        Console.WriteLine("2 - Time Machine");
-                        int powerUpChoice = GetValidInt(1, 2);
-                        if (powerUpChoice == 1)
+                        
+                    case 9:
+                        Console.WriteLine("You've chosen to commit a crime. Choose an option:");
+                        Console.WriteLine("1 - Pay $50 for information on the next stock market crash");
+                        Console.WriteLine("2 - Bribe the government for $200 to not pay wages for the next 3 days");
+                        int crimeChoice = GetValidInt(1, 2);
+
+                        switch (crimeChoice)
                         {
-                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                            case 1:
+                                Console.WriteLine(
+                                    "You have chosen to pay $50 for information on the next stock market crash");
+                                Console.WriteLine("You have been charged $50");
+                                resourceDictionary["Dollars"] -= 50;
+                                Console.WriteLine("Giving you the information now...");
+                                Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                                break;
+                            case 2:
+                                Console.WriteLine("You have chosen to bribe the government");
+                                Console.WriteLine("You have been charged 200 for the bribe");
+                                resourceDictionary["Dollars"] -= 200;
+                                // undo hardcoding here
+                                Console.WriteLine("You don't have to pay wages for the next three days");
+                                _noWageDaysLeft = 3;
+                                _totalBribes += 1;
+                                break;
                         }
-                        else if (powerUpChoice == 2)
-                        {
-                            UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
-                        }
+
                         break;
-                    case -1:
-                        GameFailed(resourceDictionary);
-                        break;
+
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
                 }
-            } while (menuOption != 4 && menuOption != -1);
+            } while (menuOption != 0 && menuOption != -1);
             
         }
         
@@ -452,21 +469,20 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Please select an option:");
+                Console.WriteLine("0 - Quit game");
                 Console.WriteLine("1 - Dig one day");
-                Console.WriteLine("2 - Go to market");
-                Console.WriteLine("3 - Print game mechanics");
-                Console.WriteLine("4 - Quit game");
-                Console.WriteLine("5 - Skip one day - $30 cost");
-                Console.WriteLine("6 - Dig multiple days");
-                Console.WriteLine("7 - Bribe the government for $150 to not pay wages for the next three days");
-                Console.WriteLine("8 - Pay $50 for information on the next stock market crash");
-                Console.WriteLine("9 - Print stats");
-                Console.WriteLine("10 - Send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
-                Console.WriteLine("11 - Use powerup");
+                Console.WriteLine("2 - Dig multiple days");
+                Console.WriteLine("3 - Go to market");
+                Console.WriteLine("4 - Skip one day");
+                Console.WriteLine("5 - Use powerup");
+                Console.WriteLine("6 - Print game mechanics");
+                Console.WriteLine("7 - Print stats");
+                Console.WriteLine("8 - Send employees for training");   
+                Console.WriteLine("9 - Commit a crime (further options inside)");
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
-                int userOption = GetValidInt(1, 11);
+                int userOption = GetValidInt(0, 9);
                 Console.Clear();
                 return userOption;
             }
@@ -476,7 +492,8 @@ namespace Gold_Diggerzz
                 return -1;
             }
             
-            return 0;
+            // -2 if you were previously in debt
+            return -2;
         }
         
         private static string CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
@@ -819,18 +836,19 @@ namespace Gold_Diggerzz
             int marketOption;
             do
             {
-                Console.WriteLine("Here is the menu for the market:");
+                Console.WriteLine("\nHere is the menu for the market:");
                 Console.WriteLine("1 - Sell a specific resource");
                 Console.WriteLine("2 - Sell all resources for dollars");
                 Console.WriteLine("3 - Hire More Employees");
                 Console.WriteLine("4 - Exit market");
-
+                Console.WriteLine("\nChoose Option:");
                 marketOption = GetValidInt(1, 8);
 
                 switch (marketOption)
                 {
                     case 1:
-                        Console.WriteLine("Youve chosen to sell a specific resource.\nWhich resource do you want to sell?");
+                        Console.WriteLine("You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
+                        // sht here bro add in the emojis
                         Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
                         int sellChoice = GetValidInt(1, 5);
                         switch (sellChoice)
