@@ -229,7 +229,7 @@ namespace Gold_Diggerzz
                         PrintResources(resourceDictionary);
                         break;
                     case 5:
-                        if (powerUpDictionary["Ancient Artefact"] == 0 && powerUpDictionary["Time Machine"] == 0)
+                        if (powerUpDictionary["Ancient Artefact"] !> 0 && powerUpDictionary["Time Machine"] !> 0)
                         {
                             Console.WriteLine("\u274c You don't have any powerups to use \u274c");
                             break;
@@ -238,7 +238,8 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
                         Console.WriteLine("1 - Ancient Artefact");
                         Console.WriteLine("2 - Time Machine");
-                        int powerUpChoice = GetValidInt(1, 2);
+                        Console.WriteLine("3 - Cancel & Return");
+                        int powerUpChoice = GetValidInt(1, 3);
                         
                         if (powerUpChoice == 1)
                         {
@@ -864,7 +865,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("3 - Hire More Employees");
                 Console.WriteLine("4 - Exit market");
                 Console.WriteLine("\nChoose Option:");
-                marketOption = GetValidInt(1, 8);
+                marketOption = GetValidInt(1, 4);
 
                 switch (marketOption)
                 {
