@@ -12,9 +12,7 @@ namespace Gold_Diggerzz
         /*
          * current issues
          * after a few days the employee efficiency is super high (like 70ish)
-         * add in price of training course n shit to the price dictionary and undo hard-coding of values
-         * print mechanics and shit is a) too long and b) incorrect values
-         * same for tutorial
+         * print mechanics and tutorial is a) too long and b) incorrect values
         */
         
         /* to-do ideas
