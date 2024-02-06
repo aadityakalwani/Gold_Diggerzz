@@ -11,7 +11,6 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * you can use powerups without actually having them
          * after a few days the employee efficiency is super high (like 70ish)
          * add in price of training course n shit to the price dictionary and undo hard-coding of values
          * print mechanics and shit is a) too long and b) incorrect values
@@ -1062,8 +1061,6 @@ namespace Gold_Diggerzz
         
         private static void QuitGame(Dictionary<string, double> resources)
         {
-            Console.WriteLine("Your final stats were:");
-            PrintResources(resources);
             PrintStats();
             Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
@@ -1084,7 +1081,6 @@ namespace Gold_Diggerzz
         {
             
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing
-            
             
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
@@ -1175,47 +1171,46 @@ namespace Gold_Diggerzz
             
             // weather effects: rain or hurricane reducing efficiency, beautifulSky increasing efficiency
             
-
-            // rain reducing efficiency
-            // undo the effects of rain reduced efficiency
+            // undoing weather effects 
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
-                _employeeEfficiency /= 0.3;
+                _employeeEfficiency /= 0.7;
             }
             
-            if (_random.Next(0, 100) < 30 && _badWeatherDaysLeft == 0)
-            {
-                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
-                _employeeEfficiency *= 0.7;
-                _badWeatherDaysLeft = 3;
-            }
-            
-            
-            // to undo effects of hurricane
-            if (_hurricaneDaysLeft == 1)
-            {
-                Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
-                _employeeEfficiency /= 0.3;
-            }
-            
-            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
-            if (_random.Next(0, 100) < 5 && _hurricaneDaysLeft == 0)
-            {
-                Console.WriteLine("A hurricane is coming, efficiency is now 40% the next five days");
-                _employeeEfficiency *= 0.4;
-                _hurricaneDaysLeft = 6;
-            }
-            
-            // 40% chance beautiful sky increasing efficiency
             if (_beautifulSkyDaysLeft == 1)
             {
                 Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
                 _employeeEfficiency /= 1.5;
                 _beautifulSkyDaysLeft = 0;
             }
-
-            if (_random.Next(0, 100) < 30 && _beautifulSkyDaysLeft == 0)
+            
+            if (_hurricaneDaysLeft == 1)
+            {
+                Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
+                _employeeEfficiency /= 0.4;
+            }
+            
+            bool noActiveWeatherEffects = _badWeatherDaysLeft == 0 && _hurricaneDaysLeft == 0 && _beautifulSkyDaysLeft == 0;
+            
+            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
+            if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
+            {
+                Console.WriteLine("A hurricane is coming, efficiency is now 40% the next five days");
+                _employeeEfficiency *= 0.4;
+                _hurricaneDaysLeft = 6;
+            }
+            
+            // rain reducing efficiency
+            else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
+            {
+                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
+                _employeeEfficiency *= 0.7;
+                _badWeatherDaysLeft = 3;
+            }
+            
+            // 30% chance beautiful sky increasing efficiency
+            else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
                 _employeeEfficiency *= 1.2;
