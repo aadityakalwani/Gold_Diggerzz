@@ -68,21 +68,27 @@ namespace Gold_Diggerzz
         
         /*
         current features: (also in PrintMechanics())
+        chance of finding coal = 90%
+        chance of finding stone = 75%
         chance of finding iron = 65%
-        chance of finding gold = 15%
+        chance of finding gold = 20%
+        chance of finding diamond = 5% 
         chance of finding Ancient Artefact = 5%
 
         cost of hiring employee = $100
+        coal value = $4
+        stone value = $8
         iron value =  $15
         gold value = $75
+        diamond value = $200
         
-        iron and gold values fluctuate by upto ±10% per day
+        resource values fluctuate by upto ±10% per day
 
         Ancient Artefact has two powerup options:
         $250 instantly, or a 50% chance of finding gold for the next 5 days
 
         the resources you gain are equal to the number of employees you have times their efficiency
-        eg. 7 employees = 7 iron found on that day
+        eg. 7 employees = 7 iron found on that day * efficiency of 1.5 = 10.5iron found
 
         baseline wage = $10 per employee per day
 
@@ -108,8 +114,8 @@ namespace Gold_Diggerzz
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         private static bool _animation = true;
-        private static int _increasedGoldChanceDays;
-        private static int _noWageDaysLeft;
+        private static int _increasedGoldChanceDays = 0;
+        private static int _noWageDaysLeft = 0;
         private static int _lessWorkerDays;
         private static int _crashDaysLeft;
         private static int _badWeatherDaysLeft;
@@ -814,20 +820,58 @@ namespace Gold_Diggerzz
             do
             {
                 Console.WriteLine("Here is the menu for the market:");
-                Console.WriteLine("1 - Sell iron for dollars");
-                Console.WriteLine("2 - Sell gold for dollars");
+                Console.WriteLine("1 - Sell a specific resource");
+                Console.WriteLine("2 - Sell all resources for dollars");
                 Console.WriteLine("3 - Hire More Employees");
                 Console.WriteLine("4 - Exit market");
-                Console.WriteLine("5 - Sell all iron and gold and stone for dollars");
-                Console.WriteLine("6 - Sell stone for dollars");
-                Console.WriteLine("7 - Sell coal for dollars");
-                Console.WriteLine("8 - Sell diamond for dollars");
 
                 marketOption = GetValidInt(1, 8);
 
                 switch (marketOption)
                 {
                     case 1:
+                        Console.WriteLine("Youve chosen to sell a specific resource.\nWhich resource do you want to sell?");
+                        Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
+                        int sellChoice = GetValidInt(1, 5);
+                        switch (sellChoice)
+                        {
+                            case 1:
+                        Console.WriteLine("Your have chosen to sell coal for dollars");
+                        Console.WriteLine($"How much coal do you want to sell?\nYou have {resources["coal"]}kg of coal");
+                        double coalToSell = GetValidDouble(0, 1000000);
+                        if (coalToSell > resources["coal"])
+                        {
+                            Console.WriteLine("You don't have enough coal to sell that much");
+                        }
+                        else
+                        {
+                            resources["coal"] -= coalToSell;
+                            resources["Dollars"] += coalToSell * priceDictionary["coal"];
+                            _totalDollarsEarned += coalToSell * priceDictionary["coal"];
+                        }
+
+                        Console.WriteLine("Here are your updated resources:");
+                        PrintResources(resources);
+                        break;
+                    case 2:
+                        Console.WriteLine("Your have chosen to sell stone for dollars");
+                        Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
+                        double stoneToSell = GetValidDouble(0, 1000000);
+                        if (stoneToSell > resources["gold"])
+                        {
+                            Console.WriteLine("You don't have enough stone to sell that much");
+                        }
+                        else
+                        {
+                            resources["stone"] -= stoneToSell;
+                            resources["Dollars"] += stoneToSell * priceDictionary["stone"];
+                            _totalDollarsEarned += stoneToSell * priceDictionary["stone"];
+                        }
+
+                        Console.WriteLine("Here are your updated resources:");
+                        PrintResources(resources);
+                        break;
+                    case 3:
                         Console.WriteLine("You have chosen to sell iron for dollars");
                         Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
                         double ironToSell = GetValidDouble(0, 100000000);
@@ -845,9 +889,8 @@ namespace Gold_Diggerzz
 
                         Console.WriteLine("Here are your update resources:");
                         PrintResources(resources);
-
                         break;
-                    case 2:
+                    case 4:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
                         double goldToSell = GetValidDouble(0, 10000000);
@@ -866,6 +909,46 @@ namespace Gold_Diggerzz
                         PrintResources(resources);
 
                         break;
+                    case 5:
+                                Console.WriteLine("Your have chosen to sell diamond for dollars");
+                                Console.WriteLine($"How much diamond do you want to sell?\nYou have {resources["diamond"]}kg of diamond");
+                                double diamondToSell = GetValidDouble(0, 1000000);
+                                if (diamondToSell > resources["diamond"])
+                                {
+                                    Console.WriteLine("You don't have enough diamond to sell that much");
+                                }
+                                else
+                                {
+                                    resources["diamond"] -= diamondToSell;
+                                    resources["Dollars"] += diamondToSell * priceDictionary["diamond"];
+                                    _totalDollarsEarned += diamondToSell * priceDictionary["diamond"];
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                PrintResources(resources);
+                        break; 
+                        }
+
+                    break;
+                        
+                    case 2:
+                        Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
+                        resources["Dollars"] += resources["coal"] * priceDictionary["coal"];
+                        resources["Dollars"] += resources["iron"] * priceDictionary["iron"];
+                        resources["Dollars"] += resources["gold"] * priceDictionary["gold"];
+                        resources["Dollars"] += resources["stone"] * priceDictionary["stone"];
+                        resources["Dollars"] += resources["diamond"] * priceDictionary["diamond"];
+                        _totalDollarsEarned += resources["coal"] * priceDictionary["coal"] + resources["iron"] * priceDictionary["iron"] + resources["gold"] * priceDictionary["gold"] + resources["stone"] * priceDictionary["stone"] + resources["diamond"] * priceDictionary["diamond"];
+                        resources["coal"] = 0;
+                        resources["iron"] = 0;
+                        resources["gold"] = 0;
+                        resources["stone"] = 0;
+                        resources["diamond"] = 0;
+                        
+                        Console.WriteLine("Here are your updated resources:");
+                        PrintResources(resources);
+                        break;
+                    
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
@@ -883,78 +966,11 @@ namespace Gold_Diggerzz
                             _totalEmployeesHired += employeesToHire;
                         }
                         break;
+                    
                     case 4:
                         Console.WriteLine("Thanks for coming to the market!");
                         break;
-                    case 5:
-                        Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
-                        resources["Dollars"] += resources["coal"] * priceDictionary["coal"];
-                        resources["Dollars"] += resources["iron"] * priceDictionary["iron"];
-                        resources["Dollars"] += resources["gold"] * priceDictionary["gold"];
-                        resources["Dollars"] += resources["stone"] * priceDictionary["stone"];
-                        resources["Dollars"] += resources["diamond"] * priceDictionary["diamond"];
-                        _totalDollarsEarned += resources["coal"] * priceDictionary["coal"] + resources["iron"] * priceDictionary["iron"] + resources["gold"] * priceDictionary["gold"] + resources["stone"] * priceDictionary["stone"] + resources["diamond"] * priceDictionary["diamond"];
-                        resources["coal"] = 0;
-                        resources["iron"] = 0;
-                        resources["gold"] = 0;
-                        resources["stone"] = 0;
-                        resources["diamond"] = 0;
-                        PrintResources(resources);
-                        break;
-                    case 6:
-                        Console.WriteLine("Your have chosen to sell stone for dollars");
-                        Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
-                        double stoneToSell = GetValidDouble(0, 1000000);
-                        if (stoneToSell > resources["gold"])
-                        {
-                            Console.WriteLine("You don't have enough stone to sell that much");
-                        }
-                        else
-                        {
-                            resources["stone"] -= stoneToSell;
-                            resources["Dollars"] += stoneToSell * priceDictionary["stone"];
-                            _totalDollarsEarned += stoneToSell * priceDictionary["stone"];
-                        }
-
-                        Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
-                        break;
-                    case 7:
-                        Console.WriteLine("Your have chosen to sell coal for dollars");
-                        Console.WriteLine($"How much coal do you want to sell?\nYou have {resources["coal"]}kg of coal");
-                        double coalToSell = GetValidDouble(0, 1000000);
-                        if (coalToSell > resources["coal"])
-                        {
-                            Console.WriteLine("You don't have enough coal to sell that much");
-                        }
-                        else
-                        {
-                            resources["coal"] -= coalToSell;
-                            resources["Dollars"] += coalToSell * priceDictionary["coal"];
-                            _totalDollarsEarned += coalToSell * priceDictionary["coal"];
-                        }
-
-                        Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
-                        break;
-                    case 8:
-                        Console.WriteLine("Your have chosen to sell diamond for dollars");
-                        Console.WriteLine($"How much diamond do you want to sell?\nYou have {resources["diamond"]}kg of diamond");
-                        double diamondToSell = GetValidDouble(0, 1000000);
-                        if (diamondToSell > resources["diamond"])
-                        {
-                            Console.WriteLine("You don't have enough diamond to sell that much");
-                        }
-                        else
-                        {
-                            resources["diamond"] -= diamondToSell;
-                            resources["Dollars"] += diamondToSell * priceDictionary["diamond"];
-                            _totalDollarsEarned += diamondToSell * priceDictionary["diamond"];
-                        }
-
-                        Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
-                        break;
+                    
                 }
             } while (marketOption != 4);
         }
