@@ -7,12 +7,13 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
-        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py                           
+        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py                            
         
         /*
          * current issues
          * after a few days the employee efficiency is super high (like 70ish)
          * print mechanics and tutorial is a) too long and b) incorrect values
+         * test out achievements feature
         */
         
         /* to-do ideas
