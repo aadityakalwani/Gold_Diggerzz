@@ -163,6 +163,7 @@ namespace Gold_Diggerzz
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
+            List<string> achievementsList = new List<string>();
 
             // setting the initial values for the global variables
             _lessWorkerDays = 0;
@@ -198,17 +199,17 @@ namespace Gold_Diggerzz
             if (Console.ReadLine() == "y")
             {
                 RunTutorial();
-                PrintGameMechanics(resourceDictionary, priceDictionary, probabilityDictionary);
+                PrintGameMechanics(priceDictionary, probabilityDictionary);
                 Thread.Sleep(2000);
             }
             
             
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
-            RunGame(resourceDictionary, priceDictionary, probabilityDictionary, powerUpDictionary);
+            RunGame(resourceDictionary, priceDictionary, probabilityDictionary, powerUpDictionary, achievementsList);
         }
         
-        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary)
+        private static void RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             int menuOption;
             do
@@ -229,13 +230,13 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary);
+                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary, achievementsList);
                         break;
                     case 2:
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary);
+                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary, achievementsList);
                         break;
                     case 3:
                         GoToMarket(resourceDictionary, priceDictionary);
@@ -264,7 +265,7 @@ namespace Gold_Diggerzz
                         {
                             if (powerUpDictionary["Ancient Artefact"] != 0)
                             {
-                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);   
+                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);   
                             }
                             else
                             {
@@ -276,7 +277,7 @@ namespace Gold_Diggerzz
                         {
                             if (powerUpDictionary["Time Machine"] != 0)
                             {
-                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary);
+                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
                                 
                             }
                             else
@@ -286,7 +287,7 @@ namespace Gold_Diggerzz
                         }
                         break;
                     case 6:
-                        PrintGameMechanics(resourceDictionary, priceDictionary, probabilityDictionary);
+                        PrintGameMechanics(priceDictionary, probabilityDictionary);
                         break;
                     case 7:
                         PrintStats();
@@ -346,7 +347,7 @@ namespace Gold_Diggerzz
             
         }
 
-        private static void PrintGameMechanics(Dictionary<string, double> resources, Dictionary<string, double> prices,
+        private static void PrintGameMechanics(Dictionary<string, double> prices,
             Dictionary<string, double> probabilities)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -501,7 +502,7 @@ namespace Gold_Diggerzz
             };
             return powerUps;
         }
-
+        
         private static void RunTutorial()
         {
             Console.WriteLine("Welcome to the tutorial");
@@ -606,7 +607,7 @@ namespace Gold_Diggerzz
             return inDebt;
         }
         
-        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary)
+        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             
             for (int days = 0; days < daysToDig; days++)
@@ -768,7 +769,7 @@ namespace Gold_Diggerzz
                         switch (userInput)
                         {
                             case 1:
-                                UsePowerUp(resources, prices, probabilities, 1, powerUpDictionary);
+                                UsePowerUp(resources, prices, probabilities, 1, powerUpDictionary, achievementsList);
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to save the Ancient Artefact for later");
@@ -788,7 +789,7 @@ namespace Gold_Diggerzz
                         switch (userInput)
                         {
                             case 1:
-                                UsePowerUp(resources, prices, probabilities, 2, powerUpDictionary);
+                                UsePowerUp(resources, prices, probabilities, 2, powerUpDictionary, achievementsList);
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to save the Time Machine for later");
@@ -867,7 +868,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
             }
 
-            CheckAchievements(resources);
+            CheckAchievements(achievementsList);
             
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             PrintResources(resources);
@@ -1054,7 +1055,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
-        private static void UsePowerUp(Dictionary<string, double> resources, Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary)
+        private static void UsePowerUp(Dictionary<string, double> resources, Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             switch (powerUpChoice)
             {
@@ -1088,7 +1089,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 10 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(resources, prices, 10, probabilities, powerUpDictionary);
+                    Dig(resources, prices, 10, probabilities, powerUpDictionary, achievementsList);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
                 }
@@ -1258,13 +1259,14 @@ namespace Gold_Diggerzz
             
         }
 
-        private static void CheckAchievements(Dictionary<string, double> resources)
+        private static void CheckAchievements(List<string> achievements)
         {
             
             if (_totalCoalFound >= 100 && !_achievement1)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
                 _achievement1 = true;
+                achievements.Add("100kg of coal found");
                 
             }
             
@@ -1272,114 +1274,133 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
                 _achievement2 = true;
+                achievements.Add("1000kg of coal found");
             }
             
             if (_totalCoalFound >= 10000 && !_achievement3)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
                 _achievement3 = true;
+                achievements.Add("10000kg of coal found");
             }
             
             if (_totalStoneFound >= 100 && !_achievement4)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
                 _achievement4 = true;
+                achievements.Add("100kg of stone found");
             }
             
             if (_totalStoneFound >= 1000 && !_achievement5)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
                 _achievement5 = true;
+                achievements.Add("1000kg of stone found");
             }
             
             if (_totalStoneFound >= 10000 && !_achievement6)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
                 _achievement6 = true;
+                achievements.Add("10000kg of stone found");
             }
             
             if (_totalIronFound >= 75 && !_achievement7)
             {
                 Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
                 _achievement7 = true;
+                achievements.Add("75kg of iron found");
             }
             
             if (_totalIronFound >= 750 && !_achievement8)
             {
                 Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
                 _achievement8 = true;
+                achievements.Add("750kg of iron found");
             }
             
             if (_totalIronFound >= 7500 && !_achievement9)
             {
                 Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
                 _achievement9 = true;
+                achievements.Add("7500kg of iron found");
             }
             
             if (_totalGoldFound >= 30 && !_achievement10)
             {
                 Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
                 _achievement10 = true;
+                achievements.Add("30kg of gold found");
             }
             
             if (_totalGoldFound >= 300 && !_achievement11)
             {
                 Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
                 _achievement11 = true;
+                achievements.Add("300kg of gold found");
             }
             
             if (_totalGoldFound >= 3000 && !_achievement12)
             {
                 Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
                 _achievement12 = true;
+                achievements.Add("3000kg of gold found");
             }
             
             if (_totalDiamondFound >= 10 && !_achievement13)
             {
                 Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
                 _achievement13 = true;
+                achievements.Add("10kg of diamond found");
             }
             
             if (_totalDiamondFound >= 100 && !_achievement14)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
                 _achievement14 = true;
+                achievements.Add("100kg of diamond found");
             }
             
             if (_totalDiamondFound >= 1000 && !_achievement15)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
                 _achievement15 = true;
+                achievements.Add("1000kg of diamond found");
             }
             
             if (_totalDollarsEarned >= 300 && !_achievement16)
             {
                 Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
                 _achievement16 = true;
+                achievements.Add("$300 earned");
             }
             
             if (_totalDollarsEarned >= 1000 && !_achievement17)
             {
                 Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
                 _achievement17 = true;
+                achievements.Add("$1000 earned");
             }
             
             if (_totalDollarsEarned >= 10000 && !_achievement18)
             {
                 Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
                 _achievement18 = true;
+                achievements.Add("$10000 earned");
             }
             
             if (_totalEmployeesHired >= 10 && !_achievement19)
             {
                 Console.WriteLine("You've unlocked an achievement: 10 employees hired milestone");
                 _achievement19 = true;
+                achievements.Add("10 employees hired");
             }
             
             if (_totalEmployeesHired >= 100 && !_achievement20)
             {
                 Console.WriteLine("You've unlocked an achievement: 100 employees hired milestone");
                 _achievement20 = true;
+                achievements.Add("100 employees hired");
             }
         }
 
