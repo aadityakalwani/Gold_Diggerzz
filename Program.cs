@@ -17,8 +17,6 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * earthquakes that loosen soil and make shit easier to find
-         * reorder almost all switch cases to be of genuine use
-         * perhaps lay sub-sets of switch cases eg. bribe goes under "do bad thing" section idk
          * achievements - eg. find 10kg total iron
          * tutorial mode (that is actually functional)
          * loans - you can take a loan from the bank and pay it back with interest
