@@ -293,6 +293,12 @@ namespace Gold_Diggerzz
                         PrintStats();
                         break;
                     case 8:
+                        for (int achievementNumber = 0; achievementNumber < achievementsList.Count; achievementNumber++)
+                        {
+                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
+                        }
+                        break;
+                    case 9:
                         if (resourceDictionary["Dollars"] > priceDictionary["trainingCourse"] * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
@@ -311,7 +317,7 @@ namespace Gold_Diggerzz
                         }
                         break;
                         
-                    case 9:
+                    case 10:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
                         Console.WriteLine("1 - Pay $50 for information on the next stock market crash");
                         Console.WriteLine("2 - Bribe the government for $200 to not pay wages for the next 3 days");
@@ -428,11 +434,11 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("__________________________________");
             Console.WriteLine($"| You have ${resources["Dollars"]}                   |");
-            Console.WriteLine($"| You have {resources["coal"]}kg of coal               |");
+            Console.WriteLine($"| You have {resources["coal"]}kg of coal            |");
             Console.WriteLine($"| You have {resources["stone"]}kg of stone           |");
             Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
             Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
-            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond            |");
+            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond         |");
             Console.WriteLine($"| You have {resources["Workers"]} employees            |");
             Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens         |");
             Console.WriteLine($"| Your employees' efficiency is {_employeeEfficiency} |");
@@ -537,12 +543,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine("5 - Use powerup");
                 Console.WriteLine("6 - Print game mechanics");
                 Console.WriteLine("7 - Print stats");
-                Console.WriteLine("8 - Send employees for training");   
-                Console.WriteLine("9 - Commit a crime (further options inside)");
+                Console.WriteLine("8 - Print achievements");
+                Console.WriteLine("9 - Send employees for training");   
+                Console.WriteLine("10 - Commit a crime (further options inside)");
                 Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
-                int userOption = GetValidInt(0, 9);
+                int userOption = GetValidInt(0, 10);
                 Console.Clear();
                 return userOption;
             }
