@@ -7,7 +7,7 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
-        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
+        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py                           
         
         /*
          * current issues
@@ -550,7 +550,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 10);
-                Console.Clear();
+                Console.Clear();          
                 return userOption;
             }
 
