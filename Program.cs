@@ -1170,7 +1170,7 @@ namespace Gold_Diggerzz
             
             // weather effects: rain or hurricane reducing efficiency, beautifulSky increasing efficiency
             
-            // undoing weather effects 
+             // undoing weather effects 
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
@@ -1215,6 +1215,7 @@ namespace Gold_Diggerzz
                 _employeeEfficiency *= 1.2;
                 _beautifulSkyDaysLeft = 3; 
             }
+            
         }
 
         private static void ChangePrices(Dictionary<string, double> prices)
