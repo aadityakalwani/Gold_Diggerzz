@@ -16,17 +16,21 @@ namespace Gold_Diggerzz
         */
         
         /* to-do ideas
-         * earthquakes that loosen soil and make shit easier to find
+         * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
          * achievements - eg. find 10kg total iron
          * tutorial mode (that is actually functional)
          * loans - you can take a loan from the bank and pay it back with interest
-         * option to invest in the stock market
-         * load/save game by saving the dictionaries to a file
+         * load/save game by saving the resource dictionary and the current date to a file
          * more power-ups
+            * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days. This would allow the player to gather resources more quickly.
+            * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
+             * Market Master: increasing selling price of all things
          * stock market feature (kinda done?)
+             * Every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
+         * option to invest in the stock market
          * managers that do shit
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
-         * (like prestige in all the idle miner games i played)
+            * (like prestige in all the idle miner games i played)
          
          features i can't do until i have an individual employee stat:
          * per-employee stats
@@ -128,6 +132,26 @@ namespace Gold_Diggerzz
         private static double _totalEmployeesHired;
         private static double _totalDollarsEarned;
         private static double _employeeEfficiency = 1;
+        private static bool _achievement1;
+        private static bool _achievement2;
+        private static bool _achievement3;
+        private static bool _achievement4;
+        private static bool _achievement5;
+        private static bool _achievement6;
+        private static bool _achievement7;
+        private static bool _achievement8;
+        private static bool _achievement9;
+        private static bool _achievement10;
+        private static bool _achievement11;
+        private static bool _achievement12;
+        private static bool _achievement13;
+        private static bool _achievement14;
+        private static bool _achievement15;
+        private static bool _achievement16;
+        private static bool _achievement17;
+        private static bool _achievement18;
+        private static bool _achievement19;
+        private static bool _achievement20;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
@@ -271,7 +295,7 @@ namespace Gold_Diggerzz
                         if (resourceDictionary["Dollars"] > priceDictionary["trainingCourse"] * resourceDictionary["Workers"] && resourceDictionary["Workers"] != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
-                            Console.WriteLine("You have been charged $400 per employee");
+                            Console.WriteLine($"You have been charged {priceDictionary["trainingCourse"]} per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
                             EmployeeTrainingCourse(resourceDictionary, priceDictionary);
                         }
@@ -842,7 +866,9 @@ namespace Gold_Diggerzz
                 
                 Console.WriteLine("___________________________________");
             }
-        
+
+            CheckAchievements(resources);
+            
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             PrintResources(resources);
         }
@@ -1230,6 +1256,131 @@ namespace Gold_Diggerzz
                 _beautifulSkyDaysLeft = 3; 
             }
             
+        }
+
+        private static void CheckAchievements(Dictionary<string, double> resources)
+        {
+            
+            if (_totalCoalFound >= 100 && !_achievement1)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
+                _achievement1 = true;
+                
+            }
+            
+            if (_totalCoalFound >= 1000 && !_achievement2)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
+                _achievement2 = true;
+            }
+            
+            if (_totalCoalFound >= 10000 && !_achievement3)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
+                _achievement3 = true;
+            }
+            
+            if (_totalStoneFound >= 100 && !_achievement4)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
+                _achievement4 = true;
+            }
+            
+            if (_totalStoneFound >= 1000 && !_achievement5)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
+                _achievement5 = true;
+            }
+            
+            if (_totalStoneFound >= 10000 && !_achievement6)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
+                _achievement6 = true;
+            }
+            
+            if (_totalIronFound >= 75 && !_achievement7)
+            {
+                Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
+                _achievement7 = true;
+            }
+            
+            if (_totalIronFound >= 750 && !_achievement8)
+            {
+                Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
+                _achievement8 = true;
+            }
+            
+            if (_totalIronFound >= 7500 && !_achievement9)
+            {
+                Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
+                _achievement9 = true;
+            }
+            
+            if (_totalGoldFound >= 30 && !_achievement10)
+            {
+                Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
+                _achievement10 = true;
+            }
+            
+            if (_totalGoldFound >= 300 && !_achievement11)
+            {
+                Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
+                _achievement11 = true;
+            }
+            
+            if (_totalGoldFound >= 3000 && !_achievement12)
+            {
+                Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
+                _achievement12 = true;
+            }
+            
+            if (_totalDiamondFound >= 10 && !_achievement13)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
+                _achievement13 = true;
+            }
+            
+            if (_totalDiamondFound >= 100 && !_achievement14)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
+                _achievement14 = true;
+            }
+            
+            if (_totalDiamondFound >= 1000 && !_achievement15)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
+                _achievement15 = true;
+            }
+            
+            if (_totalDollarsEarned >= 300 && !_achievement16)
+            {
+                Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
+                _achievement16 = true;
+            }
+            
+            if (_totalDollarsEarned >= 1000 && !_achievement17)
+            {
+                Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
+                _achievement17 = true;
+            }
+            
+            if (_totalDollarsEarned >= 10000 && !_achievement18)
+            {
+                Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
+                _achievement18 = true;
+            }
+            
+            if (_totalEmployeesHired >= 10 && !_achievement19)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10 employees hired milestone");
+                _achievement19 = true;
+            }
+            
+            if (_totalEmployeesHired >= 100 && !_achievement20)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100 employees hired milestone");
+                _achievement20 = true;
+            }
         }
 
         private static void ChangePrices(Dictionary<string, double> prices)
