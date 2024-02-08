@@ -193,7 +193,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             
-            Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
+            Console.WriteLine("Aim of the game: survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
             
             PrintResources(resourceDictionary);
@@ -258,7 +258,7 @@ namespace Gold_Diggerzz
                             break;
                         }
                         Console.WriteLine("What powerup do you want to use?");
-                        Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
+                        Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts, {powerUpDictionary["Time Machine"]} Time Machines and {powerUpDictionary["Market Master"]} Market Masters\n");
                         Console.WriteLine("0 - Cancel & Return");
                         Console.WriteLine("1 - Ancient Artefact");
                         Console.WriteLine("2 - Time Machine");
@@ -451,17 +451,13 @@ namespace Gold_Diggerzz
         
         private static void PrintResources(Dictionary<string, double> resources)
         {
-            Console.WriteLine("__________________________________");
-            Console.WriteLine($"| You have ${resources["Dollars"]}");
-            Console.WriteLine($"| You have {resources["coal"]}kg of coal");
-            Console.WriteLine($"| You have {resources["stone"]}kg of stone");
-            Console.WriteLine($"| You have {resources["iron"]}kg of iron");
-            Console.WriteLine($"| You have {resources["gold"]}kg of gold");
-            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond");
-            Console.WriteLine($"| You have {resources["Workers"]} employees");
-            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens");
-            Console.WriteLine($"| Your employees' efficiency is {_employeeEfficiency}");
-            Console.WriteLine("_________________________________\n");
+            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine($"                     You have ${resources["Dollars"]}\n");
+            Console.WriteLine($"| You have {resources["coal"]}kg of coal         | You have {resources["stone"]}kg of stone");
+            Console.WriteLine($"| You have {resources["iron"]}kg of iron         | You have {resources["gold"]}kg of gold");
+            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond      | You have {resources["magicTokens"]} magic token");
+            Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {_employeeEfficiency}");
+            Console.WriteLine("_____________________________________________________________________");
         }
         
         private static Dictionary<string, double> CreateResourceDictionary()
@@ -555,20 +551,13 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("___________________________________");
-                Console.WriteLine("Please select an option:");
+                Console.WriteLine("___________________________________\n");
+                Console.WriteLine("Main Features:              Print Options:                   Other Features:");
                 Console.WriteLine("0 - Quit game");
-                Console.WriteLine("1 - Dig one day");
-                Console.WriteLine("2 - Dig multiple days");
-                Console.WriteLine("3 - Go to market");
+                Console.WriteLine("1 - Dig one day             6 - Print game mechanics         5 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       7 - Print stats                  9 - Send employees for training");
+                Console.WriteLine("3 - Go to market            8 - Print achievements           10 - Commit a crime (further options inside)");
                 Console.WriteLine("4 - Skip one day");
-                Console.WriteLine("5 - Use powerup");
-                Console.WriteLine("6 - Print game mechanics");
-                Console.WriteLine("7 - Print stats");
-                Console.WriteLine("8 - Print achievements");
-                Console.WriteLine("9 - Send employees for training");   
-                Console.WriteLine("10 - Commit a crime (further options inside)");
-                Console.WriteLine("___________________________________");
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 10);
@@ -622,7 +611,7 @@ namespace Gold_Diggerzz
                 
                 if (inDebt == "true" && noResources && resources["Workers"] < 2)
                 {
-                    Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
+                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
                     return "bankrupt";
                 }
                 
