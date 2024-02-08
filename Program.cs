@@ -225,10 +225,10 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You were in debt, bossman have paid that off so we good now");
                         break;
                     case -1:
-                        GameFailed(resourceDictionary);
+                        GameFailed();
                         break;
                     case 0:
-                        QuitGame(resourceDictionary);
+                        QuitGame();
                         break;
                     case 1:
                         _animation = true;
@@ -259,34 +259,50 @@ namespace Gold_Diggerzz
                         }
                         Console.WriteLine("What powerup do you want to use?");
                         Console.WriteLine($"You have {powerUpDictionary["Ancient Artefact"]} Ancient Artefacts and {powerUpDictionary["Time Machine"]} Time Machines");
+                        Console.WriteLine("0 - Cancel & Return");
                         Console.WriteLine("1 - Ancient Artefact");
                         Console.WriteLine("2 - Time Machine");
-                        Console.WriteLine("3 - Cancel & Return");
-                        int powerUpChoice = GetValidInt(1, 3);
-                        
-                        if (powerUpChoice == 1)
+                        Console.WriteLine("3 - Market Master");
+                        int powerUpChoice = GetValidInt(0, 3);
+
+                        switch (powerUpChoice)
                         {
-                            if (powerUpDictionary["Ancient Artefact"] != 0)
-                            {
-                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);   
-                            }
-                            else
-                            {
-                                Console.WriteLine("You don't have any Ancient Artefacts to use");
-                            }
+                            case 1:
+                                if (powerUpDictionary["Ancient Artefact"] != 0)
+                                {
+                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);   
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Ancient Artefacts to use");
+                                }
+                                break;
                             
-                        }
-                        else if (powerUpChoice == 2)
-                        {
-                            if (powerUpDictionary["Time Machine"] != 0)
+                            case 2:
                             {
-                                UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
+                                if (powerUpDictionary["Time Machine"] != 0)
+                                {
+                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
                                 
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Time Machines to use");
+                                }
                             }
-                            else
-                            {
-                                Console.WriteLine("You don't have any Time Machines to use");
-                            }
+                                break;
+                            
+                            case 3:
+                                if (powerUpDictionary["Market Master"] != 0)
+                                {
+                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Market Masters to use");
+                                }
+
+                                break;
                         }
                         break;
                     case 6:
@@ -436,15 +452,15 @@ namespace Gold_Diggerzz
         private static void PrintResources(Dictionary<string, double> resources)
         {
             Console.WriteLine("__________________________________");
-            Console.WriteLine($"| You have ${resources["Dollars"]}                   |");
-            Console.WriteLine($"| You have {resources["coal"]}kg of coal            |");
-            Console.WriteLine($"| You have {resources["stone"]}kg of stone           |");
-            Console.WriteLine($"| You have {resources["iron"]}kg of iron            |");
-            Console.WriteLine($"| You have {resources["gold"]}kg of gold            |");
-            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond         |");
-            Console.WriteLine($"| You have {resources["Workers"]} employees            |");
-            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens         |");
-            Console.WriteLine($"| Your employees' efficiency is {_employeeEfficiency} |");
+            Console.WriteLine($"| You have ${resources["Dollars"]}");
+            Console.WriteLine($"| You have {resources["coal"]}kg of coal");
+            Console.WriteLine($"| You have {resources["stone"]}kg of stone");
+            Console.WriteLine($"| You have {resources["iron"]}kg of iron");
+            Console.WriteLine($"| You have {resources["gold"]}kg of gold");
+            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond");
+            Console.WriteLine($"| You have {resources["Workers"]} employees");
+            Console.WriteLine($"| You have {resources["magicTokens"]} magic tokens");
+            Console.WriteLine($"| Your employees' efficiency is {_employeeEfficiency}");
             Console.WriteLine("_________________________________\n");
         }
         
@@ -601,14 +617,16 @@ namespace Gold_Diggerzz
                 
                     PrintResources(resources);
                 }
+
+                bool noResources = resources["coal"] == 0 && resources["stone"] == 0 && resources["iron"] == 0 && resources["gold"] == 0 && resources["diamond"] == 0;
                 
-                if (inDebt == "true" && resources["coal"] == 0 && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["diamond"] == 0 && resources["Workers"] == 1)
+                if (inDebt == "true" && noResources && resources["Workers"] < 2)
                 {
                     Console.WriteLine("Bro you're literally bankrupt. You have failed the game.");
                     return "bankrupt";
                 }
                 
-                if (inDebt == "true" && resources["coal"] == 0 && resources["iron"] == 0 && resources["gold"] == 0 && resources["stone"] == 0 && resources["diamond"] == 0 && resources["Workers"] >= 2)
+                if (inDebt == "true" && noResources && resources["Workers"] >= 2)
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
                     resources["Dollars"] += resources["Workers"] * 100;
@@ -767,7 +785,7 @@ namespace Gold_Diggerzz
                         _totalDiamondFound += newResourcesFound;
                     }
                     
-                    if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound && !ancientArtefactFound && !timeMachineFound && !magicTokenFound)
+                    if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound && !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound)
                     {
                         Console.WriteLine("You found nothing today \ud83d\udeab");
                     }
@@ -827,8 +845,21 @@ namespace Gold_Diggerzz
                     if (marketMasterFound)
                     {
                         Console.WriteLine("You found the Market Master power up");
-                        Console.WriteLine("Selling price for every resource increased by 50% for the next 5 days");
-                        UsePowerUp(resources, prices, probabilities, 3, powerUpDictionary, achievementsList);
+                        Console.WriteLine("Choose an option:");
+                        Console.WriteLine("1 - Use now");
+                        Console.WriteLine("2 - Save for later");
+                        int userInput = GetValidInt(1, 2);
+
+                        switch (userInput)
+                        {
+                            case 1:
+                                UsePowerUp(resources, prices, probabilities, 3, powerUpDictionary, achievementsList);
+                                break;
+                            case 2:
+                                Console.WriteLine("You have chosen to save the Market Master for later");
+                                powerUpDictionary["Market Master"] += 1;
+                                break;
+                        }
                     }
                     
                     // calendar/weather etc effects 
@@ -1130,6 +1161,7 @@ namespace Gold_Diggerzz
                 }
                 
                 case 3:
+                    Console.WriteLine("Applying the Market Master power up...");
                     Console.WriteLine("The selling price of all resources has increased by 50% for the next 5 days");
                     _marketMasterDaysLeft = 5;
                     
@@ -1147,14 +1179,14 @@ namespace Gold_Diggerzz
             _totalPowerUpsUsed += 1;
         }
         
-        private static void QuitGame(Dictionary<string, double> resources)
+        private static void QuitGame()
         {
             PrintStats();
             Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
 
-        private static void GameFailed(Dictionary<string, double> resources)
+        private static void GameFailed()
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -1162,7 +1194,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             
-            QuitGame(resources);
+            QuitGame();
         }
         
         private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
