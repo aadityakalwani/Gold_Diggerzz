@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * do i add magic tokens to the powerup dictionary? (and remove from resource dictionary?)
          * after a few days the employee efficiency is super high (like 70ish)
          * print mechanics and tutorial is a) too long and b) incorrect values
          * test out achievements feature
@@ -25,7 +26,6 @@ namespace Gold_Diggerzz
          * more power-ups
             * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days. This would allow the player to gather resources more quickly.
             * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
-             * Market Master: increasing selling price of all things
          * stock market feature (kinda done?)
              * Every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
          * option to invest in the stock market
@@ -116,6 +116,7 @@ namespace Gold_Diggerzz
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         private static bool _animation = true;
         private static int _increasedGoldChanceDays;
+        private static int _marketMasterDaysLeft;
         private static int _noWageDaysLeft;
         private static int _lessWorkerDays;
         private static int _crashDaysLeft;
@@ -169,6 +170,7 @@ namespace Gold_Diggerzz
             // setting the initial values for the global variables
             _lessWorkerDays = 0;
             _increasedGoldChanceDays = 0;
+            _marketMasterDaysLeft = 0;
             _noWageDaysLeft = 0;
             _crashDaysLeft = 0;
             _badWeatherDaysLeft = 0;
@@ -490,6 +492,7 @@ namespace Gold_Diggerzz
                 { "iron", 65 },
                 { "gold", 20 },
                 { "diamond", 5 },
+                { "MarketMaster", 5 },
                 { "AncientArtefact", 8 },
                 { "magicToken", 7 },
                 { "TimeMachine", 6 },
@@ -505,7 +508,9 @@ namespace Gold_Diggerzz
             Dictionary<string, double> powerUps = new Dictionary<string, double>()
             {
                 { "Ancient Artefact", 0 },
-                { "Time Machine", 0 }
+                { "Time Machine", 0 },
+                { "Market Master", 0 },
+                { "magicToken", 0 }
             };
             return powerUps;
         }
@@ -694,12 +699,12 @@ namespace Gold_Diggerzz
                     int randomForGold = random.Next(0, 100);
                     int randomForDiamond = random.Next(0, 100);
                     int randomForAncientArtefact = _random.Next(0, 100);
+                    int randomForMarketMaster = _random.Next(0, 100);
                     int randomForTimeMachine = _random.Next(0, 100);
                     int randomForMagicToken = _random.Next(0, 100);
                     
                     
                     // if there is a changed chance of finding gold due to the Ancient Artefact powerup
-                
                     if (_increasedGoldChanceDays != 0)
                     {
                         Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
@@ -712,13 +717,14 @@ namespace Gold_Diggerzz
                         // restore 15% chance of finding gold
                         probabilities["gold"] = 15;
                     }
-            
+                    
                     bool coalFound = randomForCoal < probabilities["coal"];
                     bool stoneFound = randomForStone < probabilities["stone"];
                     bool ironFound = randomForIron < probabilities["iron"];
                     bool goldFound = randomForGold < probabilities["gold"];
                     bool diamondFound = randomForDiamond < probabilities["diamond"];
                     bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
+                    bool marketMasterFound = randomForMarketMaster < probabilities["MarketMaster"];
                     bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
                     bool magicTokenFound = randomForMagicToken < probabilities["magicToken"];
                     
@@ -817,9 +823,18 @@ namespace Gold_Diggerzz
                         prices["stone"] *= 1.2;
                         prices["diamond"] *= 1.2;
                     }
+
+                    if (marketMasterFound)
+                    {
+                        Console.WriteLine("You found the Market Master power up");
+                        Console.WriteLine("Selling price for every resource increased by 50% for the next 5 days");
+                        UsePowerUp(resources, prices, probabilities, 3, powerUpDictionary, achievementsList);
+                    }
                     
                     // calendar/weather etc effects 
                     Console.WriteLine("Here are the current active effects affecting your game:");
+                    
+                    Console.WriteLine($"{_marketMasterDaysLeft} days left of the Market Master powerup");
                     
                     if (_noWageDaysLeft != 0)
                     {
@@ -851,6 +866,18 @@ namespace Gold_Diggerzz
                     {
                         Console.WriteLine($"{_beautifulSkyDaysLeft} days left of beautiful sky");
                         _beautifulSkyDaysLeft -= 1;
+                    }
+
+                    if (_marketMasterDaysLeft == 1)
+                    {
+                        Console.WriteLine("Your Market Master powerup is no longer active");
+                        _marketMasterDaysLeft = 0;
+                    }
+                    
+                    else if (_marketMasterDaysLeft > 0)
+                    {
+                        Console.WriteLine($"{_marketMasterDaysLeft} days left of the Market Master powerup");
+                        _marketMasterDaysLeft -= 1;
                     }
                     
                     _currentDate = _currentDate.AddDays(1);
@@ -1102,6 +1129,19 @@ namespace Gold_Diggerzz
                     break;
                 }
                 
+                case 3:
+                    Console.WriteLine("The selling price of all resources has increased by 50% for the next 5 days");
+                    _marketMasterDaysLeft = 5;
+                    
+                    prices["coal"] *= 1.5;
+                    prices["stone"] *= 1.5;
+                    prices["iron"] *= 1.5;
+                    prices["gold"] *= 1.5;
+                    prices["diamond"] *= 1.5;
+                    
+                    powerUpDictionary["MarketMaster"] -= 1;
+                    
+                    break;
             }
             
             _totalPowerUpsUsed += 1;
