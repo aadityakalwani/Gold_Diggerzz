@@ -11,7 +11,6 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * do i add magic tokens to the powerup dictionary? (and remove from resource dictionary?)
          * after a few days the employee efficiency is super high (like 70ish)
          * print mechanics and tutorial is a) too long and b) incorrect values
          * test out achievements feature
@@ -394,38 +393,21 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Iron value = ${prices["iron"]}");
             Console.WriteLine($"Gold value = ${prices["gold"]}");
             Console.WriteLine($"Diamond value = ${prices["diamond"]}");
-
+            
             Console.WriteLine("\nResource values fluctuate by upto ±10% per day");
-
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
-
-            Console.WriteLine(
-                "\nThe resources you gain are equal to the number of employees you have times their efficiency");
-
+            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have times their efficiency");
             Console.WriteLine("\nBaseline wage = $10 per employee per day");
-
             Console.WriteLine("\n10% chance an employee is ill and doesn't come in to work");
-
             Console.WriteLine("\n30% pay increase on weekends only");
-
             Console.WriteLine("\nOn the first of every month, employee wage increases by 10%");
-
-            Console.WriteLine(
-                "\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-
-            Console.WriteLine(
-                "\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
-
+            Console.WriteLine("\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("\nYou can bribe the govt with $150 and not pay any wages for the next 3 days");
-
-            Console.WriteLine(
-                "\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-
+            Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each");
-
             Console.WriteLine("\nIf your $$$ balance is negative and you have no resource, you fail the game");
-
         }
 
         private static void PrintStats()
@@ -471,7 +453,6 @@ namespace Gold_Diggerzz
                 { "diamond", 0},
                 { "Dollars", 100 },
                 { "Workers", 1 },
-                { "magicTokens", 0}
             };
             return resources;
         }
@@ -522,7 +503,7 @@ namespace Gold_Diggerzz
                 { "Ancient Artefact", 0 },
                 { "Time Machine", 0 },
                 { "Market Master", 0 },
-                { "magicToken", 0 }
+                { "magicTokens", 0 }
             };
             return powerUps;
         }
