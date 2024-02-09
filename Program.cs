@@ -395,34 +395,18 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Diamond value = ${prices["diamond"]}");
 
             Console.WriteLine("\nResource values fluctuate by upto ±10% per day");
-
             Console.WriteLine("\nAncient Artefact has two powerup options:");
             Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
-
-            Console.WriteLine(
-                "\nThe resources you gain are equal to the number of employees you have times their efficiency");
-
+            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have times their efficiency");
             Console.WriteLine("\nBaseline wage = $10 per employee per day");
-
             Console.WriteLine("\n10% chance an employee is ill and doesn't come in to work");
-
             Console.WriteLine("\n30% pay increase on weekends only");
-
             Console.WriteLine("\nOn the first of every month, employee wage increases by 10%");
-
-            Console.WriteLine(
-                "\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-
-            Console.WriteLine(
-                "\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
-
+            Console.WriteLine("\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("\nYou can bribe the govt with $150 and not pay any wages for the next 3 days");
-
-            Console.WriteLine(
-                "\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-
+            Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each");
-
             Console.WriteLine("\nIf your $$$ balance is negative and you have no resource, you fail the game");
 
         }
@@ -551,12 +535,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("___________________________________\n");
-                Console.WriteLine("Main Features:              Print Options:                   Other Features:");
-                Console.WriteLine("0 - Quit game");
-                Console.WriteLine("1 - Dig one day             6 - Print game mechanics         5 - Use a powerup");
-                Console.WriteLine("2 - Dig multiple days       7 - Print stats                  9 - Send employees for training");
-                Console.WriteLine("3 - Go to market            8 - Print achievements           10 - Commit a crime (further options inside)");
-                Console.WriteLine("4 - Skip one day");
+                Console.WriteLine("Main Features:              Print Options:                   Other Features:\n");
+                Console.WriteLine("0 - Quit game               6 - Print game mechanics          4 - Skip one day");
+                Console.WriteLine("1 - Dig one day             7 - Print stats                   5 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       8 - Print achievements            9 - Send employees for training");
+                Console.WriteLine("3 - Go to market                                              10 - Commit a crime (further options inside)");
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 10);
@@ -853,8 +836,6 @@ namespace Gold_Diggerzz
                     // calendar/weather etc effects 
                     Console.WriteLine("Here are the current active effects affecting your game:");
                     
-                    Console.WriteLine($"{_marketMasterDaysLeft} days left of the Market Master powerup");
-                    
                     if (_noWageDaysLeft != 0)
                     {
                         Console.WriteLine($"You don't have to pay wages today, or for the next {_noWageDaysLeft} days");
@@ -893,7 +874,7 @@ namespace Gold_Diggerzz
                         _marketMasterDaysLeft = 0;
                     }
                     
-                    else if (_marketMasterDaysLeft > 0)
+                    else if (_marketMasterDaysLeft > 1)
                     {
                         Console.WriteLine($"{_marketMasterDaysLeft} days left of the Market Master powerup");
                         _marketMasterDaysLeft -= 1;
