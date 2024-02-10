@@ -11,12 +11,12 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * add in a round() function to round the numbers to 2 decimal places for literally everything everywhere
          * print mechanics and tutorial is a) too long and b) incorrect values
          * test out achievements feature
         */
         
         /* to-do ideas
+         * reorder the menu options to be more flowy and logical
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
          * tutorial mode (that is actually functional)
          * loans - you can take a loan from the bank and pay it back with interest
@@ -432,7 +432,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"                     You have ${resources["Dollars"]}\n");
             Console.WriteLine($"| You have {Math.Round(resources["coal"], 2)}kg of coal         | You have {Math.Round(resources["stone"], 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(resources["iron"], 2)}kg of iron         | You have {Math.Round(resources["gold"], 2)}kg of gold");
-            Console.WriteLine($"| You have {Math.Round(resources["diamond"], 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic token");
+            Console.WriteLine($"| You have {Math.Round(resources["diamond"], 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
             Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
@@ -536,7 +536,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("3 - Go to market            11 - Print tutorial               10 - Commit a crime (further options inside)");
                 Console.WriteLine("Your choice:");
              
-                int userOption = GetValidInt(0, 10);
+                int userOption = GetValidInt(0, 11);
                 Console.Clear();          
                 return userOption;
             }
