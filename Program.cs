@@ -11,14 +11,12 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * after a few days the employee efficiency is super high (like 70ish)
          * print mechanics and tutorial is a) too long and b) incorrect values
          * test out achievements feature
         */
         
         /* to-do ideas
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
-         * achievements - eg. find 10kg total iron
          * tutorial mode (that is actually functional)
          * loans - you can take a loan from the bank and pay it back with interest
          * load/save game by saving the resource dictionary and the current date to a file
@@ -490,9 +488,9 @@ namespace Gold_Diggerzz
                 { "MarketMaster", 5 },
                 { "AncientArtefact", 8 },
                 { "magicToken", 7 },
-                { "TimeMachine", 6 },
+                { "TimeMachine", 3 },
                 { "employeeIll", 10 },
-                { "stockMarketCrash", 5 }
+                { "stockMarketCrash", 7 }
             };
             
             return probabilities;
@@ -1140,7 +1138,7 @@ namespace Gold_Diggerzz
                     prices["gold"] *= 1.5;
                     prices["diamond"] *= 1.5;
                     
-                    powerUpDictionary["MarketMaster"] -= 1;
+                    powerUpDictionary["Market Master"] -= 1;
                     
                     break;
             }
@@ -1264,20 +1262,20 @@ namespace Gold_Diggerzz
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
-                _employeeEfficiency /= 0.7;
+                _employeeEfficiency *= 1.3;
             }
             
             if (_beautifulSkyDaysLeft == 1)
             {
                 Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
-                _employeeEfficiency /= 1.5;
+                _employeeEfficiency /= 1.2;
                 _beautifulSkyDaysLeft = 0;
             }
             
             if (_hurricaneDaysLeft == 1)
             {
                 Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
-                _employeeEfficiency /= 0.4;
+                _employeeEfficiency *= 1.4;
             }
             
             bool noActiveWeatherEffects = _badWeatherDaysLeft == 0 && _hurricaneDaysLeft == 0 && _beautifulSkyDaysLeft == 0;
@@ -1285,8 +1283,8 @@ namespace Gold_Diggerzz
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
-                Console.WriteLine("A hurricane is coming, efficiency is now 40% the next five days");
-                _employeeEfficiency *= 0.4;
+                Console.WriteLine("A hurricane is coming, efficiency is now 40% less the next five days");
+                _employeeEfficiency /= 1.4;
                 _hurricaneDaysLeft = 6;
             }
             
@@ -1294,7 +1292,7 @@ namespace Gold_Diggerzz
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
-                _employeeEfficiency *= 0.7;
+                _employeeEfficiency /= 1.3;
                 _badWeatherDaysLeft = 3;
             }
             
