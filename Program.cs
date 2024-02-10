@@ -40,30 +40,30 @@ namespace Gold_Diggerzz
          */ 
         
         /*
-         * hierarchy:
-         
-         - Main()
-               - CreateResourceDictionary()
-               - CreatePricesDictionary()
-               - CreateProbabilityDictionary()
-               - PrintResources(Dictionary<string, double> resources)
-               - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
-                     - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
-                              - CheckIfInDebt(Dictionary<string, double> resources)
-                              - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
-                     - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
-                              - PrintResources(Dictionary<string, double> resources)
-                     - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
-                              - PrintResources(Dictionary<string, double> resources)
-                     - PrintGameMechanics()
-                     - QuitGame(Dictionary<string, double> resources)
-                     - GameFailed(Dictionary<string, double> resources)
-                              - QuitGame(Dictionary<string, double> resources)
-               - GetValidInt()
-               - GetValidDouble()
-
-           This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
-         */
+           * hierarchy:
+           * 
+           * - Main()
+           *     - CreateResourceDictionary()
+           *     - CreatePricesDictionary()
+           *     - CreateProbabilityDictionary()
+           *     - PrintResources(Dictionary<string, double> resources)
+           *     - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
+           *            - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
+           *                    - CheckIfInDebt(Dictionary<string, double> resources)
+           *                    - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
+           *            - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
+           *                    - PrintResources(Dictionary<string, double> resources)
+           *            - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
+           *                    - PrintResources(Dictionary<string, double> resources)
+           *            - PrintGameMechanics()
+           *            - QuitGame(Dictionary<string, double> resources)
+           *            - GameFailed(Dictionary<string, double> resources)
+           *                    - QuitGame(Dictionary<string, double> resources)
+           *     - GetValidInt()
+           *     - GetValidDouble()
+           * 
+           * This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
+           * /
         
         /*
         current features: (also in PrintMechanics())
