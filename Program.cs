@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
+         * add in a round() function to round the numbers to 2 decimal places for literally everything everywhere
          * print mechanics and tutorial is a) too long and b) incorrect values
          * test out achievements feature
         */
