@@ -31,8 +31,8 @@ namespace Gold_Diggerzz
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
             * (like prestige in all the idle miner games i played)
          
-         features i can't do until i have an individual employee stat:
-         * per-employee stats
+         features i can't do until i have an individual employee stat: (employee class/object shit)
+         * printing per-employee stats
          * workers retire after x days
          * add a 'luck' stat for each employee that changes the probabilities of finding resources
              * when you hire an employee they're given a 'luck' rating between 20-80%
@@ -887,7 +887,7 @@ namespace Gold_Diggerzz
 
                 if (daysToDig >= 2)
                 {
-                    Console.WriteLine($"Current balance - {resources["Dollars"]}");
+                    Console.WriteLine($"Current balance = {resources["Dollars"]}");
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
                 
@@ -902,11 +902,35 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
             }
 
+            // Create a temporary dictionary for resources
+            Dictionary<string, double> tempResources = new Dictionary<string, double>();
+            Dictionary<string, double> tempPrices = new Dictionary<string, double>();
+
+            // Round all values in resources to 2dp
+            foreach (KeyValuePair<string, double> resource in resources)
+            {
+                double newResource = Math.Round(resource.Value, 2);
+                tempResources[resource.Key] = newResource;
+            }
+
+            // Replace the original dictionary with the temporary one
+            resources = tempResources;
+
+            foreach (KeyValuePair<string, double> price in prices)
+            {
+                double newPrice = Math.Round(price.Value, 2);
+                tempPrices[price.Key] = newPrice;
+            }
+
+            prices = tempPrices;
+            
             CheckAchievements(achievementsList);
             
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             PrintResources(resources);
         }
+        
+        
         
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
         {
