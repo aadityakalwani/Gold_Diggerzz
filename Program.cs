@@ -196,15 +196,6 @@ namespace Gold_Diggerzz
             
             PrintResources(resourceDictionary);
             
-            Console.WriteLine("Do you want a tutorial? (y/n)");
-            if (Console.ReadLine() == "y")
-            {
-                RunTutorial();
-                PrintGameMechanics(priceDictionary, probabilityDictionary);
-                Thread.Sleep(2000);
-            }
-            
-            
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
             RunGame(resourceDictionary, priceDictionary, probabilityDictionary, powerUpDictionary, achievementsList);
@@ -362,6 +353,10 @@ namespace Gold_Diggerzz
 
                         break;
 
+                    case 11:
+                        RunTutorial();
+                        break;
+                    
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -435,10 +430,10 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"                     You have ${resources["Dollars"]}\n");
-            Console.WriteLine($"| You have {resources["coal"]}kg of coal         | You have {resources["stone"]}kg of stone");
-            Console.WriteLine($"| You have {resources["iron"]}kg of iron         | You have {resources["gold"]}kg of gold");
-            Console.WriteLine($"| You have {resources["diamond"]}kg of diamond      | You have {resources["magicTokens"]} magic token");
-            Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {_employeeEfficiency}");
+            Console.WriteLine($"| You have {Math.Round(resources["coal"], 2)}kg of coal         | You have {Math.Round(resources["stone"], 2)}kg of stone");
+            Console.WriteLine($"| You have {Math.Round(resources["iron"], 2)}kg of iron         | You have {Math.Round(resources["gold"], 2)}kg of gold");
+            Console.WriteLine($"| You have {Math.Round(resources["diamond"], 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic token");
+            Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
         
@@ -485,10 +480,10 @@ namespace Gold_Diggerzz
                 { "stone", 75 },
                 { "iron", 65 },
                 { "gold", 20 },
-                { "diamond", 5 },
-                { "MarketMaster", 5 },
-                { "AncientArtefact", 8 },
-                { "magicToken", 7 },
+                { "diamond", 7 },
+                { "MarketMaster", 4 },
+                { "AncientArtefact", 7 },
+                { "magicToken", 6 },
                 { "TimeMachine", 3 },
                 { "employeeIll", 10 },
                 { "stockMarketCrash", 7 }
@@ -538,7 +533,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("0 - Quit game               6 - Print game mechanics          4 - Skip one day");
                 Console.WriteLine("1 - Dig one day             7 - Print stats                   5 - Use a powerup");
                 Console.WriteLine("2 - Dig multiple days       8 - Print achievements            9 - Send employees for training");
-                Console.WriteLine("3 - Go to market                                              10 - Commit a crime (further options inside)");
+                Console.WriteLine("3 - Go to market            11 - Print tutorial               10 - Commit a crime (further options inside)");
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 10);
@@ -722,35 +717,35 @@ namespace Gold_Diggerzz
 
                     if (coalFound)
                     {
-                        Console.WriteLine($"You found {newResourcesFound}kg of coal \ud83e\udea8");
+                        Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
                         resources["coal"] += newResourcesFound;
                         _totalCoalFound += newResourcesFound;
                     }
                     
                     if (stoneFound)
                     {
-                        Console.WriteLine($"You found {newResourcesFound}kg of stone \ud83e\udea8");
+                        Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
                         resources["stone"] += newResourcesFound;
                         _totalStoneFound += newResourcesFound;
                     }
             
                     if (ironFound)
                     {
-                        Console.WriteLine($"You found {newResourcesFound}kg of iron \ud83e\uddbe ");
+                        Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
                         resources["iron"] += newResourcesFound;
                         _totalIronFound += newResourcesFound;
                     }
 
                     if (goldFound)
                     {
-                        Console.WriteLine($"You found {newResourcesFound}kg of gold \ud83d\udc51");
+                        Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
                         resources["gold"] += newResourcesFound;
                         _totalGoldFound += newResourcesFound;
                     }
                     
                     if (diamondFound)
                     {
-                        Console.WriteLine($"You found {newResourcesFound}kg of diamond \ud83d\udc8e");
+                        Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
                         resources["diamond"] += newResourcesFound;
                         _totalDiamondFound += newResourcesFound;
                     }
@@ -901,28 +896,6 @@ namespace Gold_Diggerzz
                 
                 Console.WriteLine("___________________________________");
             }
-
-            // Create a temporary dictionary for resources
-            Dictionary<string, double> tempResources = new Dictionary<string, double>();
-            Dictionary<string, double> tempPrices = new Dictionary<string, double>();
-
-            // Round all values in resources to 2dp
-            foreach (KeyValuePair<string, double> resource in resources)
-            {
-                double newResource = Math.Round(resource.Value, 2);
-                tempResources[resource.Key] = newResource;
-            }
-
-            // Replace the original dictionary with the temporary one
-            resources = tempResources;
-
-            foreach (KeyValuePair<string, double> price in prices)
-            {
-                double newPrice = Math.Round(price.Value, 2);
-                tempPrices[price.Key] = newPrice;
-            }
-
-            prices = tempPrices;
             
             CheckAchievements(achievementsList);
             
@@ -943,13 +916,13 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
             Console.WriteLine("______________________________");
-            Console.WriteLine($"| Coal: ${priceDictionary["coal"]} per kg");
-            Console.WriteLine($"| Stone: ${priceDictionary["stone"]} per kg");
-            Console.WriteLine($"| Iron: ${priceDictionary["iron"]} per kg");
-            Console.WriteLine($"| Gold: ${priceDictionary["gold"]} per kg");
-            Console.WriteLine($"| Diamond: ${priceDictionary["diamond"]} per kg");
-            Console.WriteLine($"| Employees: ${priceDictionary["Workers"]} per employee");
-            Console.WriteLine($"| Wages: ${priceDictionary["Wage"]} per employee per day");
+            Console.WriteLine($"| Coal: ${Math.Round(priceDictionary["coal"], 2)} per kg");
+            Console.WriteLine($"| Stone: ${Math.Round(priceDictionary["stone"], 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(priceDictionary["iron"], 2)} per kg");
+            Console.WriteLine($"| Gold: ${Math.Round(priceDictionary["gold"], 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(priceDictionary["diamond"], 2)} per kg");
+            Console.WriteLine($"| Employees: ${Math.Round(priceDictionary["Workers"], 2)} per employee");
+            Console.WriteLine($"| Wages: ${Math.Round(priceDictionary["Wage"], 2)} per employee per day");
             Console.WriteLine("______________________________");
             
             
@@ -1250,7 +1223,7 @@ namespace Gold_Diggerzz
             }
             
             // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < 10)
+            if (_random.Next(0, 100) < 10 && resources["Workers"] > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 resources["Workers"] -= 1;
