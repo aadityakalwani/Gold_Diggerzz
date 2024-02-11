@@ -7,7 +7,7 @@ namespace Gold_Diggerzz
     internal abstract class Program
 
     {
-        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py                            
+        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
         
         /*
          * current issues
@@ -537,7 +537,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 11);
-                Console.Clear();          
+                Console.Clear();
                 return userOption;
             }
 
@@ -640,17 +640,17 @@ namespace Gold_Diggerzz
                             {                                                                                                       
                                  if (j < shovel.Length - i)                                                                          
                                  {                                                                                                   
-                                     Console.WriteLine(shovel[j]);                                                                   
-                                 }                                                                                                   
-                                 else                                                                                                
-                                 {                                                                                                   
+                                     Console.WriteLine(shovel[j]);
+                                 }
+                                 else
+                                 {
                                      string spaces = "";
                                      for (int k = 0; k < i; k++)
                                      {
                                          spaces += " ";
                                      }
-                                     Console.WriteLine(spaces + shovel[j]);                                                
-                                 }                                                                                                   
+                                     Console.WriteLine(spaces + shovel[j]);
+                                 }
                             }
 
                             Console.WriteLine("Progress:");
