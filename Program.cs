@@ -11,8 +11,7 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * print mechanics and tutorial is a) too long and b) incorrect values
-         * test out achievements feature
+         * skipping a day doesn't increase change weather or calendar effects
         */
         
         /* to-do ideas
@@ -428,7 +427,7 @@ namespace Gold_Diggerzz
         private static void PrintResources(Dictionary<string, double> resources)
         {
             Console.WriteLine("_____________________________________________________________________");
-            Console.WriteLine($"                     You have ${resources["Dollars"]}\n");
+            Console.WriteLine($"                     You have ${Math.Round(resources["Dollars"], 2)}\n");
             Console.WriteLine($"| You have {Math.Round(resources["coal"], 2)}kg of coal         | You have {Math.Round(resources["stone"], 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(resources["iron"], 2)}kg of iron         | You have {Math.Round(resources["gold"], 2)}kg of gold");
             Console.WriteLine($"| You have {Math.Round(resources["diamond"], 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
@@ -841,7 +840,7 @@ namespace Gold_Diggerzz
                         double totalWages = resources["Workers"] * prices["Wage"];
                         resources["Dollars"] -= totalWages;
             
-                        Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${totalWages} today.");
+                        Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                     }
 
                     if (_badWeatherDaysLeft != 0)
@@ -1070,7 +1069,7 @@ namespace Gold_Diggerzz
                         }
                         else
                         {
-                            Console.WriteLine("You have hired 1 more employee");
+                            Console.WriteLine($"You have hired {employeesToHire} more employee");
                             resources["Workers"] += employeesToHire;
                             resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
                             Console.WriteLine($"You now have {resources["Workers"]} employees");
