@@ -948,7 +948,7 @@ namespace Gold_Diggerzz
                             case 1:
                         Console.WriteLine("Your have chosen to sell coal for dollars");
                         Console.WriteLine($"How much coal do you want to sell?\nYou have {resources["coal"]}kg of coal");
-                        double coalToSell = GetValidDouble(0, 1000000);
+                        double coalToSell = GetValidDouble(0, 100000000000);
                         if (coalToSell > resources["coal"])
                         {
                             Console.WriteLine("You don't have enough coal to sell that much");
@@ -966,7 +966,7 @@ namespace Gold_Diggerzz
                     case 2:
                         Console.WriteLine("Your have chosen to sell stone for dollars");
                         Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
-                        double stoneToSell = GetValidDouble(0, 1000000);
+                        double stoneToSell = GetValidDouble(0, 100000000000);
                         if (stoneToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough stone to sell that much");
@@ -984,7 +984,7 @@ namespace Gold_Diggerzz
                     case 3:
                         Console.WriteLine("You have chosen to sell iron for dollars");
                         Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
-                        double ironToSell = GetValidDouble(0, 100000000);
+                        double ironToSell = GetValidDouble(0, 10000000000000);
                         
                         if (ironToSell > resources["iron"])
                         {
@@ -1003,7 +1003,7 @@ namespace Gold_Diggerzz
                     case 4:
                         Console.WriteLine("Your have chosen to sell gold for dollars");
                         Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
-                        double goldToSell = GetValidDouble(0, 10000000);
+                        double goldToSell = GetValidDouble(0, 1000000000000);
                         if (goldToSell > resources["gold"])
                         {
                             Console.WriteLine("You don't have enough gold to sell that much");
@@ -1022,7 +1022,7 @@ namespace Gold_Diggerzz
                     case 5:
                                 Console.WriteLine("Your have chosen to sell diamond for dollars");
                                 Console.WriteLine($"How much diamond do you want to sell?\nYou have {resources["diamond"]}kg of diamond");
-                                double diamondToSell = GetValidDouble(0, 1000000);
+                                double diamondToSell = GetValidDouble(0, 100000000000);
                                 if (diamondToSell > resources["diamond"])
                                 {
                                     Console.WriteLine("You don't have enough diamond to sell that much");
