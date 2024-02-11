@@ -257,7 +257,7 @@ namespace Gold_Diggerzz
                         switch (powerUpChoice)
                         {
                             case 1:
-                                if (powerUpDictionary["Ancient Artefact"] != 0)
+                                if (powerUpDictionary["Ancient Artefact"] >= 0)
                                 {
                                     UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);   
                                 }
@@ -269,7 +269,7 @@ namespace Gold_Diggerzz
                             
                             case 2:
                             {
-                                if (powerUpDictionary["Time Machine"] != 0)
+                                if (powerUpDictionary["Time Machine"] >= 0)
                                 {
                                     UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
                                 
@@ -282,7 +282,7 @@ namespace Gold_Diggerzz
                                 break;
                             
                             case 3:
-                                if (powerUpDictionary["Market Master"] != 0)
+                                if (powerUpDictionary["Market Master"] >= 0)
                                 {
                                     UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary, powerUpChoice, powerUpDictionary, achievementsList);
                                 }
@@ -327,17 +327,16 @@ namespace Gold_Diggerzz
                         
                     case 10:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
-                        Console.WriteLine("1 - Pay $50 for information on the next stock market crash");
-                        Console.WriteLine("2 - Bribe the government for $200 to not pay wages for the next 3 days");
+                        Console.WriteLine($"1 - Pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
+                        Console.WriteLine($"2 - Bribe the government for ${priceDictionary["bribe"]} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(1, 2);
 
                         switch (crimeChoice)
                         {
                             case 1:
                                 Console.WriteLine(
-                                    "You have chosen to pay $50 for information on the next stock market crash");
-                                Console.WriteLine("You have been charged $50");
-                                resourceDictionary["Dollars"] -= 50;
+                                    $"You have chosen to pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
+                                resourceDictionary["Dollars"] -= priceDictionary["stockMarketDate"];
                                 Console.WriteLine("Giving you the information now...");
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
@@ -354,7 +353,7 @@ namespace Gold_Diggerzz
                         break;
 
                     case 11:
-                        RunTutorial();
+                        RunTutorial(priceDictionary);
                         break;
                     
                     default:
@@ -398,9 +397,9 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nOn the first of every month, employee wage increases by 10%");
             Console.WriteLine("\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
-            Console.WriteLine("\nYou can bribe the govt with $150 and not pay any wages for the next 3 days");
+            Console.WriteLine($"\nYou can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
             Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each");
+            Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("\nIf your $$$ balance is negative and you have no resource, you fail the game");
 
         }
@@ -466,6 +465,7 @@ namespace Gold_Diggerzz
                 { "Wage", 13},
                 { "SkipDay", 50},
                 { "bribe", 200},
+                { "stockMarketDate", 50},
                 { "trainingCourse", 400}
             };
             
@@ -504,7 +504,7 @@ namespace Gold_Diggerzz
             return powerUps;
         }
         
-        private static void RunTutorial()
+        private static void RunTutorial(Dictionary<string, double> prices)
         {
             Console.WriteLine("Welcome to the tutorial");
             Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
@@ -512,10 +512,10 @@ namespace Gold_Diggerzz
             Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
             Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
             Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine("You can also pay $50 for information on the next stock market crash");
+            Console.WriteLine($"You can also pay ${prices["stockMarketDate"]} for information on the next stock market crash");
             Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
             Console.WriteLine("You can also sell all your iron and gold for dollars");
-            Console.WriteLine("You can also skip one day for $30");
+            Console.WriteLine($"You can also skip one day for ${prices["SkipDay"]}");
             Console.WriteLine("You can also quit the game");
             Console.WriteLine("You can also dig for multiple days");
             Console.WriteLine("Here are the game mechanics:");
@@ -1117,10 +1117,10 @@ namespace Gold_Diggerzz
                 case 2:
                 {
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
-                    Console.WriteLine("This will give you 10 days' worth of rewards without costing you anything");
+                    Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(resources, prices, 10, probabilities, powerUpDictionary, achievementsList);
+                    Dig(resources, prices, 5, probabilities, powerUpDictionary, achievementsList);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
                 }
