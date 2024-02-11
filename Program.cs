@@ -960,7 +960,7 @@ namespace Gold_Diggerzz
                             _totalDollarsEarned += coalToSell * priceDictionary["coal"];
                         }
 
-                        Console.WriteLine("Here are your updated resources:");
+                        Console.WriteLine("Here are your updated resources:"); 
                         PrintResources(resources);
                         break;
                     case 2:
