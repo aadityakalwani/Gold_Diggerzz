@@ -221,13 +221,13 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary, achievementsList, false);
+                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary, achievementsList);
                         break;
                     case 2:
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary, achievementsList, false);
+                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary, achievementsList);
                         break;
                     case 3:
                         GoToMarket(resourceDictionary, priceDictionary);
@@ -236,8 +236,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine($"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
                         resourceDictionary["Dollars"] -= priceDictionary["SkipDay"];
-                        Dig(resourceDictionary, priceDictionary, 0, probabilityDictionary, powerUpDictionary, achievementsList, true);
-                        
+                        _currentDate = _currentDate.AddDays(1);
                         PrintResources(resourceDictionary);
                         break;
                     case 5:
@@ -603,14 +602,13 @@ namespace Gold_Diggerzz
             return inDebt;
         }
         
-        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
+        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             
             for (int days = 0; days < daysToDig; days++)
             {
                 
-                
-                    if (CheckIfInDebt(resources, prices) !=  "true" && !skipDay)
+                if (CheckIfInDebt(resources, prices) !=  "true")
                 {
                     if (_animation)
                     {
@@ -877,8 +875,6 @@ namespace Gold_Diggerzz
                     
                     _currentDate = _currentDate.AddDays(1);
                 }
-                
-                
             
                 ChangePrices(prices);
                 _totalDaysDug += 1;
@@ -1123,7 +1119,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(resources, prices, 5, probabilities, powerUpDictionary, achievementsList, false);
+                    Dig(resources, prices, 5, probabilities, powerUpDictionary, achievementsList);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
                 }
