@@ -48,7 +48,7 @@ namespace Gold_Diggerzz
            *     - PrintResources(Dictionary<string, double> resources)
            *     - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
            *            - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
-           *                    - CheckIfInDebt(Dictionary<string, double> resources)
+           *                    - CheckIfInDebt(Dictionary<string, double> resources) 
            *                    - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
            *            - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
            *                    - PrintResources(Dictionary<string, double> resources)
