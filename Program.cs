@@ -364,8 +364,7 @@ namespace Gold_Diggerzz
             
         }
 
-        private static void PrintGameMechanics(Dictionary<string, double> prices,
-            Dictionary<string, double> probabilities)
+        private static void PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -397,6 +396,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("\nOn the first of every month, employee wage increases by 10%");
             Console.WriteLine("\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
+            Console.WriteLine("\nevery 10 days, the probabilities of finding resources is reduced by 5%");
             Console.WriteLine($"\nYou can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
             Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
