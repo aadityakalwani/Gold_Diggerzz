@@ -13,8 +13,6 @@ namespace Gold_Diggerzz
          * current issues
          * inconsistent between weather effect printing and actual
             * "6 days left of bad weather" but then it's only 5 days
-         * there should be a way to make the game harder as time goes on
-         * to do this i can reduce the change of finding resources by 5% every 15 days
         */
         
         /* to-do ideas
@@ -904,7 +902,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
                 
                 // change the probabilities of finding resources - including calendar and weather effects
-                ChangeProbabilities(prices, _currentDate, resources);
+                ChangeProbabilities(prices, _currentDate, resources, probabilities);
             
                 // apply a ±10% fluctuation to the prices of iron and gold
                 ChangePrices(prices);
@@ -1175,10 +1173,21 @@ namespace Gold_Diggerzz
             QuitGame();
         }
         
-        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
+        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources, Dictionary<string, double> probabilities)
         {
             
-            // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing
+            // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
+            
+            // every 10 days, probability of finding resources is reduced by 5%
+            if (currentDate.Day % 10 == 0)
+            {
+                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 5% \ud83d\udc22");
+                probabilities["coal"] *= 0.95;
+                probabilities["stone"] *= 0.95;
+                probabilities["iron"] *= 0.95;
+                probabilities["gold"] *= 0.95;
+                probabilities["diamond"] *= 0.95;
+            }
             
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
