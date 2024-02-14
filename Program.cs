@@ -529,11 +529,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("___________________________________\n");
-                Console.WriteLine("Main Features:              Print Options:                   Other Features:\n");
-                Console.WriteLine("0 - Quit game               6 - Print game mechanics          4 - Skip one day");
-                Console.WriteLine("1 - Dig one day             7 - Print stats                   5 - Use a powerup");
-                Console.WriteLine("2 - Dig multiple days       8 - Print achievements            9 - Send employees for training");
-                Console.WriteLine("3 - Go to market            11 - Print tutorial               10 - Commit a crime (further options inside)");
+                Console.WriteLine("Main Features:              Print Options:                  Other Features:\n");
+                Console.WriteLine("0 - Quit game               6 - Print game mechanics        4 - Skip one day");
+                Console.WriteLine("1 - Dig one day             7 - Print stats                 5 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       8 - Print achievements          9 - Send employees for training");
+                Console.WriteLine("3 - Go to market            11 - Print tutorial             10 - Commit a crime (further options inside)");
                 Console.WriteLine("Your choice:");
              
                 int userOption = GetValidInt(0, 11);
