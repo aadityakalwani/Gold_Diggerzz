@@ -13,6 +13,8 @@ namespace Gold_Diggerzz
          * current issues
          * inconsistent between weather effect printing and actual
             * "6 days left of bad weather" but then it's only 5 days
+         * there should be a way to make the game harder as time goes on
+         * to do this i can reduce the change of finding resources by 5% every 15 days
         */
         
         /* to-do ideas
@@ -916,8 +918,6 @@ namespace Gold_Diggerzz
             PrintResources(resources);
         }
         
-        
-        
         private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -1481,11 +1481,11 @@ namespace Gold_Diggerzz
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources, Dictionary<string, double> prices)
         {
             // to boost the productivity of employees
+            Console.WriteLine("Training employees...");
             Console.WriteLine($"This course charged you {prices["trainingCourse"] * resources["Workers"]} in fees");
             resources["Dollars"] -= prices["trainingCourse"] * resources["Workers"];
             _employeeEfficiency *= 1.3;
             _currentDate.AddDays(7);
-            Console.WriteLine("Training employees...");
             Thread.Sleep(1500);
             Console.WriteLine("7 Days have now passed");
         }
