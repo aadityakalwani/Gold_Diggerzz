@@ -11,7 +11,8 @@ namespace Gold_Diggerzz
         
         /*
          * current issues
-         * skipping a day doesn't include change weather or calendar effects
+         * inconsistent between weather effect printing and actual
+            * "6 days left of bad weather" but then it's only 5 days
         */
         
         /* to-do ideas
