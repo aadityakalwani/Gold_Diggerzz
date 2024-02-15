@@ -1164,6 +1164,7 @@ namespace Gold_Diggerzz
             // every 10 days, probability of finding resources is reduced by 5%
             if (currentDate.Day % 10 == 0)
             {
+                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
                 Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 5% \ud83d\udc22");
                 probabilities["coal"] *= 0.95;
                 probabilities["stone"] *= 0.95;
