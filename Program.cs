@@ -12,7 +12,7 @@ namespace Gold_Diggerzz
         /*
          * current issues
          * inconsistent between weather effect printing and actual
-            * "6 days left of bad weather" but then it's only 5 days
+            * eg "6 days left of bad weather" but then it's only 5 days
         */
         
         /* to-do ideas
@@ -22,12 +22,14 @@ namespace Gold_Diggerzz
          * loans - you can take a loan from the bank and pay it back with interest
          * load/save game by saving the resource dictionary and the current date to a file
          * more power-ups
-            * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days. This would allow the player to gather resources more quickly.
+            * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days.
             * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
          * stock market feature (kinda done?)
              * Every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
          * option to invest in the stock market
          * managers that do shit
+            * eg a 'gold' manager that improves chance of finding gold but is hired for a week
+            * or a 'diamond' manager to double chance of finding gold for 10 days
          * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
             * (like prestige in all the idle miner games i played)
          
@@ -164,26 +166,8 @@ namespace Gold_Diggerzz
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
             List<string> achievementsList = new List<string>();
-
-            // setting the initial values for the global variables
-            _lessWorkerDays = 0;
-            _increasedGoldChanceDays = 0;
-            _marketMasterDaysLeft = 0;
-            _noWageDaysLeft = 0;
-            _crashDaysLeft = 0;
-            _badWeatherDaysLeft = 0;
-            _hurricaneDaysLeft = 0;
-            _beautifulSkyDaysLeft = 0;
-            _totalBribes = 0;
-            _totalCoalFound = 0;
-            _totalStoneFound = 0;
-            _totalIronFound = 0;
-            _totalGoldFound = 0;
-            _totalDiamondFound = 0;
-            _totalDaysDug = 0;
-            _totalEmployeesHired = 1;
-            _employeeEfficiency = 1;
-            _totalPowerUpsUsed = 0;
+            
+            
             
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -386,21 +370,20 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Gold value = ${prices["gold"]}");
             Console.WriteLine($"Diamond value = ${prices["diamond"]}");
 
-            Console.WriteLine("\nResource values fluctuate by upto ±10% per day");
-            Console.WriteLine("\nAncient Artefact has two powerup options:");
-            Console.WriteLine("$250 instantly, or a 50% chance of finding gold for the next 5 days");
-            Console.WriteLine("\nThe resources you gain are equal to the number of employees you have times their efficiency");
-            Console.WriteLine("\nBaseline wage = $10 per employee per day");
-            Console.WriteLine("\n10% chance an employee is ill and doesn't come in to work");
-            Console.WriteLine("\n30% pay increase on weekends only");
-            Console.WriteLine("\nOn the first of every month, employee wage increases by 10%");
-            Console.WriteLine("\nOn the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-            Console.WriteLine("\nOne x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
-            Console.WriteLine("\nevery 10 days, the probabilities of finding resources is reduced by 5%");
-            Console.WriteLine($"\nYou can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
-            Console.WriteLine("\nAt any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine("\nIf you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
-            Console.WriteLine("\nIf your $$$ balance is negative and you have no resource, you fail the game");
+            Console.WriteLine("Resource values fluctuate by upto ±10% per day");
+            Console.WriteLine("You can find powerups that have different effects");
+            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency");
+            Console.WriteLine("Baseline wage = $10 per employee per day");
+            Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
+            Console.WriteLine("30% pay increase on weekends only");
+            Console.WriteLine("On the first of every month, employee wage increases by 10%");
+            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
+            Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 5%");
+            Console.WriteLine($"You can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
+            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
+            Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
 
         }
 
