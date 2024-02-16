@@ -283,7 +283,7 @@ namespace Gold_Diggerzz
                 "Archibald McFluffyface", "Prudence von Puddlejumper", "Barbara McFluffernugget",
                 "Algernon von Snugglebug", "Esmeralda McSquishytoes", "Rufus von Cuddlewhiskers",
                 "Millicent McFuzzywump", "Winston von Snuggleton", "Geraldine McFluffernutter",
-                "Reginald von Snugglepuss", "Rupert McFuzzybottom", "Clarence von Cuddlewhiskers", "Beatrice McFluffytoes", "Buford von Purrpants",
+                "Reginald von Snugglepuss", "Rupert McFuzzybottom", "Clarence von Cuddlewhiskers",
                 "Tabitha McFuzzyface", "Benedict von Purrwhiskers", "Humphrey McSquigglebottom",
                 "Percival von McSnoozleton", "Gwendolyn von Fluffypaws", "Chester von Cuddlebug",
                 "Prudence McSnugglewhiskers", "Millicent von Fluffernutter", "Esmeralda McPurrington",
