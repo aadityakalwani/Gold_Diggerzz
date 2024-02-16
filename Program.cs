@@ -7,36 +7,40 @@ namespace Gold_Diggerzz
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
     
     /* program structure + hierarchy
-       
+              
+        - Resource
           - Coal
           - Stone
           - Iron
           - Gold
           - Diamond
-          - Dollars
+        - Dollars
+        - Workers
+        - PowerUp
           - MagicTokens
-          - Workers
-          - Program
-              - Main()
-                  - CreatePricesDictionary()
-                  - CreateProbabilityDictionary()
-                  - CreatePowerUpDictionary()
-                  - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
-                      - UserMenuOption()
-                          - CheckIfInDebt()
-                      - Dig(Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
-                          - PrintResources()
-                      - GoToMarket()
-                          - PrintResources()
-                      - PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
-                      - QuitGame()
-                      - GameFailed()
-                      - ChangeProbabilities(DateTime currentDate)
-                      - CheckAchievements(List<string> achievements)
-                      - ChangePrices()
-                      - EmployeeTrainingCourse(Dictionary<string, double> prices)
-                  - GetValidInt(int min, int max)
-                  - GetValidDouble(double min, double max)
+          - TimeMachine
+          - AncientArtefact
+          - MarketMaster
+        - Program
+          - Main()
+              - CreatePricesDictionary()
+              - CreateProbabilityDictionary()
+              - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
+                  - UserMenuOption()
+                      - CheckIfInDebt()
+                  - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
+                      - PrintResources()
+                  - GoToMarket()
+                      - PrintResources()
+                  - PrintGameMechanics()
+                  - QuitGame()
+                  - GameFailed()
+                  - ChangeProbabilities(DateTime currentDate)
+                  - CheckAchievements(List<string> achievements)
+                  - ChangePrices()
+                  - EmployeeTrainingCourse()
+              - GetValidInt(int min, int max)
+              - GetValidDouble(double min, double max)
        * /
 
     /*
@@ -475,7 +479,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Chance of finding iron = {iron.Probability}%");
             Console.WriteLine($"Chance of finding gold = {gold.Probability}%");
             Console.WriteLine($"Chance of finding diamond = {diamond.Probability}%");
-            Console.WriteLine($"Chance of finding Ancient Artefact = {probabilities["AncientArtefact"]}%");
+            Console.WriteLine($"Chance of finding Ancient Artefact = {ancientArtefact.Probability}%");
 
             Console.WriteLine($"\nCost of hiring employee = ${Workers.Wage}");
             Console.WriteLine($"Coal value = ${coal.Price}");
@@ -766,10 +770,10 @@ namespace Gold_Diggerzz
                         bool ironFound = randomForIron < iron.Probability;
                         bool goldFound = randomForGold < gold.Probability;
                         bool diamondFound = randomForDiamond < diamond.Probability;
-                        bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
-                        bool marketMasterFound = randomForMarketMaster < probabilities["MarketMaster"];
-                        bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
-                        bool magicTokenFound = randomForMagicToken < probabilities["magicToken"];
+                        bool ancientArtefactFound = randomForAncientArtefact < ancientArtefact.Probability;
+                        bool marketMasterFound = randomForMarketMaster < marketMaster.Probability;
+                        bool timeMachineFound = randomForTimeMachine < timeMachine.Probability;
+                        bool magicTokenFound = randomForMagicToken < magicTokens.Probability;
 
                         // update values within the resources dictionary
 
