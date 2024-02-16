@@ -24,7 +24,7 @@ namespace Gold_Diggerzz
          *
          * reorder the menu options to be more flowy and logical
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
-         * tutorial mode (that is actually functional)
+         * tutorial mode (that is actually functional) 
          * loans - you can take a loan from the bank and pay it back with interest
          * load/save game by saving the resource dictionary and the current date to a file
          * more power-ups
