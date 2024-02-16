@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -125,8 +124,9 @@ namespace Gold_Diggerzz
     
     // in the pregame i create a new instance of each resource and pass in the probability, price, quantity and totalFound
     // this is then just updated throughout the game
-    // essentially removing coal from every dictionary that its currently in
+    // essentially removing coal, gold, etc from every dictionary that its currently in
     // and instead of operation on the dictionary, i just call the method for each resource object when needed
+    // and then just deleting the dictionary and replacing it with the object everywhere
     
     class Resource
     {
@@ -159,12 +159,14 @@ namespace Gold_Diggerzz
         public static double Quantity;
         public static double Wage;
         public static double Price;
+        public static double EmployeeIllProbability;
         
-        public Workers(double initialQuantity, double initialWage, double initialPrice)
+        public Workers(double initialQuantity, double initialWage, double initialPrice, double employeeIllProbability)
         {
             Quantity = initialQuantity; // = 1
             Wage = initialWage; // = 13
             Price = initialPrice; // = 100
+            EmployeeIllProbability = employeeIllProbability; // = 10
         }
     }
 
@@ -252,7 +254,7 @@ namespace Gold_Diggerzz
             gold = new Resource(20, 75, 0, 0);
             diamond = new Resource(5, 200, 0, 0);
             dollars = new Dollars(100);
-            workers = new Workers(1, 10, 100);
+            workers = new Workers(1, 10, 100, 10);
             magicTokens = new PowerUp(0, 6);
             timeMachine = new PowerUp(0, 3);
             ancientArtefact = new PowerUp(0, 7);
@@ -548,7 +550,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> probabilities = new Dictionary<string, double>()
             {
-                { "employeeIll", 10 },
                 { "stockMarketCrash", 7 }
             };
 
@@ -1298,7 +1299,7 @@ namespace Gold_Diggerzz
             }
 
             // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < 10 && Workers.Quantity > 1)
+            if (_random.Next(0, 100) < Workers.EmployeeIllProbability && Workers.Quantity > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 Workers.Quantity -= 1;
