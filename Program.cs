@@ -474,19 +474,19 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
-            Console.WriteLine($"Chance of finding coal = {coal.Probability}%");
-            Console.WriteLine($"Chance of finding stone = {stone.Probability}%");
-            Console.WriteLine($"Chance of finding iron = {iron.Probability}%");
-            Console.WriteLine($"Chance of finding gold = {gold.Probability}%");
-            Console.WriteLine($"Chance of finding diamond = {diamond.Probability}%");
-            Console.WriteLine($"Chance of finding Ancient Artefact = {ancientArtefact.Probability}%");
+            Console.WriteLine($"Chance of finding coal = {Math.Round(coal.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding stone = {Math.Round(coal.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding iron = {Math.Round(iron.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding gold = {Math.Round(gold.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding diamond = {Math.Round(diamond.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding Ancient Artefact = {Math.Round(ancientArtefact.Probability, 2)}%");
 
             Console.WriteLine($"\nCost of hiring employee = ${Workers.Wage}");
-            Console.WriteLine($"Coal value = ${coal.Price}");
-            Console.WriteLine($"Stone value = ${stone.Price}");
-            Console.WriteLine($"Iron value = ${iron.Price}");
-            Console.WriteLine($"Gold value = ${gold.Price}");
-            Console.WriteLine($"Diamond value = ${diamond.Price}");
+            Console.WriteLine($"Coal value = ${Math.Round(coal.Price, 2)}");
+            Console.WriteLine($"Stone value = ${Math.Round(stone.Price, 2)}");
+            Console.WriteLine($"Iron value = ${Math.Round(iron.Price, 2)}");
+            Console.WriteLine($"Gold value = ${Math.Round(gold.Price, 2)}");
+            Console.WriteLine($"Diamond value = ${Math.Round(diamond.Price, 2)}");
 
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
