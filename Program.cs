@@ -1068,6 +1068,7 @@ namespace Gold_Diggerzz
                             resources["Workers"] += employeesToHire;
                             resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
                             Console.WriteLine($"You now have {resources["Workers"]} employees");
+                            Worker worker1 = new Worker();
                             _totalEmployeesHired += employeesToHire;
                         }
                         break;
@@ -1517,4 +1518,12 @@ namespace Gold_Diggerzz
             return GetValidDouble(min, max);
         }
     }
+
+    class Worker
+    {
+        private float luck;
+        private int daysWorked;
+        private float wage;
+    }
+    
 }
