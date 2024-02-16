@@ -7,38 +7,37 @@ namespace Gold_Diggerzz
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
     
     /* program structure + hierarchy
-     
-       - Coal
-       - Stone
-       - Iron
-       - Gold
-       - Diamond
-       - Dollars
-       - Workers
-       - Program
-           - Main()
-               - CreateResourceDictionary()
-               - CreatePricesDictionary()
-               - CreateProbabilityDictionary()
-               - CreatePowerUpDictionary()
-               - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
-                   - UserMenuOption(Dictionary<string, double> resources)
-                       - CheckIfInDebt(Dictionary<string, double> resources)
-                       - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
-                   - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
-                       - PrintResources(Dictionary<string, double> resources)
-                   - GoToMarket(Dictionary<string, double> resources)
-                       - PrintResources(Dictionary<string, double> resources)
-                   - PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
-                   - QuitGame()
-                   - GameFailed()
-                   - ChangeProbabilities(DateTime currentDate)
-                   - CheckAchievements(List<string> achievements)
-                   - ChangePrices()
-                   - EmployeeTrainingCourse(Dictionary<string, double> prices)
-               - GetValidInt(int min, int max)
-               - GetValidDouble(double min, double max)
-     */
+       
+          - Coal
+          - Stone
+          - Iron
+          - Gold
+          - Diamond
+          - Dollars
+          - MagicTokens
+          - Workers
+          - Program
+              - Main()
+                  - CreatePricesDictionary()
+                  - CreateProbabilityDictionary()
+                  - CreatePowerUpDictionary()
+                  - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
+                      - UserMenuOption()
+                          - CheckIfInDebt()
+                      - Dig(Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
+                          - PrintResources()
+                      - GoToMarket()
+                          - PrintResources()
+                      - PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
+                      - QuitGame()
+                      - GameFailed()
+                      - ChangeProbabilities(DateTime currentDate)
+                      - CheckAchievements(List<string> achievements)
+                      - ChangePrices()
+                      - EmployeeTrainingCourse(Dictionary<string, double> prices)
+                  - GetValidInt(int min, int max)
+                  - GetValidDouble(double min, double max)
+       * /
 
     /*
      * current issues
