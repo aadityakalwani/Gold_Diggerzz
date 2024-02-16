@@ -8,50 +8,55 @@ namespace Gold_Diggerzz
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
     
     /* program structure + hierarchy
-              
-        - Resource
-              - Coal
-              - Stone
-              - Iron
-              - Gold
-              - Diamond
-        - Dollars
-        - Workers
-        - PowerUp
-              - MagicTokens
-              - TimeMachine
-              - AncientArtefact
-              - MarketMaster
-        - Program
-              - Main()
-                  - CreatePricesDictionary()
-                  - CreateProbabilityDictionary()
-                  - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
-                      - UserMenuOption()
-                          - CheckIfInDebt()
-                      - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
-                          - PrintResources()
-                      - GoToMarket()
-                          - PrintResources()
-                      - PrintGameMechanics()
-                      - QuitGame()
-                      - GameFailed()
-                      - ChangeProbabilities(DateTime currentDate)
-                      - CheckAchievements(List<string> achievements)
-                      - ChangePrices()
-                      - EmployeeTrainingCourse()
-                  - GetValidInt(int min, int max)
-                  - GetValidDouble(double min, double max)
-       * /
 
-    /*
-     * current issues
-     * inconsistent between weather effect printing and actual
+       - Resource
+             - Coal
+             - Stone
+             - Iron
+             - Gold
+             - Diamond
+       - Dollars
+       - Workers
+       - PowerUp
+             - MagicTokens
+             - TimeMachine
+             - AncientArtefact
+             - MarketMaster
+       - Program
+             - Main()
+                 - CreatePricesDictionary()
+                 - CreateProbabilityDictionary()
+                 - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
+                     - UserMenuOption()
+                         - CheckIfInDebt()
+                     - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
+                         - PrintResources()
+                     - GoToMarket()
+                         - PrintResources()
+                     - PrintGameMechanics()
+                     - QuitGame()
+                     - GameFailed()
+                     - ChangeProbabilities(DateTime currentDate)
+                     - CheckAchievements(List<string> achievements)
+                     - ChangePrices()
+                     - EmployeeTrainingCourse()
+                 - GetValidInt(int min, int max)
+                 - GetValidDouble(double min, double max)
+      * /
+
+   /*
+    * current issues
+    * inconsistent between weather effect printing and actual
+       * eg "6 days left of bad weather" but then it's only 5 days
+    * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
+    * magic tokens are x1.2 every time, which is not mathematically correct
+    */
+    
+    /* current issues:
+     * somehow going to have to create each employee separately and then have a list of them + option to print them out
+     * inconsistency with the weather effect printing and actual
         * eg "6 days left of bad weather" but then it's only 5 days
-     * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
-     * magic tokens are x1.2 every time, which is not mathematically correct
      */
-
 
     /* to-do ideas
      * OOP Workers
