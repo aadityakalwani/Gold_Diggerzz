@@ -1068,7 +1068,6 @@ namespace Gold_Diggerzz
                             resources["Workers"] += employeesToHire;
                             resources["Dollars"] -= employeesToHire * priceDictionary["Workers"];
                             Console.WriteLine($"You now have {resources["Workers"]} employees");
-                            Worker worker1 = new Worker();
                             _totalEmployeesHired += employeesToHire;
                         }
                         break;
@@ -1519,11 +1518,334 @@ namespace Gold_Diggerzz
         }
     }
 
-    class Worker
+    
+    // in the pregame i create a new instance of each resource and pass in the probability, price, quantity and totalFound
+    // this is then just updated throughout the game
+    // essentially removing coal from every dictionary that its currently in
+    // and instead of operation on the dictionary, i just call the method for each resource object when needed
+    class Coal
     {
-        private float luck;
-        private int daysWorked;
-        private float wage;
+        private double _Probability;
+        private double _Price;
+        private double _Quantity;
+        private double _TotalFound;
+
+        public Coal(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        {
+            _Probability = initialProbability;
+            _Price = initialPrice;
+            _Quantity = initialQuantity;
+            _TotalFound = totalFound;
+        }
+
+        public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Probability *= reductionMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+               _Probability /= reductionMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+            
+        }
+
+        public void ChangePrice(string increaseOrDecrease, double increaseMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Price *= increaseMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Price /= increaseMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+        
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Quantity += changeAmoun;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Quantity /= changeAmoun;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
     }
     
+    class Stone
+    {
+        private double _Probability;
+        private double _Price;
+        private double _Quantity;
+        private double _TotalFound;
+
+        public Stone(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        {
+            _Probability = initialProbability;
+            _Price = initialPrice;
+            _Quantity = initialQuantity;
+            _TotalFound = totalFound;
+        }
+
+        public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Probability *= reductionMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Probability /= reductionMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+            
+        }
+
+        public void ChangePrice(string increaseOrDecrease, double increaseMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Price *= increaseMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Price /= increaseMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+        
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Quantity += changeAmoun;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Quantity /= changeAmoun;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+    }
+    
+    class Iron
+    {
+        private double _Probability;
+        private double _Price;
+        private double _Quantity;
+        private double _TotalFound;
+
+        public Iron(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        {
+            _Probability = initialProbability;
+            _Price = initialPrice;
+            _Quantity = initialQuantity;
+            _TotalFound = totalFound;
+        }
+
+        public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Probability *= reductionMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Probability /= reductionMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+            
+        }
+
+        public void ChangePrice(string increaseOrDecrease, double increaseMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Price *= increaseMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Price /= increaseMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+        
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Quantity += changeAmoun;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Quantity /= changeAmoun;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+    }
+    
+    class Gold
+    {
+        private double _Probability;
+        private double _Price;
+        private double _Quantity;
+        private double _TotalFound;
+
+        public Gold(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        {
+            _Probability = initialProbability;
+            _Price = initialPrice;
+            _Quantity = initialQuantity;
+            _TotalFound = totalFound;
+        }
+
+        public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Probability *= reductionMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Probability /= reductionMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+            
+        }
+
+        public void ChangePrice(string increaseOrDecrease, double increaseMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Price *= increaseMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Price /= increaseMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+        
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Quantity += changeAmoun;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Quantity /= changeAmoun;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+    }
+    
+    class Diamond
+    {
+        private double _Probability;
+        private double _Price;
+        private double _Quantity;
+        private double _TotalFound;
+
+        public Diamond(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        {
+            _Probability = initialProbability;
+            _Price = initialPrice;
+            _Quantity = initialQuantity;
+            _TotalFound = totalFound;
+        }
+
+        public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Probability *= reductionMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Probability /= reductionMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+            
+        }
+
+        public void ChangePrice(string increaseOrDecrease, double increaseMultiplier)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Price *= increaseMultiplier;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Price /= increaseMultiplier;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+        
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        {
+            if (increaseOrDecrease == "increase")
+            {
+                _Quantity += changeAmoun;
+            }
+            else if (increaseOrDecrease == "decrease")
+            {
+                _Quantity /= changeAmoun;
+            }
+            else
+            {
+                Console.WriteLine("Invalid passing in, either type increase or decrease bro");
+            }
+        }
+    }
 }
+
