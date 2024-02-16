@@ -206,7 +206,7 @@ namespace Gold_Diggerzz
             int menuOption;
             do
             {
-                menuOption = UserMenuOption(resourceDictionary, priceDictionary);
+                menuOption = UserMenuOption(resourceDictionary);
 
                 switch (menuOption)
                 {
@@ -533,9 +533,9 @@ namespace Gold_Diggerzz
             Console.WriteLine("Here are the game mechanics:");
         }
 
-        private static int UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
+        private static int UserMenuOption(Dictionary<string, double> resources)
         {
-            string takeUserInput = CheckIfInDebt(resources, prices);
+            string takeUserInput = CheckIfInDebt(resources);
 
             if (takeUserInput == "false")
             {
@@ -562,7 +562,7 @@ namespace Gold_Diggerzz
             return -2;
         }
 
-        private static string CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
+        private static string CheckIfInDebt(Dictionary<string, double> resources)
         {
             string inDebt = "false";
             if (resources["Dollars"] < 0)
@@ -626,7 +626,7 @@ namespace Gold_Diggerzz
             for (int days = 0; days < daysToDig; days++)
             {
 
-                if (CheckIfInDebt(resources, prices) != "true")
+                if (CheckIfInDebt(resources) != "true")
                 {
                     if (!skipDay)
                     {
@@ -824,10 +824,8 @@ namespace Gold_Diggerzz
                         if (magicTokenFound && resources["magicTokens"] < 4)
                         {
                             resources["magicTokens"] += 1;
-                            Console.WriteLine(
-                                $"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
-                            Console.WriteLine(
-                                $"Selling price increased by a total of {resources["magicTokens"] * 20}%");
+                            Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
+                            Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
                             Coal.Price *= 1.2;
                             Stone.Price *= 1.2;
                             Iron.Price *= 1.2;
@@ -907,7 +905,7 @@ namespace Gold_Diggerzz
                     _currentDate = _currentDate.AddDays(1);
                 }
 
-                ChangePrices(prices);
+                ChangePrices();
                 _totalDaysDug += 1;
 
                 if (daysToDig >= 2)
@@ -919,10 +917,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
 
                 // change the probabilities of finding resources - including calendar and weather effects
-                ChangeProbabilities(prices, _currentDate, resources, probabilities);
+                ChangeProbabilities(prices, _currentDate, resources);
 
                 // apply a ±10% fluctuation to the prices of iron and gold
-                ChangePrices(prices);
+                ChangePrices();
 
                 Console.WriteLine("___________________________________");
             }
@@ -1196,7 +1194,7 @@ namespace Gold_Diggerzz
         }
 
         private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate,
-            Dictionary<string, double> resources, Dictionary<string, double> probabilities)
+            Dictionary<string, double> resources)
         {
 
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
@@ -1495,7 +1493,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        private static void ChangePrices(Dictionary<string, double> prices)
+        private static void ChangePrices()
         {
             // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
