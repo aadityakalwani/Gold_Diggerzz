@@ -514,15 +514,15 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             Console.WriteLine($"Here are your stats as of {_currentDate.Date: dddd, dd MMMM yyyy}:");
-            Console.WriteLine($"Total coal found: {coal.TotalFound}kg");
-            Console.WriteLine($"Total stone found: {stone.TotalFound}kg");
-            Console.WriteLine($"Total iron found: {iron.TotalFound}kg");
-            Console.WriteLine($"Total gold found: {gold.TotalFound}kg");
-            Console.WriteLine($"Total diamond found: {diamond.TotalFound}kg");
+            Console.WriteLine($"Total coal found: {Math.Round(coal.TotalFound, 2)}kg");
+            Console.WriteLine($"Total stone found: {Math.Round(stone.TotalFound, 2)}kg");
+            Console.WriteLine($"Total iron found: {Math.Round(iron.TotalFound, 2)}kg");
+            Console.WriteLine($"Total gold found: {Math.Round(gold.TotalFound, 2)}kg");
+            Console.WriteLine($"Total diamond found: {Math.Round(diamond.TotalFound, 2)}kg");
             Console.WriteLine($"Total powerups used: {_totalPowerUpsUsed}");
             Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
             Console.WriteLine($"Total bribes paid: {_totalBribes}");
-            Console.WriteLine($"\nTotal dollars earned: ${_totalDollarsEarned}");
+            Console.WriteLine($"\nTotal dollars earned: ${Math.Round(_totalDollarsEarned, 2)}");
             Console.WriteLine($"Total days dug: {_totalDaysDug}");
         }
 
