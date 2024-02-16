@@ -229,7 +229,7 @@ namespace Gold_Diggerzz
         private static bool _achievement19;
         private static bool _achievement20;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
-        static Random _random = new Random();
+        private static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
         
         // Declare your variables at the class level
@@ -386,7 +386,7 @@ namespace Gold_Diggerzz
 
                         break;
                     case 6:
-                        PrintGameMechanics(priceDictionary, probabilityDictionary);
+                        PrintGameMechanics(priceDictionary);
                         break;
                     case 7:
                         PrintStats();
@@ -465,8 +465,7 @@ namespace Gold_Diggerzz
 
         }
 
-        private static void PrintGameMechanics(Dictionary<string, double> prices,
-            Dictionary<string, double> probabilities)
+        private static void PrintGameMechanics(Dictionary<string, double> prices)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
