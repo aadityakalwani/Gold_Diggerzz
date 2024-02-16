@@ -16,6 +16,7 @@ namespace Gold_Diggerzz
         */
         
         /* to-do ideas
+         * OOPIFYING IN PROGRESS
          * reorder the menu options to be more flowy and logical
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
          * tutorial mode (that is actually functional)
@@ -165,8 +166,14 @@ namespace Gold_Diggerzz
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
-            List<string> achievementsList = new List<string>();
             
+            Coal coal = new Coal(90, 4, 0, 0);
+            Stone stone = new Stone(75, 8, 0, 0);
+            Iron iron = new Iron(65, 15, 0, 0);
+            Gold gold = new Gold(20, 75, 0, 0);
+            Diamond diamond = new Diamond(5, 200, 0, 0);
+            
+            List<string> achievementsList = new List<string>();
             
             
             Console.ForegroundColor = ConsoleColor.Green;
@@ -423,11 +430,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> resources = new Dictionary<string, double>()
             {
-                { "coal", 0},
-                { "stone", 0},
-                { "iron", 0 },
-                { "gold", 0 },
-                { "diamond", 0},
                 { "Dollars", 100 },
                 { "Workers", 1 },
                 { "magicTokens", 0}
@@ -439,11 +441,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> prices = new Dictionary<string, double>()
             {
-                { "coal", 4},
-                { "stone", 8},
-                { "iron", 15},
-                { "gold", 60},
-                { "diamond", 200},
                 { "Workers", 100},
                 { "Wage", 13},
                 { "SkipDay", 50},
@@ -459,11 +456,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> probabilities = new Dictionary<string, double>()
             {
-                { "coal", 90 },
-                { "stone", 75 },
-                { "iron", 65 },
-                { "gold", 20 },
-                { "diamond", 7 },
                 { "MarketMaster", 4 },
                 { "AncientArtefact", 7 },
                 { "magicToken", 6 },
@@ -1525,10 +1517,10 @@ namespace Gold_Diggerzz
     // and instead of operation on the dictionary, i just call the method for each resource object when needed
     class Coal
     {
-        private double _Probability;
-        private double _Price;
-        private double _Quantity;
-        private double _TotalFound;
+        public double _Probability;
+        public double _Price;
+        public double _Quantity;
+        public double _TotalFound;
 
         public Coal(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
@@ -1571,15 +1563,15 @@ namespace Gold_Diggerzz
             }
         }
         
-        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmount)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmoun;
+                _Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmoun;
+                _Quantity /= changeAmount;
             }
             else
             {
@@ -1590,10 +1582,10 @@ namespace Gold_Diggerzz
     
     class Stone
     {
-        private double _Probability;
-        private double _Price;
-        private double _Quantity;
-        private double _TotalFound;
+        public double _Probability;
+        public double _Price;
+        public double _Quantity;
+        public double _TotalFound;
 
         public Stone(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
@@ -1636,15 +1628,15 @@ namespace Gold_Diggerzz
             }
         }
         
-        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmount)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmoun;
+                _Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmoun;
+                _Quantity /= changeAmount;
             }
             else
             {
@@ -1655,10 +1647,10 @@ namespace Gold_Diggerzz
     
     class Iron
     {
-        private double _Probability;
-        private double _Price;
-        private double _Quantity;
-        private double _TotalFound;
+        public double _Probability;
+        public double _Price;
+        public double _Quantity;
+        public double _TotalFound;
 
         public Iron(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
@@ -1701,15 +1693,15 @@ namespace Gold_Diggerzz
             }
         }
         
-        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmount)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmoun;
+                _Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmoun;
+                _Quantity /= changeAmount;
             }
             else
             {
@@ -1720,10 +1712,10 @@ namespace Gold_Diggerzz
     
     class Gold
     {
-        private double _Probability;
-        private double _Price;
-        private double _Quantity;
-        private double _TotalFound;
+        public double _Probability;
+        public double _Price;
+        public double _Quantity;
+        public double _TotalFound;
 
         public Gold(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
@@ -1766,15 +1758,15 @@ namespace Gold_Diggerzz
             }
         }
         
-        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmount)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmoun;
+                _Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmoun;
+                _Quantity /= changeAmount;
             }
             else
             {
@@ -1785,10 +1777,10 @@ namespace Gold_Diggerzz
     
     class Diamond
     {
-        private double _Probability;
-        private double _Price;
-        private double _Quantity;
-        private double _TotalFound;
+        public double _Probability;
+        public double _Price;
+        public double _Quantity;
+        public double _TotalFound;
 
         public Diamond(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
@@ -1831,15 +1823,15 @@ namespace Gold_Diggerzz
             }
         }
         
-        public void ChangeQuantity(string increaseOrDecrease, double changeAmoun)
+        public void ChangeQuantity(string increaseOrDecrease, double changeAmount)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmoun;
+                _Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmoun;
+                _Quantity /= changeAmount;
             }
             else
             {
