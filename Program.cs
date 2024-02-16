@@ -456,14 +456,10 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"                     You have ${Math.Round(resources["Dollars"], 2)}\n");
-            Console.WriteLine(
-                $"| You have {Math.Round(Coal.Quantity, 2)}kg of coal         | You have {Math.Round(Stone.Quantity, 2)}kg of stone");
-            Console.WriteLine(
-                $"| You have {Math.Round(Iron.Quantity, 2)}kg of iron         | You have {Math.Round(Gold.Quantity, 2)}kg of gold");
-            Console.WriteLine(
-                $"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
-            Console.WriteLine(
-                $"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
+            Console.WriteLine($"| You have {Math.Round(Coal.Quantity, 2)}kg of coal         | You have {Math.Round(Stone.Quantity, 2)}kg of stone");
+            Console.WriteLine($"| You have {Math.Round(Iron.Quantity, 2)}kg of iron         | You have {Math.Round(Gold.Quantity, 2)}kg of gold");
+            Console.WriteLine($"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
+            Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
 
@@ -523,17 +519,13 @@ namespace Gold_Diggerzz
         private static void RunTutorial(Dictionary<string, double> prices)
         {
             Console.WriteLine("Welcome to the tutorial");
-            Console.WriteLine(
-                "You are a gold digger, and you have to survive for as long as possible before bankruptcy");
+            Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
             Console.WriteLine("You have a few resources to start with:");
-            Console.WriteLine(
-                "You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
+            Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
             Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
             Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine(
-                $"You can also pay ${prices["stockMarketDate"]} for information on the next stock market crash");
-            Console.WriteLine(
-                "You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
+            Console.WriteLine($"You can also pay ${prices["stockMarketDate"]} for information on the next stock market crash");
+            Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
             Console.WriteLine("You can also sell all your iron and gold for dollars");
             Console.WriteLine($"You can also skip one day for ${prices["SkipDay"]}");
             Console.WriteLine("You can also quit the game");
@@ -552,10 +544,8 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Main Features:              Print Options:                  Other Features:\n");
                 Console.WriteLine("0 - Quit game               6 - Print game mechanics        4 - Skip one day");
                 Console.WriteLine("1 - Dig one day             7 - Print stats                 5 - Use a powerup");
-                Console.WriteLine(
-                    "2 - Dig multiple days       8 - Print achievements          9 - Send employees for training");
-                Console.WriteLine(
-                    "3 - Go to market            11 - Print tutorial             10 - Commit a crime (further options inside)");
+                Console.WriteLine("2 - Dig multiple days       8 - Print achievements          9 - Send employees for training");
+                Console.WriteLine("3 - Go to market            11 - Print tutorial             10 - Commit a crime (further options inside)");
                 Console.WriteLine("Your choice:");
 
                 int userOption = GetValidInt(0, 11);
@@ -587,10 +577,8 @@ namespace Gold_Diggerzz
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine(
-                        "They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                    Console.WriteLine(
-                        $"right now you have ${resources["Dollars"]}, {Coal.Quantity}kg of coal, {Stone.Quantity}kg of stone, {Iron.Quantity}kg of iron, {Gold.Quantity}kg of gold, and {Diamond.Quantity}kg of diamond");
+                    Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
+                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {Coal.Quantity}kg of coal, {Stone.Quantity}kg of stone, {Iron.Quantity}kg of iron, {Gold.Quantity}kg of gold, and {Diamond.Quantity}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
@@ -883,8 +871,7 @@ namespace Gold_Diggerzz
                         double totalWages = resources["Workers"] * prices["Wage"];
                         resources["Dollars"] -= totalWages;
 
-                        Console.WriteLine(
-                            $"Your {resources["Workers"]} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                        Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                     }
 
                     if (_badWeatherDaysLeft != 0)
@@ -981,8 +968,7 @@ namespace Gold_Diggerzz
                 switch (marketOption)
                 {
                     case 1:
-                        Console.WriteLine(
-                            "You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
+                        Console.WriteLine("You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
                         // sht here bro add in the emojis
                         Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
                         int sellChoice = GetValidInt(1, 5);
@@ -991,8 +977,7 @@ namespace Gold_Diggerzz
                         {
                             case 1:
                                 Console.WriteLine("Your have chosen to sell coal for dollars");
-                                Console.WriteLine(
-                                    $"How much coal do you want to sell?\nYou have {Coal.Quantity}kg of coal");
+                                Console.WriteLine($"How much coal do you want to sell?\nYou have {Coal.Quantity}kg of coal");
                                 double coalToSell = GetValidDouble(0, 100000000000);
                                 if (coalToSell > Coal.Quantity)
                                 {
@@ -1011,8 +996,7 @@ namespace Gold_Diggerzz
 
                             case 2:
                                 Console.WriteLine("Your have chosen to sell stone for dollars");
-                                Console.WriteLine(
-                                    $"How much stone do you want to sell?\nYou have {Stone.Quantity}kg of stone");
+                                Console.WriteLine($"How much stone do you want to sell?\nYou have {Stone.Quantity}kg of stone");
                                 double stoneToSell = GetValidDouble(0, 100000000000);
                                 if (stoneToSell > Stone.Quantity)
                                 {
@@ -1030,8 +1014,7 @@ namespace Gold_Diggerzz
                                 break;
                             case 3:
                                 Console.WriteLine("Your have chosen to sell iron for dollars");
-                                Console.WriteLine(
-                                    $"How much iron do you want to sell?\nYou have {Iron.Quantity}kg of iron");
+                                Console.WriteLine($"How much iron do you want to sell?\nYou have {Iron.Quantity}kg of iron");
                                 double ironToSell = GetValidDouble(0, 100000000000);
                                 if (ironToSell > Iron.Quantity)
                                 {
@@ -1049,8 +1032,7 @@ namespace Gold_Diggerzz
                                 break;
                             case 4:
                                 Console.WriteLine("Your have chosen to sell gold for dollars");
-                                Console.WriteLine(
-                                    $"How much gold do you want to sell?\nYou have {Gold.Quantity}kg of gold");
+                                Console.WriteLine($"How much gold do you want to sell?\nYou have {Gold.Quantity}kg of gold");
                                 double goldToSell = GetValidDouble(0, 100000000000);
                                 if (goldToSell > Gold.Quantity)
                                 {
@@ -1068,8 +1050,7 @@ namespace Gold_Diggerzz
                                 break;
                             case 5:
                                 Console.WriteLine("Your have chosen to sell diamond for dollars");
-                                Console.WriteLine(
-                                    $"How much diamond do you want to sell?\nYou have {Diamond.Quantity}kg of diamond");
+                                Console.WriteLine($"How much diamond do you want to sell?\nYou have {Diamond.Quantity}kg of diamond");
                                 double diamondToSell = GetValidDouble(0, 100000000000);
                                 if (diamondToSell > Diamond.Quantity)
                                 {
@@ -1090,8 +1071,7 @@ namespace Gold_Diggerzz
                         break;
 
                     case 2:
-                        Console.WriteLine(
-                            "We're selling all your coal and iron and gold and stone and diamond for dollars");
+                        Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
                         resources["Dollars"] += Coal.Quantity * Coal.Price;
                         resources["Dollars"] += Stone.Quantity * Stone.Price;
                         resources["Dollars"] += Iron.Quantity * Iron.Price;
@@ -1112,8 +1092,7 @@ namespace Gold_Diggerzz
 
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine(
-                            $"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
+                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
                         if (employeesToHire * priceDictionary["Workers"] > resources["Dollars"])
                         {
@@ -1225,8 +1204,7 @@ namespace Gold_Diggerzz
             // every 10 days, probability of finding resources is reduced by 5%
             if (currentDate.Day % 10 == 0)
             {
-                Console.WriteLine(
-                    "Congratulations for surviving for another 10 days. The game is now getting even harder...");
+                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
                 Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 5% \ud83d\udc22");
                 Coal.Probability *= 0.95;
                 Stone.Probability *= 0.95;
@@ -1264,8 +1242,7 @@ namespace Gold_Diggerzz
 
             if (currentDate.Day == _crashDate && _crashDaysLeft == 0)
             {
-                Console.WriteLine(
-                    "The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
+                Console.WriteLine("The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
 
                 Coal.Price /= 2;
                 Stone.Price /= 2;
@@ -1315,8 +1292,7 @@ namespace Gold_Diggerzz
 
                 else
                 {
-                    Console.WriteLine(
-                        "Because you have so many employees, 60% of your current $$$ stash is given to them");
+                    Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
                     Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
                     resources["Dollars"] *= 0.4;
                 }
@@ -1359,8 +1335,7 @@ namespace Gold_Diggerzz
             // rain reducing efficiency
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
-                Console.WriteLine(
-                    "Due to torrential rain, your employees are 30% less efficient for the next two days");
+                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
                 _employeeEfficiency /= 1.3;
                 _badWeatherDaysLeft = 3;
             }
