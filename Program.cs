@@ -4,24 +4,52 @@ using System.Threading;
 
 namespace Gold_Diggerzz
 {
-    internal abstract class Program
-
-    {
-        // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
-
-        /*
-         * current issues
-         * inconsistent between weather effect printing and actual
-         * eg "6 days left of bad weather" but then it's only 5 days
-         */
-
+    // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
+    
+    /* program structure + hierarchy
+       - Program
+           - Main()
+               - CreateResourceDictionary()
+               - CreatePricesDictionary()
+               - CreateProbabilityDictionary()
+               - CreatePowerUpDictionary()
+               - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
+                   - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                       - CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                       - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
+                   - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
+                       - PrintResources(Dictionary<string, double> resources)
+                   - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
+                       - PrintResources(Dictionary<string, double> resources)
+                   - PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
+                   - QuitGame()
+                   - GameFailed()
+                   - ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources, Dictionary<string, double> probabilities)
+                   - CheckAchievements(List<string> achievements)
+                   - ChangePrices(Dictionary<string, double> prices)
+                   - EmployeeTrainingCourse(Dictionary<string, double> resources, Dictionary<string, double> prices)
+               - GetValidInt(int min, int max)
+               - GetValidDouble(double min, double max)
+       - Coal
+       - Stone
+       - Iron
+       - Gold
+       - Diamond
+     */
+    
+    /*
+     * current issues
+     * inconsistent between weather effect printing and actual
+     * eg "6 days left of bad weather" but then it's only 5 days
+     * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
+     * magic tokens are x1.2 every time, which is not mathematically correct
+     */
+    
+    
         /* to-do ideas
-         * OOPIFYING IN PROGRESS
-         * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
-         * magic tokens are x1.2 every time, which is not mathematically correct
-         *
-         *
-         *
+         * OOP Workers
+         * OOP Powerups
+         * OOP 
          * reorder the menu options to be more flowy and logical
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
          * tutorial mode (that is actually functional) 
@@ -46,78 +74,56 @@ namespace Gold_Diggerzz
              * when you hire an employee they're given a 'luck' rating between 20-80%
          * send individual number of employees for training course that then boosts their productivity
          */
-
+        
         /*
-           * hierarchy:
-           *
-           * - Main()
-           *     - CreateResourceDictionary()
-           *     - CreatePricesDictionary()
-           *     - CreateProbabilityDictionary()
-           *     - PrintResources(Dictionary<string, double> resources)
-           *     - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary)
-           *            - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
-           *                    - CheckIfInDebt(Dictionary<string, double> resources)
-           *                    - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
-           *            - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities)
-           *                    - PrintResources(Dictionary<string, double> resources)
-           *            - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
-           *                    - PrintResources(Dictionary<string, double> resources)
-           *            - PrintGameMechanics()
-           *            - QuitGame(Dictionary<string, double> resources)
-           *            - GameFailed(Dictionary<string, double> resources)
-           *                    - QuitGame(Dictionary<string, double> resources)
-           *     - GetValidInt()
-           *     - GetValidDouble()
-           *
-           * This hierarchy shows the flow of your program and how each subroutine is called from its parent subroutine.
-           * /
+       current features: (also in PrintMechanics())
+       chance of finding coal = 90%
+       chance of finding stone = 75%
+       chance of finding iron = 65%
+       chance of finding gold = 20%
+       chance of finding diamond = 5%
+       chance of finding Ancient Artefact = 5%
 
-        /*
-        current features: (also in PrintMechanics())
-        chance of finding coal = 90%
-        chance of finding stone = 75%
-        chance of finding iron = 65%
-        chance of finding gold = 20%
-        chance of finding diamond = 5%
-        chance of finding Ancient Artefact = 5%
+       cost of hiring employee = $100
+       coal value = $4
+       stone value = $8
+       iron value =  $15
+       gold value = $75
+       diamond value = $200
 
-        cost of hiring employee = $100
-        coal value = $4
-        stone value = $8
-        iron value =  $15
-        gold value = $75
-        diamond value = $200
+       resource values fluctuate by upto ±10% per day
 
-        resource values fluctuate by upto ±10% per day
+       Ancient Artefact has two powerup options:
+       $250 instantly, or a 50% chance of finding gold for the next 5 days
 
-        Ancient Artefact has two powerup options:
-        $250 instantly, or a 50% chance of finding gold for the next 5 days
+       the resources you gain are equal to the number of employees you have times their efficiency
+       eg. 7 employees = 7 iron found on that day * efficiency of 1.5 = 10.5iron found
 
-        the resources you gain are equal to the number of employees you have times their efficiency
-        eg. 7 employees = 7 iron found on that day * efficiency of 1.5 = 10.5iron found
+       baseline wage = $10 per employee per day
 
-        baseline wage = $10 per employee per day
+       10% chance an employee is ill and doesnt come in to work
 
-        10% chance an employee is ill and doesnt come in to work
+       30% pay increase on weekends only
 
-        30% pay increase on weekends only
+       on the first of every month, employee wage increases by 10%
 
-        on the first of every month, employee wage increases by 10%
+       on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
 
-        on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
+       one x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve
 
-        one x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve
+       you can bribe the govt with $150 and not pay any wages for the next 3 days
 
-        you can bribe the govt with $150 and not pay any wages for the next 3 days
+       at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
 
-        at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
+       if you have no resources to sell, they sell your employees for $100 each
 
-        if you have no resources to sell, they sell your employees for $100 each
+       if your $$$ balance is negative and you have no resource, you fail the game
+       */
+    
+    internal abstract class Program
 
-        if your $$$ balance is negative and you have no resource, you fail the game
-        */
-
+    {
+        
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         private static bool _animation = true;
