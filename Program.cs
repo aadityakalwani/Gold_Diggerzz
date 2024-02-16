@@ -41,7 +41,7 @@ namespace Gold_Diggerzz
     /*
      * current issues
      * inconsistent between weather effect printing and actual
-     * eg "6 days left of bad weather" but then it's only 5 days
+        * eg "6 days left of bad weather" but then it's only 5 days
      * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
      * magic tokens are x1.2 every time, which is not mathematically correct
      */
@@ -174,14 +174,14 @@ namespace Gold_Diggerzz
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
 
-           /*
-             Coal coal = new Coal(90, 4, 0, 0);
-             Stone stone = new Stone(75, 8, 0, 0);
-             Iron iron = new Iron(65, 15, 0, 0);
-             Gold gold = new Gold(20, 75, 0, 0);
-             Diamond diamond = new Diamond(5, 200, 0, 0);
-            */
-
+           
+             Coal Coal = new Coal(90, 4, 0, 0);
+             Stone Stone = new Stone(75, 8, 0, 0);
+             Iron Iron = new Iron(65, 15, 0, 0);
+             Gold Gold = new Gold(20, 75, 0, 0);
+             Diamond Diamond = new Diamond(5, 200, 0, 0);
+             Dollars Dollars = new Dollars(100);
+            
             List<string> achievementsList = new List<string>();
 
 
@@ -412,23 +412,17 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
-            Console.WriteLine(
-                "The resources you gain are equal to the number of employees you have times their efficiency");
+            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency");
             Console.WriteLine("Baseline wage = $10 per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10%");
-            Console.WriteLine(
-                "On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-            Console.WriteLine(
-                "One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
+            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 5%");
-            Console.WriteLine(
-                $"You can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
-            Console.WriteLine(
-                "At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine(
-                "If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
+            Console.WriteLine($"You can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
+            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
 
         }
@@ -1194,8 +1188,7 @@ namespace Gold_Diggerzz
             QuitGame();
         }
 
-        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate,
-            Dictionary<string, double> resources)
+        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
         {
 
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
@@ -1498,15 +1491,13 @@ namespace Gold_Diggerzz
         {
             // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
-            int randomChange = random.Next(-10, 10);
+            double randomChange = random.Next(-10, 10) / 100.0 + 1;
 
-            double percentageChange = (randomChange + 100) / 100;
-
-            Coal.Price *= percentageChange;
-            Stone.Price *= percentageChange;
-            Iron.Price *= percentageChange;
-            Gold.Price *= percentageChange;
-            Diamond.Price *= percentageChange;
+            Coal.Price *= randomChange;
+            Stone.Price *= randomChange;
+            Iron.Price *= randomChange;
+            Gold.Price *= randomChange;
+            Diamond.Price *= randomChange;
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources,
@@ -1646,10 +1637,11 @@ namespace Gold_Diggerzz
     {
         public static double Quantity;
         
-        public Dollars()
+        public Dollars(double initialQuantity)
         {
-            // as you start with 100 dollars
-            Quantity = 100;
+            // this is 100 as you start with 100 dollars
+            Quantity = initialQuantity;
         }
+        
     }
 }
