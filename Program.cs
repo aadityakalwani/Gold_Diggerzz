@@ -174,11 +174,13 @@ namespace Gold_Diggerzz
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
 
-            Coal coal = new Coal(90, 4, 0, 0);
-            Stone stone = new Stone(75, 8, 0, 0);
-            Iron iron = new Iron(65, 15, 0, 0);
-            Gold gold = new Gold(20, 75, 0, 0);
-            Diamond diamond = new Diamond(5, 200, 0, 0);
+           /*
+             Coal coal = new Coal(90, 4, 0, 0);
+             Stone stone = new Stone(75, 8, 0, 0);
+             Iron iron = new Iron(65, 15, 0, 0);
+             Gold gold = new Gold(20, 75, 0, 0);
+             Diamond diamond = new Diamond(5, 200, 0, 0);
+            */
 
             List<string> achievementsList = new List<string>();
 
