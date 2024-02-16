@@ -181,7 +181,7 @@ namespace Gold_Diggerzz
              Gold Gold = new Gold(20, 75, 0, 0);
              Diamond Diamond = new Diamond(5, 200, 0, 0);
              Dollars Dollars = new Dollars(100);
-             Workers Workers = new Workers(1, 10);
+             Workers Workers = new Workers(1, 10, 100);
             
             List<string> achievementsList = new List<string>();
 
@@ -236,7 +236,7 @@ namespace Gold_Diggerzz
                             achievementsList, false);
                         break;
                     case 3:
-                        GoToMarket(resourceDictionary, priceDictionary);
+                        GoToMarket(resourceDictionary);
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
@@ -331,7 +331,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(
                                 $"You have been charged {priceDictionary["trainingCourse"]} per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
-                            EmployeeTrainingCourse(resourceDictionary, priceDictionary);
+                            EmployeeTrainingCourse(priceDictionary);
                         }
                         else if (resourceDictionary["Dollars"] >
                                  priceDictionary["trainingCourse"] * Workers.Quantity &&
@@ -404,7 +404,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Chance of finding diamond = {Diamond.Probability}%");
             Console.WriteLine($"Chance of finding Ancient Artefact = {probabilities["AncientArtefact"]}%");
 
-            Console.WriteLine($"\nCost of hiring employee = ${prices["Workers"]}");
+            Console.WriteLine($"\nCost of hiring employee = ${Workers.Wage}");
             Console.WriteLine($"Coal value = ${Coal.Price}");
             Console.WriteLine($"Stone value = ${Stone.Price}");
             Console.WriteLine($"Iron value = ${Iron.Price}");
@@ -464,7 +464,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> resources = new Dictionary<string, double>()
             {
-                { "Workers", 1 },
                 { "magicTokens", 0 }
             };
             return resources;
@@ -474,8 +473,6 @@ namespace Gold_Diggerzz
         {
             Dictionary<string, double> prices = new Dictionary<string, double>()
             {
-                { "Workers", 100 },
-                { "Wage", 13 },
                 { "SkipDay", 50 },
                 { "bribe", 200 },
                 { "stockMarketDate", 50 },
@@ -860,7 +857,7 @@ namespace Gold_Diggerzz
 
                     else
                     {
-                        double totalWages = Workers.Quantity * prices["Wage"];
+                        double totalWages = Workers.Quantity * Workers.Wage;
                         Dollars.Quantity -= totalWages;
 
                         Console.WriteLine($"Your {Workers.Quantity} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
@@ -911,7 +908,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
 
                 // change the probabilities of finding resources - including calendar and weather effects
-                ChangeProbabilities(prices, _currentDate, resources);
+                ChangeProbabilities(_currentDate);
 
                 // apply a ±10% fluctuation to the prices of iron and gold
                 ChangePrices();
@@ -925,7 +922,7 @@ namespace Gold_Diggerzz
             PrintResources(resources);
         }
 
-        private static void GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
+        private static void GoToMarket(Dictionary<string, double> resources)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -941,8 +938,8 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| Iron: ${Math.Round(Iron.Price, 2)} per kg");
             Console.WriteLine($"| Gold: ${Math.Round(Gold.Price, 2)} per kg");
             Console.WriteLine($"| Diamond: ${Math.Round(Diamond.Price, 2)} per kg");
-            Console.WriteLine($"| Employees: ${Math.Round(priceDictionary["Workers"], 2)} per employee");
-            Console.WriteLine($"| Wages: ${Math.Round(priceDictionary["Wage"], 2)} per employee per day");
+            Console.WriteLine($"| Employees: ${Math.Round(Workers.Price, 2)} per employee");
+            Console.WriteLine($"| Wages: ${Math.Round(Workers.Wage, 2)} per employee per day");
             Console.WriteLine("______________________________");
 
 
@@ -1084,9 +1081,9 @@ namespace Gold_Diggerzz
 
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine($"Remember each employee charges {priceDictionary["Wage"]} in wages per day right now");
+                        Console.WriteLine($"Remember each employee charges {Workers.Wage} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
-                        if (employeesToHire * priceDictionary["Workers"] > Dollars.Quantity)
+                        if (employeesToHire * Workers.Price > Dollars.Quantity)
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
                         }
@@ -1094,11 +1091,10 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine($"You have hired {employeesToHire} more employee");
                             Workers.Quantity += employeesToHire;
-                            Dollars.Quantity -= employeesToHire * priceDictionary["Workers"];
+                            Dollars.Quantity -= employeesToHire * Workers.Price;
                             Console.WriteLine($"You now have {Workers.Quantity} employees");
                             _totalEmployeesHired += employeesToHire;
                         }
-
                         break;
 
                     case 4:
@@ -1187,7 +1183,7 @@ namespace Gold_Diggerzz
             QuitGame();
         }
 
-        private static void ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources)
+        private static void ChangeProbabilities(DateTime currentDate)
         {
 
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
@@ -1208,13 +1204,13 @@ namespace Gold_Diggerzz
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
                 Console.WriteLine("It's the weekend, your employees want 30% more pay");
-                prices["Wage"] *= 1.3;
+                Workers.Wage *= 1.3;
             }
 
             // to undo the effect of weekend pay
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
-                prices["Wage"] /= 1.3;
+                Workers.Wage /= 1.3;
             }
 
             // stock market code below
@@ -1227,7 +1223,7 @@ namespace Gold_Diggerzz
                 Iron.Price *= 2;
                 Gold.Price *= 2;
                 Diamond.Price *= 2;
-                prices["Workers"] *= 2;
+                Workers.Wage *= 2;
                 _crashDaysLeft = 0;
             }
 
@@ -1240,7 +1236,7 @@ namespace Gold_Diggerzz
                 Iron.Price /= 2;
                 Gold.Price /= 2;
                 Diamond.Price /= 2;
-                prices["Workers"] /= 2;
+                Workers.Wage /= 2;
                 _crashDaysLeft = 2;
             }
 
@@ -1248,7 +1244,7 @@ namespace Gold_Diggerzz
             if (currentDate.Month != 1 && currentDate.Day == 1)
             {
                 Console.WriteLine("It's the first of the month, your employees want a 10% raise");
-                prices["Wage"] *= 1.1;
+                Workers.Wage *= 1.1;
             }
 
             // to undo the effects of unwell workers
@@ -1499,8 +1495,7 @@ namespace Gold_Diggerzz
             Diamond.Price *= randomChange;
         }
 
-        private static void EmployeeTrainingCourse(Dictionary<string, double> resources,
-            Dictionary<string, double> prices)
+        private static void EmployeeTrainingCourse(Dictionary<string, double> prices)
         {
             // to boost the productivity of employees
             Console.WriteLine("Training employees...");
@@ -1638,20 +1633,21 @@ namespace Gold_Diggerzz
         
         public Dollars(double initialQuantity)
         {
-            // this is 100 as you start with 100 dollars
-            Quantity = initialQuantity;
+            Quantity = initialQuantity; // = 100
         }
     }
     
     class Workers
     {
         public static double Quantity;
+        public static double Wage;
+        public static double Price;
         
-        public Workers(double initialQuantity, double initialWage)
+        public Workers(double initialQuantity, double initialWage, double initialPrice)
         {
-            // this is 1 as you start with 1 worker
-            Quantity = initialQuantity;
-            // Wage = initialWage;
+            Quantity = initialQuantity; // = 1
+            Wage = initialWage; // = 13
+            Price = initialPrice; // = 100
         }
     }
 }
