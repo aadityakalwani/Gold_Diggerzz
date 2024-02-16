@@ -17,6 +17,11 @@ namespace Gold_Diggerzz
         
         /* to-do ideas
          * OOPIFYING IN PROGRESS
+         * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
+         * magic tokens are x1.2 every time, which is not mathematically correct
+         *
+         *
+         * 
          * reorder the menu options to be more flowy and logical
          * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
          * tutorial mode (that is actually functional)
@@ -126,11 +131,6 @@ namespace Gold_Diggerzz
         private static int _beautifulSkyDaysLeft;
         private static int _totalBribes;
         private static int _totalPowerUpsUsed;
-        private static double _totalCoalFound;
-        private static double _totalStoneFound;
-        private static double _totalIronFound;
-        private static double _totalGoldFound;
-        private static double _totalDiamondFound;
         private static double _totalDaysDug;
         private static double _totalEmployeesHired;
         private static double _totalDollarsEarned;
@@ -363,19 +363,19 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
-            Console.WriteLine($"Chance of finding coal = {probabilities["coal"]}%");
-            Console.WriteLine($"Chance of finding stone = {probabilities["stone"]}%");
-            Console.WriteLine($"Chance of finding iron = {probabilities["iron"]}%");
-            Console.WriteLine($"Chance of finding gold = {probabilities["gold"]}%");
-            Console.WriteLine($"Chance of finding diamond = {probabilities["diamond"]}%");
+            Console.WriteLine($"Chance of finding coal = {Coal.Probability}%");
+            Console.WriteLine($"Chance of finding stone = {Stone.Probability}%");
+            Console.WriteLine($"Chance of finding iron = {Iron.Probability}%");
+            Console.WriteLine($"Chance of finding gold = {Gold.Probability}%");
+            Console.WriteLine($"Chance of finding diamond = {Diamond.Probability}%");
             Console.WriteLine($"Chance of finding Ancient Artefact = {probabilities["AncientArtefact"]}%");
 
             Console.WriteLine($"\nCost of hiring employee = ${prices["Workers"]}");
-            Console.WriteLine($"Coal value = ${prices["coal"]}");
-            Console.WriteLine($"Stone value = ${prices["stone"]}");
-            Console.WriteLine($"Iron value = ${prices["iron"]}");
-            Console.WriteLine($"Gold value = ${prices["gold"]}");
-            Console.WriteLine($"Diamond value = ${prices["diamond"]}");
+            Console.WriteLine($"Coal value = ${Coal.Price}");
+            Console.WriteLine($"Stone value = ${Stone.Price}");
+            Console.WriteLine($"Iron value = ${Iron.Price}");
+            Console.WriteLine($"Gold value = ${Gold.Price}");
+            Console.WriteLine($"Diamond value = ${Diamond.Price}");
 
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
@@ -403,11 +403,11 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             Console.WriteLine($"Here are your stats as of {_currentDate.Date: dddd, dd MMMM yyyy}:");
-            Console.WriteLine($"Total coal found: {_totalCoalFound}kg");
-            Console.WriteLine($"Total stone found: {_totalStoneFound}kg");
-            Console.WriteLine($"Total iron found: {_totalIronFound}kg");
-            Console.WriteLine($"Total gold found: {_totalGoldFound}kg");
-            Console.WriteLine($"Total diamonds found: {_totalDiamondFound}kg");
+            Console.WriteLine($"Total coal found: {Coal.TotalFound}kg");
+            Console.WriteLine($"Total stone found: {Stone.TotalFound}kg");
+            Console.WriteLine($"Total iron found: {Iron.TotalFound}kg");
+            Console.WriteLine($"Total gold found: {Gold.TotalFound}kg");
+            Console.WriteLine($"Total diamond found: {Diamond.TotalFound}kg");
             Console.WriteLine($"Total powerups used: {_totalPowerUpsUsed}");
             Console.WriteLine($"Total employees hired: {_totalEmployeesHired}");
             Console.WriteLine($"Total bribes paid: {_totalBribes}");
@@ -419,9 +419,9 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"                     You have ${Math.Round(resources["Dollars"], 2)}\n");
-            Console.WriteLine($"| You have {Math.Round(resources["coal"], 2)}kg of coal         | You have {Math.Round(resources["stone"], 2)}kg of stone");
-            Console.WriteLine($"| You have {Math.Round(resources["iron"], 2)}kg of iron         | You have {Math.Round(resources["gold"], 2)}kg of gold");
-            Console.WriteLine($"| You have {Math.Round(resources["diamond"], 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
+            Console.WriteLine($"| You have {Math.Round(Coal.Quantity, 2)}kg of coal         | You have {Math.Round(Stone.Quantity, 2)}kg of stone");
+            Console.WriteLine($"| You have {Math.Round(Iron.Quantity, 2)}kg of iron         | You have {Math.Round(Gold.Quantity, 2)}kg of gold");
+            Console.WriteLine($"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
             Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
@@ -531,6 +531,8 @@ namespace Gold_Diggerzz
             if (resources["Dollars"] < 0)
             {
                 inDebt = "true";
+                bool noResources = Coal.Quantity == 0 && Stone.Quantity == 0 && Iron.Quantity == 0 && Gold.Quantity == 0 && Diamond.Quantity == 0;
+
                 
                 if (inDebt == "true")
                 {
@@ -538,27 +540,25 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
                     Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
-                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {resources["coal"]}kg of coal, {resources["gold"]}kg of gold, {resources["iron"]}kg of iron and {resources["stone"]}kg of stone and {resources["diamond"]}kg of diamond");
+                    Console.WriteLine($"right now you have ${resources["Dollars"]}, {Coal.Quantity}kg of coal, {Stone.Quantity}kg of stone, {Iron.Quantity}kg of iron, {Gold.Quantity}kg of gold, and {Diamond.Quantity}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
-                    resources["Dollars"] += resources["coal"] * prices["coal"];
-                    resources["Dollars"] += resources["iron"] * prices["iron"];
-                    resources["Dollars"] += resources["gold"] * prices["gold"]; 
-                    resources["Dollars"] += resources["stone"] * prices["stone"];
-                    resources["Dollars"] += resources["diamond"] * prices["diamond"];
-                    _totalDollarsEarned += resources["coal"] * prices["coal"]+ resources["iron"] * prices["iron"] + resources["gold"] * prices["gold"] + resources["stone"] * prices["stone"] + resources["diamond"] * prices["diamond"];
+                    resources["Dollars"] += Coal.Quantity * Coal.Price;
+                    resources["Dollars"] += Stone.Quantity * Stone.Price;
+                    resources["Dollars"] += Iron.Quantity * Iron.Price;
+                    resources["Dollars"] += Gold.Quantity * Gold.Price;
+                    resources["Dollars"] += Diamond.Quantity * Diamond.Price;
+                    _totalDollarsEarned += Coal.Quantity * Coal.Price+ Stone.Quantity * Stone.Price + Iron.Quantity * Iron.Price + Gold.Quantity * Gold.Price + Diamond.Quantity * Diamond.Price;
                 
-                    resources["coal"] = 0;
-                    resources["iron"] = 0;
-                    resources["gold"] = 0;
-                    resources["stone"] = 0;
-                    resources["diamond"] = 0;
+                    Coal.Quantity = 0;
+                    Stone.Quantity = 0;
+                    Iron.Quantity = 0;
+                    Gold.Quantity = 0;
+                    Diamond.Quantity = 0;
                 
                     PrintResources(resources);
                 }
-
-                bool noResources = resources["coal"] == 0 && resources["stone"] == 0 && resources["iron"] == 0 && resources["gold"] == 0 && resources["diamond"] == 0;
                 
                 if (inDebt == "true" && noResources && resources["Workers"] < 2)
                 {
@@ -568,9 +568,9 @@ namespace Gold_Diggerzz
                 
                 if (inDebt == "true" && noResources && resources["Workers"] >= 2)
                 {
-                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $100 per guy.");
-                    resources["Dollars"] += resources["Workers"] * 100;
-                    _totalDollarsEarned += resources["Workers"] * 100;
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy.");
+                    resources["Dollars"] += resources["Workers"] * 50;
+                    _totalDollarsEarned += resources["Workers"] * 50;
                     resources["Workers"] = 1;
                 }
             }
@@ -660,10 +660,10 @@ namespace Gold_Diggerzz
                         int randomForIron = random.Next(0, 100);
                         int randomForGold = random.Next(0, 100);
                         int randomForDiamond = random.Next(0, 100);
-                        int randomForAncientArtefact = _random.Next(0, 100);
-                        int randomForMarketMaster = _random.Next(0, 100);
-                        int randomForTimeMachine = _random.Next(0, 100);
-                        int randomForMagicToken = _random.Next(0, 100);
+                        int randomForAncientArtefact = random.Next(0, 100);
+                        int randomForMarketMaster = random.Next(0, 100);
+                        int randomForTimeMachine = random.Next(0, 100);
+                        int randomForMagicToken = random.Next(0, 100);
 
 
                         // if there is a changed chance of finding gold due to the Ancient Artefact powerup
@@ -671,21 +671,21 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine(
                                 $"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_increasedGoldChanceDays} days");
-                            probabilities["gold"] = 50;
+                            Gold.Probability = 50;
                             _increasedGoldChanceDays -= 1;
                         }
 
                         else
                         {
                             // restore 15% chance of finding gold
-                            probabilities["gold"] = 15;
+                            Gold.Probability = 15;
                         }
 
-                        bool coalFound = randomForCoal < probabilities["coal"];
-                        bool stoneFound = randomForStone < probabilities["stone"];
-                        bool ironFound = randomForIron < probabilities["iron"];
-                        bool goldFound = randomForGold < probabilities["gold"];
-                        bool diamondFound = randomForDiamond < probabilities["diamond"];
+                        bool coalFound = randomForCoal < Coal.Probability;
+                        bool stoneFound = randomForStone < Stone.Probability;
+                        bool ironFound = randomForIron < Iron.Probability;
+                        bool goldFound = randomForGold < Gold.Probability;
+                        bool diamondFound = randomForDiamond < Diamond.Probability;
                         bool ancientArtefactFound = randomForAncientArtefact < probabilities["AncientArtefact"];
                         bool marketMasterFound = randomForMarketMaster < probabilities["MarketMaster"];
                         bool timeMachineFound = randomForTimeMachine < probabilities["TimeMachine"];
@@ -698,41 +698,39 @@ namespace Gold_Diggerzz
                         if (coalFound)
                         {
                             Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
-                            resources["coal"] += newResourcesFound;
-                            _totalCoalFound += newResourcesFound;
+                            Coal.Quantity += newResourcesFound;
+                            Coal.TotalFound += newResourcesFound;
                         }
 
                         if (stoneFound)
                         {
                             Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
-                            resources["stone"] += newResourcesFound;
-                            _totalStoneFound += newResourcesFound;
+                            Stone.Quantity += newResourcesFound;
+                            Stone.TotalFound += newResourcesFound;
                         }
 
                         if (ironFound)
                         {
                             Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
-                            resources["iron"] += newResourcesFound;
-                            _totalIronFound += newResourcesFound;
+                            Iron.Quantity += newResourcesFound;
+                            Iron.TotalFound += newResourcesFound;
                         }
 
                         if (goldFound)
                         {
                             Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
-                            resources["gold"] += newResourcesFound;
-                            _totalGoldFound += newResourcesFound;
+                            Gold.Quantity += newResourcesFound;
+                            Gold.TotalFound += newResourcesFound;
                         }
 
                         if (diamondFound)
                         {
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
-                            resources["diamond"] += newResourcesFound;
-                            _totalDiamondFound += newResourcesFound;
+                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                            Diamond.Quantity += newResourcesFound;
+                            Diamond.TotalFound += newResourcesFound;
                         }
 
-                        if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
-                            !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound)
+                        if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound && !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound)
                         {
                             Console.WriteLine("You found nothing today \ud83d\udeab");
                         }
@@ -786,11 +784,11 @@ namespace Gold_Diggerzz
                                 $"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
                             Console.WriteLine(
                                 $"Selling price increased by a total of {resources["magicTokens"] * 20}%");
-                            prices["coal"] *= 1.2;
-                            prices["iron"] *= 1.2;
-                            prices["gold"] *= 1.2;
-                            prices["stone"] *= 1.2;
-                            prices["diamond"] *= 1.2;
+                            Coal.Price *= 1.2;
+                            Stone.Price *= 1.2;
+                            Iron.Price *= 1.2;
+                            Gold.Price *= 1.2;
+                            Diamond.Price *= 1.2;
                         }
 
                         if (marketMasterFound)
@@ -902,11 +900,11 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
             
             Console.WriteLine("______________________________");
-            Console.WriteLine($"| Coal: ${Math.Round(priceDictionary["coal"], 2)} per kg");
-            Console.WriteLine($"| Stone: ${Math.Round(priceDictionary["stone"], 2)} per kg");
-            Console.WriteLine($"| Iron: ${Math.Round(priceDictionary["iron"], 2)} per kg");
-            Console.WriteLine($"| Gold: ${Math.Round(priceDictionary["gold"], 2)} per kg");
-            Console.WriteLine($"| Diamond: ${Math.Round(priceDictionary["diamond"], 2)} per kg");
+            Console.WriteLine($"| Coal: ${Math.Round(Coal.Price, 2)} per kg");
+            Console.WriteLine($"| Stone: ${Math.Round(Stone.Price, 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(Iron.Price, 2)} per kg");
+            Console.WriteLine($"| Gold: ${Math.Round(Gold.Price, 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(Diamond.Price, 2)} per kg");
             Console.WriteLine($"| Employees: ${Math.Round(priceDictionary["Workers"], 2)} per employee");
             Console.WriteLine($"| Wages: ${Math.Round(priceDictionary["Wage"], 2)} per employee per day");
             Console.WriteLine("______________________________");
@@ -930,117 +928,117 @@ namespace Gold_Diggerzz
                         // sht here bro add in the emojis
                         Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
                         int sellChoice = GetValidInt(1, 5);
+                        
                         switch (sellChoice)
                         {
-                            case 1:
-                        Console.WriteLine("Your have chosen to sell coal for dollars");
-                        Console.WriteLine($"How much coal do you want to sell?\nYou have {resources["coal"]}kg of coal");
-                        double coalToSell = GetValidDouble(0, 100000000000);
-                        if (coalToSell > resources["coal"])
-                        {
-                            Console.WriteLine("You don't have enough coal to sell that much");
-                        }
-                        else
-                        {
-                            resources["coal"] -= coalToSell;
-                            resources["Dollars"] += coalToSell * priceDictionary["coal"];
-                            _totalDollarsEarned += coalToSell * priceDictionary["coal"];
-                        }
+                        case 1:
+                            Console.WriteLine("Your have chosen to sell coal for dollars");
+                            Console.WriteLine($"How much coal do you want to sell?\nYou have {Coal.Quantity}kg of coal");
+                            double coalToSell = GetValidDouble(0, 100000000000);
+                            if (coalToSell > Coal.Quantity)
+                            {
+                                Console.WriteLine("You don't have enough coal to sell that much");
+                            }
+                            else
+                            {
+                                Coal.Quantity -= coalToSell;
+                                resources["Dollars"] += Coal.Quantity * Coal.Price;
+                                _totalDollarsEarned += Coal.Quantity * Coal.Price;
+                            }
 
-                        Console.WriteLine("Here are your updated resources:"); 
-                        PrintResources(resources);
-                        break;
-                    case 2:
-                        Console.WriteLine("Your have chosen to sell stone for dollars");
-                        Console.WriteLine($"How much stone do you want to sell?\nYou have {resources["stone"]}kg of stone");
-                        double stoneToSell = GetValidDouble(0, 100000000000);
-                        if (stoneToSell > resources["gold"])
-                        {
-                            Console.WriteLine("You don't have enough stone to sell that much");
-                        }
-                        else
-                        {
-                            resources["stone"] -= stoneToSell;
-                            resources["Dollars"] += stoneToSell * priceDictionary["stone"];
-                            _totalDollarsEarned += stoneToSell * priceDictionary["stone"];
-                        }
-
-                        Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
-                        break;
-                    case 3:
-                        Console.WriteLine("You have chosen to sell iron for dollars");
-                        Console.WriteLine($"How much iron do you want to sell?\nYou have {resources["iron"]}kg of iron");
-                        double ironToSell = GetValidDouble(0, 10000000000000);
+                            Console.WriteLine("Here are your updated resources:"); 
+                            PrintResources(resources);
+                            break;
                         
-                        if (ironToSell > resources["iron"])
-                        {
-                            Console.WriteLine("You don't have enough iron to sell that much");
-                        }
-                        else
-                        {
-                            resources["iron"] -= ironToSell;
-                            resources["Dollars"] += ironToSell * priceDictionary["iron"];
-                            _totalDollarsEarned += ironToSell * priceDictionary["iron"];
-                        }
+                        case 2:
+                            Console.WriteLine("Your have chosen to sell stone for dollars");
+                            Console.WriteLine($"How much stone do you want to sell?\nYou have {Stone.Quantity}kg of stone");
+                            double stoneToSell = GetValidDouble(0, 100000000000);
+                            if (stoneToSell > Stone.Quantity)
+                            {
+                                Console.WriteLine("You don't have enough stone to sell that much");
+                            }
+                            else
+                            {
+                                Stone.Quantity -= stoneToSell;
+                                resources["Dollars"] += Stone.Quantity * Stone.Price;
+                                _totalDollarsEarned += Stone.Quantity * Stone.Price;
+                            }
 
-                        Console.WriteLine("Here are your update resources:");
-                        PrintResources(resources);
-                        break;
-                    case 4:
-                        Console.WriteLine("Your have chosen to sell gold for dollars");
-                        Console.WriteLine($"How much gold do you want to sell?\nYou have {resources["gold"]}kg of gold");
-                        double goldToSell = GetValidDouble(0, 1000000000000);
-                        if (goldToSell > resources["gold"])
-                        {
-                            Console.WriteLine("You don't have enough gold to sell that much");
-                        }
-                        else
-                        {
-                            resources["gold"] -= goldToSell;
-                            resources["Dollars"] += goldToSell * priceDictionary["gold"];
-                            _totalDollarsEarned += goldToSell * priceDictionary["gold"];
-                        }
+                            Console.WriteLine("Here are your updated resources:"); 
+                            PrintResources(resources);
+                            break;
+                        case 3:
+                            Console.WriteLine("Your have chosen to sell iron for dollars");
+                            Console.WriteLine($"How much iron do you want to sell?\nYou have {Iron.Quantity}kg of iron");
+                            double ironToSell = GetValidDouble(0, 100000000000);
+                            if (ironToSell > Iron.Quantity)
+                            {
+                                Console.WriteLine("You don't have enough iron to sell that much");
+                            }
+                            else
+                            {
+                                Iron.Quantity -= ironToSell;
+                                resources["Dollars"] += Iron.Quantity * Iron.Price;
+                                _totalDollarsEarned += Iron.Quantity * Iron.Price;
+                            }
 
-                        Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
+                            Console.WriteLine("Here are your updated resources:"); 
+                            PrintResources(resources);
+                            break;
+                        case 4:
+                            Console.WriteLine("Your have chosen to sell gold for dollars");
+                            Console.WriteLine($"How much gold do you want to sell?\nYou have {Gold.Quantity}kg of gold");
+                            double goldToSell = GetValidDouble(0, 100000000000);
+                            if (goldToSell > Gold.Quantity)
+                            {
+                                Console.WriteLine("You don't have enough gold to sell that much");
+                            }
+                            else
+                            {
+                                Gold.Quantity -= goldToSell;
+                                resources["Dollars"] += Gold.Quantity * Gold.Price;
+                                _totalDollarsEarned += Gold.Quantity * Gold.Price;
+                            }
 
-                        break;
-                    case 5:
-                                Console.WriteLine("Your have chosen to sell diamond for dollars");
-                                Console.WriteLine($"How much diamond do you want to sell?\nYou have {resources["diamond"]}kg of diamond");
-                                double diamondToSell = GetValidDouble(0, 100000000000);
-                                if (diamondToSell > resources["diamond"])
-                                {
-                                    Console.WriteLine("You don't have enough diamond to sell that much");
-                                }
-                                else
-                                {
-                                    resources["diamond"] -= diamondToSell;
-                                    resources["Dollars"] += diamondToSell * priceDictionary["diamond"];
-                                    _totalDollarsEarned += diamondToSell * priceDictionary["diamond"];
-                                }
+                            Console.WriteLine("Here are your updated resources:"); 
+                            PrintResources(resources);
+                            break;
+                        case 5:
+                            Console.WriteLine("Your have chosen to sell diamond for dollars");
+                            Console.WriteLine($"How much diamond do you want to sell?\nYou have {Diamond.Quantity}kg of diamond");
+                            double diamondToSell = GetValidDouble(0, 100000000000);
+                            if (diamondToSell > Diamond.Quantity)
+                            {
+                                Console.WriteLine("You don't have enough diamond to sell that much");
+                            }
+                            else
+                            {
+                                Diamond.Quantity -= diamondToSell;
+                                resources["Dollars"] += Diamond.Quantity * Diamond.Price;
+                                _totalDollarsEarned += Diamond.Quantity * Diamond.Price;
+                            }
 
-                                Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
-                        break; 
+                            Console.WriteLine("Here are your updated resources:"); 
+                            PrintResources(resources);
+                            break; 
                         }
 
                     break;
                         
                     case 2:
                         Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
-                        resources["Dollars"] += resources["coal"] * priceDictionary["coal"];
-                        resources["Dollars"] += resources["iron"] * priceDictionary["iron"];
-                        resources["Dollars"] += resources["gold"] * priceDictionary["gold"];
-                        resources["Dollars"] += resources["stone"] * priceDictionary["stone"];
-                        resources["Dollars"] += resources["diamond"] * priceDictionary["diamond"];
-                        _totalDollarsEarned += resources["coal"] * priceDictionary["coal"] + resources["iron"] * priceDictionary["iron"] + resources["gold"] * priceDictionary["gold"] + resources["stone"] * priceDictionary["stone"] + resources["diamond"] * priceDictionary["diamond"];
-                        resources["coal"] = 0;
-                        resources["iron"] = 0;
-                        resources["gold"] = 0;
-                        resources["stone"] = 0;
-                        resources["diamond"] = 0;
+                        resources["Dollars"] += Coal.Quantity * Coal.Price;
+                        resources["Dollars"] += Stone.Quantity * Stone.Price;
+                        resources["Dollars"] += Iron.Quantity * Iron.Price;
+                        resources["Dollars"] += Gold.Quantity * Gold.Price;
+                        resources["Dollars"] += Diamond.Quantity * Diamond.Price;
+                        _totalDollarsEarned += Coal.Quantity * Coal.Price + Stone.Quantity * Stone.Price + Iron.Quantity * Iron.Price + Gold.Quantity * Gold.Price + Diamond.Quantity * Diamond.Price;
+                        Coal.Quantity = 0;
+                        Stone.Quantity = 0;
+                        Iron.Quantity = 0;
+                        Gold.Quantity = 0;
+                        Diamond.Quantity = 0;
                         
                         Console.WriteLine("Here are your updated resources:");
                         PrintResources(resources);
@@ -1116,11 +1114,11 @@ namespace Gold_Diggerzz
                     Console.WriteLine("The selling price of all resources has increased by 50% for the next 5 days");
                     _marketMasterDaysLeft = 5;
                     
-                    prices["coal"] *= 1.5;
-                    prices["stone"] *= 1.5;
-                    prices["iron"] *= 1.5;
-                    prices["gold"] *= 1.5;
-                    prices["diamond"] *= 1.5;
+                    Coal.Price *= 1.5;
+                    Stone.Price *= 1.5;
+                    Iron.Price *= 1.5;
+                    Gold.Price *= 1.5;
+                    Diamond.Price *= 1.5;
                     
                     powerUpDictionary["Market Master"] -= 1;
                     
@@ -1158,11 +1156,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
                 Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 5% \ud83d\udc22");
-                probabilities["coal"] *= 0.95;
-                probabilities["stone"] *= 0.95;
-                probabilities["iron"] *= 0.95;
-                probabilities["gold"] *= 0.95;
-                probabilities["diamond"] *= 0.95;
+                Coal.Probability *= 0.95;
+                Stone.Probability *= 0.95;
+                Iron.Probability *= 0.95;
+                Gold.Probability *= 0.95;
+                Diamond.Probability *= 0.95;
             }
             
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
@@ -1183,11 +1181,11 @@ namespace Gold_Diggerzz
             if (_crashDaysLeft > 1)
             {
                 Console.WriteLine("The stock market has recovered");
-                prices["coal"] *= 2;
-                prices["stone"] *= 2;
-                prices["iron"] *= 2;
-                prices["gold"] *= 2;
-                prices["diamond"] *= 2;
+                Coal.Price *= 2;
+                Stone.Price *= 2;
+                Iron.Price *= 2;
+                Gold.Price *= 2;
+                Diamond.Price *= 2;
                 prices["Workers"] *= 2;
                 _crashDaysLeft = 0;
             }
@@ -1196,11 +1194,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
                 
-                prices["coal"] /= 2;
-                prices["stone"] /= 2;
-                prices["iron"] /= 2;
-                prices["gold"] /= 2;
-                prices["diamond"] /= 2;
+                Coal.Price /= 2;
+                Stone.Price /= 2;
+                Iron.Price /= 2;
+                Gold.Price /= 2;
+                Diamond.Price /= 2;
                 prices["Workers"] /= 2;
                 _crashDaysLeft = 2;
             }
@@ -1241,14 +1239,13 @@ namespace Gold_Diggerzz
                     resources["Dollars"] -= dollarsToLose;
                     Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
                 }
-
+                
                 else
                 {
                     Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
                     Console.WriteLine($"This means you'll lose {resources["Dollars"] * 0.6}");
                     resources["Dollars"] *= 0.4;
                 }
-                
             }
             
             
@@ -1305,7 +1302,7 @@ namespace Gold_Diggerzz
         private static void CheckAchievements(List<string> achievements)
         {
             
-            if (_totalCoalFound >= 100 && !_achievement1)
+            if (Coal.TotalFound >= 100 && !_achievement1)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
                 _achievement1 = true;
@@ -1313,98 +1310,98 @@ namespace Gold_Diggerzz
                 
             }
             
-            if (_totalCoalFound >= 1000 && !_achievement2)
+            if (Coal.TotalFound >= 1000 && !_achievement2)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
                 _achievement2 = true;
                 achievements.Add("1000kg of coal found");
             }
             
-            if (_totalCoalFound >= 10000 && !_achievement3)
+            if (Coal.TotalFound >= 10000 && !_achievement3)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
                 _achievement3 = true;
                 achievements.Add("10000kg of coal found");
             }
             
-            if (_totalStoneFound >= 100 && !_achievement4)
+            if (Stone.TotalFound >= 100 && !_achievement4)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
                 _achievement4 = true;
                 achievements.Add("100kg of stone found");
             }
             
-            if (_totalStoneFound >= 1000 && !_achievement5)
+            if (Stone.TotalFound >= 1000 && !_achievement5)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
                 _achievement5 = true;
                 achievements.Add("1000kg of stone found");
             }
             
-            if (_totalStoneFound >= 10000 && !_achievement6)
+            if (Stone.TotalFound >= 10000 && !_achievement6)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
                 _achievement6 = true;
                 achievements.Add("10000kg of stone found");
             }
             
-            if (_totalIronFound >= 75 && !_achievement7)
+            if (Iron.TotalFound >= 75 && !_achievement7)
             {
                 Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
                 _achievement7 = true;
                 achievements.Add("75kg of iron found");
             }
             
-            if (_totalIronFound >= 750 && !_achievement8)
+            if (Iron.TotalFound >= 750 && !_achievement8)
             {
                 Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
                 _achievement8 = true;
                 achievements.Add("750kg of iron found");
             }
             
-            if (_totalIronFound >= 7500 && !_achievement9)
+            if (Iron.TotalFound >= 7500 && !_achievement9)
             {
                 Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
                 _achievement9 = true;
                 achievements.Add("7500kg of iron found");
             }
             
-            if (_totalGoldFound >= 30 && !_achievement10)
+            if (Gold.TotalFound >= 30 && !_achievement10)
             {
                 Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
                 _achievement10 = true;
                 achievements.Add("30kg of gold found");
             }
             
-            if (_totalGoldFound >= 300 && !_achievement11)
+            if (Gold.TotalFound >= 300 && !_achievement11)
             {
                 Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
                 _achievement11 = true;
                 achievements.Add("300kg of gold found");
             }
             
-            if (_totalGoldFound >= 3000 && !_achievement12)
+            if (Gold.TotalFound >= 3000 && !_achievement12)
             {
                 Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
                 _achievement12 = true;
                 achievements.Add("3000kg of gold found");
             }
             
-            if (_totalDiamondFound >= 10 && !_achievement13)
+            if (Diamond.TotalFound >= 10 && !_achievement13)
             {
                 Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
                 _achievement13 = true;
                 achievements.Add("10kg of diamond found");
             }
             
-            if (_totalDiamondFound >= 100 && !_achievement14)
+            if (Diamond.TotalFound >= 100 && !_achievement14)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
                 _achievement14 = true;
                 achievements.Add("100kg of diamond found");
             }
             
-            if (_totalDiamondFound >= 1000 && !_achievement15)
+            if (Diamond.TotalFound >= 1000 && !_achievement15)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
                 _achievement15 = true;
@@ -1449,18 +1446,17 @@ namespace Gold_Diggerzz
 
         private static void ChangePrices(Dictionary<string, double> prices)
         {
-            // upto a 30% fluctuation in prices based on random probability
+            // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
             int randomChange = random.Next(-10, 10);
             
-            double percentageChange = randomChange + 100;
-            percentageChange /= 100;
-
-            prices["coal"] *= percentageChange;
-            prices["stone"] *= percentageChange;
-            prices["iron"] *= percentageChange;
-            prices["gold"] *= percentageChange;
-            prices["diamond"] *= percentageChange;
+            double percentageChange = (randomChange + 100) / 100;
+            
+            Coal.Price *= percentageChange;
+            Stone.Price *= percentageChange;
+            Iron.Price *= percentageChange;
+            Gold.Price *= percentageChange;
+            Diamond.Price *= percentageChange;
         }
 
         private static void EmployeeTrainingCourse(Dictionary<string, double> resources, Dictionary<string, double> prices)
@@ -1517,28 +1513,28 @@ namespace Gold_Diggerzz
     // and instead of operation on the dictionary, i just call the method for each resource object when needed
     class Coal
     {
-        public double _Probability;
-        public double _Price;
-        public double _Quantity;
-        public double _TotalFound;
+        public static double Probability;
+        public static double Price;
+        public static double Quantity;
+        public static double TotalFound;
 
         public Coal(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
-            _Probability = initialProbability;
-            _Price = initialPrice;
-            _Quantity = initialQuantity;
-            _TotalFound = totalFound;
+            Probability = initialProbability;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
         }
 
         public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Probability *= reductionMultiplier;
+                Probability *= reductionMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-               _Probability /= reductionMultiplier;
+               Probability /= reductionMultiplier;
             }
             else
             {
@@ -1551,11 +1547,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Price *= increaseMultiplier;
+                Price *= increaseMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Price /= increaseMultiplier;
+                Price /= increaseMultiplier;
             }
             else
             {
@@ -1567,11 +1563,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmount;
+                Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmount;
+                Quantity /= changeAmount;
             }
             else
             {
@@ -1582,28 +1578,28 @@ namespace Gold_Diggerzz
     
     class Stone
     {
-        public double _Probability;
-        public double _Price;
-        public double _Quantity;
-        public double _TotalFound;
+        public static double Probability;
+        public static double Price;
+        public static double Quantity;
+        public static double TotalFound;
 
         public Stone(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
-            _Probability = initialProbability;
-            _Price = initialPrice;
-            _Quantity = initialQuantity;
-            _TotalFound = totalFound;
+            Probability = initialProbability;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
         }
 
         public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Probability *= reductionMultiplier;
+                Probability *= reductionMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Probability /= reductionMultiplier;
+                Probability /= reductionMultiplier;
             }
             else
             {
@@ -1616,11 +1612,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Price *= increaseMultiplier;
+                Price *= increaseMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Price /= increaseMultiplier;
+                Price /= increaseMultiplier;
             }
             else
             {
@@ -1632,11 +1628,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmount;
+                Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmount;
+                Quantity /= changeAmount;
             }
             else
             {
@@ -1647,28 +1643,28 @@ namespace Gold_Diggerzz
     
     class Iron
     {
-        public double _Probability;
-        public double _Price;
-        public double _Quantity;
-        public double _TotalFound;
+        public static double Probability;
+        public static double Price;
+        public static double Quantity;
+        public static double TotalFound;
 
         public Iron(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
-            _Probability = initialProbability;
-            _Price = initialPrice;
-            _Quantity = initialQuantity;
-            _TotalFound = totalFound;
+            Probability = initialProbability;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
         }
 
         public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Probability *= reductionMultiplier;
+                Probability *= reductionMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Probability /= reductionMultiplier;
+                Probability /= reductionMultiplier;
             }
             else
             {
@@ -1681,11 +1677,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Price *= increaseMultiplier;
+                Price *= increaseMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Price /= increaseMultiplier;
+                Price /= increaseMultiplier;
             }
             else
             {
@@ -1697,11 +1693,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmount;
+                Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmount;
+                Quantity /= changeAmount;
             }
             else
             {
@@ -1712,28 +1708,28 @@ namespace Gold_Diggerzz
     
     class Gold
     {
-        public double _Probability;
-        public double _Price;
-        public double _Quantity;
-        public double _TotalFound;
+        public static double Probability;
+        public static double Price;
+        public static double Quantity;
+        public static double TotalFound;
 
         public Gold(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
-            _Probability = initialProbability;
-            _Price = initialPrice;
-            _Quantity = initialQuantity;
-            _TotalFound = totalFound;
+            Probability = initialProbability;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
         }
 
         public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Probability *= reductionMultiplier;
+                Probability *= reductionMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Probability /= reductionMultiplier;
+                Probability /= reductionMultiplier;
             }
             else
             {
@@ -1746,11 +1742,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Price *= increaseMultiplier;
+                Price *= increaseMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Price /= increaseMultiplier;
+                Price /= increaseMultiplier;
             }
             else
             {
@@ -1762,11 +1758,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmount;
+                Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmount;
+                Quantity /= changeAmount;
             }
             else
             {
@@ -1777,28 +1773,28 @@ namespace Gold_Diggerzz
     
     class Diamond
     {
-        public double _Probability;
-        public double _Price;
-        public double _Quantity;
-        public double _TotalFound;
+        public static double Probability;
+        public static double Price;
+        public static double Quantity;
+        public static double TotalFound;
 
         public Diamond(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
-            _Probability = initialProbability;
-            _Price = initialPrice;
-            _Quantity = initialQuantity;
-            _TotalFound = totalFound;
+            Probability = initialProbability;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
         }
 
         public void ChangeProbability(string increaseOrDecrease, double reductionMultiplier)
         {
             if (increaseOrDecrease == "increase")
             {
-                _Probability *= reductionMultiplier;
+                Probability *= reductionMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Probability /= reductionMultiplier;
+                Probability /= reductionMultiplier;
             }
             else
             {
@@ -1811,11 +1807,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Price *= increaseMultiplier;
+                Price *= increaseMultiplier;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Price /= increaseMultiplier;
+                Price /= increaseMultiplier;
             }
             else
             {
@@ -1827,11 +1823,11 @@ namespace Gold_Diggerzz
         {
             if (increaseOrDecrease == "increase")
             {
-                _Quantity += changeAmount;
+                Quantity += changeAmount;
             }
             else if (increaseOrDecrease == "decrease")
             {
-                _Quantity /= changeAmount;
+                Quantity /= changeAmount;
             }
             else
             {
