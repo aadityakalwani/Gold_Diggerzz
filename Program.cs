@@ -181,6 +181,7 @@ namespace Gold_Diggerzz
              Gold Gold = new Gold(20, 75, 0, 0);
              Diamond Diamond = new Diamond(5, 200, 0, 0);
              Dollars Dollars = new Dollars(100);
+             Workers Workers = new Workers(1, 10);
             
             List<string> achievementsList = new List<string>();
 
@@ -323,8 +324,8 @@ namespace Gold_Diggerzz
                         break;
                     case 9:
                         if (resourceDictionary["Dollars"] >
-                            priceDictionary["trainingCourse"] * resourceDictionary["Workers"] &&
-                            resourceDictionary["Workers"] != 0)
+                            priceDictionary["trainingCourse"] * Workers.Quantity &&
+                            Workers.Quantity != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
                             Console.WriteLine(
@@ -333,8 +334,8 @@ namespace Gold_Diggerzz
                             EmployeeTrainingCourse(resourceDictionary, priceDictionary);
                         }
                         else if (resourceDictionary["Dollars"] >
-                                 priceDictionary["trainingCourse"] * resourceDictionary["Workers"] &&
-                                 resourceDictionary["Workers"] == 0)
+                                 priceDictionary["trainingCourse"] * Workers.Quantity &&
+                                 Workers.Quantity == 0)
                         {
                             Console.WriteLine("You don't have any employees to send on a training course");
                             Console.WriteLine("This could be because of employee illness - try again later");
@@ -455,7 +456,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| You have {Math.Round(Coal.Quantity, 2)}kg of coal         | You have {Math.Round(Stone.Quantity, 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(Iron.Quantity, 2)}kg of iron         | You have {Math.Round(Gold.Quantity, 2)}kg of gold");
             Console.WriteLine($"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
-            Console.WriteLine($"| You have {resources["Workers"]} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
+            Console.WriteLine($"| You have {Workers.Quantity} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
 
@@ -572,16 +573,14 @@ namespace Gold_Diggerzz
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine("They're also reducing your percentage chances of finding resources by 30% for the next three days");
                     Console.WriteLine($"right now you have ${Dollars.Quantity}, {Coal.Quantity}kg of coal, {Stone.Quantity}kg of stone, {Iron.Quantity}kg of iron, {Gold.Quantity}kg of gold, and {Diamond.Quantity}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
-
-                    Dollars.Quantity += Coal.Quantity * Coal.Price;
-                    Dollars.Quantity += Stone.Quantity * Stone.Price;
-                    Dollars.Quantity += Iron.Quantity * Iron.Price;
-                    Dollars.Quantity += Gold.Quantity * Gold.Price;
-                    Dollars.Quantity += Diamond.Quantity * Diamond.Price;
+                    
+                    Dollars.Quantity += Coal.Quantity * Coal.Price + Stone.Quantity * Stone.Price +
+                                           Iron.Quantity * Iron.Price + Gold.Quantity * Gold.Price +
+                                           Diamond.Quantity * Diamond.Price;
+                    
                     _totalDollarsEarned += Coal.Quantity * Coal.Price + Stone.Quantity * Stone.Price +
                                            Iron.Quantity * Iron.Price + Gold.Quantity * Gold.Price +
                                            Diamond.Quantity * Diamond.Price;
@@ -595,18 +594,18 @@ namespace Gold_Diggerzz
                     PrintResources(resources);
                 }
 
-                if (inDebt == "true" && noResources && resources["Workers"] < 2)
+                if (inDebt == "true" && noResources && Workers.Quantity < 2)
                 {
                     Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
                     return "bankrupt";
                 }
 
-                if (inDebt == "true" && noResources && resources["Workers"] >= 2)
+                if (inDebt == "true" && noResources && Workers.Quantity >= 2)
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy.");
-                    Dollars.Quantity += resources["Workers"] * 50;
-                    _totalDollarsEarned += resources["Workers"] * 50;
-                    resources["Workers"] = 1;
+                    Dollars.Quantity += Workers.Quantity * 50;
+                    _totalDollarsEarned += Workers.Quantity * 50;
+                    Workers.Quantity = 1;
                 }
             }
 
@@ -730,7 +729,7 @@ namespace Gold_Diggerzz
 
                         // update values within the resources dictionary
 
-                        double newResourcesFound = resources["Workers"] * _employeeEfficiency;
+                        double newResourcesFound = Workers.Quantity * _employeeEfficiency;
 
                         if (coalFound)
                         {
@@ -861,10 +860,10 @@ namespace Gold_Diggerzz
 
                     else
                     {
-                        double totalWages = resources["Workers"] * prices["Wage"];
+                        double totalWages = Workers.Quantity * prices["Wage"];
                         Dollars.Quantity -= totalWages;
 
-                        Console.WriteLine($"Your {resources["Workers"]} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                        Console.WriteLine($"Your {Workers.Quantity} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                     }
 
                     if (_badWeatherDaysLeft != 0)
@@ -1094,9 +1093,9 @@ namespace Gold_Diggerzz
                         else
                         {
                             Console.WriteLine($"You have hired {employeesToHire} more employee");
-                            resources["Workers"] += employeesToHire;
+                            Workers.Quantity += employeesToHire;
                             Dollars.Quantity -= employeesToHire * priceDictionary["Workers"];
-                            Console.WriteLine($"You now have {resources["Workers"]} employees");
+                            Console.WriteLine($"You now have {Workers.Quantity} employees");
                             _totalEmployeesHired += employeesToHire;
                         }
 
@@ -1255,16 +1254,16 @@ namespace Gold_Diggerzz
             // to undo the effects of unwell workers
             if (_lessWorkerDays == 1)
             {
-                resources["Workers"] += 1;
+                Workers.Quantity += 1;
                 Console.WriteLine("Your employee is back at work today");
                 _lessWorkerDays = 0;
             }
 
             // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < 10 && resources["Workers"] > 1)
+            if (_random.Next(0, 100) < 10 && Workers.Quantity > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
-                resources["Workers"] -= 1;
+                Workers.Quantity -= 1;
                 _lessWorkerDays = 1;
             }
 
@@ -1273,11 +1272,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Profit sharing time!");
 
-                if (resources["Workers"] < 8)
+                if (Workers.Quantity < 8)
                 {
                     Console.WriteLine("Each employee gets 10% of your current $$$ stash");
-                    Console.WriteLine($"Your {resources["Workers"]} employees get ${Dollars.Quantity * 0.1} each");
-                    double dollarsToLose = Dollars.Quantity * 0.1 * resources["Workers"];
+                    Console.WriteLine($"Your {Workers.Quantity} employees get ${Dollars.Quantity * 0.1} each");
+                    double dollarsToLose = Dollars.Quantity * 0.1 * Workers.Quantity;
                     Dollars.Quantity -= dollarsToLose;
                     Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
                 }
@@ -1505,8 +1504,8 @@ namespace Gold_Diggerzz
         {
             // to boost the productivity of employees
             Console.WriteLine("Training employees...");
-            Console.WriteLine($"This course charged you {prices["trainingCourse"] * resources["Workers"]} in fees");
-            Dollars.Quantity -= prices["trainingCourse"] * resources["Workers"];
+            Console.WriteLine($"This course charged you {prices["trainingCourse"] * Workers.Quantity} in fees");
+            Dollars.Quantity -= prices["trainingCourse"] * Workers.Quantity;
             _employeeEfficiency *= 1.3;
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
@@ -1642,6 +1641,17 @@ namespace Gold_Diggerzz
             // this is 100 as you start with 100 dollars
             Quantity = initialQuantity;
         }
+    }
+    
+    class Workers
+    {
+        public static double Quantity;
         
+        public Workers(double initialQuantity, double initialWage)
+        {
+            // this is 1 as you start with 1 worker
+            Quantity = initialQuantity;
+            // Wage = initialWage;
+        }
     }
 }
