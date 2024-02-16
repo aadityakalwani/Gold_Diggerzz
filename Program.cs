@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -148,25 +149,18 @@ namespace Gold_Diggerzz
         }
     }
     
-    class Dollars
-    {
-        public static double Quantity;
-        
-        public Dollars(double initialQuantity)
-        {
-            Quantity = initialQuantity; // = 100
-        }
-    }
     
     class Workers
     {
+        public static string Name;
         public static double Quantity;
         public static double Wage;
         public static double Price;
         public static double EmployeeIllProbability;
         
-        public Workers(double initialQuantity, double initialWage, double initialPrice, double employeeIllProbability)
+        public Workers(string name, double initialQuantity, double initialWage, double initialPrice, double employeeIllProbability)
         {
+            Name = name;
             Quantity = initialQuantity; // = 1
             Wage = initialWage; // = 13
             Price = initialPrice; // = 100
@@ -238,27 +232,74 @@ namespace Gold_Diggerzz
         static Resource iron;
         static Resource gold;
         static Resource diamond;
-        static Dollars dollars;
+        static Resource dollars;
         static Workers workers;
         static PowerUp magicTokens;
         static PowerUp timeMachine;
         static PowerUp ancientArtefact;
         static PowerUp marketMaster;
         
-
+        // to stop screaming at me for names it doesnt recognise/think are typos
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        
         private static void Main()
         {
             // pregame
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             
+            // possible names for the workers
+
+            List<string> possibleNames = new List<string>()
+            {
+                "Sir Reginald Thunderpants III", "Bartholomew McFancyPants", "Benedict Cucumberbatch",
+                "Chadwick von Snugglesworth", "Montgomery Fiddlesticks", "Floyd Wibblebottom",
+                "Buford McFluffybutt", "Percival von Wigglesworth", "Gertrude Puddingpop",
+                "Beatrice von Schnauzer", "Rutherford McTinkleton", "Winston Fuzzyface",
+                "Penelope Fluffernutter", "Sir Fluffington Fluffykins", "Barbara Biscuitbottom",
+                "Clarence Piddlesworth", "Rufus von Purrington", "Chester McNibblebutt",
+                "Prudence McSquiggles", "Cuthbert Fuzzyboots", "Millicent von Cuddlebug",
+                "Dudley von Floofenstein", "Hilda Muffinfluff", "Percy von Snugglepuss",
+                "Barnaby McSnoozytoes", "Mortimer Fluffernoodle", "Eugene von Fuzzywump",
+                "Agnes Piddlepants", "Milton McWhiskers", "Edna von Waggletail",
+                "Humphrey Fuzzymuffin", "Geraldine Purrwhiskers", "Reginald McFluffernugget",
+                "Gertrude von Bumblefluff", "Clarence Purrington", "Tabitha Snickerdoodle",
+                "Percival von Cuddlebug", "Mildred Puddlejumper", "Archibald von Cuddlebutt",
+                "Esmeralda McSquishyface", "Reginald von Fluffykins", "Beatrice Bumbleflop",
+                "Algernon McFuzzyface", "Wanda von Snugglebug", "Horace McSnoozleton",
+                "Geraldine von Wigglesworth", "Felix Purrpants", "Matilda von Cuddlewhiskers",
+                "Reginald Fluffybottom", "Gwendolyn McFuzzytoes", "Bartholomew von Snuggleton",
+                "Clarence McPurrington", "Millicent von Waggletail", "Archibald Fiddlesticks",
+                "Esmeralda McWhiskerpants", "Rupert von Fuzzyface", "Mildred Purrwhiskers",
+                "Percival von Squigglepaws", "Reginald Fluffypants", "Eugene von Puddlejumper",
+                "Gertrude McSnugglepuss", "Humphrey von Purrington", "Prudence Fluffernoodle",
+                "Barnaby von Snugglewhiskers", "Hilda McSquigglebottom", "Benedict von Cuddlebug",
+                "Penelope McFluffernugget", "Rufus von Cuddlewhiskers", "Matilda McSquishyface",
+                "Winston von Fluffytoes", "Esmeralda McFuzzywump", "Montgomery von Squigglepaws",
+                "Tabitha McSnickerdoodle", "Buford von Fluffernutter", "Clarence McWaggletail",
+                "Beatrice von Fuzzywhiskers", "Rupert McFluffypants", "Gertrude von Cuddlebug",
+                "Chester McSquiggles", "Wanda von Fuzzytoes", "Percy McWhiskerpants",
+                "Gwendolyn von Purrwhiskers", "Milton McSnoozytoes", "Matilda von Bumbleflop",
+                "Archibald McFluffyface", "Prudence von Puddlejumper", "Barbara McFluffernugget",
+                "Algernon von Snugglebug", "Esmeralda McSquishytoes", "Rufus von Cuddlewhiskers",
+                "Millicent McFuzzywump", "Winston von Snuggleton", "Geraldine McFluffernutter",
+                "Reginald von Snugglepuss", "Rupert McFuzzybottom", "Clarence von Cuddlewhiskers", "Beatrice McFluffytoes", "Buford von Purrpants",
+                "Tabitha McFuzzyface", "Benedict von Purrwhiskers", "Humphrey McSquigglebottom",
+                "Percival von McSnoozleton", "Gwendolyn von Fluffypaws", "Chester von Cuddlebug",
+                "Prudence McSnugglewhiskers", "Millicent von Fluffernutter", "Esmeralda McPurrington",
+                "Rufus von Squigglewhiskers", "Wanda McFuzzytoes", "Algernon von Snuggleton",
+                "Matilda McFluffypants", "Rupert von Snugglebug", "Tabitha McPurrwhiskers",
+                "Benedict von Fluffypaws", "Gwendolyn McSquiggletoes", "Reginald von Fuzzywhiskers"
+            };
+
+            
             coal = new Resource(90, 4, 0, 0);
             stone = new Resource(75, 8, 0, 0);
             iron = new Resource(65, 15, 0, 0);
             gold = new Resource(20, 75, 0, 0);
             diamond = new Resource(5, 200, 0, 0);
-            dollars = new Dollars(100);
-            workers = new Workers(1, 10, 100, 10);
+            dollars = new Resource(0, 0, 100, 0);
+            workers = new Workers(possibleNames[_random.Next(0, possibleNames.Count)], 1, 10, 100, 10);
             magicTokens = new PowerUp(0, 6);
             timeMachine = new PowerUp(0, 3);
             ancientArtefact = new PowerUp(0, 7);
@@ -321,7 +362,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine(
                             $"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
-                        Dollars.Quantity -= priceDictionary["SkipDay"];
+                        dollars.Quantity -= priceDictionary["SkipDay"];
                         Dig(priceDictionary, 1, probabilityDictionary,
                             achievementsList, true);
                         PrintResources();
@@ -400,7 +441,7 @@ namespace Gold_Diggerzz
 
                         break;
                     case 9:
-                        if (Dollars.Quantity >
+                        if (dollars.Quantity >
                             priceDictionary["trainingCourse"] * Workers.Quantity &&
                             Workers.Quantity != 0)
                         {
@@ -410,7 +451,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine("Your employees will be back in 7 days");
                             EmployeeTrainingCourse(priceDictionary);
                         }
-                        else if (Dollars.Quantity >
+                        else if (dollars.Quantity >
                                  priceDictionary["trainingCourse"] * Workers.Quantity &&
                                  Workers.Quantity == 0)
                         {
@@ -437,14 +478,14 @@ namespace Gold_Diggerzz
                             case 1:
                                 Console.WriteLine(
                                     $"You have chosen to pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
-                                Dollars.Quantity -= priceDictionary["stockMarketDate"];
+                                dollars.Quantity -= priceDictionary["stockMarketDate"];
                                 Console.WriteLine("Giving you the information now...");
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to bribe the government");
                                 Console.WriteLine($"You have been charged {priceDictionary["bribe"]} for the bribe");
-                                Dollars.Quantity -= priceDictionary["bribe"];
+                                dollars.Quantity -= priceDictionary["bribe"];
                                 Console.WriteLine("You don't have to pay wages for the next three days");
                                 _noWageDaysLeft = 3;
                                 _totalBribes += 1;
@@ -528,7 +569,7 @@ namespace Gold_Diggerzz
         private static void PrintResources()
         {
             Console.WriteLine("_____________________________________________________________________");
-            Console.WriteLine($"                     You have ${Math.Round(Dollars.Quantity, 2)}\n");
+            Console.WriteLine($"                     You have ${Math.Round(dollars.Quantity, 2)}\n");
             Console.WriteLine($"| You have {Math.Round(coal.Quantity, 2)}kg of coal         | You have {Math.Round(stone.Quantity, 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(iron.Quantity, 2)}kg of iron         | You have {Math.Round(gold.Quantity, 2)}kg of gold");
             Console.WriteLine($"| You have {Math.Round(diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(magicTokens.Quantity, 2)} magic tokens");
@@ -608,7 +649,7 @@ namespace Gold_Diggerzz
         private static string CheckIfInDebt()
         {
             string inDebt = "false";
-            if (Dollars.Quantity < 0)
+            if (dollars.Quantity < 0)
             {
                 inDebt = "true";
                 bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
@@ -620,11 +661,11 @@ namespace Gold_Diggerzz
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine($"right now you have ${Dollars.Quantity}, {coal.Quantity}kg of coal, {stone.Quantity}kg of stone, {iron.Quantity}kg of iron, {gold.Quantity}kg of gold, and {diamond.Quantity}kg of diamond");
+                    Console.WriteLine($"right now you have ${dollars.Quantity}, {coal.Quantity}kg of coal, {stone.Quantity}kg of stone, {iron.Quantity}kg of iron, {gold.Quantity}kg of gold, and {diamond.Quantity}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
                     
-                    Dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                    dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
                                            diamond.Quantity * diamond.Price;
                     
@@ -650,7 +691,7 @@ namespace Gold_Diggerzz
                 if (inDebt == "true" && noResources && Workers.Quantity >= 2)
                 {
                     Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy.");
-                    Dollars.Quantity += Workers.Quantity * 50;
+                    dollars.Quantity += Workers.Quantity * 50;
                     _totalDollarsEarned += Workers.Quantity * 50;
                     Workers.Quantity = 1;
                 }
@@ -907,7 +948,7 @@ namespace Gold_Diggerzz
                     else
                     {
                         double totalWages = Workers.Quantity * Workers.Wage;
-                        Dollars.Quantity -= totalWages;
+                        dollars.Quantity -= totalWages;
 
                         Console.WriteLine($"Your {Workers.Quantity} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                     }
@@ -950,7 +991,7 @@ namespace Gold_Diggerzz
 
                 if (daysToDig >= 2)
                 {
-                    Console.WriteLine($"Current balance = {Dollars.Quantity}");
+                    Console.WriteLine($"Current balance = {dollars.Quantity}");
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
 
@@ -1024,7 +1065,7 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     coal.Quantity -= coalToSell;
-                                    Dollars.Quantity += coal.Quantity * coal.Price;
+                                    dollars.Quantity += coal.Quantity * coal.Price;
                                     _totalDollarsEarned += coal.Quantity * coal.Price;
                                 }
 
@@ -1043,7 +1084,7 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     stone.Quantity -= stoneToSell;
-                                    Dollars.Quantity += stone.Quantity * stone.Price;
+                                    dollars.Quantity += stone.Quantity * stone.Price;
                                     _totalDollarsEarned += stone.Quantity * stone.Price;
                                 }
 
@@ -1061,7 +1102,7 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     iron.Quantity -= ironToSell;
-                                    Dollars.Quantity += iron.Quantity * iron.Price;
+                                    dollars.Quantity += iron.Quantity * iron.Price;
                                     _totalDollarsEarned += iron.Quantity * iron.Price;
                                 }
 
@@ -1079,7 +1120,7 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     gold.Quantity -= goldToSell;
-                                    Dollars.Quantity += gold.Quantity * gold.Price;
+                                    dollars.Quantity += gold.Quantity * gold.Price;
                                     _totalDollarsEarned += gold.Quantity * gold.Price;
                                 }
 
@@ -1097,7 +1138,7 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     diamond.Quantity -= diamondToSell;
-                                    Dollars.Quantity += diamond.Quantity * diamond.Price;
+                                    dollars.Quantity += diamond.Quantity * diamond.Price;
                                     _totalDollarsEarned += diamond.Quantity * diamond.Price;
                                 }
 
@@ -1110,11 +1151,11 @@ namespace Gold_Diggerzz
 
                     case 2:
                         Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
-                        Dollars.Quantity += coal.Quantity * coal.Price;
-                        Dollars.Quantity += stone.Quantity * stone.Price;
-                        Dollars.Quantity += iron.Quantity * iron.Price;
-                        Dollars.Quantity += gold.Quantity * gold.Price;
-                        Dollars.Quantity += diamond.Quantity * diamond.Price;
+                        dollars.Quantity += coal.Quantity * coal.Price;
+                        dollars.Quantity += stone.Quantity * stone.Price;
+                        dollars.Quantity += iron.Quantity * iron.Price;
+                        dollars.Quantity += gold.Quantity * gold.Price;
+                        dollars.Quantity += diamond.Quantity * diamond.Price;
                         _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                                iron.Quantity * iron.Price + gold.Quantity * gold.Price +
                                                diamond.Quantity * diamond.Price;
@@ -1132,7 +1173,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {Workers.Wage} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
-                        if (employeesToHire * Workers.Price > Dollars.Quantity)
+                        if (employeesToHire * Workers.Price > dollars.Quantity)
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
                         }
@@ -1140,7 +1181,7 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine($"You have hired {employeesToHire} more employee");
                             Workers.Quantity += employeesToHire;
-                            Dollars.Quantity -= employeesToHire * Workers.Price;
+                            dollars.Quantity -= employeesToHire * Workers.Price;
                             Console.WriteLine($"You now have {Workers.Quantity} employees");
                             _totalEmployeesHired += employeesToHire;
                         }
@@ -1174,7 +1215,7 @@ namespace Gold_Diggerzz
                     else if (ancientArtefactChoice == 2)
                     {
                         Console.WriteLine("You have chosen the $250 instantly");
-                        Dollars.Quantity += 250;
+                        dollars.Quantity += 250;
                         _totalDollarsEarned += 250;
                     }
 
@@ -1317,17 +1358,17 @@ namespace Gold_Diggerzz
                 if (Workers.Quantity < 8)
                 {
                     Console.WriteLine("Each employee gets 10% of your current $$$ stash");
-                    Console.WriteLine($"Your {Workers.Quantity} employees get ${Dollars.Quantity * 0.1} each");
-                    double dollarsToLose = Dollars.Quantity * 0.1 * Workers.Quantity;
-                    Dollars.Quantity -= dollarsToLose;
+                    Console.WriteLine($"Your {Workers.Quantity} employees get ${dollars.Quantity * 0.1} each");
+                    double dollarsToLose = dollars.Quantity * 0.1 * Workers.Quantity;
+                    dollars.Quantity -= dollarsToLose;
                     Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
                 }
 
                 else
                 {
                     Console.WriteLine("Because you have so many employees, 60% of your current $$$ stash is given to them");
-                    Console.WriteLine($"This means you'll lose {Dollars.Quantity * 0.6}");
-                    Dollars.Quantity *= 0.4;
+                    Console.WriteLine($"This means you'll lose {dollars.Quantity * 0.6}");
+                    dollars.Quantity *= 0.4;
                 }
             }
 
@@ -1546,7 +1587,7 @@ namespace Gold_Diggerzz
             // to boost the productivity of employees
             Console.WriteLine("Training employees...");
             Console.WriteLine($"This course charged you {prices["trainingCourse"] * Workers.Quantity} in fees");
-            Dollars.Quantity -= prices["trainingCourse"] * Workers.Quantity;
+            dollars.Quantity -= prices["trainingCourse"] * Workers.Quantity;
             _employeeEfficiency *= 1.3;
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
