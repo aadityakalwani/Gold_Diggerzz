@@ -1033,7 +1033,7 @@ namespace Gold_Diggerzz
                                 Console.WriteLine("Your have chosen to sell stone for dollars");
                                 Console.WriteLine($"How much stone do you want to sell?\nYou have {stone.Quantity}kg of stone");
                                 double stoneToSell = GetValidDouble(0, 100000000000);
-                                if (stoneToSell > stone.Quantity)
+                                if (stoneToSell > stone.Quantity) 
                                 {
                                     Console.WriteLine("You don't have enough stone to sell that much");
                                 }
