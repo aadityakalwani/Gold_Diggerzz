@@ -13,6 +13,8 @@ namespace Gold_Diggerzz
        - Iron
        - Gold
        - Diamond
+       - Dollars
+       - Workers
        - Program
            - Main()
                - CreateResourceDictionary()
@@ -20,20 +22,20 @@ namespace Gold_Diggerzz
                - CreateProbabilityDictionary()
                - CreatePowerUpDictionary()
                - RunGame(Dictionary<string, double> resourceDictionary, Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
-                   - UserMenuOption(Dictionary<string, double> resources, Dictionary<string, double> prices)
-                       - CheckIfInDebt(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                   - UserMenuOption(Dictionary<string, double> resources)
+                       - CheckIfInDebt(Dictionary<string, double> resources)
                        - CalendarEffects(Dictionary<string, double> prices, DateTime currentDate)
                    - Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig, Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary, List<string> achievementsList, bool skipDay)
                        - PrintResources(Dictionary<string, double> resources)
-                   - GoToMarket(Dictionary<string, double> resources, Dictionary<string, double> priceDictionary)
+                   - GoToMarket(Dictionary<string, double> resources)
                        - PrintResources(Dictionary<string, double> resources)
                    - PrintGameMechanics(Dictionary<string, double> prices, Dictionary<string, double> probabilities)
                    - QuitGame()
                    - GameFailed()
-                   - ChangeProbabilities(Dictionary<string, double> prices, DateTime currentDate, Dictionary<string, double> resources, Dictionary<string, double> probabilities)
+                   - ChangeProbabilities(DateTime currentDate)
                    - CheckAchievements(List<string> achievements)
-                   - ChangePrices(Dictionary<string, double> prices)
-                   - EmployeeTrainingCourse(Dictionary<string, double> resources, Dictionary<string, double> prices)
+                   - ChangePrices()
+                   - EmployeeTrainingCourse(Dictionary<string, double> prices)
                - GetValidInt(int min, int max)
                - GetValidDouble(double min, double max)
      */
@@ -169,18 +171,17 @@ namespace Gold_Diggerzz
         private static void Main()
         {
             // pregame
-            Dictionary<string, double> resourceDictionary = CreateResourceDictionary();
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
             Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
 
-           
             Coal Coal = new Coal(90, 4, 0, 0);
             Stone Stone = new Stone(75, 8, 0, 0);
             Iron Iron = new Iron(65, 15, 0, 0);
             Gold Gold = new Gold(20, 75, 0, 0);
             Diamond Diamond = new Diamond(5, 200, 0, 0);
             Dollars Dollars = new Dollars(100);
+            MagicTokens MagicTokens = new MagicTokens(0);
             Workers Workers = new Workers(1, 10, 100);
             
             List<string> achievementsList = new List<string>();
@@ -195,21 +196,19 @@ namespace Gold_Diggerzz
             Console.WriteLine("Aim of the game: survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
 
-            PrintResources(resourceDictionary);
+            PrintResources();
 
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
-            RunGame(resourceDictionary, priceDictionary, probabilityDictionary, powerUpDictionary, achievementsList);
+            RunGame(priceDictionary, probabilityDictionary, powerUpDictionary, achievementsList);
         }
 
-        private static void RunGame(Dictionary<string, double> resourceDictionary,
-            Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary,
-            Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
+        private static void RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             int menuOption;
             do
             {
-                menuOption = UserMenuOption(resourceDictionary);
+                menuOption = UserMenuOption();
 
                 switch (menuOption)
                 {
@@ -225,27 +224,27 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary,
+                        Dig(priceDictionary, 1, probabilityDictionary, powerUpDictionary,
                             achievementsList, false);
                         break;
                     case 2:
                         _animation = false;
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        Dig(resourceDictionary, priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary,
+                        Dig(priceDictionary, daysToDig, probabilityDictionary, powerUpDictionary,
                             achievementsList, false);
                         break;
                     case 3:
-                        GoToMarket(resourceDictionary);
+                        GoToMarket();
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine(
                             $"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
-                        resourceDictionary["Dollars"] -= priceDictionary["SkipDay"];
-                        Dig(resourceDictionary, priceDictionary, 1, probabilityDictionary, powerUpDictionary,
+                        Dollars.Quantity -= priceDictionary["SkipDay"];
+                        Dig(priceDictionary, 1, probabilityDictionary, powerUpDictionary,
                             achievementsList, true);
-                        PrintResources(resourceDictionary);
+                        PrintResources();
                         break;
                     case 5:
                         if (powerUpDictionary["Ancient Artefact"] ! > 0 && powerUpDictionary["Time Machine"] ! > 0)
@@ -268,7 +267,7 @@ namespace Gold_Diggerzz
                             case 1:
                                 if (powerUpDictionary["Ancient Artefact"] >= 0)
                                 {
-                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary,
+                                    UsePowerUp(priceDictionary, probabilityDictionary,
                                         powerUpChoice, powerUpDictionary, achievementsList);
                                 }
                                 else
@@ -282,7 +281,7 @@ namespace Gold_Diggerzz
                             {
                                 if (powerUpDictionary["Time Machine"] >= 0)
                                 {
-                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary,
+                                    UsePowerUp(priceDictionary, probabilityDictionary,
                                         powerUpChoice, powerUpDictionary, achievementsList);
 
                                 }
@@ -296,7 +295,7 @@ namespace Gold_Diggerzz
                             case 3:
                                 if (powerUpDictionary["Market Master"] >= 0)
                                 {
-                                    UsePowerUp(resourceDictionary, priceDictionary, probabilityDictionary,
+                                    UsePowerUp(priceDictionary, probabilityDictionary,
                                         powerUpChoice, powerUpDictionary, achievementsList);
                                 }
                                 else
@@ -323,7 +322,7 @@ namespace Gold_Diggerzz
 
                         break;
                     case 9:
-                        if (resourceDictionary["Dollars"] >
+                        if (Dollars.Quantity >
                             priceDictionary["trainingCourse"] * Workers.Quantity &&
                             Workers.Quantity != 0)
                         {
@@ -333,7 +332,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine("Your employees will be back in 7 days");
                             EmployeeTrainingCourse(priceDictionary);
                         }
-                        else if (resourceDictionary["Dollars"] >
+                        else if (Dollars.Quantity >
                                  priceDictionary["trainingCourse"] * Workers.Quantity &&
                                  Workers.Quantity == 0)
                         {
@@ -360,14 +359,14 @@ namespace Gold_Diggerzz
                             case 1:
                                 Console.WriteLine(
                                     $"You have chosen to pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
-                                resourceDictionary["Dollars"] -= priceDictionary["stockMarketDate"];
+                                Dollars.Quantity -= priceDictionary["stockMarketDate"];
                                 Console.WriteLine("Giving you the information now...");
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to bribe the government");
                                 Console.WriteLine($"You have been charged {priceDictionary["bribe"]} for the bribe");
-                                resourceDictionary["Dollars"] -= priceDictionary["bribe"];
+                                Dollars.Quantity -= priceDictionary["bribe"];
                                 Console.WriteLine("You don't have to pay wages for the next three days");
                                 _noWageDaysLeft = 3;
                                 _totalBribes += 1;
@@ -449,24 +448,15 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total days dug: {_totalDaysDug}");
         }
 
-        private static void PrintResources(Dictionary<string, double> resources)
+        private static void PrintResources()
         {
             Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"                     You have ${Math.Round(Dollars.Quantity, 2)}\n");
             Console.WriteLine($"| You have {Math.Round(Coal.Quantity, 2)}kg of coal         | You have {Math.Round(Stone.Quantity, 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(Iron.Quantity, 2)}kg of iron         | You have {Math.Round(Gold.Quantity, 2)}kg of gold");
-            Console.WriteLine($"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(resources["magicTokens"], 2)} magic tokens");
+            Console.WriteLine($"| You have {Math.Round(Diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(MagicTokens.Quantity, 2)} magic tokens");
             Console.WriteLine($"| You have {Workers.Quantity} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
-        }
-
-        private static Dictionary<string, double> CreateResourceDictionary()
-        {
-            Dictionary<string, double> resources = new Dictionary<string, double>()
-            {
-                { "magicTokens", 0 }
-            };
-            return resources;
         }
 
         private static Dictionary<string, double> CreatePricesDictionary()
@@ -526,9 +516,9 @@ namespace Gold_Diggerzz
             Console.WriteLine("Here are the game mechanics:");
         }
 
-        private static int UserMenuOption(Dictionary<string, double> resources)
+        private static int UserMenuOption()
         {
-            string takeUserInput = CheckIfInDebt(resources);
+            string takeUserInput = CheckIfInDebt();
 
             if (takeUserInput == "false")
             {
@@ -555,7 +545,7 @@ namespace Gold_Diggerzz
             return -2;
         }
 
-        private static string CheckIfInDebt(Dictionary<string, double> resources)
+        private static string CheckIfInDebt()
         {
             string inDebt = "false";
             if (Dollars.Quantity < 0)
@@ -588,7 +578,7 @@ namespace Gold_Diggerzz
                     Gold.Quantity = 0;
                     Diamond.Quantity = 0;
 
-                    PrintResources(resources);
+                    PrintResources();
                 }
 
                 if (inDebt == "true" && noResources && Workers.Quantity < 2)
@@ -609,7 +599,7 @@ namespace Gold_Diggerzz
             return inDebt;
         }
 
-        private static void Dig(Dictionary<string, double> resources, Dictionary<string, double> prices, int daysToDig,
+        private static void Dig(Dictionary<string, double> prices, int daysToDig,
             Dictionary<string, double> probabilities, Dictionary<string, double> powerUpDictionary,
             List<string> achievementsList, bool skipDay)
         {
@@ -617,7 +607,7 @@ namespace Gold_Diggerzz
             for (int days = 0; days < daysToDig; days++)
             {
 
-                if (CheckIfInDebt(resources) != "true")
+                if (CheckIfInDebt() != "true")
                 {
                     if (!skipDay)
                     {
@@ -781,7 +771,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(resources, prices, probabilities, 1, powerUpDictionary,
+                                    UsePowerUp(prices, probabilities, 1, powerUpDictionary,
                                         achievementsList);
                                     break;
                                 case 2:
@@ -802,7 +792,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(resources, prices, probabilities, 2, powerUpDictionary,
+                                    UsePowerUp(prices, probabilities, 2, powerUpDictionary,
                                         achievementsList);
                                     break;
                                 case 2:
@@ -812,11 +802,11 @@ namespace Gold_Diggerzz
                             }
                         }
 
-                        if (magicTokenFound && resources["magicTokens"] < 4)
+                        if (magicTokenFound && MagicTokens.Quantity < 4)
                         {
-                            resources["magicTokens"] += 1;
-                            Console.WriteLine($"You've acquired another magic token. You have {resources["magicTokens"]} magic tokens now");
-                            Console.WriteLine($"Selling price increased by a total of {resources["magicTokens"] * 20}%");
+                            MagicTokens.Quantity += 1;
+                            Console.WriteLine($"You've acquired another magic token. You have {MagicTokens.Quantity} magic tokens now");
+                            Console.WriteLine($"Selling price increased by a total of {MagicTokens.Quantity * 20}%");
                             Coal.Price *= 1.2;
                             Stone.Price *= 1.2;
                             Iron.Price *= 1.2;
@@ -835,7 +825,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(resources, prices, probabilities, 3, powerUpDictionary,
+                                    UsePowerUp(prices, probabilities, 3, powerUpDictionary,
                                         achievementsList);
                                     break;
                                 case 2:
@@ -919,10 +909,10 @@ namespace Gold_Diggerzz
             CheckAchievements(achievementsList);
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
-            PrintResources(resources);
+            PrintResources();
         }
 
-        private static void GoToMarket(Dictionary<string, double> resources)
+        private static void GoToMarket()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -980,7 +970,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
+                                PrintResources();
                                 break;
 
                             case 2:
@@ -999,7 +989,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
+                                PrintResources();
                                 break;
                             case 3:
                                 Console.WriteLine("Your have chosen to sell iron for dollars");
@@ -1017,7 +1007,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
+                                PrintResources();
                                 break;
                             case 4:
                                 Console.WriteLine("Your have chosen to sell gold for dollars");
@@ -1035,7 +1025,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
+                                PrintResources();
                                 break;
                             case 5:
                                 Console.WriteLine("Your have chosen to sell diamond for dollars");
@@ -1053,7 +1043,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources(resources);
+                                PrintResources();
                                 break;
                         }
 
@@ -1076,7 +1066,7 @@ namespace Gold_Diggerzz
                         Diamond.Quantity = 0;
 
                         Console.WriteLine("Here are your updated resources:");
-                        PrintResources(resources);
+                        PrintResources();
                         break;
 
                     case 3:
@@ -1105,9 +1095,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
-        private static void UsePowerUp(Dictionary<string, double> resources, Dictionary<string, double> prices,
-            Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary,
-            List<string> achievementsList)
+        private static void UsePowerUp(Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, Dictionary<string, double> powerUpDictionary, List<string> achievementsList)
         {
             switch (powerUpChoice)
             {
@@ -1141,7 +1129,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(resources, prices, 5, probabilities, powerUpDictionary, achievementsList, false);
+                    Dig(prices, 5, probabilities, powerUpDictionary, achievementsList, false);
                     powerUpDictionary["Time Machine"] -= 1;
                     break;
                 }
@@ -1637,6 +1625,16 @@ namespace Gold_Diggerzz
         }
     }
     
+    class MagicTokens
+    {
+        public static double Quantity;
+        
+        public MagicTokens(double initialQuantity)
+        {
+            Quantity = initialQuantity; // = 0
+        }
+    }
+    
     class Workers
     {
         public static double Quantity;
@@ -1650,4 +1648,6 @@ namespace Gold_Diggerzz
             Price = initialPrice; // = 100
         }
     }
+    
+    
 }
