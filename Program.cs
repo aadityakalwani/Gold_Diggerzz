@@ -175,13 +175,13 @@ namespace Gold_Diggerzz
             Dictionary<string, double> powerUpDictionary = CreatePowerUpDictionary();
 
            
-             Coal Coal = new Coal(90, 4, 0, 0);
-             Stone Stone = new Stone(75, 8, 0, 0);
-             Iron Iron = new Iron(65, 15, 0, 0);
-             Gold Gold = new Gold(20, 75, 0, 0);
-             Diamond Diamond = new Diamond(5, 200, 0, 0);
-             Dollars Dollars = new Dollars(100);
-             Workers Workers = new Workers(1, 10, 100);
+            Coal Coal = new Coal(90, 4, 0, 0);
+            Stone Stone = new Stone(75, 8, 0, 0);
+            Iron Iron = new Iron(65, 15, 0, 0);
+            Gold Gold = new Gold(20, 75, 0, 0);
+            Diamond Diamond = new Diamond(5, 200, 0, 0);
+            Dollars Dollars = new Dollars(100);
+            Workers Workers = new Workers(1, 10, 100);
             
             List<string> achievementsList = new List<string>();
 
