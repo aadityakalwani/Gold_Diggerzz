@@ -183,6 +183,17 @@ namespace Gold_Diggerzz
         }
     }
     
+    class StockMarketCrash
+    {
+        public double Probability;
+        
+        public StockMarketCrash()
+
+        {
+            Probability = 7;
+        }
+    }
+    
     internal abstract class Program
 
     {
@@ -294,8 +305,6 @@ namespace Gold_Diggerzz
         {
             // pregame
             Dictionary<string, double> priceDictionary = CreatePricesDictionary();
-            Dictionary<string, double> probabilityDictionary = CreateProbabilityDictionary();
-            
             // possible names for the workers
             
             HireNewWorker(1);
@@ -324,10 +333,10 @@ namespace Gold_Diggerzz
 
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
-            RunGame(priceDictionary, probabilityDictionary, achievementsList);
+            RunGame(priceDictionary, achievementsList);
         }
 
-        private static void RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
+        private static void RunGame(Dictionary<string, double> priceDictionary, List<string> achievementsList)
         {
             int menuOption;
             do
@@ -348,7 +357,7 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(priceDictionary, 1, probabilityDictionary, 
+                        Dig(priceDictionary, 1, 
                             achievementsList, false);
                         break;
                     case 2:
@@ -356,7 +365,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("\n___  ___        _  _    _         _        ______               ______  _        \n|  \\/  |       | || |  (_)       | |       |  _  \\              |  _  \\(_)       \n| .  . | _   _ | || |_  _  _ __  | |  ___  | | | | __ _  _   _  | | | | _   __ _ \n| |\\/| || | | || || __|| || '_ \\ | | / _ \\ | | | |/ _` || | | | | | | || | / _` |\n| |  | || |_| || || |_ | || |_) || ||  __/ | |/ /| (_| || |_| | | |/ / | || (_| |\n\\_|  |_/ \\__,_||_| \\__||_|| .__/ |_| \\___| |___/  \\__,_| \\__, | |___/  |_| \\__, |\n                          | |                             __/ |             __/ |\n                          |_|                            |___/             |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        Dig(priceDictionary, daysToDig, probabilityDictionary,
+                        Dig(priceDictionary, daysToDig, 
                             achievementsList, false);
                         break;
                     case 3:
@@ -367,7 +376,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine(
                             $"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
                         dollars.Quantity -= priceDictionary["SkipDay"];
-                        Dig(priceDictionary, 1, probabilityDictionary,
+                        Dig(priceDictionary, 1,
                             achievementsList, true);
                         PrintResources();
                         break;
@@ -391,7 +400,7 @@ namespace Gold_Diggerzz
                             case 1:
                                 if (ancientArtefact.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary, probabilityDictionary, powerUpChoice, achievementsList);
+                                    UsePowerUp(priceDictionary, powerUpChoice, achievementsList);
                                 }
                                 else
                                 {
@@ -404,7 +413,7 @@ namespace Gold_Diggerzz
                             {
                                 if (timeMachine.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary, probabilityDictionary,
+                                    UsePowerUp(priceDictionary,
                                         powerUpChoice, achievementsList);
 
                                 }
@@ -418,7 +427,7 @@ namespace Gold_Diggerzz
                             case 3:
                                 if (marketMaster.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary, probabilityDictionary,
+                                    UsePowerUp(priceDictionary,
                                         powerUpChoice, achievementsList);
                                 }
                                 else
@@ -590,16 +599,6 @@ namespace Gold_Diggerzz
             return prices;
         }
 
-        private static Dictionary<string, double> CreateProbabilityDictionary()
-        {
-            Dictionary<string, double> probabilities = new Dictionary<string, double>()
-            {
-                { "stockMarketCrash", 7 }
-            };
-
-            return probabilities;
-        }
-
         private static void RunTutorial(Dictionary<string, double> prices)
         {
             Console.WriteLine("Welcome to the tutorial");
@@ -705,7 +704,6 @@ namespace Gold_Diggerzz
         }
 
         private static void Dig(Dictionary<string, double> prices, int daysToDig,
-            Dictionary<string, double> probabilities,
             List<string> achievementsList, bool skipDay)
         {
 
@@ -781,7 +779,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"Digging done for the day {_currentDate.Date:dddd, dd MMMM, yyyy}");
                         Console.WriteLine("Here are the changes to your resources:");
 
-                        // creating randoms for the chance of finding iron and gold and stone
+                        // creating randoms for the chance of finding all the stuff
                         Random random = new Random();
                         int randomForCoal = random.Next(0, 90);
                         int randomForStone = random.Next(0, 100);
@@ -876,7 +874,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, probabilities, 1, achievementsList);
+                                    UsePowerUp(prices, 1, achievementsList);
                                     break;
                                 case 2:
                                     Console.WriteLine("You have chosen to save the Ancient Artefact for later");
@@ -896,7 +894,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, probabilities, 2, 
+                                    UsePowerUp(prices, 2, 
                                         achievementsList);
                                     break;
                                 case 2:
@@ -929,7 +927,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, probabilities, 3,
+                                    UsePowerUp(prices, 3,
                                         achievementsList);
                                     break;
                                 case 2:
@@ -1202,7 +1200,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
-        private static void UsePowerUp(Dictionary<string, double> prices, Dictionary<string, double> probabilities, int powerUpChoice, List<string> achievementsList)
+        private static void UsePowerUp(Dictionary<string, double> prices, int powerUpChoice, List<string> achievementsList)
         {
             switch (powerUpChoice)
             {
@@ -1236,7 +1234,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(prices, 5, probabilities, achievementsList, false);
+                    Dig(prices, 5, achievementsList, false);
                     timeMachine.Quantity -= 1;
                     break;
                 }
