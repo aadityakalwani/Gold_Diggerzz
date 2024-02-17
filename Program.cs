@@ -702,8 +702,10 @@ namespace Gold_Diggerzz
                     dollars.Quantity += workersList.Count * 50;
                     _totalDollarsEarned += workersList.Count * 50;
                     
-                    // a for or a while loop to remove every item in the list aside from one tk
-                    HireNewWorker(10);
+                    while (workersList.Count > 1)
+                    {
+                        workersList.RemoveAt(0);
+                    }
                 }
             }
 
@@ -1373,7 +1375,7 @@ namespace Gold_Diggerzz
             if (_random.Next(0, 100) < _currentEmployeeIllProbability && workersList.Count > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
-                RemoveWorker();
+                workersList.RemoveAt(0);
                 _lessWorkerDays = 1;
             }
 
@@ -1628,11 +1630,6 @@ namespace Gold_Diggerzz
                 Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
                 workersList.Add(newWorker);
             }
-        }
-
-        private static void RemoveWorker()
-        {
-            workersList.RemoveAt(workersList.Count - 1);
         }
 
         private static int GetValidInt(int min, int max)
