@@ -539,7 +539,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
             Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency");
-            Console.WriteLine("Baseline wage = $10 per employee per day");
+            Console.WriteLine($"Baseline wage = ${_currentWageRate} per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10%");
@@ -1305,6 +1305,7 @@ namespace Gold_Diggerzz
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
                 Console.WriteLine("It's the weekend, your employees want 30% more pay");
+                _currentWageRate *= 1.3;
                 foreach (Worker workers in workersList)
                 {
                     workers.Wage *= 1.3;
@@ -1314,9 +1315,10 @@ namespace Gold_Diggerzz
             // to undo the effect of weekend pay
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
+                _currentWageRate /= 1.3;
                 foreach (Worker workers in workersList)
                 {
-                    workers.Wage *= 1.3;
+                    workers.Wage /= 1.3;
                 }
             }
 
@@ -1330,10 +1332,7 @@ namespace Gold_Diggerzz
                 iron.Price *= 2;
                 gold.Price *= 2;
                 diamond.Price *= 2;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage *= 2;
-                }
+                _currentEmployeePrice *= 2;
                 _crashDaysLeft = 0;
             }
 
@@ -1346,17 +1345,15 @@ namespace Gold_Diggerzz
                 iron.Price /= 2;
                 gold.Price /= 2;
                 diamond.Price /= 2;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage /= 2;
-                }
+                _currentEmployeePrice /= 2;
                 _crashDaysLeft = 2;
             }
 
             // 10% raise on the first of every month (apart from January)
             if (currentDate.Month != 1 && currentDate.Day == 1)
             {
-                Console.WriteLine("It's the first of the month, your employees want a 10% raise");
+                Console.WriteLine("It's the first of the month, your employees get a 10% raise for the rest of time");
+                _currentWageRate *= 1.1;
                 foreach (Worker workers in workersList)
                 {
                     workers.Wage *= 1.1;
