@@ -57,19 +57,12 @@ namespace Gold_Diggerzz
     * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
     * magic tokens are x1.2 every time, which is not mathematically correct
     */
-    
-    /* current issues:
-     * somehow going to have to create each employee separately and then have a list of them + option to print them out
-     * inconsistency with the weather effect printing and actual
-        * eg "6 days left of bad weather" but then it's only 5 days
-     */
 
     /* to-do ideas
-     * OOP Workers
-     * OOP Powerups
-     * OOP 
+     * more general OOP-ing
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
+     * a "mine collapse" event could temporarily reduce the player's digging efficiency
      * tutorial mode (that is actually functional) 
      * loans - you can take a loan from the bank and pay it back with interest
      * load/save game by saving the resource dictionary and the current date to a file
@@ -321,9 +314,7 @@ namespace Gold_Diggerzz
             List<string> achievementsList = new List<string>();
             
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                 Welcome to Gold Diggerzz                   ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.WriteLine("  ______             __        __        _______   __                                                   \n /      \\           |  \\      |  \\      |       \\ |  \\                                                  \n|  $$$$$$\\  ______  | $$  ____| $$      | $$$$$$$\\ \\$$  ______    ______    ______    ______    _______ \n| $$ __\\$$ /      \\ | $$ /      $$      | $$  | $$|  \\ /      \\  /      \\  /      \\  /      \\  /       \\\n| $$|    \\|  $$$$$$\\| $$|  $$$$$$$      | $$  | $$| $$|  $$$$$$\\|  $$$$$$\\|  $$$$$$\\|  $$$$$$\\|  $$$$$$$\n| $$ \\$$$$| $$  | $$| $$| $$  | $$      | $$  | $$| $$| $$  | $$| $$  | $$| $$    $$| $$   \\$$ \\$$    \\ \n| $$__| $$| $$__/ $$| $$| $$__| $$      | $$__/ $$| $$| $$__| $$| $$__| $$| $$$$$$$$| $$       _\\$$$$$$\\\n \\$$    $$ \\$$    $$| $$ \\$$    $$      | $$    $$| $$ \\$$    $$ \\$$    $$ \\$$     \\| $$      |       $$\n  \\$$$$$$   \\$$$$$$  \\$$  \\$$$$$$$       \\$$$$$$$  \\$$ _\\$$$$$$$ _\\$$$$$$$  \\$$$$$$$ \\$$       \\$$$$$$$ \n                                                      |  \\__| $$|  \\__| $$                              \n                                                       \\$$    $$ \\$$    $$                              \n                                                        \\$$$$$$   \\$$$$$$                               \n");
             Console.ResetColor();
 
             Console.WriteLine("Aim of the game: survive for as long as possible before bankruptcy");
@@ -362,6 +353,7 @@ namespace Gold_Diggerzz
                         break;
                     case 2:
                         _animation = false;
+                        Console.WriteLine("\n___  ___        _  _    _         _        ______               ______  _        \n|  \\/  |       | || |  (_)       | |       |  _  \\              |  _  \\(_)       \n| .  . | _   _ | || |_  _  _ __  | |  ___  | | | | __ _  _   _  | | | | _   __ _ \n| |\\/| || | | || || __|| || '_ \\ | | / _ \\ | | | |/ _` || | | | | | | || | / _` |\n| |  | || |_| || || |_ | || |_) || ||  __/ | |/ /| (_| || |_| | | |/ / | || (_| |\n\\_|  |_/ \\__,_||_| \\__||_|| .__/ |_| \\___| |___/  \\__,_| \\__, | |___/  |_| \\__, |\n                          | |                             __/ |             __/ |\n                          |_|                            |___/             |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
                         Dig(priceDictionary, daysToDig, probabilityDictionary,
@@ -1027,9 +1019,8 @@ namespace Gold_Diggerzz
         private static void GoToMarket()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                    WELCOME TO THE MARKET                   ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.Write(
+                "\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
             Console.ResetColor();
 
             Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
@@ -1182,8 +1173,10 @@ namespace Gold_Diggerzz
                         break;
 
                     case 3:
+                        Console.Clear();
+                        Console.WriteLine("\n  _    _  _               ______                    _                                \n | |  | |(_)             |  ____|                  | |                               \n | |__| | _  _ __  ___   | |__    _ __ ___   _ __  | |  ___   _   _   ___   ___  ___ \n |  __  || || '__|/ _ \\  |  __|  | '_ ` _ \\ | '_ \\ | | / _ \\ | | | | / _ \\ / _ \\/ __|\n | |  | || || |  |  __/  | |____ | | | | | || |_) || || (_) || |_| ||  __/|  __/\\__ \\\n |_|  |_||_||_|   \\___|  |______||_| |_| |_|| .__/ |_| \\___/  \\__, | \\___| \\___||___/\n                                            | |                __/ |                 \n                                            |_|               |___/                  \n");
+                        Console.WriteLine($"Each employee charges {_currentWageRate} in wages per day right now");
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine($"Remember each employee charges {_currentWageRate} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
                         if (employeesToHire * _currentEmployeePrice > dollars.Quantity)
                         {
