@@ -10,38 +10,44 @@ namespace Gold_Diggerzz
     /* program structure + hierarchy
 
        - Resource
-             - Coal
-             - Stone
-             - Iron
-             - Gold
-             - Diamond
+           - Coal
+           - Stone
+           - Iron
+           - Gold
+           - Diamond
        - Dollars
-       - Workers
+       - Worker
+           - Name
+           - Wage
+           - Price
+           - EmployeeIllProbability
        - PowerUp
-             - MagicTokens
-             - TimeMachine
-             - AncientArtefact
-             - MarketMaster
+           - MagicTokens
+           - TimeMachine
+           - AncientArtefact
+           - MarketMaster
        - Program
-             - Main()
-                 - CreatePricesDictionary()
-                 - CreateProbabilityDictionary()
-                 - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
-                     - UserMenuOption()
-                         - CheckIfInDebt()
-                     - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
-                         - PrintResources()
-                     - GoToMarket()
-                         - PrintResources()
-                     - PrintGameMechanics()
-                     - QuitGame()
-                     - GameFailed()
-                     - ChangeProbabilities(DateTime currentDate)
-                     - CheckAchievements(List<string> achievements)
-                     - ChangePrices()
-                     - EmployeeTrainingCourse()
-                 - GetValidInt(int min, int max)
-                 - GetValidDouble(double min, double max)
+           - Main()
+               - CreatePricesDictionary()
+               - CreateProbabilityDictionary()
+               - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
+                   - UserMenuOption()
+                       - CheckIfInDebt()
+                   - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
+                       - PrintResources()
+                   - GoToMarket()
+                       - PrintResources()
+                   - PrintGameMechanics()
+                   - QuitGame()
+                   - GameFailed()
+                   - ChangeProbabilities(DateTime currentDate)
+                   - CheckAchievements(List<string> achievements)
+                   - ChangePrices()
+                   - EmployeeTrainingCourse()
+               - GetValidInt(int min, int max)
+               - GetValidDouble(double min, double max)
+               - HireNewWorker(int numberOfWorkers)
+               - RemoveWorker()
       * /
 
    /*
