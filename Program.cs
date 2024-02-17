@@ -162,12 +162,12 @@ namespace Gold_Diggerzz
         public double Price;
         public double EmployeeIllProbability;
         
-        public Worker(string name)
+        public Worker(string name, double wage, double price, double employeeIllProbability)
         {
             Name = name;
-            Wage = 10;
-            Price = 100;
-            EmployeeIllProbability = 10;
+            Wage = wage;
+            Price = price;
+            EmployeeIllProbability = employeeIllProbability;
         }
     }
 
@@ -225,6 +225,9 @@ namespace Gold_Diggerzz
         private static bool _achievement18;
         private static bool _achievement19;
         private static bool _achievement20;
+        private static double _currentWageRate = 10;
+        private static double _currentEmployeeIllProbability = 10;
+        private static double _currentEmployeePrice = 100;
         private static DateTime _currentDate = new DateTime(2024, 1, 1);
         private static Random _random = new Random();
         private static int _crashDate = _random.Next(0, 28);
@@ -296,7 +299,7 @@ namespace Gold_Diggerzz
             
             // possible names for the workers
             
-            HireNewWorker(_possibleNames, 1);
+            HireNewWorker(1);
             
             coal = new Resource(90, 4, 0, 0);
             stone = new Resource(75, 8, 0, 0);
@@ -520,7 +523,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Chance of finding diamond = {Math.Round(diamond.Probability, 2)}%");
             Console.WriteLine($"Chance of finding Ancient Artefact = {Math.Round(ancientArtefact.Probability, 2)}%");
 
-            Console.WriteLine($"\nCost of hiring employee = ${workersList[1].Wage}");
+            Console.WriteLine($"\nCost of hiring employee = ${workersList[0].Price}");
             Console.WriteLine($"Coal value = ${Math.Round(coal.Price, 2)}");
             Console.WriteLine($"Stone value = ${Math.Round(stone.Price, 2)}");
             Console.WriteLine($"Iron value = ${Math.Round(iron.Price, 2)}");
@@ -694,7 +697,7 @@ namespace Gold_Diggerzz
                     _totalDollarsEarned += workersList.Count * 50;
                     
                     // a for or a while loop to remove every item in the list aside from one tk
-                    HireNewWorker(_possibleNames, 10);
+                    HireNewWorker(10);
                 }
             }
 
@@ -948,7 +951,7 @@ namespace Gold_Diggerzz
 
                     else
                     {
-                        double totalWages = workersList.Count * workersList[1].Wage;
+                        double totalWages = workersList.Count * _currentWageRate;
                         dollars.Quantity -= totalWages;
 
                         Console.WriteLine($"Your {workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
@@ -1029,8 +1032,8 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| Iron: ${Math.Round(iron.Price, 2)} per kg");
             Console.WriteLine($"| Gold: ${Math.Round(gold.Price, 2)} per kg");
             Console.WriteLine($"| Diamond: ${Math.Round(diamond.Price, 2)} per kg");
-            Console.WriteLine($"| Employees: ${Math.Round(workersList[1].Price, 2)} per employee");
-            Console.WriteLine($"| Wages: ${Math.Round(workersList[1].Wage, 2)} per employee per day");
+            Console.WriteLine($"| Employees: ${Math.Round(workersList[0].Price, 2)} per employee");
+            Console.WriteLine($"| Wages: ${Math.Round(_currentWageRate, 2)} per employee per day");
             Console.WriteLine("______________________________");
 
 
@@ -1172,9 +1175,9 @@ namespace Gold_Diggerzz
 
                     case 3:
                         Console.WriteLine("Enter how many employees you want to hire:");
-                        Console.WriteLine($"Remember each employee charges {workersList[1].Wage} in wages per day right now");
+                        Console.WriteLine($"Remember each employee charges {_currentWageRate} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
-                        if (employeesToHire * workersList[1].Price > dollars.Quantity)
+                        if (employeesToHire * workersList[0].Price > dollars.Quantity)
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
                         }
@@ -1182,9 +1185,9 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine($"You have hired {employeesToHire} more employee");
                             
-                            HireNewWorker(_possibleNames, employeesToHire);
+                            HireNewWorker(employeesToHire);
                             
-                            dollars.Quantity -= employeesToHire * workersList[1].Price;
+                            dollars.Quantity -= employeesToHire * workersList[0].Price;
                             Console.WriteLine($"You now have {workersList.Count} employees");
                             _totalEmployeesHired += employeesToHire;
                         }
@@ -1294,13 +1297,19 @@ namespace Gold_Diggerzz
             if (currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
                 Console.WriteLine("It's the weekend, your employees want 30% more pay");
-                workersList[1].Wage *= 1.3;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage *= 1.3;
+                }
             }
 
             // to undo the effect of weekend pay
             else if (currentDate.DayOfWeek is DayOfWeek.Monday)
             {
-                workersList[1].Wage /= 1.3;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage *= 1.3;
+                }
             }
 
             // stock market code below
@@ -1340,19 +1349,22 @@ namespace Gold_Diggerzz
             if (currentDate.Month != 1 && currentDate.Day == 1)
             {
                 Console.WriteLine("It's the first of the month, your employees want a 10% raise");
-                workersList[1].Wage *= 1.1;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage *= 1.1;
+                }
             }
 
             // to undo the effects of unwell workers
             if (_lessWorkerDays == 1)
             {
-                HireNewWorker(_possibleNames, 1);
+                HireNewWorker(1);
                 Console.WriteLine("Your employee is back at work today");
                 _lessWorkerDays = 0;
             }
 
             // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < workersList[1].EmployeeIllProbability && workersList.Count > 1)
+            if (_random.Next(0, 100) < workersList[0].EmployeeIllProbability && workersList.Count > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 RemoveWorker();
@@ -1603,11 +1615,11 @@ namespace Gold_Diggerzz
             Console.WriteLine("7 Days have now passed");
         }
 
-        private static void HireNewWorker(List<string> _possibleNames, int numberOfWorkers)
+        private static void HireNewWorker(int numberOfWorkers)
         {
             for (int i = 0; i < numberOfWorkers; i++)
             {
-                Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)]);
+                Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
                 workersList.Add(newWorker);
             }
         }
