@@ -523,7 +523,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Chance of finding diamond = {Math.Round(diamond.Probability, 2)}%");
             Console.WriteLine($"Chance of finding Ancient Artefact = {Math.Round(ancientArtefact.Probability, 2)}%");
 
-            Console.WriteLine($"\nCost of hiring employee = ${workersList[0].Price}");
+            Console.WriteLine($"\nCost of hiring employee = ${_currentEmployeePrice}");
             Console.WriteLine($"Coal value = ${Math.Round(coal.Price, 2)}");
             Console.WriteLine($"Stone value = ${Math.Round(stone.Price, 2)}");
             Console.WriteLine($"Iron value = ${Math.Round(iron.Price, 2)}");
@@ -1032,7 +1032,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| Iron: ${Math.Round(iron.Price, 2)} per kg");
             Console.WriteLine($"| Gold: ${Math.Round(gold.Price, 2)} per kg");
             Console.WriteLine($"| Diamond: ${Math.Round(diamond.Price, 2)} per kg");
-            Console.WriteLine($"| Employees: ${Math.Round(workersList[0].Price, 2)} per employee");
+            Console.WriteLine($"| Employees: ${Math.Round(_currentEmployeePrice, 2)} per employee");
             Console.WriteLine($"| Wages: ${Math.Round(_currentWageRate, 2)} per employee per day");
             Console.WriteLine("______________________________");
 
@@ -1177,7 +1177,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Enter how many employees you want to hire:");
                         Console.WriteLine($"Remember each employee charges {_currentWageRate} in wages per day right now");
                         int employeesToHire = GetValidInt(0, 100000);
-                        if (employeesToHire * workersList[0].Price > dollars.Quantity)
+                        if (employeesToHire * _currentEmployeePrice > dollars.Quantity)
                         {
                             Console.WriteLine("You don't have enough dollars to hire that many employees");
                         }
@@ -1187,7 +1187,7 @@ namespace Gold_Diggerzz
                             
                             HireNewWorker(employeesToHire);
                             
-                            dollars.Quantity -= employeesToHire * workersList[0].Price;
+                            dollars.Quantity -= employeesToHire * _currentEmployeePrice;
                             Console.WriteLine($"You now have {workersList.Count} employees");
                             _totalEmployeesHired += employeesToHire;
                         }
@@ -1364,7 +1364,7 @@ namespace Gold_Diggerzz
             }
 
             // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < workersList[0].EmployeeIllProbability && workersList.Count > 1)
+            if (_random.Next(0, 100) < _currentEmployeeIllProbability && workersList.Count > 1)
             {
                 Console.WriteLine("One of your employees is unwell and doesn't come in today");
                 RemoveWorker();
