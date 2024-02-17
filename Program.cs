@@ -26,28 +26,31 @@ namespace Gold_Diggerzz
            - TimeMachine
            - AncientArtefact
            - MarketMaster
+       - StockMarketCrash
+           - PriceToFindOutDate
+           - Probability
        - Program
            - Main()
                - CreatePricesDictionary()
-               - CreateProbabilityDictionary()
-               - RunGame(Dictionary<string, double> priceDictionary, Dictionary<string, double> probabilityDictionary, List<string> achievementsList)
+               - RunGame(Dictionary<string, double> priceDictionary, List<string> achievementsList)
                    - UserMenuOption()
                        - CheckIfInDebt()
                    - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
                        - PrintResources()
                    - GoToMarket()
                        - PrintResources()
-                   - PrintGameMechanics()
+                   - PrintGameMechanics(Dictionary<string, double> prices)
+                   - PrintStats()
+                   - PrintResources()
                    - QuitGame()
                    - GameFailed()
                    - ChangeProbabilities(DateTime currentDate)
                    - CheckAchievements(List<string> achievements)
                    - ChangePrices()
-                   - EmployeeTrainingCourse()
+                   - EmployeeTrainingCourse(Dictionary<string, double> prices)
                - GetValidInt(int min, int max)
                - GetValidDouble(double min, double max)
                - HireNewWorker(int numberOfWorkers)
-               - RemoveWorker()
       * /
 
    /*
@@ -185,11 +188,13 @@ namespace Gold_Diggerzz
     
     class StockMarketCrash
     {
+        public int PriceToFindOutDate;
         public double Probability;
         
         public StockMarketCrash()
 
         {
+            PriceToFindOutDate = 50;
             Probability = 7;
         }
     }
@@ -254,6 +259,7 @@ namespace Gold_Diggerzz
         static PowerUp timeMachine;
         static PowerUp ancientArtefact;
         static PowerUp marketMaster;
+        static StockMarketCrash stockMarketCrash = new StockMarketCrash();
         
         // to stop screaming at me for names it doesnt recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
@@ -477,7 +483,7 @@ namespace Gold_Diggerzz
                     case 10:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
                         Console.WriteLine(
-                            $"1 - Pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
+                            $"1 - Pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
                         Console.WriteLine(
                             $"2 - Bribe the government for ${priceDictionary["bribe"]} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(1, 2);
@@ -486,8 +492,8 @@ namespace Gold_Diggerzz
                         {
                             case 1:
                                 Console.WriteLine(
-                                    $"You have chosen to pay ${priceDictionary["stockMarketDate"]} for information on the next stock market crash");
-                                dollars.Quantity -= priceDictionary["stockMarketDate"];
+                                    $"You have chosen to pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
+                                dollars.Quantity -= stockMarketCrash.PriceToFindOutDate;
                                 Console.WriteLine("Giving you the information now...");
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
@@ -592,7 +598,6 @@ namespace Gold_Diggerzz
             {
                 { "SkipDay", 50 },
                 { "bribe", 200 },
-                { "stockMarketDate", 50 },
                 { "trainingCourse", 400 }
             };
 
@@ -607,7 +612,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
             Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
             Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine($"You can also pay ${prices["stockMarketDate"]} for information on the next stock market crash");
+            Console.WriteLine($"You can also pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
             Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
             Console.WriteLine("You can also sell all your iron and gold for dollars");
             Console.WriteLine($"You can also skip one day for ${prices["SkipDay"]}");
