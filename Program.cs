@@ -1590,7 +1590,7 @@ namespace Gold_Diggerzz
                 for (int i = 0; i < numberOfWorkers; i++)
                 {
                     int randomName = _random.Next(0, _possibleNames.Count);
-                    double efficiency = _random.Next(70, 100) / 100.0;
+                    double efficiency = _random.Next(70, 130) / 100;
                     Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
