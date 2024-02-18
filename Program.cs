@@ -968,8 +968,6 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
 
-                Console.WriteLine("___________________________________");
-
                 // change the probabilities of finding resources - including calendar and weather effects
                 ChangeProbabilities();
 
@@ -984,8 +982,10 @@ namespace Gold_Diggerzz
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             DisplayStuff.DisplayResources(this);
             
-            foreach (Worker worker in workersList)
+            // retiring workers
+            for (int i = workersList.Count - 1; i >= 0; i--)
             {
+                Worker worker = workersList[i];
                 if (worker.DaysUntilRetirement != 0)
                 {
                     worker.DaysUntilRetirement -= 1;
@@ -994,10 +994,9 @@ namespace Gold_Diggerzz
                 if (worker.DaysUntilRetirement == 0)
                 {
                     Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
-                    Console.WriteLine($"You now have {workersList.Count - 1} employees");
-                    workersList.Remove(worker);
+                    workersList.RemoveAt(i);
+                    Console.WriteLine($"You now have {workersList.Count} employees");
                 }
-
             }
             
             skipDay.skipDayOrNot = false;
@@ -1631,11 +1630,15 @@ namespace Gold_Diggerzz
                 {
                     int randomName = _random.Next(0, _possibleNames.Count);
                     
-                    // making 'brackets' or 'levels' of efficiency based on the number of employees
+                    // making 'levels' of efficiency based on the number of employees
                     // this is to make the game harder over time as the player hires more employees
-
                     double efficiency = 1;
-                    if (workersList.Count > 5)
+                    if (workersList.Count > 0)
+                    {
+                        efficiency = _random.Next(70, 130);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 5)
                     {
                         efficiency = _random.Next(65, 125);
                         efficiency /= 100;
@@ -1715,7 +1718,7 @@ namespace Gold_Diggerzz
             }
             else
             {
-                Console.WriteLine("You've run out of names to give to your employees as you've hired all 200/200 available employee names");
+                Console.WriteLine("You've hired all 200/200 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
             }
         }
 
