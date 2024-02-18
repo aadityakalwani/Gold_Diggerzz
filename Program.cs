@@ -228,7 +228,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
             Console.WriteLine($"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
-            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' efficiency is {Math.Round(program._employeeEfficiency, 2)}");
+            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
         
@@ -264,7 +264,7 @@ namespace Gold_Diggerzz
         public double _totalDaysDug;
         public double _totalEmployeesHired;
         public double _totalDollarsEarned;
-        public double _employeeEfficiency = 1;
+        public double _averageEmployeeEfficiency = 1;
         public bool _achievement1;
         public bool _achievement2;
         public bool _achievement3;
@@ -660,6 +660,13 @@ namespace Gold_Diggerzz
         public void Dig(int daysToDig)
         {
 
+            double totalEfficiency = 0;
+            foreach (Worker worker in workersList)
+            {
+                totalEfficiency += worker.DefaultEfficiency;
+            }
+            _averageEmployeeEfficiency = totalEfficiency / workersList.Count;
+
             for (int days = 0; days < daysToDig; days++)
             {
 
@@ -772,7 +779,7 @@ namespace Gold_Diggerzz
 
                         // update values within the resources dictionary
 
-                        double newResourcesFound = workersList.Count * _employeeEfficiency;
+                        double newResourcesFound = workersList.Count * _averageEmployeeEfficiency;
 
                         if (coalFound)
                         {
@@ -1384,20 +1391,20 @@ namespace Gold_Diggerzz
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
-                _employeeEfficiency *= 1.3;
+                _averageEmployeeEfficiency *= 1.3;
             }
 
             if (_beautifulSkyDaysLeft == 1)
             {
                 Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
-                _employeeEfficiency /= 1.2;
+                _averageEmployeeEfficiency /= 1.2;
                 _beautifulSkyDaysLeft = 0;
             }
 
             if (_hurricaneDaysLeft == 1)
             {
                 Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
-                _employeeEfficiency *= 1.4;
+                _averageEmployeeEfficiency *= 1.4;
             }
 
             bool noActiveWeatherEffects =
@@ -1407,7 +1414,7 @@ namespace Gold_Diggerzz
             if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
                 Console.WriteLine("A hurricane is coming, efficiency is now 40% less the next five days");
-                _employeeEfficiency /= 1.4;
+                _averageEmployeeEfficiency /= 1.4;
                 _hurricaneDaysLeft = 6;
             }
 
@@ -1415,7 +1422,7 @@ namespace Gold_Diggerzz
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
-                _employeeEfficiency /= 1.3;
+                _averageEmployeeEfficiency /= 1.3;
                 _badWeatherDaysLeft = 3;
             }
 
@@ -1423,7 +1430,7 @@ namespace Gold_Diggerzz
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
-                _employeeEfficiency *= 1.2;
+                _averageEmployeeEfficiency *= 1.2;
                 _beautifulSkyDaysLeft = 3;
             }
 
@@ -1593,7 +1600,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("Training employees...");
             Console.WriteLine($"This course charged you {trainingCourse.Price * workersList.Count} in fees");
             dollars.Quantity -= trainingCourse.Price * workersList.Count;
-            _employeeEfficiency *= 1.3;
+            _averageEmployeeEfficiency *= 1.3;
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
             Console.WriteLine("7 Days have now passed");
@@ -1606,7 +1613,9 @@ namespace Gold_Diggerzz
                 for (int i = 0; i < numberOfWorkers; i++)
                 {
                     int randomName = _random.Next(0, _possibleNames.Count);
-                    double efficiency = _random.Next(70, 130) / 100;
+                    double efficiency = _random.Next(70, 130);
+                    efficiency /= 100;
+                    
                     Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
