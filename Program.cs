@@ -1163,7 +1163,7 @@ namespace Gold_Diggerzz
                         }
                         else
                         {
-                            Console.WriteLine($"You have hired {employeesToHire} more employee");
+                            Console.WriteLine($"You have hired {employeesToHire} more employees.\nSay hello to:");
                             
                             HireNewWorker(employeesToHire);
                             
@@ -1598,6 +1598,7 @@ namespace Gold_Diggerzz
             {
                 Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
                 workersList.Add(newWorker);
+                Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
         
