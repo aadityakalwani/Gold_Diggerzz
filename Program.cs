@@ -84,9 +84,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * per-employee stuff
-         * workers retire after x days
-         * send individual number of employees for training course that then boosts their productivity
+     * send individual number of employees for training course that then boosts their productivity
      */
 
     class GameState
@@ -311,7 +309,7 @@ namespace Gold_Diggerzz
 
         private static List<string> achievementsList = new List<string>();
         
-        // possible names for the workers
+        // 200 possible names for the workers
         // to stop screaming at me for names it doesnt recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         private static List<string> _possibleNames = new List<string>()
@@ -336,9 +334,6 @@ namespace Gold_Diggerzz
                 "Ryan Gosling-along", "Tom Cruise-control", "Russell Crow-bar", "Matt Damon-salad", "Jennifer Lawrence-of-arabia", "Reese Witherspoon-fed", "Angelina Jolie-ox", "Dwayne 'The Rocking Chair' Johnson", "George Clooney-tunes", "Robert Downey Jr. High",
                 "Keanu Reeves and Butthead", "Meryl Streep-ing", "Jessica Al-bacon", "Liam Neeson-light", "Tom Hanks-giving", "Kate Wins-lit", "Bradley Cooper-ate", "Charlize Theron-ament", "Julia Roberts-rule", "Natalie Port-man",
                 "Jennifer Aniston-bake", "Kevin Space-jam", "Daniel Radishcliffe", "Amy Wine-house", "Brad Pitt-stop", "Katy Perry-corn", "Hugh Grant-ed", "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
-                "Eddie Murphy-bed", "Bruce Willis-tower", "Johnny Cash-flow", "Celine Dion-osaur", "Jennifer Lopez-ing", "Ellen DeGeneres-erator", "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule", "Tom Cruise-control",
-                "Zach Galifianakis-bar", "Kate Wins-lit", "Denzel Washing-done", "Brad Pitt-stop", "Eva Longoria-lunch", "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful", "Charlize Thereon", "Amy Wine-handy",
-                "Tommy Lee Bones", "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar", "Bruce Spring-clean", "George Clooney-tunes", "Jennifer Aniston-the-pants"
             };
         
         private static List<string>_usedNames = new List<string>();
@@ -347,7 +342,6 @@ namespace Gold_Diggerzz
         public static void Main()
         {
             Program program = new Program();
-            
             // pre-game
             
             program.HireNewWorker(1);
@@ -659,7 +653,7 @@ namespace Gold_Diggerzz
 
         public void Dig(int daysToDig)
         {
-
+            // recalculate the average efficiency of the employees
             double totalEfficiency = 0;
             foreach (Worker worker in workersList)
             {
@@ -1613,8 +1607,81 @@ namespace Gold_Diggerzz
                 for (int i = 0; i < numberOfWorkers; i++)
                 {
                     int randomName = _random.Next(0, _possibleNames.Count);
-                    double efficiency = _random.Next(70, 130);
-                    efficiency /= 100;
+                    
+                    // making 'brackets' or 'levels' of efficiency based on the number of employees
+                    // this is to make the game harder over time as the player hires more employees
+
+                    double efficiency = 1;
+                    if (workersList.Count > 5)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 5)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 10)
+                    {
+                        efficiency = _random.Next(6, 120);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 15)
+                    {
+                        efficiency = _random.Next(55, 115);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 20)
+                    {
+                        efficiency = _random.Next(50, 110);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 25)
+                    {
+                        efficiency = _random.Next(45, 105);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 30)
+                    {
+                        efficiency = _random.Next(40, 100);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 35)
+                    {
+                        efficiency = _random.Next(35, 95);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 40)
+                    {
+                        efficiency = _random.Next(30, 90);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 45)
+                    {
+                        efficiency = _random.Next(25, 85);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 50)
+                    {
+                        efficiency = _random.Next(20, 80);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 55)
+                    {
+                        efficiency = _random.Next(15, 75);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 60)
+                    {
+                        efficiency = _random.Next(10, 70);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 65)
+                    {
+                        efficiency = _random.Next(5, 65);
+                        efficiency /= 100;
+                    }
                     
                     Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
@@ -1625,7 +1692,7 @@ namespace Gold_Diggerzz
             }
             else
             {
-                Console.WriteLine("You've run out of names to give to your employees");
+                Console.WriteLine("You've run out of names to give to your employees as you've hired all 200/200 available employee names");
             }
         }
 
