@@ -68,7 +68,9 @@ namespace Gold_Diggerzz
     */
 
     /* to-do ideas
-     * achievements are OOP-ed? idk
+     * OOP the weather effects
+     * allow for multiple employees to be ill at any time based on their employee ill probability
+     * achievements are OOP-ed? idk about this one
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
@@ -226,7 +228,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
             Console.WriteLine($"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
             Console.WriteLine($"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
-            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' average efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
         
@@ -660,10 +662,9 @@ namespace Gold_Diggerzz
                 totalEfficiency += worker.DefaultEfficiency;
             }
             _averageEmployeeEfficiency = totalEfficiency / workersList.Count;
-
+            
             for (int days = 0; days < daysToDig; days++)
             {
-
                 if (CheckIfInDebt() != "true")
                 {
                     if (!skipDay.skipDayOrNot)
@@ -970,7 +971,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("___________________________________");
 
                 // change the probabilities of finding resources - including calendar and weather effects
-                ChangeProbabilities(_currentDate);
+                ChangeProbabilities();
 
                 // apply a ±10% fluctuation to the prices of iron and gold
                 ChangePrices();
@@ -1264,9 +1265,9 @@ namespace Gold_Diggerzz
             QuitGame();
         }
 
-        public void ChangeProbabilities(DateTime currentDate)
+        public void ChangeProbabilities()
         {
-
+            DateTime currentDate = _currentDate;
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
 
             // every 10 days, probability of finding resources is reduced by 5%
@@ -1348,12 +1349,14 @@ namespace Gold_Diggerzz
                 _lessWorkerDays = 0;
             }
 
-            // 10% chance an employee is unwell and doesn't come in
-            if (_random.Next(0, 100) < _currentEmployeeIllProbability && workersList.Count > 1)
+            foreach (Worker worker in workersList)
             {
-                Console.WriteLine("One of your employees is unwell and doesn't come in today");
-                workersList.RemoveAt(0);
-                _lessWorkerDays = 1;
+                if (_random.Next(0, 100) < worker.EmployeeIllProbability)
+                {
+                    Console.WriteLine($"One of your employees, {worker.Name} is unwell and doesn't come in today");
+                    workersList.Remove(worker);
+                    _lessWorkerDays = 1;
+                }
             }
 
             // 10% profit sharing to each employee on the 15th of every month
@@ -1385,30 +1388,41 @@ namespace Gold_Diggerzz
             if (_badWeatherDaysLeft == 1)
             {
                 Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
-                _averageEmployeeEfficiency *= 1.3;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency *= 1.3;
+                }
             }
 
             if (_beautifulSkyDaysLeft == 1)
             {
                 Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
-                _averageEmployeeEfficiency /= 1.2;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency /= 1.2;
+                }
                 _beautifulSkyDaysLeft = 0;
             }
 
             if (_hurricaneDaysLeft == 1)
             {
                 Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
-                _averageEmployeeEfficiency *= 1.4;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency *= 1.4;
+                }
             }
 
-            bool noActiveWeatherEffects =
-                _badWeatherDaysLeft == 0 && _hurricaneDaysLeft == 0 && _beautifulSkyDaysLeft == 0;
+            bool noActiveWeatherEffects = _badWeatherDaysLeft == 0 && _hurricaneDaysLeft == 0 && _beautifulSkyDaysLeft == 0;
 
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
                 Console.WriteLine("A hurricane is coming, efficiency is now 40% less the next five days");
-                _averageEmployeeEfficiency /= 1.4;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency /= 1.4;
+                }
                 _hurricaneDaysLeft = 6;
             }
 
@@ -1416,7 +1430,10 @@ namespace Gold_Diggerzz
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
-                _averageEmployeeEfficiency /= 1.3;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency /= 1.3;
+                }
                 _badWeatherDaysLeft = 3;
             }
 
@@ -1424,7 +1441,10 @@ namespace Gold_Diggerzz
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
                 Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
-                _averageEmployeeEfficiency *= 1.2;
+                foreach (Worker worker in workersList)
+                {
+                    worker.DefaultEfficiency *= 1.2;
+                }
                 _beautifulSkyDaysLeft = 3;
             }
 
@@ -1594,7 +1614,10 @@ namespace Gold_Diggerzz
             Console.WriteLine("Training employees...");
             Console.WriteLine($"This course charged you {trainingCourse.Price * workersList.Count} in fees");
             dollars.Quantity -= trainingCourse.Price * workersList.Count;
-            _averageEmployeeEfficiency *= 1.3;
+            foreach (Worker worker in workersList)
+            {
+                worker.DefaultEfficiency *= 1.3;
+            }
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
             Console.WriteLine("7 Days have now passed");
@@ -1730,5 +1753,4 @@ namespace Gold_Diggerzz
             return GetValidDouble(min, max);
         }
     }
-    
 }
