@@ -69,6 +69,8 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * OOP the weather effects
+     * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
+        * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * allow for multiple employees to be ill at any time based on their employee ill probability
      * achievements are OOP-ed? idk about this one
      * reorder the menu options to be more flowy and logical
@@ -241,7 +243,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.workersList)
             {
                 i++;
-                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {worker.DefaultEfficiency}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
         
@@ -1161,7 +1163,7 @@ namespace Gold_Diggerzz
                         Console.Clear();
                         Console.WriteLine("  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
                         Console.WriteLine($"Each employee charges {_currentWageRate} in wages per day right now");
-                        Console.WriteLine("Enter how many employees you want to hire:");
+                        Console.WriteLine($"Enter how many employees you want to hire?\nYou have {dollars.Quantity} dollars");
                         int employeesToHire = GetValidInt(0, 100000);
                         if (employeesToHire * _currentEmployeePrice > dollars.Quantity)
                         {
@@ -1271,12 +1273,12 @@ namespace Gold_Diggerzz
             if (currentDate.Day % 10 == 0)
             {
                 Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
-                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 5% \ud83d\udc22");
-                coal.Probability *= 0.95;
-                stone.Probability *= 0.95;
-                iron.Probability *= 0.95;
-                gold.Probability *= 0.95;
-                diamond.Probability *= 0.95;
+                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 8% \ud83d\udc22");
+                coal.Probability *= 0.92;
+                stone.Probability *= 0.92;
+                iron.Probability *= 0.92;
+                gold.Probability *= 0.92;
+                diamond.Probability *= 0.92;
             }
 
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
@@ -1365,7 +1367,7 @@ namespace Gold_Diggerzz
                 {
                     if (_random.Next(0, 100) < worker.EmployeeIllProbability)
                     {
-                        Console.WriteLine($"\ud83e\udd27 One of your employees, {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        Console.WriteLine($"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
                         newlyIllWorkers.Add(worker);
                     }
                 }
@@ -1658,77 +1660,136 @@ namespace Gold_Diggerzz
                         efficiency = _random.Next(70, 130);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 5)
+                    else if (workersList.Count > 3)
                     {
                         efficiency = _random.Next(65, 125);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 5)
+                    else if (workersList.Count > 6)
                     {
                         efficiency = _random.Next(65, 125);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 10)
+                    else if (workersList.Count > 9)
                     {
                         efficiency = _random.Next(6, 120);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 15)
+                    else if (workersList.Count > 12)
                     {
                         efficiency = _random.Next(55, 115);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 20)
+                    else if (workersList.Count > 15)
                     {
                         efficiency = _random.Next(50, 110);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 25)
+                    else if (workersList.Count > 18)
                     {
                         efficiency = _random.Next(45, 105);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 30)
+                    else if (workersList.Count > 21)
                     {
                         efficiency = _random.Next(40, 100);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 35)
+                    else if (workersList.Count > 24)
                     {
                         efficiency = _random.Next(35, 95);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 40)
+                    else if (workersList.Count > 27)
                     {
                         efficiency = _random.Next(30, 90);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 45)
+                    else if (workersList.Count > 30)
                     {
                         efficiency = _random.Next(25, 85);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 50)
+                    else if (workersList.Count > 33)
                     {
                         efficiency = _random.Next(20, 80);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 55)
+                    else if (workersList.Count > 36)
                     {
                         efficiency = _random.Next(15, 75);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 60)
+                    else if (workersList.Count > 39)
                     {
                         efficiency = _random.Next(10, 70);
                         efficiency /= 100;
                     }
-                    else if (workersList.Count > 65)
+                    else if (workersList.Count > 42)
                     {
                         efficiency = _random.Next(5, 65);
                         efficiency /= 100;
                     }
-                    
+                    else if (workersList.Count > 45)
+                    {
+                        efficiency = _random.Next(0, 60);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 28)
+                    {
+                        efficiency = _random.Next(0, 55);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 51)
+                    {
+                        efficiency = _random.Next(0, 50);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 54)
+                    {
+                        efficiency = _random.Next(0, 45);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 57)
+                    {
+                        efficiency = _random.Next(0, 40);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 60)
+                    {
+                        efficiency = _random.Next(0, 35);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 63)
+                    {
+                        efficiency = _random.Next(0, 30);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 66)
+                    {
+                        efficiency = _random.Next(0, 25);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 69)
+                    {
+                        efficiency = _random.Next(0, 20);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 72)
+                    {
+                        efficiency = _random.Next(0, 15);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 75)
+                    {
+                        efficiency = _random.Next(0, 10);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 78)
+                    {
+                        efficiency = _random.Next(0, 5);
+                        efficiency /= 100;
+                    }
                     Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
