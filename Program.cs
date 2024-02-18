@@ -64,11 +64,10 @@ namespace Gold_Diggerzz
     */
 
     /* to-do ideas
-     * more general OOP-ing
      * achievements are OOP-ed? idk
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
-     * a "mine collapse" event could temporarily reduce the player's digging efficiency
+     * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
      * tutorial mode (that is actually functional) 
      * loans - you can take a loan from the bank and pay it back with interest
      * load/save game
@@ -81,10 +80,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
-        * (like prestige in all the idle miner games i played)
      * per-employee stuff
-         * printing per-employee stats
          * workers retire after x days
          * add a 'luck' stat for each employee that changes the probabilities of finding resources
              * when you hire an employee they're given a 'luck' rating between 20-80%
@@ -276,29 +272,23 @@ namespace Gold_Diggerzz
                 "Sir Reginald Thunderpants III", "Bartholomew McFancyPants", "Benedict Cucumberbatch",
                 "Chadwick von Snugglesworth", "Montgomery Fiddlesticks", "Floyd Wibblebottom",
                 "Buford McFluffybutt", "Percival von Wigglesworth", "Gertrude Puddingpop",
-                "Beatrice von Schnauzer", "Rutherford McTinkleton", "Winston Fuzzyface",
+                "Barock O'Bam-Bam", "Serena Waterfalls", "Elona Musky",
+                "Michelin Obama", "LeBrick James", "Jeffy Bozos",
                 "Penelope Fluffernutter", "Sir Fluffington Fluffykins", "Barbara Biscuitbottom",
                 "Clarence Piddlesworth", "Rufus von Purrington", "Chester McNibblebutt",
                 "Prudence McSquiggles", "Cuthbert Fuzzyboots", "Millicent von Cuddlebug",
                 "Dudley von Floofenstein", "Hilda Muffinfluff", "Percy von Snugglepuss",
                 "Barnaby McSnoozytoes", "Mortimer Fluffernoodle", "Eugene von Fuzzywump",
-                "Agnes Piddlepants", "Milton McWhiskers", "Edna von Waggletail",
-                "Humphrey Fuzzymuffin", "Geraldine Purrwhiskers", "Reginald McFluffernugget",
+                "Oprah Windfury", "Roger Federbear", "Warren Buffet",
                 "Gertrude von Bumblefluff", "Clarence Purrington", "Tabitha Snickerdoodle",
                 "Percival von Cuddlebug", "Mildred Puddlejumper", "Archibald von Cuddlebutt",
                 "Esmeralda McSquishyface", "Reginald von Fluffykins", "Beatrice Bumbleflop",
-                "Algernon McFuzzyface", "Wanda von Snugglebug", "Horace McSnoozleton",
-                "Geraldine von Wigglesworth", "Felix Purrpants", "Matilda von Cuddlewhiskers",
-                "Reginald Fluffybottom", "Gwendolyn McFuzzytoes", "Bartholomew von Snuggleton",
-                "Clarence McPurrington", "Millicent von Waggletail", "Archibald Fiddlesticks",
-                "Esmeralda McWhiskerpants", "Rupert von Fuzzyface", "Mildred Purrwhiskers",
-                "Percival von Squigglepaws", "Reginald Fluffypants", "Eugene von Puddlejumper",
-                "Gertrude McSnugglepuss", "Humphrey von Purrington", "Prudence Fluffernoodle",
-                "Barnaby von Snugglewhiskers", "Hilda McSquigglebottom", "Benedict von Cuddlebug",
-                "Penelope McFluffernugget", "Rufus von Cuddlewhiskers", "Matilda McSquishyface",
-                "Winston von Fluffytoes", "Esmeralda McFuzzywump", "Montgomery von Squigglepaws",
-                "Tabitha McSnickerdoodle", "Buford von Fluffernutter", "Clarence McWaggletail",
-                "Beatrice von Fuzzywhiskers", "Rupert McFluffypants", "Gertrude von Cuddlebug",
+                "Michael Jumper", "Indra Munchi", "Richard Branflakes",
+                "Wanda von Snugglebug", "Horace McSnoozleton", "Geraldine von Wigglesworth",
+                "Serena Waterfalls", "Alexandria Rodriguez", "Sherlock Sandbox",
+                "Reginald McFluffernugget", "Gertrude von Bumblefluff", "Clarence Purrington",
+                "Milton McWhiskers", "Edna von Waggletail", "Humphrey Fuzzymuffin",
+                "Jack Ma-gic", "Cristiano Ronaldough", "Mark Zuckerburger",
                 "Chester McSquiggles", "Wanda von Fuzzytoes", "Percy McWhiskerpants",
                 "Gwendolyn von Purrwhiskers", "Milton McSnoozytoes", "Matilda von Bumbleflop",
                 "Archibald McFluffyface", "Prudence von Puddlejumper", "Barbara McFluffernugget",
@@ -306,11 +296,9 @@ namespace Gold_Diggerzz
                 "Millicent McFuzzywump", "Winston von Snuggleton", "Geraldine McFluffernutter",
                 "Reginald von Snugglepuss", "Rupert McFuzzybottom", "Clarence von Cuddlewhiskers",
                 "Tabitha McFuzzyface", "Benedict von Purrwhiskers", "Humphrey McSquigglebottom",
-                "Percival von McSnoozleton", "Gwendolyn von Fluffypaws", "Chester von Cuddlebug",
-                "Prudence McSnugglewhiskers", "Millicent von Fluffernutter", "Esmeralda McPurrington",
-                "Rufus von Squigglewhiskers", "Wanda McFuzzytoes", "Algernon von Snuggleton",
-                "Matilda McFluffypants", "Rupert von Snugglebug", "Tabitha McPurrwhiskers",
-                "Benedict von Fluffypaws", "Gwendolyn McSquiggletoes", "Reginald von Fuzzywhiskers"
+                "Ellen DeGenerous", "Lionel Messy", "Satya Nadellemon",
+                "Pierce Brosnap", "Serena Waterfalls", "Warren Buffet",
+                "Michelin Obama", "Roger Federbear", "Tim Crook"
             };
 
         
@@ -616,11 +604,11 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("___________________________________\n");
-                Console.WriteLine("Main Features:              Print Options:                  Other Features:\n");
-                Console.WriteLine("0 - Quit game               6 - Print game mechanics        4 - Skip one day");
-                Console.WriteLine("1 - Dig one day             7 - Print stats                 5 - Use a powerup");
-                Console.WriteLine("2 - Dig multiple days       8 - Print achievements          9 - Send employees for training");
-                Console.WriteLine("3 - Go to market            11 - Print tutorial             10 - Commit a crime (further options inside)");
+                Console.WriteLine("Main Features:              Display Options:                  Other Features:\n");
+                Console.WriteLine("0 - Quit game               6 - Display game mechanics        4 - Skip one day");
+                Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
+                Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
                 Console.WriteLine("                            12 - Display employees\n");
                 Console.WriteLine("Your choice:");
 
