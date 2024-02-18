@@ -26,20 +26,21 @@ namespace Gold_Diggerzz
            - TimeMachine
            - AncientArtefact
            - MarketMaster
-       - StockMarketCrash
-           - PriceToFindOutDate
-           - Probability
+       - PayForStuff
+           - StockMarketCrash
+           - SkipDay
+           - Bribe
+           - TrainingCourse
        - Program
            - Main()
-               - CreatePricesDictionary()
-               - RunGame(Dictionary<string, double> priceDictionary, List<string> achievementsList)
+               - RunGame()
                    - UserMenuOption()
                        - CheckIfInDebt()
-                   - Dig(int daysToDig, List<string> achievementsList, bool skipDay)
+                   - Dig(int daysToDig)
                        - PrintResources()
                    - GoToMarket()
                        - PrintResources()
-                   - PrintGameMechanics(Dictionary<string, double> prices)
+                   - PrintGameMechanics()
                    - PrintStats()
                    - PrintResources()
                    - QuitGame()
@@ -47,10 +48,11 @@ namespace Gold_Diggerzz
                    - ChangeProbabilities(DateTime currentDate)
                    - CheckAchievements(List<string> achievements)
                    - ChangePrices()
-                   - EmployeeTrainingCourse(Dictionary<string, double> prices)
+                   - EmployeeTrainingCourse()
                - GetValidInt(int min, int max)
                - GetValidDouble(double min, double max)
                - HireNewWorker(int numberOfWorkers)
+               - DisplayEmployees()
       * /
 
    /*
