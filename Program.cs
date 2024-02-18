@@ -37,12 +37,12 @@ namespace Gold_Diggerzz
                    - UserMenuOption()
                        - CheckIfInDebt()
                    - Dig(int daysToDig)
-                       - PrintResources()
+                       - DisplayResources()
                    - GoToMarket()
-                       - PrintResources()
-                   - PrintGameMechanics()
-                   - PrintStats()
-                   - PrintResources()
+                       - DisplayResources()
+                   - DisplayGameMechanics()
+                   - DisplayStats()
+                   - DisplayResources()
                    - QuitGame()
                    - GameFailed()
                    - ChangeProbabilities(DateTime currentDate)
@@ -57,7 +57,7 @@ namespace Gold_Diggerzz
 
    /*
     * current issues
-    * inconsistent between weather effect printing and actual
+    * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
     * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
     * magic tokens are x1.2 every time, which is not mathematically correct
@@ -88,7 +88,7 @@ namespace Gold_Diggerzz
      */
         
     /*
-    current features: (also in PrintMechanics())
+    current features: (also in DisplayMechanics())
     chance of finding coal = 90%
     chance of finding stone = 75%
     chance of finding iron = 65%
@@ -131,12 +131,11 @@ namespace Gold_Diggerzz
 
     if your $$$ balance is negative and you have no resource, you fail the game
     */
-    
-    // in the pregame i create a new instance of each resource and pass in the probability, price, quantity and totalFound
-    // this is then just updated throughout the game
-    // essentially removing coal, gold, etc from every dictionary that its currently in
-    // and instead of operation on the dictionary, i just call the method for each resource object when needed
-    // and then just deleting the dictionary and replacing it with the object everywhere
+
+    class GameState
+    {
+        
+    }
     
     class Resource
     {
@@ -153,7 +152,6 @@ namespace Gold_Diggerzz
             TotalFound = totalFound;
         }
     }
-    
     
     class Worker
     {
@@ -195,56 +193,55 @@ namespace Gold_Diggerzz
             skipDayOrNot = false;
         }
     }
-    
 
-    internal abstract class Program
+    class Program
 
     {
         
         // imagine these as like global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
-        private static bool _animation = true;
-        private static int _increasedGoldChanceDays;
-        private static int _marketMasterDaysLeft;
-        private static int _noWageDaysLeft;
-        private static int _lessWorkerDays;
-        private static int _crashDaysLeft;
-        private static int _badWeatherDaysLeft;
-        private static int _hurricaneDaysLeft;
-        private static int _beautifulSkyDaysLeft;
-        private static int _totalBribes;
-        private static int _totalPowerUpsUsed;
-        private static double _totalDaysDug;
-        private static double _totalEmployeesHired;
-        private static double _totalDollarsEarned;
-        private static double _employeeEfficiency = 1;
-        private static bool _achievement1;
-        private static bool _achievement2;
-        private static bool _achievement3;
-        private static bool _achievement4;
-        private static bool _achievement5;
-        private static bool _achievement6;
-        private static bool _achievement7;
-        private static bool _achievement8;
-        private static bool _achievement9;
-        private static bool _achievement10;
-        private static bool _achievement11;
-        private static bool _achievement12;
-        private static bool _achievement13;
-        private static bool _achievement14;
-        private static bool _achievement15;
-        private static bool _achievement16;
-        private static bool _achievement17;
-        private static bool _achievement18;
-        private static bool _achievement19;
-        private static bool _achievement20;
-        private static double _currentWageRate = 10;
-        private static double _currentEmployeeIllProbability = 10;
-        private static double _currentEmployeePrice = 100;
-        private static DateTime _currentDate = new DateTime(2024, 1, 1);
-        private static Random _random = new Random();
-        private static int _crashDate = _random.Next(0, 28);
-        private static List<Worker> workersList = new List<Worker>();
+        public static bool _animation = true;
+        public static int _increasedGoldChanceDays;
+        public static int _marketMasterDaysLeft;
+        public static int _noWageDaysLeft;
+        public static int _lessWorkerDays;
+        public static int _crashDaysLeft;
+        public static int _badWeatherDaysLeft;
+        public static int _hurricaneDaysLeft;
+        public static int _beautifulSkyDaysLeft;
+        public static int _totalBribes;
+        public static int _totalPowerUpsUsed;
+        public static double _totalDaysDug;
+        public static double _totalEmployeesHired;
+        public static double _totalDollarsEarned;
+        public static double _employeeEfficiency = 1;
+        public static bool _achievement1;
+        public static bool _achievement2;
+        public static bool _achievement3;
+        public static bool _achievement4;
+        public static bool _achievement5;
+        public static bool _achievement6;
+        public static bool _achievement7;
+        public static bool _achievement8;
+        public static bool _achievement9;
+        public static bool _achievement10;
+        public static bool _achievement11;
+        public static bool _achievement12;
+        public static bool _achievement13;
+        public static bool _achievement14;
+        public static bool _achievement15;
+        public static bool _achievement16;
+        public static bool _achievement17;
+        public static bool _achievement18;
+        public static bool _achievement19;
+        public static bool _achievement20;
+        public static double _currentWageRate = 10;
+        public static double _currentEmployeeIllProbability = 10;
+        public static double _currentEmployeePrice = 100;
+        public static DateTime _currentDate = new DateTime(2024, 1, 1);
+        public static Random _random = new Random();
+        public static int _crashDate = _random.Next(0, 28);
+        public static List<Worker> workersList = new List<Worker>();
         
         // Declare your variables at the class level
         static Resource coal;
@@ -302,7 +299,7 @@ namespace Gold_Diggerzz
             };
 
         
-        private static void Main()
+        public static void Main()
         {
             // pre-game
             
@@ -331,14 +328,14 @@ namespace Gold_Diggerzz
             Console.WriteLine("Aim of the game: survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
 
-            PrintResources();
+            DisplayResources();
 
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
             RunGame();
         }
 
-        private static void RunGame()
+        public static void RunGame()
         {
             int menuOption;
             do
@@ -377,7 +374,7 @@ namespace Gold_Diggerzz
                         dollars.Quantity -= skipDay.Price;
                         skipDay.skipDayOrNot = true;
                         Dig(1);
-                        PrintResources();
+                        DisplayResources();
                         break;
                     case 5:
                         if (ancientArtefact.Quantity ! > 0 && timeMachine.Quantity ! > 0)
@@ -434,10 +431,10 @@ namespace Gold_Diggerzz
 
                         break;
                     case 6:
-                        PrintGameMechanics();
+                        DisplayGameMechanics();
                         break;
                     case 7:
-                        PrintStats();
+                        DisplayStats();
                         break;
                     case 8:
                         for (int achievementNumber = 0; achievementNumber < achievementsList.Count; achievementNumber++)
@@ -507,8 +504,113 @@ namespace Gold_Diggerzz
             } while (menuOption != 0 && menuOption != -1);
 
         }
+        
+        public static void RunTutorial()
+        {
+            Console.WriteLine("Welcome to the tutorial");
+            Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
+            Console.WriteLine("You have a few resources to start with:");
+            Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
+            Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
+            Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
+            Console.WriteLine($"You can also pay ${stockMarketCrash.Price} for information on the next stock market crash");
+            Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
+            Console.WriteLine("You can also sell all your iron and gold for dollars");
+            Console.WriteLine($"You can also skip one day for ${skipDay.Price}");
+            Console.WriteLine("You can also quit the game");
+            Console.WriteLine("You can also dig for multiple days");
+            Console.WriteLine("Here are the game mechanics:");
+        }
 
-        private static void PrintGameMechanics()
+        public static int UserMenuOption()
+        {
+            string takeUserInput = CheckIfInDebt();
+
+            if (takeUserInput == "false")
+            {
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
+                Console.WriteLine("___________________________________\n");
+                Console.WriteLine("Main Features:              Display Options:                  Other Features:\n");
+                Console.WriteLine("0 - Quit game               6 - Display game mechanics        4 - Skip one day");
+                Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
+                Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
+                Console.WriteLine("                            12 - Display employees\n");
+                Console.WriteLine("Your choice:");
+
+                int userOption = GetValidInt(0, 12);
+                Console.Clear();
+                return userOption;
+            }
+
+            if (takeUserInput == "bankrupt")
+            {
+                return -1;
+            }
+
+            // -2 if you were previously in debt
+            return -2;
+        }
+
+        public static string CheckIfInDebt()
+        {
+            string inDebt = "false";
+            if (dollars.Quantity < 0)
+            {
+                inDebt = "true";
+                bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
+                                   gold.Quantity == 0 && diamond.Quantity == 0;
+
+
+                if (inDebt == "true")
+                {
+                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Console.WriteLine("You are in debt, bossman is coming for you");
+                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
+                    Console.WriteLine($"right now you have ${dollars.Quantity}, {coal.Quantity}kg of coal, {stone.Quantity}kg of stone, {iron.Quantity}kg of iron, {gold.Quantity}kg of gold, and {diamond.Quantity}kg of diamond");
+                    Console.WriteLine("Unlucky bro...");
+                    Console.WriteLine("After bossman stole your resources, you now have:");
+                    
+                    dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                           iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                           diamond.Quantity * diamond.Price;
+                    
+                    _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                           iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                           diamond.Quantity * diamond.Price;
+
+                    coal.Quantity = 0;
+                    stone.Quantity = 0;
+                    iron.Quantity = 0;
+                    gold.Quantity = 0;
+                    diamond.Quantity = 0;
+
+                    DisplayResources();
+                }
+
+                if (inDebt == "true" && noResources && workersList.Count < 2)
+                {
+                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
+                    return "bankrupt";
+                }
+
+                if (inDebt == "true" && noResources && workersList.Count >= 2)
+                {
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy.");
+                    dollars.Quantity += workersList.Count * 50;
+                    _totalDollarsEarned += workersList.Count * 50;
+                    
+                    while (workersList.Count > 1)
+                    {
+                        workersList.RemoveAt(0);
+                    }
+                }
+            }
+
+            return inDebt;
+        }
+        
+        public static void DisplayGameMechanics()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -547,7 +649,7 @@ namespace Gold_Diggerzz
 
         }
 
-        private static void PrintStats()
+        public static void DisplayStats()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -568,7 +670,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total days dug: {_totalDaysDug}");
         }
 
-        private static void PrintResources()
+        public static void DisplayResources()
         {
             Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"                     You have ${Math.Round(dollars.Quantity, 2)}\n");
@@ -578,113 +680,19 @@ namespace Gold_Diggerzz
             Console.WriteLine($"| You have {workersList.Count} employees         | Your employees' efficiency is {Math.Round(_employeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
-
-        private static void RunTutorial()
+        
+        public static void DisplayEmployees()
         {
-            Console.WriteLine("Welcome to the tutorial");
-            Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
-            Console.WriteLine("You have a few resources to start with:");
-            Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
-            Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
-            Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine($"You can also pay ${stockMarketCrash.Price} for information on the next stock market crash");
-            Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
-            Console.WriteLine("You can also sell all your iron and gold for dollars");
-            Console.WriteLine($"You can also skip one day for ${skipDay.Price}");
-            Console.WriteLine("You can also quit the game");
-            Console.WriteLine("You can also dig for multiple days");
-            Console.WriteLine("Here are the game mechanics:");
+            Console.WriteLine("Here are your employees:");
+            int i = 0;
+            foreach (Worker worker in workersList)
+            {
+                i++;
+                Console.WriteLine($"Employee Number {i} - {worker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
         }
 
-        private static int UserMenuOption()
-        {
-            string takeUserInput = CheckIfInDebt();
-
-            if (takeUserInput == "false")
-            {
-                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("___________________________________\n");
-                Console.WriteLine("Main Features:              Display Options:                  Other Features:\n");
-                Console.WriteLine("0 - Quit game               6 - Display game mechanics        4 - Skip one day");
-                Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
-                Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
-                Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
-                Console.WriteLine("                            12 - Display employees\n");
-                Console.WriteLine("Your choice:");
-
-                int userOption = GetValidInt(0, 12);
-                Console.Clear();
-                return userOption;
-            }
-
-            if (takeUserInput == "bankrupt")
-            {
-                return -1;
-            }
-
-            // -2 if you were previously in debt
-            return -2;
-        }
-
-        private static string CheckIfInDebt()
-        {
-            string inDebt = "false";
-            if (dollars.Quantity < 0)
-            {
-                inDebt = "true";
-                bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
-                                   gold.Quantity == 0 && diamond.Quantity == 0;
-
-
-                if (inDebt == "true")
-                {
-                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                    Console.WriteLine("You are in debt, bossman is coming for you");
-                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine($"right now you have ${dollars.Quantity}, {coal.Quantity}kg of coal, {stone.Quantity}kg of stone, {iron.Quantity}kg of iron, {gold.Quantity}kg of gold, and {diamond.Quantity}kg of diamond");
-                    Console.WriteLine("Unlucky bro...");
-                    Console.WriteLine("After bossman stole your resources, you now have:");
-                    
-                    dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                           iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price;
-                    
-                    _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                           iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price;
-
-                    coal.Quantity = 0;
-                    stone.Quantity = 0;
-                    iron.Quantity = 0;
-                    gold.Quantity = 0;
-                    diamond.Quantity = 0;
-
-                    PrintResources();
-                }
-
-                if (inDebt == "true" && noResources && workersList.Count < 2)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
-                    return "bankrupt";
-                }
-
-                if (inDebt == "true" && noResources && workersList.Count >= 2)
-                {
-                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy.");
-                    dollars.Quantity += workersList.Count * 50;
-                    _totalDollarsEarned += workersList.Count * 50;
-                    
-                    while (workersList.Count > 1)
-                    {
-                        workersList.RemoveAt(0);
-                    }
-                }
-            }
-
-            return inDebt;
-        }
-
-        private static void Dig(int daysToDig)
+        public static void Dig(int daysToDig)
         {
 
             for (int days = 0; days < daysToDig; days++)
@@ -989,12 +997,12 @@ namespace Gold_Diggerzz
             CheckAchievements(achievementsList);
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
-            PrintResources();
+            DisplayResources();
             
             skipDay.skipDayOrNot = false;
         }
 
-        private static void GoToMarket()
+        public static void GoToMarket()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write(
@@ -1051,7 +1059,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources();
+                                DisplayResources();
                                 break;
 
                             case 2:
@@ -1070,7 +1078,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources();
+                                DisplayResources();
                                 break;
                             case 3:
                                 Console.WriteLine("Your have chosen to sell iron for dollars");
@@ -1088,7 +1096,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources();
+                                DisplayResources();
                                 break;
                             case 4:
                                 Console.WriteLine("Your have chosen to sell gold for dollars");
@@ -1106,7 +1114,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources();
+                                DisplayResources();
                                 break;
                             case 5:
                                 Console.WriteLine("Your have chosen to sell diamond for dollars");
@@ -1124,7 +1132,7 @@ namespace Gold_Diggerzz
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
-                                PrintResources();
+                                DisplayResources();
                                 break;
                         }
 
@@ -1148,7 +1156,7 @@ namespace Gold_Diggerzz
                         diamond.Quantity = 0;
 
                         Console.WriteLine("Here are your updated resources:");
-                        PrintResources();
+                        DisplayResources();
                         break;
 
                     case 3:
@@ -1181,7 +1189,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
-        private static void UsePowerUp(int powerUpChoice)
+        public static void UsePowerUp(int powerUpChoice)
         {
             switch (powerUpChoice)
             {
@@ -1238,14 +1246,14 @@ namespace Gold_Diggerzz
             _totalPowerUpsUsed += 1;
         }
 
-        private static void QuitGame()
+        public static void QuitGame()
         {
-            PrintStats();
+            DisplayStats();
             Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
 
-        private static void GameFailed()
+        public static void GameFailed()
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -1256,7 +1264,7 @@ namespace Gold_Diggerzz
             QuitGame();
         }
 
-        private static void ChangeProbabilities(DateTime currentDate)
+        public static void ChangeProbabilities(DateTime currentDate)
         {
 
             // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
@@ -1422,7 +1430,7 @@ namespace Gold_Diggerzz
 
         }
 
-        private static void CheckAchievements(List<string> achievements)
+        public static void CheckAchievements(List<string> achievements)
         {
 
             if (coal.TotalFound >= 100 && !_achievement1)
@@ -1567,7 +1575,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        private static void ChangePrices()
+        public static void ChangePrices()
         {
             // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
@@ -1580,7 +1588,7 @@ namespace Gold_Diggerzz
             diamond.Price *= randomChange;
         }
 
-        private static void EmployeeTrainingCourse()
+        public static void EmployeeTrainingCourse()
         {
             // to boost the productivity of employees
             Console.WriteLine("Training employees...");
@@ -1592,7 +1600,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("7 Days have now passed");
         }
 
-        private static void HireNewWorker(int numberOfWorkers)
+        public static void HireNewWorker(int numberOfWorkers)
         {
             for (int i = 0; i < numberOfWorkers; i++)
             {
@@ -1601,19 +1609,8 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
-        
-        private static void DisplayEmployees()
-        {
-            Console.WriteLine("Here are your employees:");
-            int i = 0;
-            foreach (Worker worker in workersList)
-            {
-                i++;
-                Console.WriteLine($"Employee Number {i} - {worker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
-            }
-        }
 
-        private static int GetValidInt(int min, int max)
+        public static int GetValidInt(int min, int max)
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
             {
@@ -1630,7 +1627,7 @@ namespace Gold_Diggerzz
             return GetValidInt(min, max);
         }
 
-        private static double GetValidDouble(double min, double max)
+        public static double GetValidDouble(double min, double max)
         {
             if (double.TryParse(Console.ReadLine(), out double validDouble))
             {
