@@ -293,6 +293,7 @@ namespace Gold_Diggerzz
         public static Random _random = new Random();
         public int _crashDate = _random.Next(0, 28);
         public List<Worker> workersList = new List<Worker>();
+        List<Worker> illWorkersList = new List<Worker>();
         
         // Declare your variables at the class level
         public Resource coal;
@@ -1341,27 +1342,44 @@ namespace Gold_Diggerzz
                 }
             }
 
-            List<Worker> illWorkersList = new List<Worker>();
             // to undo the effects of unwell workers
+            List<Worker> noLongerIllWorkersList = new List<Worker>();
+            
             foreach (Worker worker in illWorkersList)
             {
                 if (worker.ReturnToWorkDate == currentDate)
                 {
                     Console.WriteLine($"Employee {worker.Name} has returned to work");
-                    workersList.Add(worker);
-                    illWorkersList.Remove(worker);
+                    noLongerIllWorkersList.Add(worker);
                 }
             }
-
-            foreach (Worker worker in workersList)
+            
+            foreach (Worker worker in noLongerIllWorkersList)
             {
-                if (_random.Next(0, 100) < worker.EmployeeIllProbability)
+                illWorkersList.Remove(worker);
+                workersList.Add(worker);
+            }
+
+            if (workersList.Count > 1)
+            {
+                List<Worker> newlyIllWorkers = new List<Worker>();
+                
+                foreach (Worker worker in workersList)
                 {
-                    Console.WriteLine($"One of your employees, {worker.Name} is unwell and doesn't come in today. They'll be back in three days.");
-                    illWorkersList.Add(worker);
-                    workersList.Remove(worker);
-                    worker.ReturnToWorkDate = currentDate.AddDays(3);
+                    if (_random.Next(0, 100) < worker.EmployeeIllProbability)
+                    {
+                        Console.WriteLine($"\ud83e\udd27 One of your employees, {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        newlyIllWorkers.Add(worker);
+                    }
                 }
+                
+                foreach (Worker worker in newlyIllWorkers)
+                {
+                    worker.ReturnToWorkDate = currentDate.AddDays(3);
+                    workersList.Remove(worker);
+                    illWorkersList.Add(worker);
+                }
+                
             }
 
             // 10% profit sharing to each employee on the 15th of every month
@@ -1719,7 +1737,7 @@ namespace Gold_Diggerzz
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine($"{newWorker.Name}, Efficiency {newWorker.DefaultEfficiency}\ud83e\uddcd\u200d\u2642\ufe0f");
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.DefaultEfficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
                 }
             }
             else
