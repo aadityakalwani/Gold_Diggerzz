@@ -53,14 +53,13 @@ namespace Gold_Diggerzz
                - GetValidDouble(double min, double max)
                - HireNewWorker(int numberOfWorkers)
                - DisplayStuff.DisplayEmployees(this);
-      * /
+      */
 
    /*
     * current issues
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
-    * uhm the bankruptcy doesnt reduce price to 40%? does it? confirm
-    * magic tokens are x1.2 every time, which is not mathematically correct
+    * magic tokens are x1.2 every time, which is not mathematically correct - should be fixed now but must check
     */
 
     /* to-do ideas
@@ -94,6 +93,7 @@ namespace Gold_Diggerzz
     
     class Resource
     {
+        public double InitialPrice;
         public double Probability;
         public double Price;
         public double Quantity;
@@ -102,6 +102,7 @@ namespace Gold_Diggerzz
         public Resource(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
             Probability = initialProbability;
+            InitialPrice = initialPrice;
             Price = initialPrice;
             Quantity = initialQuantity;
             TotalFound = totalFound;
@@ -127,13 +128,14 @@ namespace Gold_Diggerzz
     class PowerUp
     {
         public double Quantity;
+        public double MaxQuantity;
         public double Probability;
         
-        public PowerUp(double initialQuantity, double initialProbability)
-
+        public PowerUp(double initialQuantity, double initialProbability, double maxQuantity)
         {
-            Quantity = initialQuantity; // = 0
-            Probability = initialProbability; // = 2-10 depending on the powerup
+            Quantity = initialQuantity;
+            MaxQuantity = maxQuantity;
+            Probability = initialProbability;
         }
     }
 
@@ -354,10 +356,10 @@ namespace Gold_Diggerzz
             program.gold = new Resource(20, 75, 0, 0);
             program.diamond = new Resource(5, 200, 0, 0);
             program.dollars = new Resource(0, 0, 100, 0);
-            program.magicTokens = new PowerUp(0, 6);
-            program.timeMachine = new PowerUp(0, 3);
-            program.ancientArtefact = new PowerUp(0, 7);
-            program.marketMaster = new PowerUp(0, 4);
+            program.magicTokens = new PowerUp(0, 6, 3);
+            program.timeMachine = new PowerUp(0, 3, 3);
+            program.ancientArtefact = new PowerUp(0, 7, 3);
+            program.marketMaster = new PowerUp(0, 4, 3);
             program.stockMarketCrash = new PayForStuff(100);
             program.skipDay = new PayForStuff(50);
             program.bribe = new PayForStuff(200);
@@ -616,11 +618,11 @@ namespace Gold_Diggerzz
                     
                     dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price;
+                                           diamond.Quantity * diamond.Price * 0.4;
                     
                     _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price;
+                                           diamond.Quantity * diamond.Price * 0.4;
 
                     coal.Quantity = 0;
                     stone.Quantity = 0;
@@ -817,7 +819,7 @@ namespace Gold_Diggerzz
                             Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
                             Console.WriteLine("Choose an option:");
                             Console.WriteLine("1 - Use now");
-                            Console.WriteLine("2 - Save for later");
+                            Console.WriteLine($"2 - Save for later (max {ancientArtefact.MaxQuantity})");
                             int userInput = GetValidInt(1, 2);
 
                             switch (userInput)
@@ -826,8 +828,14 @@ namespace Gold_Diggerzz
                                     UsePowerUp(1);
                                     break;
                                 case 2:
-                                    Console.WriteLine("You have chosen to save the Ancient Artefact for later");
-                                    ancientArtefact.Quantity += 1;
+                                    if (ancientArtefact.Quantity < ancientArtefact.MaxQuantity)
+                                    {
+                                        Console.WriteLine("You have chosen to save the Ancient Artefact for later");
+                                        ancientArtefact.Quantity += 1;
+                                        break;
+                                    }
+                                    
+                                    Console.WriteLine("You have reached the maximum quantity of Ancient Artefacts");
                                     break;
                             }
                         }
@@ -837,7 +845,7 @@ namespace Gold_Diggerzz
                             Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
                             Console.WriteLine("Choose an option:");
                             Console.WriteLine("1 - Use now");
-                            Console.WriteLine("2 - Save for later");
+                            Console.WriteLine($"2 - Save for later (max {timeMachine.MaxQuantity})");
                             int userInput = GetValidInt(1, 2);
 
                             switch (userInput)
@@ -846,22 +854,28 @@ namespace Gold_Diggerzz
                                     UsePowerUp(2);
                                     break;
                                 case 2:
-                                    Console.WriteLine("You have chosen to save the Time Machine for later");
-                                    timeMachine.Quantity += 1;
+                                    if (timeMachine.Quantity < timeMachine.MaxQuantity)
+                                    {
+                                        Console.WriteLine("You have chosen to save the Time Machine for later");
+                                        marketMaster.Quantity += 1;
+                                        break;
+                                    }
+                                    
+                                    Console.WriteLine("You have reached the maximum quantity of Time Machines");
                                     break;
                             }
                         }
 
-                        if (magicTokenFound && magicTokens.Quantity < 4)
+                        if (magicTokenFound && magicTokens.Quantity < magicTokens.MaxQuantity)
                         {
                             magicTokens.Quantity += 1;
                             Console.WriteLine($"You've acquired another magic token. You have {magicTokens.Quantity} magic tokens now");
                             Console.WriteLine($"Selling price increased by a total of {magicTokens.Quantity * 20}%");
-                            coal.Price *= 1.2;
-                            stone.Price *= 1.2;
-                            iron.Price *= 1.2;
-                            gold.Price *= 1.2;
-                            diamond.Price *= 1.2;
+                            coal.Price += coal.InitialPrice * 0.2;
+                            stone.Price += stone.InitialPrice * 0.2;
+                            iron.Price += iron.InitialPrice * 0.2;
+                            gold.Price += gold.InitialPrice * 0.2;
+                            diamond.Price += diamond.InitialPrice * 0.2;
                         }
 
                         if (marketMasterFound)
@@ -869,7 +883,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine("You found the Market Master power up");
                             Console.WriteLine("Choose an option:");
                             Console.WriteLine("1 - Use now");
-                            Console.WriteLine("2 - Save for later");
+                            Console.WriteLine($"2 - Save for later (max {marketMaster.MaxQuantity})");
                             int userInput = GetValidInt(1, 2);
 
                             switch (userInput)
@@ -878,8 +892,14 @@ namespace Gold_Diggerzz
                                     UsePowerUp(3);
                                     break;
                                 case 2:
-                                    Console.WriteLine("You have chosen to save the Market Master for later");
-                                    marketMaster.Quantity += 1;
+                                    if (marketMaster.Quantity < marketMaster.MaxQuantity)
+                                    {
+                                        Console.WriteLine("You have chosen to save the Market Master for later");
+                                        marketMaster.Quantity += 1;
+                                        break;
+                                    }
+                                    
+                                    Console.WriteLine("You have reached the maximum quantity of Market Master");
                                     break;
                             }
                         }
@@ -1169,9 +1189,9 @@ namespace Gold_Diggerzz
                     }
                     else if (ancientArtefactChoice == 2)
                     {
-                        Console.WriteLine("You have chosen the $250 instantly");
-                        dollars.Quantity += 250;
-                        _totalDollarsEarned += 250;
+                        Console.WriteLine("You have chosen the $200 instantly");
+                        dollars.Quantity += 200;
+                        _totalDollarsEarned += 200;
                     }
 
                     ancientArtefact.Quantity -= 1;
