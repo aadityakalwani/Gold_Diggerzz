@@ -63,12 +63,13 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * more general OOP-ing
+     * achievements are OOP-ed? idk
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency
      * tutorial mode (that is actually functional) 
      * loans - you can take a loan from the bank and pay it back with interest
-     * load/save game by saving the resource dictionary and the current date to a file
+     * load/save game
      * more power-ups
         * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days.
         * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
@@ -80,13 +81,12 @@ namespace Gold_Diggerzz
         * or a 'diamond' manager to double chance of finding gold for 10 days
      * or you can 'restart' and sacrifice all your $$$ for a better location with better iron payments per day
         * (like prestige in all the idle miner games i played)
-
-     features i can't do until i have an individual employee stat: (employee class/object shit)
-     * printing per-employee stats
-     * workers retire after x days
-     * add a 'luck' stat for each employee that changes the probabilities of finding resources
-         * when you hire an employee they're given a 'luck' rating between 20-80%
-     * send individual number of employees for training course that then boosts their productivity
+     * per-employee stuff
+         * printing per-employee stats
+         * workers retire after x days
+         * add a 'luck' stat for each employee that changes the probabilities of finding resources
+             * when you hire an employee they're given a 'luck' rating between 20-80%
+         * send individual number of employees for training course that then boosts their productivity
      */
         
     /*
@@ -185,20 +185,20 @@ namespace Gold_Diggerzz
             Probability = initialProbability; // = 2-10 depending on the powerup
         }
     }
-    
-    class StockMarketCrash
-    {
-        public int PriceToFindOutDate;
-        public double Probability;
-        
-        public StockMarketCrash()
 
+    class PayForStuff
+    {
+        public int Price;
+        public bool skipDayOrNot;
+        
+        public PayForStuff(int price)
         {
-            PriceToFindOutDate = 50;
-            Probability = 7;
+            Price = price;
+            skipDayOrNot = false;
         }
     }
     
+
     internal abstract class Program
 
     {
@@ -259,11 +259,16 @@ namespace Gold_Diggerzz
         static PowerUp timeMachine;
         static PowerUp ancientArtefact;
         static PowerUp marketMaster;
-        static StockMarketCrash stockMarketCrash = new StockMarketCrash();
+        static PayForStuff stockMarketCrash;
+        static PayForStuff skipDay;
+        static PayForStuff bribe;
+        static PayForStuff trainingCourse;
         
+        private static List<string> achievementsList = new List<string>();
+        
+        // possible names for the workers
         // to stop screaming at me for names it doesnt recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
-        
         private static List<string> _possibleNames = new List<string>()
             {
                 "Sir Reginald Thunderpants III", "Bartholomew McFancyPants", "Benedict Cucumberbatch",
@@ -309,9 +314,7 @@ namespace Gold_Diggerzz
         
         private static void Main()
         {
-            // pregame
-            Dictionary<string, double> priceDictionary = CreatePricesDictionary();
-            // possible names for the workers
+            // pre-game
             
             HireNewWorker(1);
             
@@ -325,8 +328,11 @@ namespace Gold_Diggerzz
             timeMachine = new PowerUp(0, 3);
             ancientArtefact = new PowerUp(0, 7);
             marketMaster = new PowerUp(0, 4);
+            stockMarketCrash = new PayForStuff(100);
+            skipDay = new PayForStuff(50);
+            bribe = new PayForStuff(200);
+            trainingCourse = new PayForStuff(400);
             
-            List<string> achievementsList = new List<string>();
             
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("  ______             __        __        _______   __                                                   \n /      \\           |  \\      |  \\      |       \\ |  \\                                                  \n|  $$$$$$\\  ______  | $$  ____| $$      | $$$$$$$\\ \\$$  ______    ______    ______    ______    _______ \n| $$ __\\$$ /      \\ | $$ /      $$      | $$  | $$|  \\ /      \\  /      \\  /      \\  /      \\  /       \\\n| $$|    \\|  $$$$$$\\| $$|  $$$$$$$      | $$  | $$| $$|  $$$$$$\\|  $$$$$$\\|  $$$$$$\\|  $$$$$$\\|  $$$$$$$\n| $$ \\$$$$| $$  | $$| $$| $$  | $$      | $$  | $$| $$| $$  | $$| $$  | $$| $$    $$| $$   \\$$ \\$$    \\ \n| $$__| $$| $$__/ $$| $$| $$__| $$      | $$__/ $$| $$| $$__| $$| $$__| $$| $$$$$$$$| $$       _\\$$$$$$\\\n \\$$    $$ \\$$    $$| $$ \\$$    $$      | $$    $$| $$ \\$$    $$ \\$$    $$ \\$$     \\| $$      |       $$\n  \\$$$$$$   \\$$$$$$  \\$$  \\$$$$$$$       \\$$$$$$$  \\$$ _\\$$$$$$$ _\\$$$$$$$  \\$$$$$$$ \\$$       \\$$$$$$$ \n                                                      |  \\__| $$|  \\__| $$                              \n                                                       \\$$    $$ \\$$    $$                              \n                                                        \\$$$$$$   \\$$$$$$                               \n");
@@ -339,10 +345,10 @@ namespace Gold_Diggerzz
 
             // game starts
             Console.WriteLine("The game is about to start, good luck...");
-            RunGame(priceDictionary, achievementsList);
+            RunGame();
         }
 
-        private static void RunGame(Dictionary<string, double> priceDictionary, List<string> achievementsList)
+        private static void RunGame()
         {
             int menuOption;
             do
@@ -363,27 +369,24 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        Dig(priceDictionary, 1, 
-                            achievementsList, false);
+                        Dig(1);
                         break;
                     case 2:
                         _animation = false;
                         Console.WriteLine("\n___  ___        _  _    _         _        ______               ______  _        \n|  \\/  |       | || |  (_)       | |       |  _  \\              |  _  \\(_)       \n| .  . | _   _ | || |_  _  _ __  | |  ___  | | | | __ _  _   _  | | | | _   __ _ \n| |\\/| || | | || || __|| || '_ \\ | | / _ \\ | | | |/ _` || | | | | | | || | / _` |\n| |  | || |_| || || |_ | || |_) || ||  __/ | |/ /| (_| || |_| | | |/ / | || (_| |\n\\_|  |_/ \\__,_||_| \\__||_|| .__/ |_| \\___| |___/  \\__,_| \\__, | |___/  |_| \\__, |\n                          | |                             __/ |             __/ |\n                          |_|                            |___/             |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        Dig(priceDictionary, daysToDig, 
-                            achievementsList, false);
+                        Dig(daysToDig);
                         break;
                     case 3:
                         GoToMarket();
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
-                        Console.WriteLine(
-                            $"You have been charged ${priceDictionary["SkipDay"]} for the costs of skipping a day");
-                        dollars.Quantity -= priceDictionary["SkipDay"];
-                        Dig(priceDictionary, 1,
-                            achievementsList, true);
+                        Console.WriteLine($"You have been charged ${skipDay.Price} for the costs of skipping a day");
+                        dollars.Quantity -= skipDay.Price;
+                        skipDay.skipDayOrNot = true;
+                        Dig(1);
                         PrintResources();
                         break;
                     case 5:
@@ -406,7 +409,7 @@ namespace Gold_Diggerzz
                             case 1:
                                 if (ancientArtefact.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary, powerUpChoice, achievementsList);
+                                    UsePowerUp(powerUpChoice);
                                 }
                                 else
                                 {
@@ -416,37 +419,32 @@ namespace Gold_Diggerzz
                                 break;
 
                             case 2:
-                            {
+                            
                                 if (timeMachine.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary,
-                                        powerUpChoice, achievementsList);
-
+                                    UsePowerUp(powerUpChoice);
                                 }
                                 else
                                 {
                                     Console.WriteLine("You don't have any Time Machines to use");
                                 }
-                            }
                                 break;
 
                             case 3:
                                 if (marketMaster.Quantity >= 0)
                                 {
-                                    UsePowerUp(priceDictionary,
-                                        powerUpChoice, achievementsList);
+                                    UsePowerUp( powerUpChoice);
                                 }
                                 else
                                 {
                                     Console.WriteLine("You don't have any Market Masters to use");
                                 }
-
                                 break;
                         }
 
                         break;
                     case 6:
-                        PrintGameMechanics(priceDictionary);
+                        PrintGameMechanics();
                         break;
                     case 7:
                         PrintStats();
@@ -457,18 +455,17 @@ namespace Gold_Diggerzz
                             Console.WriteLine(
                                 $"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
                         }
-
                         break;
+                    
                     case 9:
-                        if (dollars.Quantity >
-                            priceDictionary["trainingCourse"] * workersList.Count && workersList.Count != 0)
+                        if (dollars.Quantity > trainingCourse.Price * workersList.Count && workersList.Count != 0)
                         {
                             Console.WriteLine("You have chosen to send all employees on a training course");
-                            Console.WriteLine($"You have been charged {priceDictionary["trainingCourse"]} per employee");
+                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
                             Console.WriteLine("Your employees will be back in 7 days");
-                            EmployeeTrainingCourse(priceDictionary);
+                            EmployeeTrainingCourse();
                         }
-                        else if (dollars.Quantity > priceDictionary["trainingCourse"] * workersList.Count && workersList.Count == 0)
+                        else if (dollars.Quantity > trainingCourse.Price * workersList.Count && workersList.Count == 0)
                         {
                             Console.WriteLine("You don't have any employees to send on a training course");
                             Console.WriteLine("This could be because of employee illness - try again later");
@@ -477,30 +474,26 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine("You don't have enough money to send all employees on a training course");
                         }
-
                         break;
 
                     case 10:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
-                        Console.WriteLine(
-                            $"1 - Pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
-                        Console.WriteLine(
-                            $"2 - Bribe the government for ${priceDictionary["bribe"]} to not pay wages for the next 3 days");
+                        Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                        Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(1, 2);
 
                         switch (crimeChoice)
                         {
                             case 1:
-                                Console.WriteLine(
-                                    $"You have chosen to pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
-                                dollars.Quantity -= stockMarketCrash.PriceToFindOutDate;
+                                Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                                dollars.Quantity -= stockMarketCrash.Price;
                                 Console.WriteLine("Giving you the information now...");
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to bribe the government");
-                                Console.WriteLine($"You have been charged {priceDictionary["bribe"]} for the bribe");
-                                dollars.Quantity -= priceDictionary["bribe"];
+                                Console.WriteLine($"You have been charged {bribe.Price} for the bribe");
+                                dollars.Quantity -= bribe.Price;
                                 Console.WriteLine("You don't have to pay wages for the next three days");
                                 _noWageDaysLeft = 3;
                                 _totalBribes += 1;
@@ -510,7 +503,11 @@ namespace Gold_Diggerzz
                         break;
 
                     case 11:
-                        RunTutorial(priceDictionary);
+                        RunTutorial();
+                        break;
+                    
+                    case 12:
+                        DisplayEmployees();
                         break;
 
                     default:
@@ -521,7 +518,7 @@ namespace Gold_Diggerzz
 
         }
 
-        private static void PrintGameMechanics(Dictionary<string, double> prices)
+        private static void PrintGameMechanics()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -553,7 +550,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 5%");
-            Console.WriteLine($"You can bribe the govt with ${prices["bribe"]} and not pay any wages for the next 3 days");
+            Console.WriteLine($"You can bribe the govt with ${bribe.Price} and not pay any wages for the next 3 days");
             Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
@@ -592,19 +589,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("_____________________________________________________________________");
         }
 
-        private static Dictionary<string, double> CreatePricesDictionary()
-        {
-            Dictionary<string, double> prices = new Dictionary<string, double>()
-            {
-                { "SkipDay", 50 },
-                { "bribe", 200 },
-                { "trainingCourse", 400 }
-            };
-
-            return prices;
-        }
-
-        private static void RunTutorial(Dictionary<string, double> prices)
+        private static void RunTutorial()
         {
             Console.WriteLine("Welcome to the tutorial");
             Console.WriteLine("You are a gold digger, and you have to survive for as long as possible before bankruptcy");
@@ -612,10 +597,10 @@ namespace Gold_Diggerzz
             Console.WriteLine("You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
             Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
             Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine($"You can also pay ${stockMarketCrash.PriceToFindOutDate} for information on the next stock market crash");
+            Console.WriteLine($"You can also pay ${stockMarketCrash.Price} for information on the next stock market crash");
             Console.WriteLine("You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
             Console.WriteLine("You can also sell all your iron and gold for dollars");
-            Console.WriteLine($"You can also skip one day for ${prices["SkipDay"]}");
+            Console.WriteLine($"You can also skip one day for ${skipDay.Price}");
             Console.WriteLine("You can also quit the game");
             Console.WriteLine("You can also dig for multiple days");
             Console.WriteLine("Here are the game mechanics:");
@@ -634,9 +619,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             7 - Print stats                 5 - Use a powerup");
                 Console.WriteLine("2 - Dig multiple days       8 - Print achievements          9 - Send employees for training");
                 Console.WriteLine("3 - Go to market            11 - Print tutorial             10 - Commit a crime (further options inside)");
+                Console.WriteLine("                            12 - Display employees\n");
                 Console.WriteLine("Your choice:");
 
-                int userOption = GetValidInt(0, 11);
+                int userOption = GetValidInt(0, 12);
                 Console.Clear();
                 return userOption;
             }
@@ -708,8 +694,7 @@ namespace Gold_Diggerzz
             return inDebt;
         }
 
-        private static void Dig(Dictionary<string, double> prices, int daysToDig,
-            List<string> achievementsList, bool skipDay)
+        private static void Dig(int daysToDig)
         {
 
             for (int days = 0; days < daysToDig; days++)
@@ -717,7 +702,7 @@ namespace Gold_Diggerzz
 
                 if (CheckIfInDebt() != "true")
                 {
-                    if (!skipDay)
+                    if (!skipDay.skipDayOrNot)
                     {
                         if (_animation)
                         {
@@ -879,7 +864,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, 1, achievementsList);
+                                    UsePowerUp(1);
                                     break;
                                 case 2:
                                     Console.WriteLine("You have chosen to save the Ancient Artefact for later");
@@ -899,8 +884,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, 2, 
-                                        achievementsList);
+                                    UsePowerUp(2);
                                     break;
                                 case 2:
                                     Console.WriteLine("You have chosen to save the Time Machine for later");
@@ -932,8 +916,7 @@ namespace Gold_Diggerzz
                             switch (userInput)
                             {
                                 case 1:
-                                    UsePowerUp(prices, 3,
-                                        achievementsList);
+                                    UsePowerUp(3);
                                     break;
                                 case 2:
                                     Console.WriteLine("You have chosen to save the Market Master for later");
@@ -1017,6 +1000,8 @@ namespace Gold_Diggerzz
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             PrintResources();
+            
+            skipDay.skipDayOrNot = false;
         }
 
         private static void GoToMarket()
@@ -1157,14 +1142,15 @@ namespace Gold_Diggerzz
 
                     case 2:
                         Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
-                        dollars.Quantity += coal.Quantity * coal.Price;
-                        dollars.Quantity += stone.Quantity * stone.Price;
-                        dollars.Quantity += iron.Quantity * iron.Price;
-                        dollars.Quantity += gold.Quantity * gold.Price;
-                        dollars.Quantity += diamond.Quantity * diamond.Price;
+                        
+                        dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                               iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                                  diamond.Quantity * diamond.Price;
+                        
                         _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                                iron.Quantity * iron.Price + gold.Quantity * gold.Price +
                                                diamond.Quantity * diamond.Price;
+                        
                         coal.Quantity = 0;
                         stone.Quantity = 0;
                         iron.Quantity = 0;
@@ -1205,7 +1191,7 @@ namespace Gold_Diggerzz
             } while (marketOption != 4);
         }
 
-        private static void UsePowerUp(Dictionary<string, double> prices, int powerUpChoice, List<string> achievementsList)
+        private static void UsePowerUp(int powerUpChoice)
         {
             switch (powerUpChoice)
             {
@@ -1239,7 +1225,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    Dig(prices, 5, achievementsList, false);
+                    Dig(5);
                     timeMachine.Quantity -= 1;
                     break;
                 }
@@ -1604,12 +1590,12 @@ namespace Gold_Diggerzz
             diamond.Price *= randomChange;
         }
 
-        private static void EmployeeTrainingCourse(Dictionary<string, double> prices)
+        private static void EmployeeTrainingCourse()
         {
             // to boost the productivity of employees
             Console.WriteLine("Training employees...");
-            Console.WriteLine($"This course charged you {prices["trainingCourse"] * workersList.Count} in fees");
-            dollars.Quantity -= prices["trainingCourse"] * workersList.Count;
+            Console.WriteLine($"This course charged you {trainingCourse.Price * workersList.Count} in fees");
+            dollars.Quantity -= trainingCourse.Price * workersList.Count;
             _employeeEfficiency *= 1.3;
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
@@ -1622,6 +1608,17 @@ namespace Gold_Diggerzz
             {
                 Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
                 workersList.Add(newWorker);
+            }
+        }
+        
+        private static void DisplayEmployees()
+        {
+            Console.WriteLine("Here are your employees:");
+            int i = 0;
+            foreach (Worker worker in workersList)
+            {
+                i++;
+                Console.WriteLine($"Employee Number {i} - {worker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
 
