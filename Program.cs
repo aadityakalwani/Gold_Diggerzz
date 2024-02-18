@@ -1308,7 +1308,7 @@ namespace Gold_Diggerzz
             // to undo the effects of the crash
             if (_crashDaysLeft > 1)
             {
-                Console.WriteLine("The stock market has recovered");
+                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
                 coal.Price *= 2;
                 stone.Price *= 2;
                 iron.Price *= 2;
@@ -1320,7 +1320,7 @@ namespace Gold_Diggerzz
 
             if (currentDate.Day == _crashDate && _crashDaysLeft == 0)
             {
-                Console.WriteLine("The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper");
+                Console.WriteLine("\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
 
                 coal.Price /= 2;
                 stone.Price /= 2;
@@ -1360,6 +1360,7 @@ namespace Gold_Diggerzz
                 workersList.Add(worker);
             }
 
+            // unwell workers
             if (workersList.Count > 1)
             {
                 List<Worker> newlyIllWorkers = new List<Worker>();
@@ -1379,13 +1380,12 @@ namespace Gold_Diggerzz
                     workersList.Remove(worker);
                     illWorkersList.Add(worker);
                 }
-                
             }
 
             // 10% profit sharing to each employee on the 15th of every month
             if (currentDate.Day == 15)
             {
-                Console.WriteLine("Profit sharing time!");
+                Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
 
                 if (workersList.Count < 7)
                 {
