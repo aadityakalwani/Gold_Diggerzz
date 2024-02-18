@@ -422,7 +422,8 @@ namespace Gold_Diggerzz
                         DisplayStuff.DisplayResources(this);
                         break;
                     case 5:
-                        if (ancientArtefact.Quantity ! > 0 && timeMachine.Quantity ! > 0)
+                        
+                        if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 && marketMaster.Quantity == 0)
                         {
                             Console.WriteLine("\u274c You don't have any powerups to use \u274c");
                             break;
@@ -488,7 +489,6 @@ namespace Gold_Diggerzz
                                 $"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
                         }
                         break;
-                    
                     case 9:
                         if (dollars.Quantity > trainingCourse.Price * workersList.Count && workersList.Count != 0)
                         {
@@ -507,7 +507,6 @@ namespace Gold_Diggerzz
                             Console.WriteLine("You don't have enough money to send all employees on a training course");
                         }
                         break;
-
                     case 10:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
@@ -533,15 +532,12 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-
                     case 11:
                         RunTutorial();
                         break;
-                    
                     case 12:
                         DisplayStuff.DisplayEmployees(this);
                         break;
-
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
