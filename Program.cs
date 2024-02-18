@@ -350,11 +350,11 @@ namespace Gold_Diggerzz
             
             program.HireNewWorker(1);
             
-            program.coal = new Resource(90, 4, 0, 0);
-            program.stone = new Resource(75, 8, 0, 0);
-            program.iron = new Resource(65, 15, 0, 0);
-            program.gold = new Resource(20, 75, 0, 0);
-            program.diamond = new Resource(5, 200, 0, 0);
+            program.coal = new Resource(90, 3, 0, 0);
+            program.stone = new Resource(75, 6, 0, 0);
+            program.iron = new Resource(65, 12, 0, 0);
+            program.gold = new Resource(20, 60, 0, 0);
+            program.diamond = new Resource(5, 150, 0, 0);
             program.dollars = new Resource(0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
