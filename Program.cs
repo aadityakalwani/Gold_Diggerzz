@@ -926,26 +926,26 @@ namespace Gold_Diggerzz
 
                     if (_badWeatherDaysLeft != 0)
                     {
-                        Console.WriteLine($"{_badWeatherDaysLeft} days left of torrential rain");
                         _badWeatherDaysLeft -= 1;
+                        Console.WriteLine($"{_badWeatherDaysLeft} days left of torrential rain");
                     }
 
                     if (_hurricaneDaysLeft != 0)
                     {
-                        Console.WriteLine($"{_hurricaneDaysLeft} days left of hurricane");
                         _hurricaneDaysLeft -= 1;
+                        Console.WriteLine($"{_hurricaneDaysLeft} days left of hurricane");
                     }
 
                     if (_beautifulSkyDaysLeft != 0)
                     {
-                        Console.WriteLine($"{_beautifulSkyDaysLeft} days left of beautiful sky");
                         _beautifulSkyDaysLeft -= 1;
+                        Console.WriteLine($"{_beautifulSkyDaysLeft} days left of beautiful weather");
                     }
 
                     if (_marketMasterDaysLeft == 1)
                     {
-                        Console.WriteLine("Your Market Master powerup is no longer active");
                         _marketMasterDaysLeft = 0;
+                        Console.WriteLine("Your Market Master powerup is no longer active");
                     }
 
                     else if (_marketMasterDaysLeft > 1)
