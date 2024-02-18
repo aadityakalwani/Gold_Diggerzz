@@ -341,6 +341,8 @@ namespace Gold_Diggerzz
                 "Michelin Obama", "Roger Federbear", "Tim Crook"
             };
         
+        private static List<string>_usedNames = new List<string>();
+        
         
         public static void Main()
         {
@@ -1587,6 +1589,8 @@ namespace Gold_Diggerzz
             {
                 Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
                 workersList.Add(newWorker);
+                _usedNames.Add(newWorker.Name);
+                _possibleNames.Remove(newWorker.Name);
                 Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
