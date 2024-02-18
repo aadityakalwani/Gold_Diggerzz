@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace Gold_Diggerzz
 {
+    // as of sunday 18feb 1pm, 27hours 45mins spent on digging sim as of gcal
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
     
     /* program structure + hierarchy
