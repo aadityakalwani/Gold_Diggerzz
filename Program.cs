@@ -120,6 +120,7 @@ namespace Gold_Diggerzz
         public double EmployeeIllProbability;
         public double DefaultEfficiency;
         public int DaysUntilRetirement;
+        public DateTime ReturnToWorkDate;
         
         public Worker(string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
         {
@@ -129,6 +130,7 @@ namespace Gold_Diggerzz
             EmployeeIllProbability = employeeIllProbability;
             DefaultEfficiency = defaultEfficiency;
             DaysUntilRetirement = 30;
+            ReturnToWorkDate = DateTime.Today;
         }
     }
 
@@ -254,7 +256,6 @@ namespace Gold_Diggerzz
         public int _increasedGoldChanceDays;
         public int _marketMasterDaysLeft;
         public int _noWageDaysLeft;
-        public int _lessWorkerDays;
         public int _crashDaysLeft;
         public int _badWeatherDaysLeft;
         public int _hurricaneDaysLeft;
@@ -286,7 +287,7 @@ namespace Gold_Diggerzz
         public bool _achievement19;
         public bool _achievement20;
         public double _currentWageRate = 10;
-        public double _currentEmployeeIllProbability = 10;
+        public double _currentEmployeeIllProbability = 5;
         public double _currentEmployeePrice = 100;
         public DateTime _currentDate = new DateTime(2024, 1, 1);
         public static Random _random = new Random();
@@ -1340,21 +1341,26 @@ namespace Gold_Diggerzz
                 }
             }
 
+            List<Worker> illWorkersList = new List<Worker>();
             // to undo the effects of unwell workers
-            if (_lessWorkerDays == 1)
+            foreach (Worker worker in illWorkersList)
             {
-                HireNewWorker(1);
-                Console.WriteLine("Your employee is back at work today");
-                _lessWorkerDays = 0;
+                if (worker.ReturnToWorkDate == currentDate)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has returned to work");
+                    workersList.Add(worker);
+                    illWorkersList.Remove(worker);
+                }
             }
 
             foreach (Worker worker in workersList)
             {
                 if (_random.Next(0, 100) < worker.EmployeeIllProbability)
                 {
-                    Console.WriteLine($"One of your employees, {worker.Name} is unwell and doesn't come in today");
+                    Console.WriteLine($"One of your employees, {worker.Name} is unwell and doesn't come in today. They'll be back in three days.");
+                    illWorkersList.Add(worker);
                     workersList.Remove(worker);
-                    _lessWorkerDays = 1;
+                    worker.ReturnToWorkDate = currentDate.AddDays(3);
                 }
             }
 
