@@ -5,33 +5,11 @@ using System.Threading;
 
 namespace Gold_Diggerzz
 {
-    // as of sunday 18feb 1pm, 27hours 45mins spent on digging sim as of gcal
+    // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
     
     /* program structure + hierarchy
 
-       - Resource
-           - Coal
-           - Stone
-           - Iron
-           - Gold
-           - Diamond
-       - Dollars
-       - Worker
-           - Name
-           - Wage
-           - Price
-           - EmployeeIllProbability
-       - PowerUp
-           - MagicTokens
-           - TimeMachine
-           - AncientArtefact
-           - MarketMaster
-       - PayForStuff
-           - StockMarketCrash
-           - SkipDay
-           - Bribe
-           - TrainingCourse
        - Program
            - Main()
                - RunGame()
@@ -54,13 +32,39 @@ namespace Gold_Diggerzz
                - GetValidDouble(double min, double max)
                - HireNewWorker(int numberOfWorkers)
                - DisplayStuff.DisplayEmployees(this);
+       - Resource
+           - Coal
+           - Stone
+           - Iron
+           - Gold
+           - Diamond
+       - Dollars
+       - Worker
+           - Name
+           - Wage
+           - Price
+           - EmployeeIllProbability
+       - PowerUp
+           - MagicTokens
+           - TimeMachine
+           - AncientArtefact
+           - MarketMaster
+       - PayForStuff
+           - StockMarketCrash
+           - SkipDay
+           - Bribe
+           - TrainingCourse
+       - DisplayStuff
+           - DisplayGameMechanics(Program program)
+           - DisplayStats(Program program)
+           - DisplayResources(Program program)
+           - DisplayEmployees(Program program)
       */
 
    /*
     * current issues
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
-    * magic tokens are x1.2 every time, which is not mathematically correct - should be fixed now but must check
     */
 
     /* to-do ideas
@@ -116,13 +120,15 @@ namespace Gold_Diggerzz
         public double Wage;
         public double Price;
         public double EmployeeIllProbability;
+        public double DefaultEfficiency;
         
-        public Worker(string name, double wage, double price, double employeeIllProbability)
+        public Worker(string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
         {
             Name = name;
             Wage = wage;
             Price = price;
             EmployeeIllProbability = employeeIllProbability;
+            DefaultEfficiency = defaultEfficiency;
         }
     }
 
@@ -233,7 +239,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.workersList)
             {
                 i++;
-                Console.WriteLine($"Employee Number {i} - {worker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {worker.DefaultEfficiency} \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
         
@@ -242,7 +248,7 @@ namespace Gold_Diggerzz
     class Program
     {
         
-        // imagine these as like global variables
+        // global variables
         // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         public  bool _animation = true;
         public int _increasedGoldChanceDays;
@@ -1583,11 +1589,13 @@ namespace Gold_Diggerzz
             {
                 for (int i = 0; i < numberOfWorkers; i++)
                 {
-                    Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
+                    int randomName = _random.Next(0, _possibleNames.Count);
+                    double efficiency = _random.Next(70, 100) / 100.0;
+                    Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {newWorker.DefaultEfficiency}\ud83e\uddcd\u200d\u2642\ufe0f");
                 }
             }
             else
