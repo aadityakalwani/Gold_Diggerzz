@@ -1334,7 +1334,7 @@ namespace Gold_Diggerzz
             // 10% raise on the first of every month (apart from January)
             if (currentDate.Month != 1 && currentDate.Day == 1)
             {
-                Console.WriteLine("It's the first of the month, your employees get a 10% raise for the rest of time");
+                Console.WriteLine("\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
                 _currentWageRate *= 1.1;
                 foreach (Worker workers in workersList)
                 {
@@ -1349,7 +1349,7 @@ namespace Gold_Diggerzz
             {
                 if (worker.ReturnToWorkDate == currentDate)
                 {
-                    Console.WriteLine($"Employee {worker.Name} has returned to work");
+                    Console.WriteLine($"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
                     noLongerIllWorkersList.Add(worker);
                 }
             }
@@ -1410,7 +1410,7 @@ namespace Gold_Diggerzz
             // undoing weather effects 
             if (_badWeatherDaysLeft == 1)
             {
-                Console.WriteLine("The weather has cleared up, your employees are back to normal efficiency");
+                Console.WriteLine("\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency *= 1.3;
@@ -1419,7 +1419,7 @@ namespace Gold_Diggerzz
 
             if (_beautifulSkyDaysLeft == 1)
             {
-                Console.WriteLine("The weather is mid, your employees are back to normal efficiency");
+                Console.WriteLine("\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency /= 1.2;
@@ -1429,7 +1429,7 @@ namespace Gold_Diggerzz
 
             if (_hurricaneDaysLeft == 1)
             {
-                Console.WriteLine("The hurricane has passed, your employees are back to normal efficiency");
+                Console.WriteLine("\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency *= 1.4;
@@ -1441,7 +1441,7 @@ namespace Gold_Diggerzz
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
-                Console.WriteLine("A hurricane is coming, efficiency is now 40% less the next five days");
+                Console.WriteLine(" \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency /= 1.4;
@@ -1452,7 +1452,7 @@ namespace Gold_Diggerzz
             // rain reducing efficiency
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
-                Console.WriteLine("Due to torrential rain, your employees are 30% less efficient for the next two days");
+                Console.WriteLine("\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency /= 1.3;
@@ -1463,7 +1463,7 @@ namespace Gold_Diggerzz
             // 30% chance beautiful sky increasing efficiency
             else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
-                Console.WriteLine("The weather is beautiful today, your employees are 20% more efficient for two days");
+                Console.WriteLine("\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
                 foreach (Worker worker in workersList)
                 {
                     worker.DefaultEfficiency *= 1.2;
