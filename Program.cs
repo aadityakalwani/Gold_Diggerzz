@@ -86,51 +86,6 @@ namespace Gold_Diggerzz
              * when you hire an employee they're given a 'luck' rating between 20-80%
          * send individual number of employees for training course that then boosts their productivity
      */
-        
-    /*
-    current features: (also in DisplayMechanics())
-    chance of finding coal = 90%
-    chance of finding stone = 75%
-    chance of finding iron = 65%
-    chance of finding gold = 20%
-    chance of finding diamond = 5%
-    chance of finding Ancient Artefact = 5%
-
-    cost of hiring employee = $100
-    coal value = $4
-    stone value = $8
-    iron value =  $15
-    gold value = $75
-    diamond value = $200
-
-    resource values fluctuate by upto ±10% per day
-
-    Ancient Artefact has two powerup options:
-    $250 instantly, or a 50% chance of finding gold for the next 5 days
-
-    the resources you gain are equal to the number of employees you have times their efficiency
-    eg. 7 employees = 7 iron found on that day * efficiency of 1.5 = 10.5iron found
-
-    baseline wage = $10 per employee per day
-
-    10% chance an employee is ill and doesnt come in to work
-
-    30% pay increase on weekends only
-
-    on the first of every month, employee wage increases by 10%
-
-    on the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)
-
-    one x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve
-
-    you can bribe the govt with $150 and not pay any wages for the next 3 days
-
-    at any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate
-
-    if you have no resources to sell, they sell your employees for $100 each
-
-    if your $$$ balance is negative and you have no resource, you fail the game
-    */
 
     class GameState
     {
@@ -194,7 +149,7 @@ namespace Gold_Diggerzz
         }
     }
 
-    class Program
+    internal abstract class Program
 
     {
         
@@ -244,20 +199,20 @@ namespace Gold_Diggerzz
         public static List<Worker> workersList = new List<Worker>();
         
         // Declare your variables at the class level
-        static Resource coal;
-        static Resource stone;
-        static Resource iron;
-        static Resource gold;
-        static Resource diamond;
-        static Resource dollars;
-        static PowerUp magicTokens;
-        static PowerUp timeMachine;
-        static PowerUp ancientArtefact;
-        static PowerUp marketMaster;
-        static PayForStuff stockMarketCrash;
-        static PayForStuff skipDay;
-        static PayForStuff bribe;
-        static PayForStuff trainingCourse;
+        public static Resource coal;
+        public static Resource stone;
+        public static Resource iron;
+        public static Resource gold;
+        public static Resource diamond;
+        public static Resource dollars;
+        public static PowerUp magicTokens;
+        public static PowerUp timeMachine;
+        public static PowerUp ancientArtefact;
+        public static PowerUp marketMaster;
+        public static PayForStuff stockMarketCrash;
+        public static PayForStuff skipDay;
+        public static PayForStuff bribe;
+        public static PayForStuff trainingCourse;
         
         private static List<string> achievementsList = new List<string>();
         
