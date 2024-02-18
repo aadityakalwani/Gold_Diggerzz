@@ -86,8 +86,6 @@ namespace Gold_Diggerzz
         * or a 'diamond' manager to double chance of finding gold for 10 days
      * per-employee stuff
          * workers retire after x days
-         * add a 'luck' stat for each employee that changes the probabilities of finding resources
-             * when you hire an employee they're given a 'luck' rating between 20-80%
          * send individual number of employees for training course that then boosts their productivity
      */
 
@@ -121,6 +119,7 @@ namespace Gold_Diggerzz
         public double Price;
         public double EmployeeIllProbability;
         public double DefaultEfficiency;
+        public int DaysUntilRetirement;
         
         public Worker(string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
         {
@@ -129,6 +128,7 @@ namespace Gold_Diggerzz
             Price = price;
             EmployeeIllProbability = employeeIllProbability;
             DefaultEfficiency = defaultEfficiency;
+            DaysUntilRetirement = 30;
         }
     }
 
@@ -239,7 +239,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.workersList)
             {
                 i++;
-                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {worker.DefaultEfficiency} \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {worker.DefaultEfficiency}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
         
@@ -981,6 +981,22 @@ namespace Gold_Diggerzz
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             DisplayStuff.DisplayResources(this);
+            
+            foreach (Worker worker in workersList)
+            {
+                if (worker.DaysUntilRetirement != 0)
+                {
+                    worker.DaysUntilRetirement -= 1;
+                }
+
+                if (worker.DaysUntilRetirement == 0)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
+                    Console.WriteLine($"You now have {workersList.Count - 1} employees");
+                    workersList.Remove(worker);
+                }
+
+            }
             
             skipDay.skipDayOrNot = false;
         }
