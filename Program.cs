@@ -331,7 +331,7 @@ namespace Gold_Diggerzz
                 "Jennifer Aniston-bake", "Kevin Space-jam", "Daniel Radishcliffe", "Amy Wine-house", "Brad Pitt-stop", "Katy Perry-corn", "Hugh Grant-ed", "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
                 "Eddie Murphy-bed", "Bruce Willis-tower", "Johnny Cash-flow", "Celine Dion-osaur", "Jennifer Lopez-ing", "Ellen DeGeneres-erator", "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule", "Tom Cruise-control",
                 "Zach Galifianakis-bar", "Kate Wins-lit", "Denzel Washing-done", "Brad Pitt-stop", "Eva Longoria-lunch", "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful", "Charlize Thereon", "Amy Wine-handy",
-                "Tommy Lee Bones", "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar", "Bruce Spring-clean", "George Clooney-tunes", "Jennifer Aniston-the-pants", "
+                "Tommy Lee Bones", "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar", "Bruce Spring-clean", "George Clooney-tunes", "Jennifer Aniston-the-pants"
             };
         
         private static List<string>_usedNames = new List<string>();
@@ -1578,13 +1578,20 @@ namespace Gold_Diggerzz
 
         public void HireNewWorker(int numberOfWorkers)
         {
-            for (int i = 0; i < numberOfWorkers; i++)
+            if (_possibleNames.Count > 0)
             {
-                Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
-                workersList.Add(newWorker);
-                _usedNames.Add(newWorker.Name);
-                _possibleNames.Remove(newWorker.Name);
-                Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
+                for (int i = 0; i < numberOfWorkers; i++)
+                {
+                    Worker newWorker = new Worker(_possibleNames[_random.Next(0, _possibleNames.Count)], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability);
+                    workersList.Add(newWorker);
+                    _usedNames.Add(newWorker.Name);
+                    _possibleNames.Remove(newWorker.Name);
+                    Console.WriteLine($"{newWorker.Name} \ud83e\uddcd\u200d\u2642\ufe0f");
+                }
+            }
+            else
+            {
+                Console.WriteLine("You've run out of names to give to your employees");
             }
         }
 
