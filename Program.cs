@@ -333,28 +333,35 @@ namespace Gold_Diggerzz
         // to stop screaming at me for names it doesnt recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         private static List<string> _possibleNames = new List<string>()
-            {
-               "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus", "Barack O'Banana", "Lady GooGoo", "Michael Jackhammer", "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein", "Dwayne 'The Rocking Chair' Johnson",
-                "Marilyn Mon-roll", "Mark Zuckerburger", "Oprah Win-free", "Steve Jobsite", "Hillary Cling-on", "Emma Stoned", "Donald Duck Trump", "Bruce Spring-chicken", "Bill Gateskeeper", "Justin Beaver",
-                "Kim Car-dashing", "Shakira-law", "Charlie Sheen-bean", "Ellen DeGenerous", "Jennifer Lawn-mower", "Will Smithereens", "Cristiano Armani", "Serena Williams-son", "Vladimir Poutine", "Ariana Grand-piano",
-                "Jackie Chan-delier", "Scarlett Johandsome", "Vin Diesel-truck", "Harrison Ford F-150", "Gordon Rams-lamb", "Ryan Gooseling", "Nicolas Cage-free", "Johnny Depp-fryer", "Arnold Schwarzenegger-schnitzel", "Jessica Al-bacon",
-                "Keanu Reefs", "Denzel Washing-done", "Samuel L. Vodka", "Matt Damon-salad", "Angelina Jolie-ox", "Tom Cruise-control", "Kate Wins-lit", "Julia Robberies", "Robert Downey Jr. High", "Chris Prattfall",
-                "Jennifer Aniston-bake", "George Clooney-tunes", "Leonardo DiCapriSun", "Kanye East", "Benedict Cucumberbatch", "Taylor Swiftboat", "Morgan Free-wheeling", "Jimmy Fallon-over", "Nicole Kidneybean", "Hugh Jackman-go",
-                "John Lemonade", "Jennifer Lawrence-of-arabia", "Jennifer Garner-den", "Daniel Radish-cliffe", "Angelina Jolie-ox", "Ryan Goose-down", "Emma Watson-burger", "Justin Timberlake-up", "Robert Downey Jr. High", "Tom Hanks-giving",
-                "Leonardo DiCaprio-daVinci", "Jack Black-hole", "Miley Cyrus-virus", "Katy Perry-corn", "Hugh Grant-ed", "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on", "Eddie Murphy-bed", "Bruce Willis-tower",
-                "Johnny Cash-flow", "Celine Dion-osaur", "Jennifer Lopez-ing", "Ellen DeGeneres-erator", "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule", "Tom Cruise-control", "Zach Galifianakis-bar", "Kate Wins-lit",
-                "Denzel Washing-done", "Brad Pitt-stop", "Eva Longoria-lunch", "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful", "Charlize Thereon", "Amy Wine-handy", "Tommy Lee Bones", "Kurt Russell Sprouts",
-                "Alicia Keys-to-the-city", "Adam Sand-dollar", "Bruce Spring-clean", "George Clooney-tunes", "Jennifer Aniston-the-pants", "Hugh Jacked-man", "Johnny Deep-fry", "Rihanna-na-na", "Bruce Lee-sure", "Julianne Moore-or-less",
-                "Chris Pineapple", "Leonardo DiCapri-pants", "Jackie Chain-reaction", "Morgan Freeman-dle", "Robert Downey Jr. Low", "Chris Rocking Chair", "Helen Mirren-aged", "Jamie Foxx-in-the-box", "Dwayne 'The Flocking Chair' Johnson", "Arnold Schwarzenegger-salad",
-                "Will Ferrell-y-good", "Gwyneth Paltrow-lint", "Bradley Cooper-ate", "Liam Neeson-light", "Tom Hardy-har-har", "Daniel Day-Lewis and Clark", "Johnny Depp-o", "Ben Affleck-tion", "Anne Hathaway with Words", "Julia Roberts-ized",
-                "Russell Crow-bar", "Hugh Grant-ed", "Reese Witherspoon-fed", "Jennifer Garner-ner", "Ben Stiller-ware", "Halle Berry-licious", "John Travolted", "Denzel Washing-done", "Amy Adams-apples", "Kevin Bacon-ator",
-                "Will Smithen", "Owen Wilson-you-over", "Jake Gyllen-hall", "Matthew McConaughey-mind", "Cate Blanchett-et", "Sandra Bullockbuster", "Natalie Port-man", "Steve Carell-ing", "Sylvester Stall-own", "Emily Blunt-ed",
-                "Emma Stone-throw", "Mel Gibson-soup", "Ryan Reynolds-wrap", "Nicole Kid-man", "Amanda Seyfried-rice", "James Franco-american", "Kate Wins-lit", "Angelina Jolie-ox", "Harrison Ford Focus", "Julianne Moore-or-less",
-                "Scarlett Johandsome", "Leonardo DiCapriSun", "Johnny Deep-fryer", "Jim Carrey-on", "Cameron Diaz-up", "Vin Diesel-truck", "Jennifer Garner-den", "Will Smithereens", "Sandra Bullockbuster", "Brad Pitt-stop",
-                "Ryan Gosling-along", "Tom Cruise-control", "Russell Crow-bar", "Matt Damon-salad", "Jennifer Lawrence-of-arabia", "Reese Witherspoon-fed", "Angelina Jolie-ox", "Dwayne 'The Rocking Chair' Johnson", "George Clooney-tunes", "Robert Downey Jr. High",
-                "Keanu Reeves and Butthead", "Meryl Streep-ing", "Jessica Al-bacon", "Liam Neeson-light", "Tom Hanks-giving", "Kate Wins-lit", "Bradley Cooper-ate", "Charlize Theron-ament", "Julia Roberts-rule", "Natalie Port-man",
-                "Jennifer Aniston-bake", "Kevin Space-jam", "Daniel Radishcliffe", "Amy Wine-house", "Brad Pitt-stop", "Katy Perry-corn", "Hugh Grant-ed", "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
-            };
+        {
+            "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus", "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
+            "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein", "Dwayne 'The Rocking Chair, Johnson",
+            "Marilyn Mon-roll", "Mark Zuckerburger", "Oprah Win-free", "Steve Jobsite", "Hillary Cling-on", "Emma Stoned",
+            "Donald Duck Trump", "Bruce Spring-chicken", "Bill Gateskeeper", "Justin Beaver", "Kim Car-dashing", "Shakira-law",
+            "Charlie Sheen-bean", "Ellen DeGenerous", "Jennif er Lawn-mower", "Will Smithereens", "Cristiano Armani", "Serena Williams-son",
+            "Vladimir Poutine", "Ariana Grand-piano", "Jackie Chan-deliep", "Scarlett Johandsome", "Vin Diesel-truck", "Harrison Ford F-150",
+            "Gordon Rams-lamb", "Ryan Gooseling", "Nicolas Cage-f ree", "Johnny Depp-fryer", "Arnold Schwarzenegger-schnitzel", "Jessica Al-bacon",
+            "Keanu Reefs", "Denzel Washing-done", "Samuel L. Vodka", "Matt Damon-salad", "Angelina Jolie-ox", "Tom Cruise-control",
+            "Kate Wins-lit", "Julia Robberies", "Robert Downey Jp. High", "Chris Prattfall", "Jennif er Aniston-bake", "George Clooney-tunes",
+            "Leonardo DiCapriSun", "Kanye East", "Benedict Cucumberbatch", "Taylor Swiftboat", "Morgan Free-wheeling", "Jimmy Fallon-over",
+            "Nicole Kidneybean", "Hugh Jackman-go", "John Lemonade", "Jennif er Lawrence-of-arabia", "Jennif er Garner-den", "Daniel Radish-cliff e",
+            "Ryan Goose-down", "Emma Watson-burgep", "Justin Timberlake-up", "Tom Hanks-giving", "Leonardo DiCaprio-daVinci", "Jack Black-hole",
+            "Miley Cyrus-virus", "Katy Perry-corn", "Hugh Grant-ed", "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
+            "Eddie Murphy-bed", "Bruce Willis-tower", "Johnny Cash-flow", "Celine Dion-osaur", "Jennif er Lopez-ing", "Ellen DeGeneres-erator",
+            "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule", "Zach Galif ianakis-bar", "Brad Pitt-stop", "Eva Longoria-lunch",
+            "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful", "Charlize Thereon", "Amy Wine-handy", "Tommy Lee Bones",
+            "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar", "Bruce Spring-clean", "Jennif er Aniston-the-pants", "Hugh Jacked-man",
+            "Johnny Deep-fry", "Rihanna-na-na", "Bruce Lee-sure", "Chris Pineapple", "Leonardo DiCapri-pants", "Jackie Chain-reaction",
+            "Morgan Freeman-dle", "Robert Downey Jr. Low", "Chris Rocking Chair", "Helen Mirren-aged", "Jamie Foxx-in-the-box", "Dwayne 'The Flocking Chair'  Johnson",
+            "Arnold Schwarzenegger-salad", "Will Ferrell-y-good", "Gwyneth Paltrow-lint", "Bradley Cooper-ate", "Liam Neeson-light", "Tom Hardy-har-har",
+            "Daniel Day-Lewis and Clark", "Johnny Depp-o", "Ben Affleck-tion", "Julia Roberts-ized", "Russell Crow-bar", "Reese Witherspoon-fed",
+            "Jennif er Garner-ner", "Ben Stiller-ware", "Halle Berry-licious", "John Travolted", "Amy Adams-apples", "Kevin Bacon-ator",
+            "Will Smithen", "Owen Wilson-you-over", "Jake Gyllen-hall", "Matthew McConaughey-mind", "Cate Blanchett-et", "Natalie Port-man",
+            "Sylvester Stall-own", "Emily Blunt-ed", "Emma Stone-throw", "Mel Gibson-soup", "Ryan Reynolds-wrap", "Nicole Kid-man",
+            "Amanda Seyf ried-rice", "James Franco-american", "Harrison Ford Focus", "Johnny Deep-fryer", "Cameron Diaz-up", "Ryan Gosling-along",
+            "Keanu Reeves and Butthead", "Meryl Streep-ing", "Charlize Theron-ament", "Kevin Space- jam", "Daniel Radishcliffe", "Amy Wine-house",
+            "Steve Carell-ing",
+        };
         
         private static List<string>_usedNames = new List<string>();
         
@@ -1813,7 +1820,7 @@ namespace Gold_Diggerzz
             }
             else
             {
-                Console.WriteLine("You've hired all 200/200 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                Console.WriteLine("You've hired all 163/163 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
             }
         }
 
