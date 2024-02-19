@@ -268,7 +268,8 @@ namespace Gold_Diggerzz
 
     class MiningOperation
     {
-        public void Dig(int daysToDig, Program _program)
+        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
+
         {
             for (int days = 0; days < daysToDig; days++)
             {
@@ -574,15 +575,15 @@ namespace Gold_Diggerzz
                 }
 
                 // post-digging effects
-                _program.CalendarEffects();
-                _program.WeatherEffects();
-                _program.DealWithEmployees();
-                _program.FluctuatePrices();
+                _DayToDayOperations.CalendarEffects(_program);
+                _DayToDayOperations.WeatherEffects(_program);
+                _DayToDayOperations.DealWithEmployees(_program);
+                _DayToDayOperations.FluctuatePrices(_program);
 
                 Console.WriteLine("___________________________________");
             }
 
-            _program.CheckAchievements(_program.achievementsList);
+            _DayToDayOperations.CheckAchievements(achievements, _program);
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             DisplayStuff.DisplayResources(_program);
@@ -593,7 +594,7 @@ namespace Gold_Diggerzz
 
     class MarketOperation
     {
-        public static void GoToMarket(Program _program)
+        public void GoToMarket(Program _program)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write("\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
@@ -780,11 +781,429 @@ namespace Gold_Diggerzz
         }
     }
 
+    class DayToDayOperations
+    {
+        public void WeatherEffects(Program _program)
+        {
+            Random random = new Random();
+
+            // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
+
+            // undoing weather effects 
+            if (_program._badWeatherDaysLeft == 1)
+            {
+                Console.WriteLine("\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency *= 1.3;
+                }
+            }
+
+            if (_program._beautifulSkyDaysLeft == 1)
+            {
+                Console.WriteLine("\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency /= 1.2;
+                }
+                _program._beautifulSkyDaysLeft = 0;
+            }
+
+            if (_program._hurricaneDaysLeft == 1)
+            {
+                Console.WriteLine("\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency *= 1.4;
+                }
+            }
+
+            bool noActiveWeatherEffects = _program._badWeatherDaysLeft == 0 && _program._hurricaneDaysLeft == 0 && _program._beautifulSkyDaysLeft == 0;
+
+            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
+            if (random.Next(0, 100) < 5 && noActiveWeatherEffects)
+            {
+                Console.WriteLine(" \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency /= 1.4;
+                }
+                _program._hurricaneDaysLeft = 6;
+            }
+
+            // rain reducing efficiency
+            else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
+            {
+                Console.WriteLine("\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency /= 1.3;
+                }
+                _program._badWeatherDaysLeft = 3;
+            }
+
+            // 30% chance beautiful sky increasing efficiency
+            else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
+            {
+                Console.WriteLine("\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.DefaultEfficiency *= 1.2;
+                }
+                _program._beautifulSkyDaysLeft = 3;
+            }
+
+        }
+
+        public void CalendarEffects(Program _program)
+        {
+            // weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
+
+            // every 10 days, probability of finding resources is reduced by 5%
+            if (_program._currentDate.Day % 10 == 0)
+            {
+                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
+                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 8% \ud83d\udc22");
+                _program.coal.Probability *= 0.92;
+                _program.stone.Probability *= 0.92;
+                _program.iron.Probability *= 0.92;
+                _program.gold.Probability *= 0.92;
+                _program.diamond.Probability *= 0.92;
+            }
+
+            // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
+            if (_program._currentDate.DayOfWeek is DayOfWeek.Saturday)
+            {
+                Console.WriteLine("It's the weekend, your employees want 30% more pay");
+                _program._currentWageRate *= 1.3;
+                foreach (Worker workers in _program.workersList)
+                {
+                    workers.Wage *= 1.3;
+                }
+            }
+
+            // to undo the effect of weekend pay
+            else if (_program._currentDate.DayOfWeek is DayOfWeek.Monday)
+            {
+                _program._currentWageRate /= 1.3;
+                foreach (Worker workers in _program.workersList)
+                {
+                    workers.Wage /= 1.3;
+                }
+            }
+
+            // stock market code below
+            // to undo the effects of the crash
+            if (_program._crashDaysLeft > 1)
+            {
+                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
+                _program.coal.Price *= 2;
+                _program.stone.Price *= 2;
+                _program.iron.Price *= 2;
+                _program.gold.Price *= 2;
+                _program.diamond.Price *= 2;
+                _program._currentEmployeePrice *= 2;
+                _program._crashDaysLeft = 0;
+            }
+
+            if (_program._currentDate.Day == _program._crashDate && _program._crashDaysLeft == 0)
+            {
+                Console.WriteLine("\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
+
+                _program.coal.Price /= 2;
+                _program.stone.Price /= 2;
+                _program.iron.Price /= 2;
+                _program.gold.Price /= 2;
+                _program.diamond.Price /= 2;
+                _program._currentEmployeePrice /= 2;
+                _program._crashDaysLeft = 2;
+            }
+
+            // 10% raise on the first of every month (apart from January)
+            if (_program._currentDate.Month != 1 && _program._currentDate.Day == 1)
+            {
+                Console.WriteLine("\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
+                _program._currentWageRate *= 1.1;
+                foreach (Worker workers in _program.workersList)
+                {
+                    workers.Wage *= 1.1;
+                }
+            }
+
+            // 10% profit sharing to each employee on the 15th of every month
+            if (_program._currentDate.Day == 15)
+            {
+                Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
+
+                if (_program.workersList.Count < 7)
+                {
+                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
+                    Console.WriteLine($"Your {_program.workersList.Count} employees get ${_program.dollars.Quantity * 0.1} each");
+                    double dollarsToLose = _program.dollars.Quantity * 0.1 *_program. workersList.Count;
+                    _program.dollars.Quantity -= dollarsToLose;
+                    Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+                }
+
+                else
+                {
+                    Console.WriteLine("Because you have so many employees, 70% of your current $$$ stash is given to them");
+                    Console.WriteLine($"This means you'll lose {_program.dollars.Quantity * 0.7}");
+                    _program.dollars.Quantity -= _program.dollars.Quantity * 0.7;
+                }
+            }
+        }
+        
+        public void DealWithEmployees(Program _program)
+        {
+            
+            Random random = new Random();
+            
+            // recalculate the average efficiency of the employees
+            double totalEfficiency = 0;
+            foreach (Worker worker in _program.workersList)
+            {
+                totalEfficiency += worker.DefaultEfficiency;
+            }
+            _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
+            
+            // retiring workers
+            for (int i = _program.workersList.Count - 1; i >= 0; i--)
+            {
+                Worker worker = _program.workersList[i];
+                if (worker.DaysUntilRetirement != 0)
+                {
+                    worker.DaysUntilRetirement -= 1;
+                }
+
+                if (worker.DaysUntilRetirement == 0)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
+                    worker.RetirementDate = _program._currentDate.Date;
+                    _program.retiredWorkersList.Add(worker);
+                    _program.workersList.Remove(worker);
+                    Console.WriteLine($"You now have {_program.workersList.Count} employees");
+                }
+            }
+            
+            // workers that return (due to training course)
+            foreach (Worker worker in _program.trainingWorkersList)
+            {
+                if (worker.ReturnToWorkDate == _program._currentDate.Date)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
+                    _program.trainingWorkersList.Remove(worker);
+                    _program.workersList.Add(worker);
+                }
+            }
+
+            // unwell workers
+            if (_program.workersList.Count > 1)
+            {
+                List<Worker> newlyIllWorkers = new List<Worker>();
+                
+                foreach (Worker worker in _program.workersList)
+                {
+                    if (random.Next(0, 100) < worker.EmployeeIllProbability)
+                    {
+                        Console.WriteLine($"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        newlyIllWorkers.Add(worker);
+                    }
+                }
+                
+                foreach (Worker worker in newlyIllWorkers)
+                {
+                    worker.IsIll = true;
+                    worker.ReturnToWorkDate = _program._currentDate.AddDays(3);
+                    _program.workersList.Remove(worker);
+                    _program.illWorkersList.Add(worker);
+                }
+            }
+            
+            // to undo the effects of unwell workers
+            List<Worker> noLongerIllWorkersList = new List<Worker>();
+            
+            foreach (Worker worker in _program.illWorkersList)
+            {
+                if (worker.IsIll && worker.ReturnToWorkDate == _program._currentDate.Date)
+                {
+                    Console.WriteLine($"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                    noLongerIllWorkersList.Add(worker);
+                }
+            }
+            
+            foreach (Worker worker in noLongerIllWorkersList)
+            {
+                worker.IsIll = false;
+                _program.illWorkersList.Remove(worker);
+                _program. workersList.Add(worker);
+            }
+            
+        }
+
+        public void CheckAchievements(List<string> achievements, Program _program)
+        {
+
+            if (_program.coal.TotalFound >= 100 && !_program._achievement1)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
+                _program._achievement1 = true;
+                achievements.Add("100kg of coal found");
+
+            }
+
+            if (_program.coal.TotalFound >= 1000 && !_program._achievement2)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
+                _program._achievement2 = true;
+                achievements.Add("1000kg of coal found");
+            }
+
+            if (_program.coal.TotalFound >= 10000 && !_program._achievement3)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
+                _program._achievement3 = true;
+                achievements.Add("10000kg of coal found");
+            }
+
+            if (_program.stone.TotalFound >= 100 && !_program._achievement4)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
+                _program._achievement4 = true;
+                achievements.Add("100kg of stone found");
+            }
+
+            if (_program.stone.TotalFound >= 1000 && !_program._achievement5)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
+                _program._achievement5 = true;
+                achievements.Add("1000kg of stone found");
+            }
+
+            if (_program.stone.TotalFound >= 10000 && !_program._achievement6)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
+                _program._achievement6 = true;
+                achievements.Add("10000kg of stone found");
+            }
+
+            if (_program.iron.TotalFound >= 75 && !_program._achievement7)
+            {
+                Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
+                _program._achievement7 = true;
+                achievements.Add("75kg of iron found");
+            }
+
+            if (_program.iron.TotalFound >= 750 && !_program._achievement8)
+            {
+                Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
+                _program._achievement8 = true;
+                achievements.Add("750kg of iron found");
+            }
+
+            if (_program.iron.TotalFound >= 7500 && !_program._achievement9)
+            {
+                Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
+                _program._achievement9 = true;
+                achievements.Add("7500kg of iron found");
+            }
+
+            if (_program.gold.TotalFound >= 30 && !_program._achievement10)
+            {
+                Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
+                _program._achievement10 = true;
+                achievements.Add("30kg of gold found");
+            }
+
+            if (_program.gold.TotalFound >= 300 && !_program._achievement11)
+            {
+                Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
+                _program._achievement11 = true;
+                achievements.Add("300kg of gold found");
+            }
+
+            if (_program.gold.TotalFound >= 3000 && !_program._achievement12)
+            {
+                Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
+                _program._achievement12 = true;
+                achievements.Add("3000kg of gold found");
+            }
+
+            if (_program.diamond.TotalFound >= 10 && !_program._achievement13)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
+                _program._achievement13 = true;
+                achievements.Add("10kg of diamond found");
+            }
+
+            if (_program.diamond.TotalFound >= 100 && !_program._achievement14)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
+                _program._achievement14 = true;
+                achievements.Add("100kg of diamond found");
+            }
+
+            if (_program.diamond.TotalFound >= 1000 && !_program._achievement15)
+            {
+                Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
+                _program._achievement15 = true;
+                achievements.Add("1000kg of diamond found");
+            }
+
+            if (_program._totalDollarsEarned >= 300 && !_program._achievement16)
+            {
+                Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
+                _program._achievement16 = true;
+                achievements.Add("$300 earned");
+            }
+
+            if (_program._totalDollarsEarned >= 1000 && !_program._achievement17)
+            {
+                Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
+                _program._achievement17 = true;
+                achievements.Add("$1000 earned");
+            }
+
+            if (_program._totalDollarsEarned >= 10000 && !_program._achievement18)
+            {
+                Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
+                _program._achievement18 = true;
+                achievements.Add("$10000 earned");
+            }
+
+            if (_program._totalEmployeesHired >= 10 && !_program._achievement19)
+            {
+                Console.WriteLine("You've unlocked an achievement: 10 employees hired milestone");
+                _program._achievement19 = true;
+                achievements.Add("10 employees hired");
+            }
+
+            if (_program._totalEmployeesHired >= 100 && !_program._achievement20)
+            {
+                Console.WriteLine("You've unlocked an achievement: 100 employees hired milestone");
+                _program._achievement20 = true;
+                achievements.Add("100 employees hired");
+            }
+        }
+
+        public void FluctuatePrices(Program _program)
+        {
+            // upto a 20% fluctuation in prices based on random probability
+            Random random = new Random();
+            double randomChange = random.Next(-10, 10) / 100.0 + 1;
+
+            _program.coal.Price *= randomChange;
+            _program.stone.Price *= randomChange;
+            _program.iron.Price *= randomChange;
+            _program.gold.Price *= randomChange;
+            _program.diamond.Price *= randomChange;
+        }
+    }
+
     class Program
     {
+
+        # region global variables
         
-        // global variables
-        // the ints are for the number of days left for the effect to wear off - set to 0 in Main() during pre-game
         public  bool _animation = true;
         public int _increasedGoldChanceDays;
         public int _marketMasterDaysLeft;
@@ -833,6 +1252,7 @@ namespace Gold_Diggerzz
         
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
+        DayToDayOperations dayToDayOperations = new DayToDayOperations();
         
         // Declare your variables at the class level
         public Resource coal;
@@ -859,7 +1279,6 @@ namespace Gold_Diggerzz
         public Trade ironToGold;
         public Trade ironToDiamond;
         public Trade goldToDiamond;
-
 
         public List<string> achievementsList = new List<string>();
         
@@ -898,6 +1317,8 @@ namespace Gold_Diggerzz
         };
         
         private static List<string>_usedNames = new List<string>();
+        
+        # endregion
         
         public static void Main()
         {
@@ -969,24 +1390,24 @@ namespace Gold_Diggerzz
                     case 1:
                         _animation = true;
                         Console.WriteLine("You have chosen to dig one day");
-                        miningOperation.Dig(1, this);
+                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         break;
                     case 2:
                         _animation = false;
                         Console.WriteLine("\n___  ___        _  _    _         _        ______               ______  _        \n|  \\/  |       | || |  (_)       | |       |  _  \\              |  _  \\(_)       \n| .  . | _   _ | || |_  _  _ __  | |  ___  | | | | __ _  _   _  | | | | _   __ _ \n| |\\/| || | | || || __|| || '_ \\ | | / _ \\ | | | |/ _` || | | | | | | || | / _` |\n| |  | || |_| || || |_ | || |_) || ||  __/ | |/ /| (_| || |_| | | |/ / | || (_| |\n\\_|  |_/ \\__,_||_| \\__||_|| .__/ |_| \\___| |___/  \\__,_| \\__, | |___/  |_| \\__, |\n                          | |                             __/ |             __/ |\n                          |_|                            |___/             |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
-                        miningOperation.Dig(daysToDig, this);
+                        miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
                         break;
                     case 3:
-                        MarketOperation.GoToMarket(this);
+                        marketOperation.GoToMarket(this);
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine($"You have been charged ${skipDay.Price} for the costs of skipping a day");
                         dollars.Quantity -= skipDay.Price;
                         skipDay.skipDayOrNot = true;
-                        miningOperation.Dig(1, this);
+                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         DisplayStuff.DisplayResources(this);
                         break;
                     case 5:
@@ -1262,7 +1683,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
-                    miningOperation.Dig(5, this);
+                    miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
                     timeMachine.Quantity -= 1;
                     break;
                 }
@@ -1301,333 +1722,6 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             QuitGame();
-        }
-
-        public void WeatherEffects()
-        {
-
-            // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
-
-            // undoing weather effects 
-            if (_badWeatherDaysLeft == 1)
-            {
-                Console.WriteLine("\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency *= 1.3;
-                }
-            }
-
-            if (_beautifulSkyDaysLeft == 1)
-            {
-                Console.WriteLine("\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency /= 1.2;
-                }
-                _beautifulSkyDaysLeft = 0;
-            }
-
-            if (_hurricaneDaysLeft == 1)
-            {
-                Console.WriteLine("\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency *= 1.4;
-                }
-            }
-
-            bool noActiveWeatherEffects = _badWeatherDaysLeft == 0 && _hurricaneDaysLeft == 0 && _beautifulSkyDaysLeft == 0;
-
-            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
-            if (_random.Next(0, 100) < 5 && noActiveWeatherEffects)
-            {
-                Console.WriteLine(" \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency /= 1.4;
-                }
-                _hurricaneDaysLeft = 6;
-            }
-
-            // rain reducing efficiency
-            else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
-            {
-                Console.WriteLine("\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency /= 1.3;
-                }
-                _badWeatherDaysLeft = 3;
-            }
-
-            // 30% chance beautiful sky increasing efficiency
-            else if (_random.Next(0, 100) < 30 && noActiveWeatherEffects)
-            {
-                Console.WriteLine("\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
-                foreach (Worker worker in workersList)
-                {
-                    worker.DefaultEfficiency *= 1.2;
-                }
-                _beautifulSkyDaysLeft = 3;
-            }
-
-        }
-
-        public void CalendarEffects()
-        {
-            // weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
-
-            // every 10 days, probability of finding resources is reduced by 5%
-            if (_currentDate.Day % 10 == 0)
-            {
-                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
-                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 8% \ud83d\udc22");
-                coal.Probability *= 0.92;
-                stone.Probability *= 0.92;
-                iron.Probability *= 0.92;
-                gold.Probability *= 0.92;
-                diamond.Probability *= 0.92;
-            }
-
-            // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
-            if (_currentDate.DayOfWeek is DayOfWeek.Saturday)
-            {
-                Console.WriteLine("It's the weekend, your employees want 30% more pay");
-                _currentWageRate *= 1.3;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage *= 1.3;
-                }
-            }
-
-            // to undo the effect of weekend pay
-            else if (_currentDate.DayOfWeek is DayOfWeek.Monday)
-            {
-                _currentWageRate /= 1.3;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage /= 1.3;
-                }
-            }
-
-            // stock market code below
-            // to undo the effects of the crash
-            if (_crashDaysLeft > 1)
-            {
-                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
-                coal.Price *= 2;
-                stone.Price *= 2;
-                iron.Price *= 2;
-                gold.Price *= 2;
-                diamond.Price *= 2;
-                _currentEmployeePrice *= 2;
-                _crashDaysLeft = 0;
-            }
-
-            if (_currentDate.Day == _crashDate && _crashDaysLeft == 0)
-            {
-                Console.WriteLine("\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
-
-                coal.Price /= 2;
-                stone.Price /= 2;
-                iron.Price /= 2;
-                gold.Price /= 2;
-                diamond.Price /= 2;
-                _currentEmployeePrice /= 2;
-                _crashDaysLeft = 2;
-            }
-
-            // 10% raise on the first of every month (apart from January)
-            if (_currentDate.Month != 1 && _currentDate.Day == 1)
-            {
-                Console.WriteLine("\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
-                _currentWageRate *= 1.1;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage *= 1.1;
-                }
-            }
-
-            // 10% profit sharing to each employee on the 15th of every month
-            if (_currentDate.Day == 15)
-            {
-                Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
-
-                if (workersList.Count < 7)
-                {
-                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
-                    Console.WriteLine($"Your {workersList.Count} employees get ${dollars.Quantity * 0.1} each");
-                    double dollarsToLose = dollars.Quantity * 0.1 * workersList.Count;
-                    dollars.Quantity -= dollarsToLose;
-                    Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
-                }
-
-                else
-                {
-                    Console.WriteLine("Because you have so many employees, 70% of your current $$$ stash is given to them");
-                    Console.WriteLine($"This means you'll lose {dollars.Quantity * 0.7}");
-                    dollars.Quantity -= dollars.Quantity * 0.7;
-                }
-            }
-        }
-
-        public void CheckAchievements(List<string> achievements)
-        {
-
-            if (coal.TotalFound >= 100 && !_achievement1)
-            {
-                Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
-                _achievement1 = true;
-                achievements.Add("100kg of coal found");
-
-            }
-
-            if (coal.TotalFound >= 1000 && !_achievement2)
-            {
-                Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
-                _achievement2 = true;
-                achievements.Add("1000kg of coal found");
-            }
-
-            if (coal.TotalFound >= 10000 && !_achievement3)
-            {
-                Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
-                _achievement3 = true;
-                achievements.Add("10000kg of coal found");
-            }
-
-            if (stone.TotalFound >= 100 && !_achievement4)
-            {
-                Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
-                _achievement4 = true;
-                achievements.Add("100kg of stone found");
-            }
-
-            if (stone.TotalFound >= 1000 && !_achievement5)
-            {
-                Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
-                _achievement5 = true;
-                achievements.Add("1000kg of stone found");
-            }
-
-            if (stone.TotalFound >= 10000 && !_achievement6)
-            {
-                Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
-                _achievement6 = true;
-                achievements.Add("10000kg of stone found");
-            }
-
-            if (iron.TotalFound >= 75 && !_achievement7)
-            {
-                Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
-                _achievement7 = true;
-                achievements.Add("75kg of iron found");
-            }
-
-            if (iron.TotalFound >= 750 && !_achievement8)
-            {
-                Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
-                _achievement8 = true;
-                achievements.Add("750kg of iron found");
-            }
-
-            if (iron.TotalFound >= 7500 && !_achievement9)
-            {
-                Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
-                _achievement9 = true;
-                achievements.Add("7500kg of iron found");
-            }
-
-            if (gold.TotalFound >= 30 && !_achievement10)
-            {
-                Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
-                _achievement10 = true;
-                achievements.Add("30kg of gold found");
-            }
-
-            if (gold.TotalFound >= 300 && !_achievement11)
-            {
-                Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
-                _achievement11 = true;
-                achievements.Add("300kg of gold found");
-            }
-
-            if (gold.TotalFound >= 3000 && !_achievement12)
-            {
-                Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
-                _achievement12 = true;
-                achievements.Add("3000kg of gold found");
-            }
-
-            if (diamond.TotalFound >= 10 && !_achievement13)
-            {
-                Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
-                _achievement13 = true;
-                achievements.Add("10kg of diamond found");
-            }
-
-            if (diamond.TotalFound >= 100 && !_achievement14)
-            {
-                Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
-                _achievement14 = true;
-                achievements.Add("100kg of diamond found");
-            }
-
-            if (diamond.TotalFound >= 1000 && !_achievement15)
-            {
-                Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
-                _achievement15 = true;
-                achievements.Add("1000kg of diamond found");
-            }
-
-            if (_totalDollarsEarned >= 300 && !_achievement16)
-            {
-                Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
-                _achievement16 = true;
-                achievements.Add("$300 earned");
-            }
-
-            if (_totalDollarsEarned >= 1000 && !_achievement17)
-            {
-                Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
-                _achievement17 = true;
-                achievements.Add("$1000 earned");
-            }
-
-            if (_totalDollarsEarned >= 10000 && !_achievement18)
-            {
-                Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
-                _achievement18 = true;
-                achievements.Add("$10000 earned");
-            }
-
-            if (_totalEmployeesHired >= 10 && !_achievement19)
-            {
-                Console.WriteLine("You've unlocked an achievement: 10 employees hired milestone");
-                _achievement19 = true;
-                achievements.Add("10 employees hired");
-            }
-
-            if (_totalEmployeesHired >= 100 && !_achievement20)
-            {
-                Console.WriteLine("You've unlocked an achievement: 100 employees hired milestone");
-                _achievement20 = true;
-                achievements.Add("100 employees hired");
-            }
-        }
-
-        public void FluctuatePrices()
-        {
-            // upto a 20% fluctuation in prices based on random probability
-            Random random = new Random();
-            double randomChange = random.Next(-10, 10) / 100.0 + 1;
-
-            coal.Price *= randomChange;
-            stone.Price *= randomChange;
-            iron.Price *= randomChange;
-            gold.Price *= randomChange;
-            diamond.Price *= randomChange;
         }
 
         public void EmployeeTrainingCourse(int numberOfEmployees)
@@ -1811,91 +1905,6 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("You've hired all 163/163 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
             }
-        }
-
-        public void DealWithEmployees()
-        {
-            
-            // recalculate the average efficiency of the employees
-            double totalEfficiency = 0;
-            foreach (Worker worker in workersList)
-            {
-                totalEfficiency += worker.DefaultEfficiency;
-            }
-            _averageEmployeeEfficiency = totalEfficiency / workersList.Count;
-            
-            // retiring workers
-            for (int i = workersList.Count - 1; i >= 0; i--)
-            {
-                Worker worker = workersList[i];
-                if (worker.DaysUntilRetirement != 0)
-                {
-                    worker.DaysUntilRetirement -= 1;
-                }
-
-                if (worker.DaysUntilRetirement == 0)
-                {
-                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
-                    worker.RetirementDate = _currentDate.Date;
-                    retiredWorkersList.Add(worker);
-                    workersList.Remove(worker);
-                    Console.WriteLine($"You now have {workersList.Count} employees");
-                }
-            }
-            
-            // workers that return (due to training course)
-            foreach (Worker worker in trainingWorkersList)
-            {
-                if (worker.ReturnToWorkDate == _currentDate.Date)
-                {
-                    Console.WriteLine($"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
-                    trainingWorkersList.Remove(worker);
-                    workersList.Add(worker);
-                }
-            }
-
-            // unwell workers
-            if (workersList.Count > 1)
-            {
-                List<Worker> newlyIllWorkers = new List<Worker>();
-                
-                foreach (Worker worker in workersList)
-                {
-                    if (_random.Next(0, 100) < worker.EmployeeIllProbability)
-                    {
-                        Console.WriteLine($"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
-                        newlyIllWorkers.Add(worker);
-                    }
-                }
-                
-                foreach (Worker worker in newlyIllWorkers)
-                {
-                    worker.IsIll = true;
-                    worker.ReturnToWorkDate = _currentDate.AddDays(3);
-                    workersList.Remove(worker);
-                    illWorkersList.Add(worker);
-                }
-            }
-            
-            // to undo the effects of unwell workers
-            List<Worker> noLongerIllWorkersList = new List<Worker>();
-            
-            foreach (Worker worker in illWorkersList)
-            {
-                if (worker.IsIll && worker.ReturnToWorkDate == _currentDate.Date)
-                {
-                    Console.WriteLine($"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
-                    noLongerIllWorkersList.Add(worker);
-                }
-            }
-            
-            foreach (Worker worker in noLongerIllWorkersList)
-            {
-                worker.IsIll = false;
-                illWorkersList.Remove(worker);
-                workersList.Add(worker);
-            }
-            
         }
 
         public void GoToTrader()
