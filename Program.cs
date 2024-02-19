@@ -8,7 +8,7 @@ namespace Gold_Diggerzz
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
 
-   /*
+    /*
     * current issues
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
@@ -18,7 +18,6 @@ namespace Gold_Diggerzz
      * a list of all possible trades, foreach trade, if the player has enough of the fromResource, display the trade option?
      * OOP the weather effects
      * 3 types of workers, bad, mid and good with different probabilities of being ill, wages, efficiencies, retiring times etc.
-     * a heatwave could decrease efficiency but increase the chance of finding certain resources.
      *  employee morale, if morale is low, the employee could be less efficient.
         * morale-boosting powerup
      * create morale and reputation
@@ -27,10 +26,10 @@ namespace Gold_Diggerzz
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract.
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
+        * as the mine gets emptier, chance of finding resources decreases 
      * Achievements and Rewards: Implement more achievements and provide rewards for achieving them. This could be in the form of in-game currency, special power-ups, or even new gameplay features.
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
-     * Expand the employee management aspect of the game. This could involve hiring and firing employees, managing their morale, and training them to improve their efficiency.
-     * Trading: Implement a trading system where the player can trade resources with other entities in the game. This could involve negotiating prices and could be influenced by the player's reputation, which could be another aspect of the game.
+     * Trader's prices fluctuate (one of the factors can be reputation)
      * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
      * Environmental Impact: Implement an environmental impact system where the player's mining operations could have negative effects on the environment, which could lead to penalties or restrictions.
      * Corporate Espionage: Introduce a system where the player can engage in corporate espionage to gain an advantage over their competitors. This could involve risks of getting caught and facing penalties.
@@ -39,6 +38,7 @@ namespace Gold_Diggerzz
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
+     * a heatwave could decrease efficiency but increase the chance of finding certain resources.
      * tutorial mode (that is actually functional) 
      * loans - you can take a loan from the bank and pay it back with interest
      * load/save game
@@ -53,11 +53,6 @@ namespace Gold_Diggerzz
         * or a 'diamond' manager to double chance of finding gold for 10 days
      * send individual number of employees for training course that then boosts their productivity
      */
-
-    class GameState
-    {
-        
-    }
     
     class Resource
     {
@@ -1244,6 +1239,7 @@ namespace Gold_Diggerzz
         public DateTime _currentDate = new DateTime(2024, 1, 1);
         public static Random _random = new Random();
         public int _crashDate = _random.Next(0, 28);
+        
         public List<Worker> workersList = new List<Worker>();
         public List<Worker> illWorkersList = new List<Worker>();
         public List<Worker> retiredWorkersList = new List<Worker>();
@@ -1323,12 +1319,13 @@ namespace Gold_Diggerzz
         public static void Main()
         {
             Program program = new Program();
-            // pre-game
+            
+            # region initialisation of all objects
             
             program.HireNewWorker(1);
             
             program.coal = new Resource("Coal",80, 3, 0, 0);
-            program.stone = new Resource("Stone",75, 5, 0, 0);
+            program.stone = new Resource("Stone",70, 6, 0, 0);
             program.iron = new Resource("Iron",60, 13, 0, 0);
             program.gold = new Resource("Gold",15, 65, 0, 0);
             program.diamond = new Resource("Diamond",3, 200, 0, 0);
@@ -1353,6 +1350,7 @@ namespace Gold_Diggerzz
             program.ironToDiamond = new Trade(16, program.iron, program.diamond);
             program.goldToDiamond = new Trade(3, program.gold, program.diamond);
             
+            # endregion 
             
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -1363,8 +1361,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("These are your initial resources...");
 
             DisplayStuff.DisplayResources(program);
-
-            // game starts
+            
             Console.WriteLine("The game is about to start, good luck...");
             program.RunGame();
         }
