@@ -63,6 +63,7 @@ namespace Gold_Diggerzz
 
    /*
     * current issues
+    * instead of just adding 7 days after an employee training course, set each employee on the course a return date, similar to the illness
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
     */
@@ -578,21 +579,27 @@ namespace Gold_Diggerzz
                         }
                         break;
                     case 9:
-                        if (dollars.Quantity > trainingCourse.Price * workersList.Count && workersList.Count != 0)
+                        Console.WriteLine($"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
+                        int employeesToSend = GetValidInt(-1, workersList.Count);
+                        if (employeesToSend == -1)
                         {
-                            Console.WriteLine("You have chosen to send all employees on a training course");
-                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
-                            Console.WriteLine("Your employees will be back in 7 days");
-                            EmployeeTrainingCourse();
+                            employeesToSend = workersList.Count;
                         }
-                        else if (dollars.Quantity > trainingCourse.Price * workersList.Count && workersList.Count == 0)
+                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
+                        {
+                            Console.WriteLine($"You have chosen to send {employeesToSend} employees on a training course");
+                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
+                            Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
+                            EmployeeTrainingCourse(employeesToSend);
+                        }
+                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count == 0)
                         {
                             Console.WriteLine("You don't have any employees to send on a training course");
                             Console.WriteLine("This could be because of employee illness - try again later");
                         }
                         else
                         {
-                            Console.WriteLine("You don't have enough money to send all employees on a training course");
+                            Console.WriteLine($"You don't have enough money to send {employeesToSend} employees on a training course");
                         }
                         break;
                     case 10:
@@ -1015,19 +1022,19 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"Your {workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                     }
 
-                    if (_badWeatherDaysLeft != 0)
+                    if (_badWeatherDaysLeft > 0)
                     {
                         _badWeatherDaysLeft -= 1;
                         Console.WriteLine($"{_badWeatherDaysLeft} days left of torrential rain");
                     }
 
-                    if (_hurricaneDaysLeft != 0)
+                    if (_hurricaneDaysLeft > 0)
                     {
                         _hurricaneDaysLeft -= 1;
                         Console.WriteLine($"{_hurricaneDaysLeft} days left of hurricane");
                     }
 
-                    if (_beautifulSkyDaysLeft != 0)
+                    if (_beautifulSkyDaysLeft > 0)
                     {
                         _beautifulSkyDaysLeft -= 1;
                         Console.WriteLine($"{_beautifulSkyDaysLeft} days left of beautiful weather");
@@ -1718,15 +1725,15 @@ namespace Gold_Diggerzz
             diamond.Price *= randomChange;
         }
 
-        public void EmployeeTrainingCourse()
+        public void EmployeeTrainingCourse(int numberOfEmployees)
         {
             // to boost the productivity of employees
-            Console.WriteLine("Training employees...");
-            Console.WriteLine($"This course charged you {trainingCourse.Price * workersList.Count} in fees");
-            dollars.Quantity -= trainingCourse.Price * workersList.Count;
-            foreach (Worker worker in workersList)
+            Console.WriteLine($"Training {numberOfEmployees} employees...");
+            Console.WriteLine($"This course charged you {trainingCourse.Price * numberOfEmployees} in fees");
+            dollars.Quantity -= trainingCourse.Price * numberOfEmployees;
+            for (int i = 0; i < numberOfEmployees; i++)
             {
-                worker.DefaultEfficiency *= 1.3;
+                workersList[i].DefaultEfficiency *= 1.3;
             }
             _currentDate.AddDays(7);
             Thread.Sleep(1500);
