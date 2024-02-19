@@ -278,11 +278,15 @@ namespace Gold_Diggerzz
         
         public static void MakeTrade(double ratio, Resource fromResource, Resource toResource)
         {
-            double amountToTrade = fromResource.Quantity * ratio;
-            fromResource.Quantity -= amountToTrade;
-            toResource.Quantity += amountToTrade;
+            if (ratio * fromResource.Quantity > toResource.Quantity)
+            {
+                double amountToTrade = fromResource.Quantity * ratio;
+                fromResource.Quantity -= amountToTrade;
+                toResource.Quantity += amountToTrade;
+                Console.WriteLine($"Trade Complete! You traded {amountToTrade}kg of {fromResource} for {amountToTrade}kg of {toResource}");
+            }
+            Console.WriteLine("You can't afford to make this trade brokie");
         }
-
     }
 
     class Program
@@ -1874,7 +1878,10 @@ namespace Gold_Diggerzz
 
         public void GoToTrader()
         {
-            Console.WriteLine("Welcome to the trader's shop!");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n  _______                      _               \n |__   __|                    | |              \n    | |     _ __    __ _    __| |   ___   _ __ \n    | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n    | |    | |    | (_| | | (_| | |  __/ | |   \n    |_|    |_|     \\__,_|  \\__,_|  \\___| |_|   \n");
+            Console.ResetColor();
+            DisplayStuff.DisplayResources(this);
             Console.WriteLine("Here are the rates for today:");
             Console.WriteLine("______________________________");
             Console.WriteLine("0 - Cancel and return");
@@ -1937,6 +1944,7 @@ namespace Gold_Diggerzz
                     Trade.MakeTrade(goldToDiamond.Ratio, gold, diamond);
                     break;
             }
+            DisplayStuff.DisplayResources(this);
         }
 
         public int GetValidInt(int min, int max)
