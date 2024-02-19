@@ -181,16 +181,16 @@ namespace Gold_Diggerzz
 
     class PayForStuff
     {
-        public int Price;
+        public double Price;
         public bool skipDayOrNot;
         
-        public PayForStuff(int price)
+        public PayForStuff(double price)
         {
             Price = price;
             skipDayOrNot = false;
         }
     }
-
+    
     class DisplayStuff
     {
         
@@ -278,9 +278,10 @@ namespace Gold_Diggerzz
             int j = 0;
             foreach (Worker worker in program.workersList)
             {
-                i++;
+                j++;
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
+            Console.WriteLine();
         }
         
     }
@@ -433,7 +434,6 @@ namespace Gold_Diggerzz
         };
         
         private static List<string>_usedNames = new List<string>();
-        
         
         public static void Main()
         {
@@ -1857,6 +1857,9 @@ namespace Gold_Diggerzz
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
                     Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.DefaultEfficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
+                    
+                    // updating bribe price
+                    bribe.Price = _currentWageRate * workersList.Count * 2;
                 }
             }
             else
