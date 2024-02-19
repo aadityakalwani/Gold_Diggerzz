@@ -7,59 +7,6 @@ namespace Gold_Diggerzz
 {
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
-    
-    /* program structure + hierarchy
-
-       - Program
-           - Main()
-               - RunGame()
-                   - UserMenuOption()
-                       - CheckIfInDebt()
-                   - Dig(int daysToDig)
-                       - DisplayResources()
-                   - GoToMarket()
-                       - DisplayResources()
-                   - DisplayStuff.DisplayGameMechanics(this);
-                   - DisplayStuff.DisplayStats(this);
-                   - DisplayResources()
-                   - QuitGame()
-                   - GameFailed()
-                   - ChangeProbabilities(DateTime currentDate)
-                   - CheckAchievements(List<string> achievements)
-                   - ChangePrices()
-                   - EmployeeTrainingCourse()
-               - GetValidInt(int min, int max)
-               - GetValidDouble(double min, double max)
-               - HireNewWorker(int numberOfWorkers)
-               - DisplayStuff.DisplayEmployees(this);
-       - Resource
-           - Coal
-           - Stone
-           - Iron
-           - Gold
-           - Diamond
-       - Dollars
-       - Worker
-           - Name
-           - Wage
-           - Price
-           - EmployeeIllProbability
-       - PowerUp
-           - MagicTokens
-           - TimeMachine
-           - AncientArtefact
-           - MarketMaster
-       - PayForStuff
-           - StockMarketCrash
-           - SkipDay
-           - Bribe
-           - TrainingCourse
-       - DisplayStuff
-           - DisplayGameMechanics(Program program)
-           - DisplayStats(Program program)
-           - DisplayResources(Program program)
-           - DisplayEmployees(Program program)
-      */
 
    /*
     * current issues
