@@ -139,8 +139,11 @@ namespace Gold_Diggerzz
         public double Wage;
         public double Price;
         public double EmployeeIllProbability;
+        public DateTime HireDate; 
         public double DefaultEfficiency;
         public int DaysUntilRetirement;
+        public DateTime RetirementDate;
+        public bool IsIll;
         public DateTime ReturnToWorkDate;
         
         public Worker(string type,string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
@@ -154,6 +157,8 @@ namespace Gold_Diggerzz
                 EmployeeIllProbability = employeeIllProbability;
                 DefaultEfficiency = defaultEfficiency;
                 DaysUntilRetirement = 30;
+                IsIll = false;
+                HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
             }
             
@@ -262,12 +267,19 @@ namespace Gold_Diggerzz
         
         public static void DisplayEmployees(Program program)
         {
-            Console.WriteLine("Here are your employees:");
+            Console.WriteLine("_____________________________________________________________________");
             int i = 0;
+            foreach (Worker worker in program.retiredWorkersList)
+            {
+                i++;
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate} days \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
+            Console.WriteLine("Here are your current working employees:");
+            int j = 0;
             foreach (Worker worker in program.workersList)
             {
                 i++;
-                Console.WriteLine($"Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
         }
         
@@ -353,6 +365,9 @@ namespace Gold_Diggerzz
         public int _crashDate = _random.Next(0, 28);
         public List<Worker> workersList = new List<Worker>();
         public List<Worker> illWorkersList = new List<Worker>();
+        public List<Worker> retiredWorkersList = new List<Worker>();
+        public List<Worker> trainingWorkersList = new List<Worker>();
+        public List<Worker> toSendToTrainingList = new List<Worker>();
         
         // Declare your variables at the class level
         public Resource coal;
@@ -674,7 +689,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
                 Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
                 Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
-                Console.WriteLine("                            12 - Display employees            13 - Go To Trader\n");
+                Console.WriteLine("13 - Go To Trader           12 - Display employees\n");
                 Console.WriteLine("Your choice:");
 
                 int userOption = GetValidInt(0, 13);
@@ -1077,23 +1092,8 @@ namespace Gold_Diggerzz
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             DisplayStuff.DisplayResources(this);
-            
-            // retiring workers
-            for (int i = workersList.Count - 1; i >= 0; i--)
-            {
-                Worker worker = workersList[i];
-                if (worker.DaysUntilRetirement != 0)
-                {
-                    worker.DaysUntilRetirement -= 1;
-                }
 
-                if (worker.DaysUntilRetirement == 0)
-                {
-                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
-                    workersList.RemoveAt(i);
-                    Console.WriteLine($"You now have {workersList.Count} employees");
-                }
-            }
+            DealWithEmployees();
             
             skipDay.skipDayOrNot = false;
         }
@@ -1436,46 +1436,6 @@ namespace Gold_Diggerzz
                 }
             }
 
-            // to undo the effects of unwell workers
-            List<Worker> noLongerIllWorkersList = new List<Worker>();
-            
-            foreach (Worker worker in illWorkersList)
-            {
-                if (worker.ReturnToWorkDate == currentDate)
-                {
-                    Console.WriteLine($"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
-                    noLongerIllWorkersList.Add(worker);
-                }
-            }
-            
-            foreach (Worker worker in noLongerIllWorkersList)
-            {
-                illWorkersList.Remove(worker);
-                workersList.Add(worker);
-            }
-
-            // unwell workers
-            if (workersList.Count > 1)
-            {
-                List<Worker> newlyIllWorkers = new List<Worker>();
-                
-                foreach (Worker worker in workersList)
-                {
-                    if (_random.Next(0, 100) < worker.EmployeeIllProbability)
-                    {
-                        Console.WriteLine($"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
-                        newlyIllWorkers.Add(worker);
-                    }
-                }
-                
-                foreach (Worker worker in newlyIllWorkers)
-                {
-                    worker.ReturnToWorkDate = currentDate.AddDays(3);
-                    workersList.Remove(worker);
-                    illWorkersList.Add(worker);
-                }
-            }
-
             // 10% profit sharing to each employee on the 15th of every month
             if (currentDate.Day == 15)
             {
@@ -1733,11 +1693,17 @@ namespace Gold_Diggerzz
             dollars.Quantity -= trainingCourse.Price * numberOfEmployees;
             for (int i = 0; i < numberOfEmployees; i++)
             {
+                Console.WriteLine($"Employee {workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
+                workersList[i].ReturnToWorkDate = _currentDate.AddDays(7);
                 workersList[i].DefaultEfficiency *= 1.3;
+                toSendToTrainingList.Add(workersList[i]);
             }
-            _currentDate.AddDays(7);
-            Thread.Sleep(1500);
-            Console.WriteLine("7 Days have now passed");
+            foreach (Worker worker in toSendToTrainingList)
+            {
+                workersList.Remove(worker);
+                trainingWorkersList.Add(worker);
+            }
+            Thread.Sleep(1250);
         }
 
         public void HireNewWorker(int numberOfWorkers)
@@ -1897,6 +1863,82 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("You've hired all 163/163 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
             }
+        }
+
+        public void DealWithEmployees()
+        {
+            // retiring workers
+            for (int i = workersList.Count - 1; i >= 0; i--)
+            {
+                Worker worker = workersList[i];
+                if (worker.DaysUntilRetirement != 0)
+                {
+                    worker.DaysUntilRetirement -= 1;
+                }
+
+                if (worker.DaysUntilRetirement == 0)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
+                    worker.RetirementDate = _currentDate.Date;
+                    retiredWorkersList.Add(worker);
+                    workersList.Remove(worker);
+                    Console.WriteLine($"You now have {workersList.Count} employees");
+                }
+            }
+            
+            // workers that return (due to training course)
+            foreach (Worker worker in trainingWorkersList)
+            {
+                if (worker.ReturnToWorkDate == _currentDate.Date)
+                {
+                    Console.WriteLine($"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
+                    trainingWorkersList.Remove(worker);
+                    workersList.Add(worker);
+                }
+            }
+
+            // unwell workers
+            if (workersList.Count > 1)
+            {
+                List<Worker> newlyIllWorkers = new List<Worker>();
+                
+                foreach (Worker worker in workersList)
+                {
+                    if (_random.Next(0, 100) < worker.EmployeeIllProbability)
+                    {
+                        Console.WriteLine($"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        newlyIllWorkers.Add(worker);
+                    }
+                }
+                
+                foreach (Worker worker in newlyIllWorkers)
+                {
+                    worker.IsIll = true;
+                    worker.ReturnToWorkDate = _currentDate.AddDays(3);
+                    workersList.Remove(worker);
+                    illWorkersList.Add(worker);
+                }
+            }
+            
+            // to undo the effects of unwell workers
+            List<Worker> noLongerIllWorkersList = new List<Worker>();
+            
+            foreach (Worker worker in illWorkersList)
+            {
+                if (worker.IsIll && worker.ReturnToWorkDate == _currentDate.Date)
+                {
+                    Console.WriteLine($"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                    noLongerIllWorkersList.Add(worker);
+                }
+            }
+            
+            foreach (Worker worker in noLongerIllWorkersList)
+            {
+                worker.IsIll = false;
+                illWorkersList.Remove(worker);
+                workersList.Add(worker);
+            }
+            
         }
 
         public void GoToTrader()
