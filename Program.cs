@@ -113,14 +113,16 @@ namespace Gold_Diggerzz
     
     class Resource
     {
+        public string ResourceName;
         public double InitialPrice;
         public double Probability;
         public double Price;
         public double Quantity;
         public double TotalFound;
 
-        public Resource(double initialProbability, double initialPrice, double initialQuantity, double totalFound)
+        public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity, double totalFound)
         {
+            ResourceName = resourceName;
             Probability = initialProbability;
             InitialPrice = initialPrice;
             Price = initialPrice;
@@ -280,21 +282,20 @@ namespace Gold_Diggerzz
         
         public static void MakeTrade(double ratio, Resource fromResource, Resource toResource, DateTime _currentDate)
         {
-            if (datesOfTradesMade.Contains(DateTime.Today))
+            if (!datesOfTradesMade.Contains(_currentDate))
             {
-                Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
+                if (ratio * fromResource.Quantity > toResource.Quantity)
+                {
+                    fromResource.Quantity -= ratio;
+                    toResource.Quantity += 1;
+                
+                    Console.WriteLine($"Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName}");
+                    datesOfTradesMade.Add(DateTime.Today);
+                }
+                Console.WriteLine("You can't afford to make this trade brokie");
                 return;
             }
-            else if (ratio * fromResource.Quantity > toResource.Quantity)
-            {
-                double amountToTrade = fromResource.Quantity * ratio;
-                fromResource.Quantity -= amountToTrade;
-                toResource.Quantity += amountToTrade;
-                
-                Console.WriteLine($"Trade Complete! You traded {amountToTrade}kg of {fromResource} for {amountToTrade}kg of {toResource}");
-                datesOfTradesMade.Add(DateTime.Today);
-            }
-            Console.WriteLine("You can't afford to make this trade brokie");
+            Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
         }
     }
 
@@ -419,12 +420,12 @@ namespace Gold_Diggerzz
             
             program.HireNewWorker(1);
             
-            program.coal = new Resource(80, 3, 0, 0);
-            program.stone = new Resource(75, 5, 0, 0);
-            program.iron = new Resource(60, 13, 0, 0);
-            program.gold = new Resource(15, 65, 0, 0);
-            program.diamond = new Resource(3, 200, 0, 0);
-            program.dollars = new Resource(0, 0, 100, 0);
+            program.coal = new Resource("Coal",80, 3, 0, 0);
+            program.stone = new Resource("Stone",75, 5, 0, 0);
+            program.iron = new Resource("Iron",60, 13, 0, 0);
+            program.gold = new Resource("Gold",15, 65, 0, 0);
+            program.diamond = new Resource("Diamond",3, 200, 0, 0);
+            program.dollars = new Resource("Dollars",0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
             program.ancientArtefact = new PowerUp(0, 7, 3);
@@ -1893,16 +1894,16 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(this);
             Console.WriteLine("Here are the options for today:");
             Console.WriteLine("\n0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {coalToStone.Ratio}kg of coal for 1kg of stone");
-            Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for 1kg of iron");
-            Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for 1kg of gold");
-            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio}kg of coal for 1kg of diamond");
-            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for 1kg of iron");
-            Console.WriteLine($"6 - Convert {stoneToGold.Ratio}kg of stone for 1kg of gold");
-            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio}kg of stone for 1kg of diamond");
-            Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for 1kg of gold");
-            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio}kg of iron for 1kg of diamond");
-            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio}kg of gold for 1kg of diamond");
+            Console.WriteLine($"1 - Convert {coalToStone.Ratio}kg of coal for stone");
+            Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for iron");
+            Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for gold");
+            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio}kg of coal for diamond");
+            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for ron");
+            Console.WriteLine($"6 - Convert {stoneToGold.Ratio}kg of stone for gold");
+            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio}kg of stone for diamond");
+            Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for gold");
+            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio}kg of iron for diamond");
+            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio}kg of gold for diamond");
             Console.WriteLine("Remember, you can only make one trader per day. Choose wisely!");
             Console.WriteLine("_________________________________________");
 
