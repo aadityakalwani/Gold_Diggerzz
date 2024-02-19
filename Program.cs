@@ -263,6 +263,28 @@ namespace Gold_Diggerzz
         
     }
 
+    class Trade
+    {
+        public double Ratio;
+        public Resource FromResource;
+        public Resource ToResource;
+
+        public Trade(double ratio, Resource fromResource, Resource toResource)
+        {
+            Ratio = ratio;
+            FromResource = fromResource;
+            ToResource = toResource;
+        }
+        
+        public static void MakeTrade(double ratio, Resource fromResource, Resource toResource)
+        {
+            double amountToTrade = fromResource.Quantity * ratio;
+            fromResource.Quantity -= amountToTrade;
+            toResource.Quantity += amountToTrade;
+        }
+
+    }
+
     class Program
     {
         
@@ -326,11 +348,22 @@ namespace Gold_Diggerzz
         public PayForStuff skipDay;
         public PayForStuff bribe;
         public PayForStuff trainingCourse;
+        public Trade coalToStone;
+        public Trade coalToIron;
+        public Trade coalToGold;
+        public Trade coalToDiamond;
+        public Trade stoneToIron;
+        public Trade stoneToGold;
+        public Trade stoneToDiamond;
+        public Trade ironToGold;
+        public Trade ironToDiamond;
+        public Trade goldToDiamond;
+        
 
         private static List<string> achievementsList = new List<string>();
         
         // 200 possible names for the workers
-        // to stop screaming at me for names it doesnt recognise/think are typos
+        // to stop screaming at me for names it doesn't recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         private static List<string> _possibleNames = new List<string>()
         {
@@ -388,12 +421,24 @@ namespace Gold_Diggerzz
             program.bribe = new PayForStuff(200);
             program.trainingCourse = new PayForStuff(400);
             
+            program.coalToStone = new Trade(2, program.coal, program.stone);
+            program.coalToIron = new Trade(5, program.coal, program.iron);
+            program.coalToGold = new Trade(12, program.coal, program.gold);
+            program.coalToDiamond = new Trade(70, program.coal, program.diamond);
+            program.stoneToIron = new Trade(3, program.stone, program.iron);
+            program.stoneToGold = new Trade(13, program.stone, program.gold);
+            program.stoneToDiamond = new Trade(40, program.stone, program.diamond);
+            program.ironToGold = new Trade(5, program.iron, program.gold);
+            program.ironToDiamond = new Trade(16, program.iron, program.diamond);
+            program.goldToDiamond = new Trade(3, program.gold, program.diamond);
+            
+            
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
-            Console.WriteLine("Aim of the game: survive for as long as possible before bankruptcy");
+            Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
 
             DisplayStuff.DisplayResources(program);
@@ -561,6 +606,9 @@ namespace Gold_Diggerzz
                     case 12:
                         DisplayStuff.DisplayEmployees(this);
                         break;
+                    case 13:
+                        GoToTrader();
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -599,10 +647,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
                 Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
                 Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
-                Console.WriteLine("                            12 - Display employees\n");
+                Console.WriteLine("                            12 - Display employees            13 - Go To Trader\n");
                 Console.WriteLine("Your choice:");
 
-                int userOption = GetValidInt(0, 12);
+                int userOption = GetValidInt(0, 13);
                 Console.Clear();
                 return userOption;
             }
@@ -1821,6 +1869,73 @@ namespace Gold_Diggerzz
             else
             {
                 Console.WriteLine("You've hired all 163/163 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+            }
+        }
+
+        public void GoToTrader()
+        {
+            Console.WriteLine("Welcome to the trader's shop!");
+            Console.WriteLine("Here are the rates for today:");
+            Console.WriteLine("______________________________");
+            Console.WriteLine("0 - Cancel and return");
+            Console.WriteLine($"1 - Convert {coalToStone.Ratio}kg of coal for 1kg of stone");
+            Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for 1kg of iron");
+            Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for 1kg of gold");
+            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio}kg of coal for 1kg of diamond");
+            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for 1kg of iron");
+            Console.WriteLine($"6 - Convert {stoneToGold.Ratio}kg of stone for 1kg of gold");
+            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio}kg of stone for 1kg of diamond");
+            Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for 1kg of gold");
+            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio}kg of iron for 1kg of diamond");
+            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio}kg of gold for 1kg of diamond");
+            Console.WriteLine("______________________________");
+
+            int userTrade = GetValidInt(0, 10);
+
+            switch (userTrade)
+            {
+                case 0:
+                    break;
+                case 1:
+                    Console.WriteLine($"You've chosen to convert {coalToStone.Ratio}kg coal for stone");
+                    Trade.MakeTrade(coalToStone.Ratio, coal, stone);
+                    break;
+                case 2:
+                    Console.WriteLine($"You've chosen to convert {coalToIron.Ratio}kg coal for iron");
+                    Trade.MakeTrade(coalToIron.Ratio, coal, iron);
+                    break;
+                case 3:
+                    Console.WriteLine($"You've chosen to convert {coalToGold.Ratio}kg coal for gold");
+                    Trade.MakeTrade(coalToGold.Ratio, coal, gold);
+                    break;
+                case 4:
+                    Console.WriteLine($"You've chosen to convert {coalToDiamond.Ratio}kg coal for diamond");
+                    Trade.MakeTrade(coalToDiamond.Ratio, coal, diamond);
+                    break;
+                case 5:
+                    Console.WriteLine($"You've chosen to convert {stoneToIron.Ratio}kg stone for iron");
+                    Trade.MakeTrade(stoneToIron.Ratio, stone, iron);
+                    break;
+                case 6:
+                    Console.WriteLine($"You've chosen to convert {stoneToGold.Ratio}kg stone for gold");
+                    Trade.MakeTrade(stoneToGold.Ratio, stone, gold);
+                    break;
+                case 7:
+                    Console.WriteLine($"You've chosen to convert {stoneToDiamond.Ratio}kg stone for diamond");
+                    Trade.MakeTrade(stoneToDiamond.Ratio, stone, diamond);
+                    break;
+                case 8:
+                    Console.WriteLine($"You've chosen to convert {ironToGold.Ratio}kg iron for gold");
+                    Trade.MakeTrade(ironToGold.Ratio, iron, gold);
+                    break;
+                case 9:
+                    Console.WriteLine($"You've chosen to convert {ironToDiamond.Ratio}kg gold for diamond");
+                    Trade.MakeTrade(ironToDiamond.Ratio, iron, diamond);
+                    break;
+                case 10:
+                    Console.WriteLine($"You've chosen to convert {goldToDiamond.Ratio}kg gold for diamond");
+                    Trade.MakeTrade(goldToDiamond.Ratio, gold, diamond);
+                    break;
             }
         }
 
