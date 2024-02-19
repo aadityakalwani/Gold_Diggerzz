@@ -10,7 +10,6 @@ namespace Gold_Diggerzz
 
    /*
     * current issues
-    * instead of just adding 7 days after an employee training course, set each employee on the course a return date, similar to the illness
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
     */
@@ -22,10 +21,12 @@ namespace Gold_Diggerzz
      * a heatwave could decrease efficiency but increase the chance of finding certain resources.
      *  employee morale, if morale is low, the employee could be less efficient.
         * morale-boosting powerup
+     * create morale and reputation
      * Resource Quality: Different quality levels for resources, which affect their price and the chance of finding them. Higher quality resources could be found less frequently but sold for a higher price.
      * the player could choose to offer them a retirement package in exchange for a morale boost for the remaining workers.
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract.
+     * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
      * Achievements and Rewards: Implement more achievements and provide rewards for achieving them. This could be in the form of in-game currency, special power-ups, or even new gameplay features.
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
      * Expand the employee management aspect of the game. This could involve hiring and firing employees, managing their morale, and training them to improve their efficiency.
@@ -34,7 +35,6 @@ namespace Gold_Diggerzz
      * Environmental Impact: Implement an environmental impact system where the player's mining operations could have negative effects on the environment, which could lead to penalties or restrictions.
      * Corporate Espionage: Introduce a system where the player can engage in corporate espionage to gain an advantage over their competitors. This could involve risks of getting caught and facing penalties.
         * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
-     * allow for multiple employees to be ill at any time based on their employee ill probability
      * achievements are OOP-ed? idk about this one
      * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
@@ -713,14 +713,6 @@ namespace Gold_Diggerzz
 
         public void Dig(int daysToDig)
         {
-            // recalculate the average efficiency of the employees
-            double totalEfficiency = 0;
-            foreach (Worker worker in workersList)
-            {
-                totalEfficiency += worker.DefaultEfficiency;
-            }
-            _averageEmployeeEfficiency = totalEfficiency / workersList.Count;
-            
             for (int days = 0; days < daysToDig; days++)
             {
                 if (CheckIfInDebt() != "true")
@@ -1016,8 +1008,7 @@ namespace Gold_Diggerzz
 
                     _currentDate = _currentDate.AddDays(1);
                 }
-
-                ChangePrices();
+                
                 _totalDaysDug += 1;
 
                 if (daysToDig >= 2)
@@ -1026,11 +1017,11 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
 
-                // change the probabilities of finding resources - including calendar and weather effects
-                ChangeProbabilities();
-
-                // apply a ±10% fluctuation to the prices of iron and gold
-                ChangePrices();
+                // post-digging effects
+                CalendarEffects();
+                WeatherEffects();
+                DealWithEmployees();
+                FluctuatePrices();
 
                 Console.WriteLine("___________________________________");
             }
@@ -1039,8 +1030,6 @@ namespace Gold_Diggerzz
 
             Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
             DisplayStuff.DisplayResources(this);
-
-            DealWithEmployees();
             
             skipDay.skipDayOrNot = false;
         }
@@ -1307,106 +1296,10 @@ namespace Gold_Diggerzz
             QuitGame();
         }
 
-        public void ChangeProbabilities()
+        public void WeatherEffects()
         {
-            DateTime currentDate = _currentDate;
-            // calendar effects: weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
 
-            // every 10 days, probability of finding resources is reduced by 5%
-            if (currentDate.Day % 10 == 0)
-            {
-                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
-                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 8% \ud83d\udc22");
-                coal.Probability *= 0.92;
-                stone.Probability *= 0.92;
-                iron.Probability *= 0.92;
-                gold.Probability *= 0.92;
-                diamond.Probability *= 0.92;
-            }
-
-            // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
-            if (currentDate.DayOfWeek is DayOfWeek.Saturday)
-            {
-                Console.WriteLine("It's the weekend, your employees want 30% more pay");
-                _currentWageRate *= 1.3;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage *= 1.3;
-                }
-            }
-
-            // to undo the effect of weekend pay
-            else if (currentDate.DayOfWeek is DayOfWeek.Monday)
-            {
-                _currentWageRate /= 1.3;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage /= 1.3;
-                }
-            }
-
-            // stock market code below
-            // to undo the effects of the crash
-            if (_crashDaysLeft > 1)
-            {
-                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
-                coal.Price *= 2;
-                stone.Price *= 2;
-                iron.Price *= 2;
-                gold.Price *= 2;
-                diamond.Price *= 2;
-                _currentEmployeePrice *= 2;
-                _crashDaysLeft = 0;
-            }
-
-            if (currentDate.Day == _crashDate && _crashDaysLeft == 0)
-            {
-                Console.WriteLine("\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
-
-                coal.Price /= 2;
-                stone.Price /= 2;
-                iron.Price /= 2;
-                gold.Price /= 2;
-                diamond.Price /= 2;
-                _currentEmployeePrice /= 2;
-                _crashDaysLeft = 2;
-            }
-
-            // 10% raise on the first of every month (apart from January)
-            if (currentDate.Month != 1 && currentDate.Day == 1)
-            {
-                Console.WriteLine("\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
-                _currentWageRate *= 1.1;
-                foreach (Worker workers in workersList)
-                {
-                    workers.Wage *= 1.1;
-                }
-            }
-
-            // 10% profit sharing to each employee on the 15th of every month
-            if (currentDate.Day == 15)
-            {
-                Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
-
-                if (workersList.Count < 7)
-                {
-                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
-                    Console.WriteLine($"Your {workersList.Count} employees get ${dollars.Quantity * 0.1} each");
-                    double dollarsToLose = dollars.Quantity * 0.1 * workersList.Count;
-                    dollars.Quantity -= dollarsToLose;
-                    Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
-                }
-
-                else
-                {
-                    Console.WriteLine("Because you have so many employees, 70% of your current $$$ stash is given to them");
-                    Console.WriteLine($"This means you'll lose {dollars.Quantity * 0.7}");
-                    dollars.Quantity -= dollars.Quantity * 0.7;
-                }
-            }
-
-
-            // weather effects: rain or hurricane reducing efficiency, beautifulSky increasing efficiency
+            // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
 
             // undoing weather effects 
             if (_badWeatherDaysLeft == 1)
@@ -1472,6 +1365,104 @@ namespace Gold_Diggerzz
                 _beautifulSkyDaysLeft = 3;
             }
 
+        }
+
+        public void CalendarEffects()
+        {
+            // weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
+
+            // every 10 days, probability of finding resources is reduced by 5%
+            if (_currentDate.Day % 10 == 0)
+            {
+                Console.WriteLine("Congratulations for surviving for another 10 days. The game is now getting even harder...");
+                Console.WriteLine("\ud83d\udc22 The probability of finding resources has reduced by 8% \ud83d\udc22");
+                coal.Probability *= 0.92;
+                stone.Probability *= 0.92;
+                iron.Probability *= 0.92;
+                gold.Probability *= 0.92;
+                diamond.Probability *= 0.92;
+            }
+
+            // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
+            if (_currentDate.DayOfWeek is DayOfWeek.Saturday)
+            {
+                Console.WriteLine("It's the weekend, your employees want 30% more pay");
+                _currentWageRate *= 1.3;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage *= 1.3;
+                }
+            }
+
+            // to undo the effect of weekend pay
+            else if (_currentDate.DayOfWeek is DayOfWeek.Monday)
+            {
+                _currentWageRate /= 1.3;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage /= 1.3;
+                }
+            }
+
+            // stock market code below
+            // to undo the effects of the crash
+            if (_crashDaysLeft > 1)
+            {
+                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
+                coal.Price *= 2;
+                stone.Price *= 2;
+                iron.Price *= 2;
+                gold.Price *= 2;
+                diamond.Price *= 2;
+                _currentEmployeePrice *= 2;
+                _crashDaysLeft = 0;
+            }
+
+            if (_currentDate.Day == _crashDate && _crashDaysLeft == 0)
+            {
+                Console.WriteLine("\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
+
+                coal.Price /= 2;
+                stone.Price /= 2;
+                iron.Price /= 2;
+                gold.Price /= 2;
+                diamond.Price /= 2;
+                _currentEmployeePrice /= 2;
+                _crashDaysLeft = 2;
+            }
+
+            // 10% raise on the first of every month (apart from January)
+            if (_currentDate.Month != 1 && _currentDate.Day == 1)
+            {
+                Console.WriteLine("\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
+                _currentWageRate *= 1.1;
+                foreach (Worker workers in workersList)
+                {
+                    workers.Wage *= 1.1;
+                }
+            }
+
+            // 10% profit sharing to each employee on the 15th of every month
+            if (_currentDate.Day == 15)
+            {
+                Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
+
+                if (workersList.Count < 7)
+                {
+                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
+                    Console.WriteLine($"Your {workersList.Count} employees get ${dollars.Quantity * 0.1} each");
+                    double dollarsToLose = dollars.Quantity * 0.1 * workersList.Count;
+                    dollars.Quantity -= dollarsToLose;
+                    Console.WriteLine($"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+                }
+
+                else
+                {
+                    Console.WriteLine("Because you have so many employees, 70% of your current $$$ stash is given to them");
+                    Console.WriteLine($"This means you'll lose {dollars.Quantity * 0.7}");
+                    dollars.Quantity -= dollars.Quantity * 0.7;
+                }
+            }
         }
 
         public void CheckAchievements(List<string> achievements)
@@ -1619,7 +1610,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        public void ChangePrices()
+        public void FluctuatePrices()
         {
             // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
@@ -1817,6 +1808,15 @@ namespace Gold_Diggerzz
 
         public void DealWithEmployees()
         {
+            
+            // recalculate the average efficiency of the employees
+            double totalEfficiency = 0;
+            foreach (Worker worker in workersList)
+            {
+                totalEfficiency += worker.DefaultEfficiency;
+            }
+            _averageEmployeeEfficiency = totalEfficiency / workersList.Count;
+            
             // retiring workers
             for (int i = workersList.Count - 1; i >= 0; i--)
             {
