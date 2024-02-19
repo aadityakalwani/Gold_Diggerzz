@@ -133,6 +133,7 @@ namespace Gold_Diggerzz
     
     class Worker
     {
+        public string Type;
         public string Name;
         public double Wage;
         public double Price;
@@ -141,15 +142,20 @@ namespace Gold_Diggerzz
         public int DaysUntilRetirement;
         public DateTime ReturnToWorkDate;
         
-        public Worker(string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
+        public Worker(string type,string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
         {
-            Name = name;
-            Wage = wage;
-            Price = price;
-            EmployeeIllProbability = employeeIllProbability;
-            DefaultEfficiency = defaultEfficiency;
-            DaysUntilRetirement = 30;
-            ReturnToWorkDate = DateTime.Today;
+            if (type == "mid")
+            {
+                Type = "mid";
+                Name = name;
+                Wage = wage;
+                Price = price;
+                EmployeeIllProbability = employeeIllProbability;
+                DefaultEfficiency = defaultEfficiency;
+                DaysUntilRetirement = 30;
+                ReturnToWorkDate = DateTime.Today;
+            }
+            
         }
     }
 
@@ -1873,7 +1879,7 @@ namespace Gold_Diggerzz
                         efficiency = _random.Next(0, 5);
                         efficiency /= 100;
                     }
-                    Worker newWorker = new Worker(_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
+                    Worker newWorker = new Worker("mid",_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
