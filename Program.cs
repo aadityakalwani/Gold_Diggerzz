@@ -68,6 +68,7 @@ namespace Gold_Diggerzz
     */
 
     /* to-do ideas
+     * a list of all possible trades, foreach trade, if the player has enough of the fromResource, display the trade option?
      * OOP the weather effects
      * 3 types of workers, bad, mid and good with different probabilities of being ill, wages, efficiencies, retiring times etc.
      * a heatwave could decrease efficiency but increase the chance of finding certain resources.
@@ -265,6 +266,7 @@ namespace Gold_Diggerzz
 
     class Trade
     {
+        public static List<DateTime> datesOfTradesMade = new List<DateTime>();
         public double Ratio;
         public Resource FromResource;
         public Resource ToResource;
@@ -276,14 +278,21 @@ namespace Gold_Diggerzz
             ToResource = toResource;
         }
         
-        public static void MakeTrade(double ratio, Resource fromResource, Resource toResource)
+        public static void MakeTrade(double ratio, Resource fromResource, Resource toResource, DateTime _currentDate)
         {
-            if (ratio * fromResource.Quantity > toResource.Quantity)
+            if (datesOfTradesMade.Contains(DateTime.Today))
+            {
+                Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
+                return;
+            }
+            else if (ratio * fromResource.Quantity > toResource.Quantity)
             {
                 double amountToTrade = fromResource.Quantity * ratio;
                 fromResource.Quantity -= amountToTrade;
                 toResource.Quantity += amountToTrade;
+                
                 Console.WriteLine($"Trade Complete! You traded {amountToTrade}kg of {fromResource} for {amountToTrade}kg of {toResource}");
+                datesOfTradesMade.Add(DateTime.Today);
             }
             Console.WriteLine("You can't afford to make this trade brokie");
         }
@@ -335,7 +344,7 @@ namespace Gold_Diggerzz
         public static Random _random = new Random();
         public int _crashDate = _random.Next(0, 28);
         public List<Worker> workersList = new List<Worker>();
-        List<Worker> illWorkersList = new List<Worker>();
+        public List<Worker> illWorkersList = new List<Worker>();
         
         // Declare your variables at the class level
         public Resource coal;
@@ -1879,12 +1888,11 @@ namespace Gold_Diggerzz
         public void GoToTrader()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n  _______                      _               \n |__   __|                    | |              \n    | |     _ __    __ _    __| |   ___   _ __ \n    | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n    | |    | |    | (_| | | (_| | |  __/ | |   \n    |_|    |_|     \\__,_|  \\__,_|  \\___| |_|   \n");
+            Console.WriteLine("             _______                      _               \n            |__   __|                    | |              \n               | |     _ __    __ _    __| |   ___   _ __ \n               | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n               | |    | |    | (_| | | (_| | |  __/ | |   \n               |_|    |_|     \\__,_|  \\__,_|  \\___| |_|");
             Console.ResetColor();
             DisplayStuff.DisplayResources(this);
-            Console.WriteLine("Here are the rates for today:");
-            Console.WriteLine("______________________________");
-            Console.WriteLine("0 - Cancel and return");
+            Console.WriteLine("Here are the options for today:");
+            Console.WriteLine("\n0 - Cancel and return");
             Console.WriteLine($"1 - Convert {coalToStone.Ratio}kg of coal for 1kg of stone");
             Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for 1kg of iron");
             Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for 1kg of gold");
@@ -1895,7 +1903,8 @@ namespace Gold_Diggerzz
             Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for 1kg of gold");
             Console.WriteLine($"9 - Convert {ironToDiamond.Ratio}kg of iron for 1kg of diamond");
             Console.WriteLine($"10 - Convert {goldToDiamond.Ratio}kg of gold for 1kg of diamond");
-            Console.WriteLine("______________________________");
+            Console.WriteLine("Remember, you can only make one trader per day. Choose wisely!");
+            Console.WriteLine("_________________________________________");
 
             int userTrade = GetValidInt(0, 10);
 
@@ -1905,46 +1914,47 @@ namespace Gold_Diggerzz
                     break;
                 case 1:
                     Console.WriteLine($"You've chosen to convert {coalToStone.Ratio}kg coal for stone");
-                    Trade.MakeTrade(coalToStone.Ratio, coal, stone);
+                    Trade.MakeTrade(coalToStone.Ratio, coal, stone, _currentDate);
                     break;
                 case 2:
                     Console.WriteLine($"You've chosen to convert {coalToIron.Ratio}kg coal for iron");
-                    Trade.MakeTrade(coalToIron.Ratio, coal, iron);
+                    Trade.MakeTrade(coalToIron.Ratio, coal, iron, _currentDate);
                     break;
                 case 3:
                     Console.WriteLine($"You've chosen to convert {coalToGold.Ratio}kg coal for gold");
-                    Trade.MakeTrade(coalToGold.Ratio, coal, gold);
+                    Trade.MakeTrade(coalToGold.Ratio, coal, gold, _currentDate);
                     break;
                 case 4:
                     Console.WriteLine($"You've chosen to convert {coalToDiamond.Ratio}kg coal for diamond");
-                    Trade.MakeTrade(coalToDiamond.Ratio, coal, diamond);
+                    Trade.MakeTrade(coalToDiamond.Ratio, coal, diamond, _currentDate);
                     break;
                 case 5:
                     Console.WriteLine($"You've chosen to convert {stoneToIron.Ratio}kg stone for iron");
-                    Trade.MakeTrade(stoneToIron.Ratio, stone, iron);
+                    Trade.MakeTrade(stoneToIron.Ratio, stone, iron, _currentDate);
                     break;
                 case 6:
                     Console.WriteLine($"You've chosen to convert {stoneToGold.Ratio}kg stone for gold");
-                    Trade.MakeTrade(stoneToGold.Ratio, stone, gold);
+                    Trade.MakeTrade(stoneToGold.Ratio, stone, gold, _currentDate);
                     break;
                 case 7:
                     Console.WriteLine($"You've chosen to convert {stoneToDiamond.Ratio}kg stone for diamond");
-                    Trade.MakeTrade(stoneToDiamond.Ratio, stone, diamond);
+                    Trade.MakeTrade(stoneToDiamond.Ratio, stone, diamond, _currentDate);
                     break;
                 case 8:
                     Console.WriteLine($"You've chosen to convert {ironToGold.Ratio}kg iron for gold");
-                    Trade.MakeTrade(ironToGold.Ratio, iron, gold);
+                    Trade.MakeTrade(ironToGold.Ratio, iron, gold, _currentDate);
                     break;
                 case 9:
                     Console.WriteLine($"You've chosen to convert {ironToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(ironToDiamond.Ratio, iron, diamond);
+                    Trade.MakeTrade(ironToDiamond.Ratio, iron, diamond, _currentDate);
                     break;
                 case 10:
                     Console.WriteLine($"You've chosen to convert {goldToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(goldToDiamond.Ratio, gold, diamond);
+                    Trade.MakeTrade(goldToDiamond.Ratio, gold, diamond, _currentDate);
                     break;
             }
             DisplayStuff.DisplayResources(this);
+            Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
 
         public int GetValidInt(int min, int max)
