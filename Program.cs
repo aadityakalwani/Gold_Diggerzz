@@ -1196,7 +1196,6 @@ namespace Gold_Diggerzz
 
     class Program
     {
-
         # region global variables
         
         public  bool _animation = true;
@@ -1237,15 +1236,18 @@ namespace Gold_Diggerzz
         public double _currentEmployeeIllProbability = 5;
         public double _currentEmployeePrice = 100;
         public DateTime _currentDate = new DateTime(2024, 1, 1);
-        public static Random _random = new Random();
+        public static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
         
-        public List<Worker> workersList = new List<Worker>();
-        public List<Worker> illWorkersList = new List<Worker>();
-        public List<Worker> retiredWorkersList = new List<Worker>();
-        public List<Worker> trainingWorkersList = new List<Worker>();
-        public List<Worker> toSendToTrainingList = new List<Worker>();
+        public List<Worker> illWorkersList = new();
+        public List<Worker> retiredWorkersList = new();
+        public List<Worker> trainingWorkersList = new();
+        public List<Worker> toSendToTrainingList = new();
         
+        public List<Worker> workersList = new()
+        {
+            new Worker("mid", "bob", 10, 100, 10, 1)
+        };
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
         DayToDayOperations dayToDayOperations = new DayToDayOperations();
@@ -1321,8 +1323,6 @@ namespace Gold_Diggerzz
             Program program = new Program();
             
             # region initialisation of all objects
-            
-            program.HireNewWorker(1);
             
             program.coal = new Resource("Coal",80, 3, 0, 0);
             program.stone = new Resource("Stone",70, 6, 0, 0);
@@ -1770,7 +1770,7 @@ namespace Gold_Diggerzz
                     }
                     else if (workersList.Count > 9)
                     {
-                        efficiency = _random.Next(6, 120);
+                        efficiency = _random.Next(60, 120);
                         efficiency /= 100;
                     }
                     else if (workersList.Count > 12)
@@ -1888,6 +1888,7 @@ namespace Gold_Diggerzz
                         efficiency = _random.Next(0, 5);
                         efficiency /= 100;
                     }
+                    
                     Worker newWorker = new Worker("mid",_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
