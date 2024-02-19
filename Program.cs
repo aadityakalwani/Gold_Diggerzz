@@ -1246,7 +1246,7 @@ namespace Gold_Diggerzz
         
         public List<Worker> workersList = new()
         {
-            new Worker("mid", "bob", 10, 100, 10, 1)
+            new Worker("mid", "Your First Slave Worker", 10, 100, 10, 1)
         };
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
