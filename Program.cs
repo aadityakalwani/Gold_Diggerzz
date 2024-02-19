@@ -69,7 +69,21 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * OOP the weather effects
+     * 3 types of workers, bad, mid and good with different probabilities of being ill, wages, efficiencies, retiring times etc.
+     * a heatwave could decrease efficiency but increase the chance of finding certain resources.
+     *  employee morale, if morale is low, the employee could be less efficient.
+        * morale-boosting powerup
+     * Resource Quality: Different quality levels for resources, which affect their price and the chance of finding them. Higher quality resources could be found less frequently but sold for a higher price.
+     * the player could choose to offer them a retirement package in exchange for a morale boost for the remaining workers.
+     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
+     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract.
+     * Achievements and Rewards: Implement more achievements and provide rewards for achieving them. This could be in the form of in-game currency, special power-ups, or even new gameplay features.
+     * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
+     * Expand the employee management aspect of the game. This could involve hiring and firing employees, managing their morale, and training them to improve their efficiency.
+     * Trading: Implement a trading system where the player can trade resources with other entities in the game. This could involve negotiating prices and could be influenced by the player's reputation, which could be another aspect of the game.
      * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
+     * Environmental Impact: Implement an environmental impact system where the player's mining operations could have negative effects on the environment, which could lead to penalties or restrictions.
+     * Corporate Espionage: Introduce a system where the player can engage in corporate espionage to gain an advantage over their competitors. This could involve risks of getting caught and facing penalties.
         * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * allow for multiple employees to be ill at any time based on their employee ill probability
      * achievements are OOP-ed? idk about this one
@@ -352,11 +366,11 @@ namespace Gold_Diggerzz
             
             program.HireNewWorker(1);
             
-            program.coal = new Resource(90, 3, 0, 0);
-            program.stone = new Resource(75, 6, 0, 0);
-            program.iron = new Resource(65, 12, 0, 0);
-            program.gold = new Resource(20, 60, 0, 0);
-            program.diamond = new Resource(5, 150, 0, 0);
+            program.coal = new Resource(80, 3, 0, 0);
+            program.stone = new Resource(75, 5, 0, 0);
+            program.iron = new Resource(60, 13, 0, 0);
+            program.gold = new Resource(15, 65, 0, 0);
+            program.diamond = new Resource(3, 200, 0, 0);
             program.dollars = new Resource(0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
