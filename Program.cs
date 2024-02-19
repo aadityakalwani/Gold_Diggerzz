@@ -589,7 +589,195 @@ namespace Gold_Diggerzz
             
             _program.skipDay.skipDayOrNot = false;
         }
-       
+    }
+
+    class MarketOperation
+    {
+        public static void GoToMarket(Program _program)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write("\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
+            Console.ResetColor();
+
+            Console.WriteLine($"Here are the rates for {_program._currentDate:dddd dd MMMM, yyyy}:");
+
+            Console.WriteLine("______________________________");
+            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg");
+            Console.WriteLine($"| Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg");
+            Console.WriteLine($"| Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg");
+            Console.WriteLine($"| Employees: ${Math.Round(_program._currentEmployeePrice, 2)} per employee");
+            Console.WriteLine($"| Wages: ${Math.Round(_program._currentWageRate, 2)} per employee per day");
+            Console.WriteLine("______________________________");
+
+
+            int marketOption;
+            do
+            {
+                Console.WriteLine("\nHere is the menu for the market:");
+                Console.WriteLine("1 - Sell a specific resource");
+                Console.WriteLine("2 - Sell all resources for dollars");
+                Console.WriteLine("3 - Hire More Employees");
+                Console.WriteLine("4 - Exit market");
+                Console.WriteLine("\nChoose Option:");
+                marketOption = _program.GetValidInt(1, 4);
+
+                switch (marketOption)
+                {
+                    case 1:
+                        Console.WriteLine("You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
+                        // sht here bro add in the emojis
+                        Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
+                        int sellChoice = _program.GetValidInt(1, 5);
+
+                        switch (sellChoice)
+                        {
+                            case 1:
+                                Console.WriteLine("Your have chosen to sell coal for dollars");
+                                Console.WriteLine($"How much coal do you want to sell?\nYou have {_program.coal.Quantity}kg of coal");
+                                double coalToSell = _program.GetValidDouble(0, 100000000000);
+                                if (coalToSell > _program.coal.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough coal to sell that much");
+                                }
+                                else
+                                {
+                                    _program.coal.Quantity -= coalToSell;
+                                    _program.dollars.Quantity += _program.coal.Quantity * _program.coal.Price;
+                                    _program._totalDollarsEarned += _program.coal.Quantity * _program.coal.Price;
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                DisplayStuff.DisplayResources(_program);
+                                break;
+
+                            case 2:
+                                Console.WriteLine("Your have chosen to sell stone for dollars");
+                                Console.WriteLine($"How much stone do you want to sell?\nYou have {_program.stone.Quantity}kg of stone");
+                                double stoneToSell = _program.GetValidDouble(0, 100000000000);
+                                if (stoneToSell > _program.stone.Quantity) 
+                                {
+                                    Console.WriteLine("You don't have enough stone to sell that much");
+                                }
+                                else
+                                {
+                                    _program.stone.Quantity -= stoneToSell;
+                                    _program.dollars.Quantity += _program.stone.Quantity * _program.stone.Price;
+                                    _program._totalDollarsEarned += _program.stone.Quantity * _program.stone.Price;
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                DisplayStuff.DisplayResources(_program);
+                                break;
+                            case 3:
+                                Console.WriteLine("Your have chosen to sell iron for dollars");
+                                Console.WriteLine($"How much iron do you want to sell?\nYou have {_program.iron.Quantity}kg of iron");
+                                double ironToSell = _program.GetValidDouble(0, 100000000000);
+                                if (ironToSell > _program.iron.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough iron to sell that much");
+                                }
+                                else
+                                {
+                                    _program.iron.Quantity -= ironToSell;
+                                    _program.dollars.Quantity += _program.iron.Quantity * _program.iron.Price;
+                                    _program._totalDollarsEarned += _program.iron.Quantity * _program.iron.Price;
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                DisplayStuff.DisplayResources(_program);
+                                break;
+                            case 4:
+                                Console.WriteLine("Your have chosen to sell gold for dollars");
+                                Console.WriteLine($"How much gold do you want to sell?\nYou have {_program.gold.Quantity}kg of gold");
+                                double goldToSell = _program.GetValidDouble(0, 100000000000);
+                                if (goldToSell > _program.gold.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough gold to sell that much");
+                                }
+                                else
+                                {
+                                    _program.gold.Quantity -= goldToSell;
+                                    _program.dollars.Quantity += _program.gold.Quantity * _program.gold.Price;
+                                    _program._totalDollarsEarned += _program.gold.Quantity * _program.gold.Price;
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                DisplayStuff.DisplayResources(_program);
+                                break;
+                            case 5:
+                                Console.WriteLine("Your have chosen to sell diamond for dollars");
+                                Console.WriteLine($"How much diamond do you want to sell?\nYou have {_program.diamond.Quantity}kg of diamond");
+                                double diamondToSell = _program.GetValidDouble(0, 100000000000);
+                                if (diamondToSell > _program.diamond.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough diamond to sell that much");
+                                }
+                                else
+                                {
+                                    _program.diamond.Quantity -= diamondToSell;
+                                    _program.dollars.Quantity += _program.diamond.Quantity * _program.diamond.Price;
+                                    _program._totalDollarsEarned += _program.diamond.Quantity * _program.diamond.Price;
+                                }
+
+                                Console.WriteLine("Here are your updated resources:");
+                                DisplayStuff.DisplayResources(_program);
+                                break;
+                        }
+
+                        break;
+
+                    case 2:
+                        Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
+                        
+                        _program.dollars.Quantity += _program.coal.Quantity * _program.coal.Price + _program.stone.Quantity * _program.stone.Price +
+                                                     _program.iron.Quantity * _program.iron.Price + _program.gold.Quantity * _program.gold.Price +
+                                                     _program.diamond.Quantity * _program.diamond.Price;
+                        
+                        _program._totalDollarsEarned += _program.coal.Quantity * _program.coal.Price + _program.stone.Quantity * _program.stone.Price +
+                                                        _program.iron.Quantity * _program.iron.Price + _program.gold.Quantity * _program.gold.Price +
+                                                        _program.diamond.Quantity * _program.diamond.Price;
+                        
+                        _program.coal.Quantity = 0;
+                        _program.stone.Quantity = 0;
+                        _program.iron.Quantity = 0;
+                        _program.gold.Quantity = 0;
+                        _program.diamond.Quantity = 0;
+
+                        Console.WriteLine("Here are your updated resources:");
+                        DisplayStuff.DisplayResources(_program);
+                        break;
+
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
+                        Console.WriteLine($"Each employee charges {_program._currentWageRate} in wages per day right now");
+                        Console.WriteLine($"Enter how many employees you want to hire?\nYou have {_program.dollars.Quantity} dollars");
+                        int employeesToHire = _program.GetValidInt(0, 100000);
+                        if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
+                        {
+                            Console.WriteLine("You don't have enough dollars to hire that many employees");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You have hired {employeesToHire} more employees.\nSay hello to:");
+                            
+                            _program.HireNewWorker(employeesToHire);
+                            
+                            _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
+                            Console.WriteLine($"You now have {_program.workersList.Count} employees");
+                            _program._totalEmployeesHired += employeesToHire;
+                        }
+                        break;
+
+                    case 4:
+                        Console.WriteLine("Thanks for coming to the market!");
+                        break;
+
+                }
+            } while (marketOption != 4);
+        }
     }
 
     class Program
@@ -644,6 +832,7 @@ namespace Gold_Diggerzz
         public List<Worker> toSendToTrainingList = new List<Worker>();
         
         MiningOperation miningOperation = new MiningOperation();
+        MarketOperation marketOperation = new MarketOperation();
         
         // Declare your variables at the class level
         public Resource coal;
@@ -790,7 +979,7 @@ namespace Gold_Diggerzz
                         miningOperation.Dig(daysToDig, this);
                         break;
                     case 3:
-                        GoToMarket();
+                        MarketOperation.GoToMarket(this);
                         break;
                     case 4:
                         Console.WriteLine("Skipping one day");
@@ -1038,194 +1227,7 @@ namespace Gold_Diggerzz
 
             return inDebt;
         }
-
-        public void GoToMarket()
-        {
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write(
-                "\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
-            Console.ResetColor();
-
-            Console.WriteLine($"Here are the rates for {_currentDate:dddd dd MMMM, yyyy}:");
-
-            Console.WriteLine("______________________________");
-            Console.WriteLine($"| Coal: ${Math.Round(coal.Price, 2)} per kg");
-            Console.WriteLine($"| Stone: ${Math.Round(stone.Price, 2)} per kg");
-            Console.WriteLine($"| Iron: ${Math.Round(iron.Price, 2)} per kg");
-            Console.WriteLine($"| Gold: ${Math.Round(gold.Price, 2)} per kg");
-            Console.WriteLine($"| Diamond: ${Math.Round(diamond.Price, 2)} per kg");
-            Console.WriteLine($"| Employees: ${Math.Round(_currentEmployeePrice, 2)} per employee");
-            Console.WriteLine($"| Wages: ${Math.Round(_currentWageRate, 2)} per employee per day");
-            Console.WriteLine("______________________________");
-
-
-            int marketOption;
-            do
-            {
-                Console.WriteLine("\nHere is the menu for the market:");
-                Console.WriteLine("1 - Sell a specific resource");
-                Console.WriteLine("2 - Sell all resources for dollars");
-                Console.WriteLine("3 - Hire More Employees");
-                Console.WriteLine("4 - Exit market");
-                Console.WriteLine("\nChoose Option:");
-                marketOption = GetValidInt(1, 4);
-
-                switch (marketOption)
-                {
-                    case 1:
-                        Console.WriteLine("You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
-                        // sht here bro add in the emojis
-                        Console.WriteLine("1 - Coal\n2 - Stone\n3 - Iron\n4 - Gold\n5 - Diamond");
-                        int sellChoice = GetValidInt(1, 5);
-
-                        switch (sellChoice)
-                        {
-                            case 1:
-                                Console.WriteLine("Your have chosen to sell coal for dollars");
-                                Console.WriteLine($"How much coal do you want to sell?\nYou have {coal.Quantity}kg of coal");
-                                double coalToSell = GetValidDouble(0, 100000000000);
-                                if (coalToSell > coal.Quantity)
-                                {
-                                    Console.WriteLine("You don't have enough coal to sell that much");
-                                }
-                                else
-                                {
-                                    coal.Quantity -= coalToSell;
-                                    dollars.Quantity += coal.Quantity * coal.Price;
-                                    _totalDollarsEarned += coal.Quantity * coal.Price;
-                                }
-
-                                Console.WriteLine("Here are your updated resources:");
-                                DisplayStuff.DisplayResources(this);
-                                break;
-
-                            case 2:
-                                Console.WriteLine("Your have chosen to sell stone for dollars");
-                                Console.WriteLine($"How much stone do you want to sell?\nYou have {stone.Quantity}kg of stone");
-                                double stoneToSell = GetValidDouble(0, 100000000000);
-                                if (stoneToSell > stone.Quantity) 
-                                {
-                                    Console.WriteLine("You don't have enough stone to sell that much");
-                                }
-                                else
-                                {
-                                    stone.Quantity -= stoneToSell;
-                                    dollars.Quantity += stone.Quantity * stone.Price;
-                                    _totalDollarsEarned += stone.Quantity * stone.Price;
-                                }
-
-                                Console.WriteLine("Here are your updated resources:");
-                                DisplayStuff.DisplayResources(this);
-                                break;
-                            case 3:
-                                Console.WriteLine("Your have chosen to sell iron for dollars");
-                                Console.WriteLine($"How much iron do you want to sell?\nYou have {iron.Quantity}kg of iron");
-                                double ironToSell = GetValidDouble(0, 100000000000);
-                                if (ironToSell > iron.Quantity)
-                                {
-                                    Console.WriteLine("You don't have enough iron to sell that much");
-                                }
-                                else
-                                {
-                                    iron.Quantity -= ironToSell;
-                                    dollars.Quantity += iron.Quantity * iron.Price;
-                                    _totalDollarsEarned += iron.Quantity * iron.Price;
-                                }
-
-                                Console.WriteLine("Here are your updated resources:");
-                                DisplayStuff.DisplayResources(this);
-                                break;
-                            case 4:
-                                Console.WriteLine("Your have chosen to sell gold for dollars");
-                                Console.WriteLine($"How much gold do you want to sell?\nYou have {gold.Quantity}kg of gold");
-                                double goldToSell = GetValidDouble(0, 100000000000);
-                                if (goldToSell > gold.Quantity)
-                                {
-                                    Console.WriteLine("You don't have enough gold to sell that much");
-                                }
-                                else
-                                {
-                                    gold.Quantity -= goldToSell;
-                                    dollars.Quantity += gold.Quantity * gold.Price;
-                                    _totalDollarsEarned += gold.Quantity * gold.Price;
-                                }
-
-                                Console.WriteLine("Here are your updated resources:");
-                                DisplayStuff.DisplayResources(this);
-                                break;
-                            case 5:
-                                Console.WriteLine("Your have chosen to sell diamond for dollars");
-                                Console.WriteLine($"How much diamond do you want to sell?\nYou have {diamond.Quantity}kg of diamond");
-                                double diamondToSell = GetValidDouble(0, 100000000000);
-                                if (diamondToSell > diamond.Quantity)
-                                {
-                                    Console.WriteLine("You don't have enough diamond to sell that much");
-                                }
-                                else
-                                {
-                                    diamond.Quantity -= diamondToSell;
-                                    dollars.Quantity += diamond.Quantity * diamond.Price;
-                                    _totalDollarsEarned += diamond.Quantity * diamond.Price;
-                                }
-
-                                Console.WriteLine("Here are your updated resources:");
-                                DisplayStuff.DisplayResources(this);
-                                break;
-                        }
-
-                        break;
-
-                    case 2:
-                        Console.WriteLine("We're selling all your coal and iron and gold and stone and diamond for dollars");
-                        
-                        dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                               iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                                  diamond.Quantity * diamond.Price;
-                        
-                        _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                               iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                               diamond.Quantity * diamond.Price;
-                        
-                        coal.Quantity = 0;
-                        stone.Quantity = 0;
-                        iron.Quantity = 0;
-                        gold.Quantity = 0;
-                        diamond.Quantity = 0;
-
-                        Console.WriteLine("Here are your updated resources:");
-                        DisplayStuff.DisplayResources(this);
-                        break;
-
-                    case 3:
-                        Console.Clear();
-                        Console.WriteLine("  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
-                        Console.WriteLine($"Each employee charges {_currentWageRate} in wages per day right now");
-                        Console.WriteLine($"Enter how many employees you want to hire?\nYou have {dollars.Quantity} dollars");
-                        int employeesToHire = GetValidInt(0, 100000);
-                        if (employeesToHire * _currentEmployeePrice > dollars.Quantity)
-                        {
-                            Console.WriteLine("You don't have enough dollars to hire that many employees");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"You have hired {employeesToHire} more employees.\nSay hello to:");
-                            
-                            HireNewWorker(employeesToHire);
-                            
-                            dollars.Quantity -= employeesToHire * _currentEmployeePrice;
-                            Console.WriteLine($"You now have {workersList.Count} employees");
-                            _totalEmployeesHired += employeesToHire;
-                        }
-                        break;
-
-                    case 4:
-                        Console.WriteLine("Thanks for coming to the market!");
-                        break;
-
-                }
-            } while (marketOption != 4);
-        }
-
+        
         public void UsePowerUp(int powerUpChoice)
         {
             switch (powerUpChoice)
