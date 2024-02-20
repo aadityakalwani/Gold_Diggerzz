@@ -10,14 +10,18 @@ namespace Gold_Diggerzz
 
     /*
     * current issues
+     * apparently price of gold fluctuates like crazy
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
     */
 
     /* to-do ideas
-     * a list of all possible trades, foreach trade, if the player has enough of the fromResource, display the trade option?
+     * SAVE/LOAD GAME
+     * adding more incentive to keep playing
+        * goals to reach
+        * if you reach _______ income you can find ______
+     * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
      * OOP the weather effects
-     * 3 types of workers, bad, mid and good with different probabilities of being ill, wages, efficiencies, retiring times etc.
      *  employee morale, if morale is low, the employee could be less efficient.
         * morale-boosting powerup
      * create morale and reputation
@@ -38,7 +42,7 @@ namespace Gold_Diggerzz
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
      * a heatwave could decrease efficiency but increase the chance of finding certain resources.
-     * tutorial mode (that is actually functional) 
+     * a tutorial mode that is actually functional 
      * loans - you can take a loan from the bank and pay it back with interest
      * load/save game
      * more power-ups
@@ -50,8 +54,58 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * send individual number of employees for training course that then boosts their productivity
      */
+
+    class GameState
+    {
+        private Dictionary<string, double> gameStateDictionary;
+        
+        public GameState(Program _program)
+        {
+            Dictionary<string, object> gameStateDictionary = new Dictionary<string, object>()
+            {
+                {"increasedGoldChanceDays", _program._increasedGoldChanceDays},
+                {"marketMasterDaysLeft", _program._marketMasterDaysLeft},
+                {"noWageDaysLeft", _program._noWageDaysLeft},
+                {"crashDaysLeft", _program._crashDaysLeft},
+                {"badWeatherDaysLeft", _program._badWeatherDaysLeft},
+                {"hurricaneDaysLeft", _program._hurricaneDaysLeft},
+                {"beautifulSkyDaysLeft", _program._beautifulSkyDaysLeft},
+                {"totalBribes", _program._totalBribes},
+                {"totalPowerUpsUsed", _program._totalPowerUpsUsed},
+                {"totalDaysDug", _program._totalDaysDug},
+                {"totalEmployeesHired", _program._totalEmployeesHired},
+                {"totalDollarsEarned", _program._totalDollarsEarned},
+                { "employeesList", _program.workersList},
+                {"retiredEmployeesList", _program.retiredWorkersList},
+                {"coal", _program.coal},
+                {"stone", _program.stone},
+                {"iron", _program.iron},
+                {"gold", _program.gold},
+                {"diamond", _program.diamond},
+                { "dollars", _program.dollars},
+                {"magicTokens", _program.magicTokens},
+                {"timeMachine", _program.timeMachine},
+                {"ancientArtefact", _program.ancientArtefact},
+                { "marketMaster", _program.marketMaster},
+                {"achievementsList", _program.achievementsList},
+                {"currentWageRate", _program._currentWageRate},
+                {"currentDate", _program._currentDate},
+                {"crashDate", _program._crashDate}
+            };
+        }
+        
+        public void SaveGameState(Program _program)
+        {
+            // save the game state to a file
+        }
+        
+        public void LoadGameState(Program _program)
+        {
+            // load the game state from a file
+        }
+        
+    }
     
     class Resource
     {
@@ -1447,9 +1501,11 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
+            Thread.Sleep(1750);
 
             DisplayStuff.DisplayResources(program);
             
+            Thread.Sleep(1750);
             Console.WriteLine("The game is about to start, good luck...");
             program.RunGame();
         }
@@ -1624,6 +1680,9 @@ namespace Gold_Diggerzz
                         }
 
                         break;
+                    case 14:
+                        SaveGameState();
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -1662,10 +1721,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup");
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)");
-                Console.WriteLine("4 - Go To Trader            9 - Display employees\n");
+                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save game state (and quit game)\n");
                 Console.WriteLine("Your choice:");
 
-                int userOption = GetValidInt(0, 13);
+                int userOption = GetValidInt(0, 14);
                 Console.Clear();
                 return userOption;
             }
@@ -1785,6 +1844,15 @@ namespace Gold_Diggerzz
             }
 
             _totalPowerUpsUsed += 1;
+        }
+
+        public void SaveGameState()
+        {
+            Console.WriteLine("Saving game state...");
+            Thread.Sleep(1750);
+            
+            GameState gameState = new GameState(this);
+            
         }
 
         public void QuitGame()
