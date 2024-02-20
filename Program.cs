@@ -131,7 +131,6 @@ namespace Gold_Diggerzz
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
             }
-            
         }
     }
 
@@ -246,12 +245,14 @@ namespace Gold_Diggerzz
             }
             Console.WriteLine("Here are your current working employees:");
             int j = 0;
+            double totalWages = 0;
             foreach (Worker worker in program.workersList)
             {
+                totalWages += worker.Wage;
                 j++;
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
-            Console.WriteLine();
+            Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
         }
         
     }
@@ -786,9 +787,9 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"2- Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x");
                         Console.WriteLine($"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x");
                         Console.WriteLine("4 - Cancel and return to market menu");
-                        int employeeType = int.Parse(Console.ReadLine());
+                        int employeeType = _program.GetValidInt(1, 4);
                         Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
-                        int employeesToHire = _program.GetValidInt(0, 100000);
+                        int employeesToHire = _program.GetValidInt(0, 163);
                         switch (employeeType)
                         {
                             case 1:
@@ -1270,6 +1271,8 @@ namespace Gold_Diggerzz
             _program.iron.Price *= randomChange;
             _program.gold.Price *= randomChange;
             _program.diamond.Price *= randomChange;
+            
+            Console.WriteLine($"Prices of all resources have fluctuated by {randomChange * 100}%");
         }
     }
 
