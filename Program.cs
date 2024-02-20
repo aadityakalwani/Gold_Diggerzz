@@ -35,7 +35,6 @@ namespace Gold_Diggerzz
      * Corporate Espionage: Introduce a system where the player can engage in corporate espionage to gain an advantage over their competitors. This could involve risks of getting caught and facing penalties.
         * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * achievements are OOP-ed? idk about this one
-     * reorder the menu options to be more flowy and logical
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
      * a heatwave could decrease efficiency but increase the chance of finding certain resources.
@@ -1480,6 +1479,27 @@ namespace Gold_Diggerzz
                         marketOperation.GoToMarket(this);
                         break;
                     case 4:
+                        GoToTrader();
+                        break;
+                    case 5:
+                        DisplayStuff.DisplayGameMechanics(this);
+                        break;
+                    case 6:
+                        DisplayStuff.DisplayStats(this);
+                        break;
+                    case 7:
+                        for (int achievementNumber = 0; achievementNumber < achievementsList.Count; achievementNumber++)
+                        {
+                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
+                        }
+                        break;
+                    case 8:
+                        RunTutorial();
+                        break;
+                    case 9:
+                        DisplayStuff.DisplayEmployees(this);
+                        break;
+                    case 10:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine($"You have been charged ${skipDay.Price} for the costs of skipping a day");
                         dollars.Quantity -= skipDay.Price;
@@ -1487,7 +1507,7 @@ namespace Gold_Diggerzz
                         miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         DisplayStuff.DisplayResources(this);
                         break;
-                    case 5:
+                    case 11:
                         
                         if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 && marketMaster.Quantity == 0)
                         {
@@ -1542,20 +1562,7 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 6:
-                        DisplayStuff.DisplayGameMechanics(this);
-                        break;
-                    case 7:
-                        DisplayStuff.DisplayStats(this);
-                        break;
-                    case 8:
-                        for (int achievementNumber = 0; achievementNumber < achievementsList.Count; achievementNumber++)
-                        {
-                            Console.WriteLine(
-                                $"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
-                        }
-                        break;
-                    case 9:
+                    case 12:
                         Console.WriteLine($"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
                         int employeesToSend = GetValidInt(-1, workersList.Count);
                         if (employeesToSend == -1)
@@ -1579,7 +1586,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine($"You don't have enough money to send {employeesToSend} employees on a training course");
                         }
                         break;
-                    case 10:
+                    case 13:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
@@ -1603,15 +1610,6 @@ namespace Gold_Diggerzz
                                 break;
                         }
 
-                        break;
-                    case 11:
-                        RunTutorial();
-                        break;
-                    case 12:
-                        DisplayStuff.DisplayEmployees(this);
-                        break;
-                    case 13:
-                        GoToTrader();
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -1647,11 +1645,11 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
                 Console.WriteLine("___________________________________\n");
                 Console.WriteLine("Main Features:              Display Options:                  Other Features:\n");
-                Console.WriteLine("0 - Quit game               6 - Display game mechanics        4 - Skip one day");
-                Console.WriteLine("1 - Dig one day             7 - Display stats                 5 - Use a powerup");
-                Console.WriteLine("2 - Dig multiple days       8 - Display achievements          9 - Send employees for training");
-                Console.WriteLine("3 - Go to market            11 - Display tutorial             10 - Commit a crime (further options inside)");
-                Console.WriteLine("13 - Go To Trader           12 - Display employees\n");
+                Console.WriteLine("0 - Quit game               5 - Display game mechanics        10 - Skip one day");
+                Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup");
+                Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training");
+                Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)");
+                Console.WriteLine("4 - Go To Trader            9 - Display employees\n");
                 Console.WriteLine("Your choice:");
 
                 int userOption = GetValidInt(0, 13);
