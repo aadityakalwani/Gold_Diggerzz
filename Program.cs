@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -58,7 +59,7 @@ namespace Gold_Diggerzz
 
     class GameState
     {
-        private Dictionary<string, double> gameStateDictionary;
+        private Dictionary<string, object> gameStateDictionary;
         
         public GameState(Program _program)
         {
@@ -97,12 +98,34 @@ namespace Gold_Diggerzz
         
         public void SaveGameState(Program _program)
         {
-            // save the game state to a file
+            using (StreamWriter writer = new StreamWriter("gameState.txt"))
+            {
+                foreach (KeyValuePair<string, object> entry in gameStateDictionary)
+                {
+                    writer.WriteLine($"{entry.Key}:{entry.Value}");
+                    Console.WriteLine($"{entry.Key}:{entry.Value} saved to");
+                }
+            }
+            _program.QuitGame();
         }
-        
+
         public void LoadGameState(Program _program)
         {
-            // load the game state from a file
+            using (StreamReader reader = new StreamReader("gameState.txt"))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] parts = line.Split(':');
+                    string key = parts[0];
+                    double value = double.Parse(parts[1]);
+
+                    if (gameStateDictionary.ContainsKey(key))
+                    {
+                        gameStateDictionary[key] = value;
+                    }
+                }
+            }
         }
         
     }
@@ -1681,7 +1704,9 @@ namespace Gold_Diggerzz
 
                         break;
                     case 14:
-                        SaveGameState();
+                        Console.WriteLine("This feature doesn't exist yet. re-download the .exe file later on to see if it's been added\nFor now, you'll be sent back to the pain menu");
+                        //SaveGameState();
+                        
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -1852,6 +1877,7 @@ namespace Gold_Diggerzz
             Thread.Sleep(1750);
             
             GameState gameState = new GameState(this);
+            gameState.SaveGameState(this);
             
         }
 
