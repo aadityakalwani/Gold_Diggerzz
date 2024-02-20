@@ -98,7 +98,7 @@ namespace Gold_Diggerzz
                 Price = price;
                 EmployeeIllProbability = employeeIllProbability;
                 DefaultEfficiency = defaultEfficiency;
-                DaysUntilRetirement = 30;
+                DaysUntilRetirement = 45;
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
@@ -112,7 +112,7 @@ namespace Gold_Diggerzz
                 Price = price * 0.5;
                 EmployeeIllProbability = employeeIllProbability * 2;
                 DefaultEfficiency = defaultEfficiency * 0.5;
-                DaysUntilRetirement = 30;
+                DaysUntilRetirement = 60;
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
@@ -123,10 +123,10 @@ namespace Gold_Diggerzz
                 Type = "good";
                 Name = name;
                 Wage = wage * 2;
-                Price = price * 2;
+                Price = price * 2.5;
                 EmployeeIllProbability = employeeIllProbability * 0.5;
                 DefaultEfficiency = defaultEfficiency * 2;
-                DaysUntilRetirement = 20;
+                DaysUntilRetirement = 30;
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
@@ -249,7 +249,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.workersList)
             {
                 j++;
-                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
             Console.WriteLine();
         }
@@ -782,12 +782,12 @@ namespace Gold_Diggerzz
                         Console.Clear();
                         Console.WriteLine("  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
                         Console.WriteLine($"What type of employee do you want to hire?");
-                        Console.WriteLine($"1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5},Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x");
-                        Console.WriteLine($"2- Hire a mid employee: Price = ${_program._currentEmployeePrice},Wage = ${_program._currentWageRate}, Efficiency = 1x");
-                        Console.WriteLine($"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2},Wage = ${_program._currentWageRate * 2}, Efficiency = 2x");
+                        Console.WriteLine($"1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x");
+                        Console.WriteLine($"2- Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x");
+                        Console.WriteLine($"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x");
                         Console.WriteLine("4 - Cancel and return to market menu");
                         int employeeType = int.Parse(Console.ReadLine());
-                        Console.WriteLine($"Enter how many employees you want to hire?\nYou have {_program.dollars.Quantity} dollars");
+                        Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
                         int employeesToHire = _program.GetValidInt(0, 100000);
                         switch (employeeType)
                         {
