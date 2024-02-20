@@ -104,6 +104,34 @@ namespace Gold_Diggerzz
                 ReturnToWorkDate = DateTime.Today;
             }
             
+            else if (type == "bad")
+            {
+                Type = "bad";
+                Name = name;
+                Wage = wage * 0.5;
+                Price = price * 0.5;
+                EmployeeIllProbability = employeeIllProbability * 2;
+                DefaultEfficiency = defaultEfficiency * 0.5;
+                DaysUntilRetirement = 30;
+                IsIll = false;
+                HireDate = DateTime.Today;
+                ReturnToWorkDate = DateTime.Today;
+            }
+            
+            else if (type == "good")
+            {
+                Type = "good";
+                Name = name;
+                Wage = wage * 2;
+                Price = price * 2;
+                EmployeeIllProbability = employeeIllProbability * 0.5;
+                DefaultEfficiency = defaultEfficiency * 2;
+                DaysUntilRetirement = 20;
+                IsIll = false;
+                HireDate = DateTime.Today;
+                ReturnToWorkDate = DateTime.Today;
+            }
+            
         }
     }
 
@@ -748,23 +776,69 @@ namespace Gold_Diggerzz
                     case 3:
                         Console.Clear();
                         Console.WriteLine("  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
-                        Console.WriteLine($"Each employee charges {_program._currentWageRate} in wages per day right now");
+                        Console.WriteLine($"What type of employee do you want to hire?");
+                        Console.WriteLine($"n1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5},Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x");
+                        Console.WriteLine($" 2- Hire a mid employee: Price = ${_program._currentEmployeePrice},Wage = ${_program._currentWageRate}, Efficiency = 1x");
+                        Console.WriteLine($" 3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2},Wage = ${_program._currentWageRate * 2}, Efficiency = 2x");
+                        Console.WriteLine("4 - Cancel and return to market menu");
+                        int employeeType = int.Parse(Console.ReadLine());
                         Console.WriteLine($"Enter how many employees you want to hire?\nYou have {_program.dollars.Quantity} dollars");
                         int employeesToHire = _program.GetValidInt(0, 100000);
-                        if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
+                        switch (employeeType)
                         {
-                            Console.WriteLine("You don't have enough dollars to hire that many employees");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"You have hired {employeesToHire} more employees.\nSay hello to:");
+                            case 1:
+                                if (employeesToHire * _program._currentEmployeePrice * 0.5 > _program.dollars.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough dollars to hire that many bad employees");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"You have hired {employeesToHire} more bad employees.\nSay hello to:");
                             
-                            _program.HireNewWorker(employeesToHire);
+                                    _program.HireNewWorker(employeesToHire, "bad");
                             
-                            _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
-                            Console.WriteLine($"You now have {_program.workersList.Count} employees");
-                            _program._totalEmployeesHired += employeesToHire;
+                                    _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 0.5;
+                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                                    _program._totalEmployeesHired += employeesToHire;
+                                }
+                                break;
+                            case 2:
+                                if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough dollars to hire that many mid employees");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"You have hired {employeesToHire} more mid employees.\nSay hello to:");
+                            
+                                    _program.HireNewWorker(employeesToHire, "mid");
+                            
+                                    _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
+                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                                    _program._totalEmployeesHired += employeesToHire;
+                                }
+                                break;
+                            case 3:
+                                if (employeesToHire * _program._currentEmployeePrice * 2 > _program.dollars.Quantity)
+                                {
+                                    Console.WriteLine("You don't have enough dollars to hire that many good employees");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"You have hired {employeesToHire} more good employees.\nSay hello to:");
+                            
+                                    _program.HireNewWorker(employeesToHire, "good");
+                            
+                                    _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 2;
+                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                                    _program._totalEmployeesHired += employeesToHire;
+                                }
+                                break;
+                            case 4:
+                                Console.WriteLine("Returning to the market menu...");
+                                break;
                         }
+
                         break;
 
                     case 4:
@@ -1245,9 +1319,7 @@ namespace Gold_Diggerzz
         public List<Worker> toSendToTrainingList = new();
         
         public List<Worker> workersList = new()
-        {
-            new Worker("mid", "Your First Slave Worker", 10, 100, 10, 1)
-        };
+        { new Worker("mid", "Your First Worker", 10, 100, 10, 1) };
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
         DayToDayOperations dayToDayOperations = new DayToDayOperations();
@@ -1742,7 +1814,7 @@ namespace Gold_Diggerzz
             Thread.Sleep(1250);
         }
 
-        public void HireNewWorker(int numberOfWorkers)
+        public void HireNewWorker(int numberOfWorkers, string type)
         {
             if (_possibleNames.Count > 0)
             {
@@ -1889,7 +1961,7 @@ namespace Gold_Diggerzz
                         efficiency /= 100;
                     }
                     
-                    Worker newWorker = new Worker("mid",_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
+                    Worker newWorker = new Worker(type,_possibleNames[randomName], _currentWageRate, _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
