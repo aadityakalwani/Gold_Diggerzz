@@ -1704,7 +1704,8 @@ namespace Gold_Diggerzz
 
                         break;
                     case 14:
-                        Console.WriteLine("This feature doesn't exist yet. re-download the .exe file later on to see if it's been added\nFor now, you'll be sent back to the pain menu");
+                        Console.WriteLine("This feature doesn't exist yet. re-download the .exe file later on to see if it's been added\nFor now, you'll be sent back to the main menu in 5 seconds");
+                        Thread.Sleep(5000);
                         //SaveGameState();
                         
                         break;
