@@ -282,7 +282,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName}");
                     datesOfTradesMade.Add(DateTime.Today);
                 }
-                Console.WriteLine("You can't afford to make this trade brokie");
+                Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
                 return;
             }
             Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
@@ -451,7 +451,7 @@ namespace Gold_Diggerzz
                         if (ancientArtefactFound)
                         {
                             Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                            Console.WriteLine("Choose an option:");
+                            Console.WriteLine("\nChoose an option:");
                             Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
                             Console.WriteLine("2 - $200 instantly");
                             Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
@@ -481,7 +481,7 @@ namespace Gold_Diggerzz
                         if (timeMachineFound)
                         {
                             Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
-                            Console.WriteLine("Choose an option:");
+                            Console.WriteLine("\nChoose an option:");
                             Console.WriteLine("1 - Use now --> Gain 5 days' worth of rewards without costing you anything");
                             Console.WriteLine($"2 - Save for later (max {_program.timeMachine.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
@@ -632,17 +632,22 @@ namespace Gold_Diggerzz
             Console.Write("\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
             Console.ResetColor();
 
+            if (_program._currentDate.Month == 1 && _program._currentDate.Day == 1)
+            {
+                Console.WriteLine("Happy New Year! ");
+            }
+            
+            else
+            {
+                Console.WriteLine("Prices have fluctuated ± 10%% from what they were yesterday");
+            }
             Console.WriteLine($"Here are the rates for {_program._currentDate:dddd dd MMMM, yyyy}:");
 
-            Console.WriteLine("______________________________");
-            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg");
-            Console.WriteLine($"| Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
-            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg");
-            Console.WriteLine($"| Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
-            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg");
-            Console.WriteLine($"| Employees: ${Math.Round(_program._currentEmployeePrice, 2)} per employee");
-            Console.WriteLine($"| Wages: ${Math.Round(_program._currentWageRate, 2)} per employee per day");
-            Console.WriteLine("______________________________");
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg           | Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg          | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg      | Employees: {Math.Round(_program._currentEmployeePrice, 2)} per employee");
+            Console.WriteLine("__________________________________________________________");
 
 
             int marketOption;
@@ -1275,7 +1280,7 @@ namespace Gold_Diggerzz
             _program.gold.Price *= randomChange;
             _program.diamond.Price *= randomChange;
             
-            Console.WriteLine($"Prices of all resources have fluctuated by {randomChange * 100}%");
+            Console.WriteLine($"Prices are {randomChange * 100}% what they were yesterday");
         }
     }
 
@@ -1996,7 +2001,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for iron");
             Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for gold");
             Console.WriteLine($"4 - Convert {coalToDiamond.Ratio}kg of coal for diamond");
-            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for ron");
+            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for iron");
             Console.WriteLine($"6 - Convert {stoneToGold.Ratio}kg of stone for gold");
             Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio}kg of stone for diamond");
             Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for gold");
