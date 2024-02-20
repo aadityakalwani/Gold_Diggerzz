@@ -452,16 +452,20 @@ namespace Gold_Diggerzz
                         {
                             Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
                             Console.WriteLine("Choose an option:");
-                            Console.WriteLine("1 - Use now");
-                            Console.WriteLine($"2 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
+                            Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
+                            Console.WriteLine("2 - $200 instantly");
+                            Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
 
                             switch (userInput)
                             {
                                 case 1:
-                                    _program.UsePowerUp(1);
+                                    _program.UsePowerUp(1, 1);
                                     break;
                                 case 2:
+                                    _program.UsePowerUp(1, 1);
+                                    break;
+                                case 3:
                                     if (_program.ancientArtefact.Quantity < _program.ancientArtefact.MaxQuantity)
                                     {
                                         Console.WriteLine("You have chosen to save the Ancient Artefact for later");
@@ -478,14 +482,14 @@ namespace Gold_Diggerzz
                         {
                             Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
                             Console.WriteLine("Choose an option:");
-                            Console.WriteLine("1 - Use now");
+                            Console.WriteLine("1 - Use now --> Gain 5 days' worth of rewards without costing you anything");
                             Console.WriteLine($"2 - Save for later (max {_program.timeMachine.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
 
                             switch (userInput)
                             {
                                 case 1:
-                                    _program.UsePowerUp(2);
+                                    _program.UsePowerUp(2, 1);
                                     break;
                                 case 2:
                                     if (_program.timeMachine.Quantity < _program.timeMachine.MaxQuantity)
@@ -516,14 +520,14 @@ namespace Gold_Diggerzz
                         {
                             Console.WriteLine("You found the Market Master power up");
                             Console.WriteLine("Choose an option:");
-                            Console.WriteLine("1 - Use now");
+                            Console.WriteLine("1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
                             Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
 
                             switch (userInput)
                             {
                                 case 1:
-                                    _program.UsePowerUp(3);
+                                    _program.UsePowerUp(3, 1);
                                     break;
                                 case 2:
                                     if (_program.marketMaster.Quantity < _program.marketMaster.MaxQuantity)
@@ -1518,9 +1522,9 @@ namespace Gold_Diggerzz
                         Console.WriteLine("What powerup do you want to use?");
                         Console.WriteLine($"You have {ancientArtefact.Quantity} Ancient Artefacts, {timeMachine.Quantity} Time Machines and {marketMaster.Quantity} Market Masters\n");
                         Console.WriteLine("0 - Cancel & Return");
-                        Console.WriteLine("1 - Ancient Artefact");
-                        Console.WriteLine("2 - Time Machine");
-                        Console.WriteLine("3 - Market Master");
+                        Console.WriteLine("1 - Ancient Artefact --> 2 options inside");
+                        Console.WriteLine("2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
+                        Console.WriteLine("3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
                         int powerUpChoice = GetValidInt(0, 3);
 
                         switch (powerUpChoice)
@@ -1528,7 +1532,11 @@ namespace Gold_Diggerzz
                             case 1:
                                 if (ancientArtefact.Quantity >= 0)
                                 {
-                                    UsePowerUp(powerUpChoice);
+                                    Console.WriteLine("You have chosen to use an Ancient Artefact. Choose an option:");
+                                    Console.WriteLine("1 - Increase the probability of finding gold to 50% for 3 days");
+                                    Console.WriteLine("2 - $200 instantly");
+                                    int ancientArtefactChoice = GetValidInt(1, 2);
+                                    UsePowerUp(powerUpChoice, ancientArtefactChoice);
                                 }
                                 else
                                 {
@@ -1541,7 +1549,7 @@ namespace Gold_Diggerzz
                             
                                 if (timeMachine.Quantity >= 0)
                                 {
-                                    UsePowerUp(powerUpChoice);
+                                    UsePowerUp(powerUpChoice, 0);
                                 }
                                 else
                                 {
@@ -1552,7 +1560,7 @@ namespace Gold_Diggerzz
                             case 3:
                                 if (marketMaster.Quantity >= 0)
                                 {
-                                    UsePowerUp( powerUpChoice);
+                                    UsePowerUp(powerUpChoice, 0);
                                 }
                                 else
                                 {
@@ -1724,24 +1732,18 @@ namespace Gold_Diggerzz
             return inDebt;
         }
         
-        public void UsePowerUp(int powerUpChoice)
+        public void UsePowerUp(int powerUpChoice, int subChoice)
         {
             switch (powerUpChoice)
             {
                 case 1:
                 {
-                    Console.WriteLine("You have chosen to use the Ancient Artefact powerup");
-                    Console.WriteLine("Choose your option:");
-                    Console.WriteLine("1 - 50% chance of finding gold for the next five days");
-                    Console.WriteLine("2 - $250 instantly");
-                    int ancientArtefactChoice = GetValidInt(1, 2);
-
-                    if (ancientArtefactChoice == 1)
+                    if (subChoice == 1)
                     {
                         Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
                         _increasedGoldChanceDays = 5;
                     }
-                    else if (ancientArtefactChoice == 2)
+                    else if (subChoice == 2)
                     {
                         Console.WriteLine("You have chosen the $200 instantly");
                         dollars.Quantity += 200;
@@ -1755,7 +1757,6 @@ namespace Gold_Diggerzz
                 case 2:
                 {
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
-                    Console.WriteLine("This will give you 5 days' worth of rewards without costing you anything");
                     _noWageDaysLeft = 10;
                     _animation = false;
                     miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
