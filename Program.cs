@@ -1765,7 +1765,6 @@ namespace Gold_Diggerzz
                 return -1;
             }
 
-            // -2 if you were previously in debt
             return -2;
         }
 
@@ -1782,19 +1781,21 @@ namespace Gold_Diggerzz
                 if (inDebt == "true")
                 {
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Thread.Sleep(1000);
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine("The government will come and sell all your resources for 40% the current market rate");
                     Console.WriteLine($"Right now you have ${(Math.Round(dollars.Quantity), 2)}, {(Math.Round(coal.Quantity), 2)}kg of coal, {(Math.Round(stone.Quantity), 2)}kg of stone, {(Math.Round(iron.Quantity), 2)}kg of iron, {(Math.Round(gold.Quantity), 2)}kg of gold, and {(Math.Round(diamond.Quantity), 2)}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
+                    Thread.Sleep(750);
                     Console.WriteLine("After bossman stole your resources, you now have:");
                     
-                    dollars.Quantity += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                    dollars.Quantity += (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price * 0.4;
+                                           diamond.Quantity * diamond.Price) * 0.4;
                     
-                    _totalDollarsEarned += coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                    _totalDollarsEarned += (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                           diamond.Quantity * diamond.Price * 0.4;
+                                           diamond.Quantity * diamond.Price) * 0.4;
 
                     coal.Quantity = 0;
                     stone.Quantity = 0;
