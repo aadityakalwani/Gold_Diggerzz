@@ -23,38 +23,33 @@ namespace Gold_Diggerzz
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
      * OOP the weather effects
-     *  employee morale, if morale is low, the employee could be less efficient.
+     * * create morale and reputation
+     *  employee morale --> if morale is low, the employee could be less efficient.
         * morale-boosting powerup
-     * create morale and reputation
-     * Resource Quality: Different quality levels for resources, which affect their price and the chance of finding them. Higher quality resources could be found less frequently but sold for a higher price.
      * the player could choose to offer them a retirement package in exchange for a morale boost for the remaining workers.
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
-     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract.
+     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
+        * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc 
         * as the mine gets emptier, chance of finding resources decreases 
-     * Achievements and Rewards: Implement more achievements and provide rewards for achieving them. This could be in the form of in-game currency, special power-ups, or even new gameplay features.
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
      * Trader's prices fluctuate (one of the factors can be reputation)
      * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
-     * Environmental Impact: Implement an environmental impact system where the player's mining operations could have negative effects on the environment, which could lead to penalties or restrictions.
-     * Corporate Espionage: Introduce a system where the player can engage in corporate espionage to gain an advantage over their competitors. This could involve risks of getting caught and facing penalties.
-        * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
+     * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * achievements are OOP-ed? idk about this one
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
-     * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees
-     * a heatwave could decrease efficiency but increase the chance of finding certain resources.
+     * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees ++ morale lost
      * a tutorial mode that is actually functional 
      * loans - you can take a loan from the bank and pay it back with interest
-     * load/save game
      * more power-ups
         * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days.
         * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
      * stock market feature (kinda done?)
-         * Every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
-     * option to invest in the stock market
+         * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
      * managers that do shit
-        * eg a 'gold' manager that improves chance of finding gold but is hired for a week
+        * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
+     * competition / fake in some other mining companies and you're also trying to beat them (give em a quadratic rate of growth)
      */
 
     class GameState
