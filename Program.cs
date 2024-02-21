@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
 
     /*
     * current issues
+     * error in clipboard probably about hiring more than 163 workers
      * apparently price of gold fluctuates like crazy
     * inconsistent between weather effect Displaying and actual
        * eg "6 days left of bad weather" but then it's only 5 days
@@ -18,7 +19,8 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * SAVE/LOAD GAME
-     * adding more incentive to keep playing
+     * adding more incentive to keep playin15
+     g
         * goals to reach
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
@@ -72,7 +74,7 @@ namespace Gold_Diggerzz
                 {"totalDaysDug", _program._totalDaysDug},
                 {"totalEmployeesHired", _program._totalEmployeesHired},
                 {"totalDollarsEarned", _program._totalDollarsEarned},
-                { "employeesList", _program.workersList},
+                {"employeesList", _program.workersList},
                 {"retiredEmployeesList", _program.retiredWorkersList},
                 {"coal", _program.coal},
                 {"stone", _program.stone},
@@ -154,6 +156,7 @@ namespace Gold_Diggerzz
         public double EmployeeIllProbability;
         public DateTime HireDate; 
         public double DefaultEfficiency;
+        public double DaysWorked;
         public int DaysUntilRetirement;
         public DateTime RetirementDate;
         public bool IsIll;
@@ -169,6 +172,7 @@ namespace Gold_Diggerzz
                 Price = price;
                 EmployeeIllProbability = employeeIllProbability;
                 DefaultEfficiency = defaultEfficiency;
+                DaysWorked = 0;
                 DaysUntilRetirement = 45;
                 IsIll = false;
                 HireDate = DateTime.Today;
@@ -312,8 +316,9 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
+            Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine("Here are your current working employees:");
             int j = 0;
             double totalWages = 0;
@@ -323,7 +328,10 @@ namespace Gold_Diggerzz
                 j++;
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
+            Console.WriteLine("\n_____________________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
+            Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine("_____________________________________________________________________");
         }
         
     }
@@ -432,6 +440,7 @@ namespace Gold_Diggerzz
                             }
 
                             Thread.Sleep(500);
+                            Console.Clear();
                         }
 
                         Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
@@ -1128,6 +1137,7 @@ namespace Gold_Diggerzz
                 if (worker.DaysUntilRetirement != 0)
                 {
                     worker.DaysUntilRetirement -= 1;
+                    worker.DaysWorked += 1;
                 }
 
                 if (worker.DaysUntilRetirement == 0)
@@ -1352,7 +1362,7 @@ namespace Gold_Diggerzz
             _program.gold.Price *= randomChange;
             _program.diamond.Price *= randomChange;
             
-            Console.WriteLine($"Prices are {randomChange * 100}% what they were yesterday");
+            Console.WriteLine($"Prices are {randomChange * 100 - 100 }% what they were yesterday");
         }
     }
 
@@ -1736,7 +1746,7 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("___________________________________\n");
+                Console.WriteLine("___________________________________________________________________________________________________________\n");
                 Console.WriteLine("Main Features:              Display Options:                  Other Features:\n");
                 Console.WriteLine("0 - Quit game               5 - Display game mechanics        10 - Skip one day");
                 Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup");
@@ -1773,8 +1783,8 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Console.WriteLine("You are in debt, bossman is coming for you");
-                    Console.WriteLine("The government will come and sell all your resources for 2/5 the rate");
-                    Console.WriteLine($"right now you have ${dollars.Quantity}, {coal.Quantity}kg of coal, {stone.Quantity}kg of stone, {iron.Quantity}kg of iron, {gold.Quantity}kg of gold, and {diamond.Quantity}kg of diamond");
+                    Console.WriteLine("The government will come and sell all your resources for 40% the current market rate");
+                    Console.WriteLine($"Right now you have ${(Math.Round(dollars.Quantity), 2)}, {(Math.Round(coal.Quantity), 2)}kg of coal, {(Math.Round(stone.Quantity), 2)}kg of stone, {(Math.Round(iron.Quantity), 2)}kg of iron, {(Math.Round(gold.Quantity), 2)}kg of gold, and {(Math.Round(diamond.Quantity), 2)}kg of diamond");
                     Console.WriteLine("Unlucky bro...");
                     Console.WriteLine("After bossman stole your resources, you now have:");
                     
@@ -2161,7 +2171,7 @@ namespace Gold_Diggerzz
                 }
 
                 Console.WriteLine($"No bro enter a number between {min} and {max}");
-                GetValidInt(min, max);
+                return GetValidInt(min, max);
             }
 
             Console.WriteLine("Please enter a valid integer");
@@ -2178,7 +2188,7 @@ namespace Gold_Diggerzz
                 }
 
                 Console.WriteLine($"No bro enter a number between {min} and {max}");
-                GetValidDouble(min, max);
+                return GetValidDouble(min, max);
             }
 
             Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
