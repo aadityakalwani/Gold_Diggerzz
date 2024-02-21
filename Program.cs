@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -57,10 +58,11 @@ namespace Gold_Diggerzz
     class GameState
     {
         private Dictionary<string, object> gameStateDictionary;
+        string filename = "gameState.txt";
         
         public GameState(Program _program)
         {
-            Dictionary<string, object> gameStateDictionary = new Dictionary<string, object>()
+            gameStateDictionary = new Dictionary<string, object>
             {
                 {"increasedGoldChanceDays", _program._increasedGoldChanceDays},
                 {"marketMasterDaysLeft", _program._marketMasterDaysLeft},
@@ -81,7 +83,7 @@ namespace Gold_Diggerzz
                 {"iron", _program.iron},
                 {"gold", _program.gold},
                 {"diamond", _program.diamond},
-                { "dollars", _program.dollars},
+                {"dollars", _program.dollars},
                 {"magicTokens", _program.magicTokens},
                 {"timeMachine", _program.timeMachine},
                 {"ancientArtefact", _program.ancientArtefact},
@@ -95,33 +97,56 @@ namespace Gold_Diggerzz
         
         public void SaveGameState(Program _program)
         {
-            using (StreamWriter writer = new StreamWriter("gameState.txt"))
+            using StreamWriter writer = new StreamWriter(filename);
             {
                 foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
                     writer.WriteLine($"{entry.Key}:{entry.Value}");
-                    Console.WriteLine($"{entry.Key}:{entry.Value} saved to");
                 }
+
+                writer.WriteLine("end");
             }
-            _program.QuitGame();
+            Console.WriteLine("Game state saved successfully");
         }
 
         public void LoadGameState(Program _program)
         {
-            using (StreamReader reader = new StreamReader("gameState.txt"))
+            Console.WriteLine("Loading game state...");
+            using StreamReader reader = new StreamReader(filename);
             {
                 string line;
-                while ((line = reader.ReadLine()) != null)
+                Dictionary<string, object> tempDictionary = new Dictionary<string, object>(gameStateDictionary);
+                foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
-                    string[] parts = line.Split(':');
-                    string key = parts[0];
-                    double value = double.Parse(parts[1]);
-
-                    if (gameStateDictionary.ContainsKey(key))
+                    Console.WriteLine("Reading the next line");
+                    line = reader.ReadLine();
+                    if (line != "end")
                     {
-                        gameStateDictionary[key] = value;
+                        string[] parts = line.Split(':');
+                        string key = parts[0];
+                        object value = parts[1];
+
+                        Console.WriteLine($"working on the current key: {key}, current value: {gameStateDictionary[key]}");
+                        tempDictionary[key] = value;
+                        Console.WriteLine($"New value: {tempDictionary[key]}");
                     }
                 }
+                gameStateDictionary = tempDictionary;
+                Console.WriteLine("Read until the end and updated the dictionary");
+                Thread.Sleep(1750);
+                
+                UpdateGameState(_program, tempDictionary);
+            }
+        }
+
+        public void UpdateGameState(Program _program, Dictionary<string, object> tempDictionary)
+        {
+            foreach (KeyValuePair<string, object> entry in tempDictionary)
+            {
+                // what i want to do is:
+                // gameStateDictionary[entry.Key] = entry.Value;
+                object entryValue = tempDictionary[entry.Key];
+                gameStateDictionary[entry.Key] = entryValue;
             }
         }
         
@@ -1710,9 +1735,11 @@ namespace Gold_Diggerzz
                         break;
                     case 14:
                         Console.WriteLine("This feature doesn't exist yet. re-download the .exe file later on to see if it's been added\nFor now, you'll be sent back to the main menu in 5 seconds");
-                        Thread.Sleep(5000);
-                        //SaveGameState();
-                        
+                        Thread.Sleep(1000);
+                        SaveGameState(1);
+                        break;
+                    case 15:
+                        SaveGameState(2);
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -1753,9 +1780,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)");
                 Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save game state (and quit game)\n");
+                Console.WriteLine("TESTING OPTION 15 TO LOAD GAME STATE - do not use if youre a player and youre not me");
                 Console.WriteLine("Your choice:");
 
-                int userOption = GetValidInt(0, 14);
+                int userOption = GetValidInt(0, 15);
                 Console.Clear();
                 return userOption;
             }
@@ -1878,15 +1906,26 @@ namespace Gold_Diggerzz
             _totalPowerUpsUsed += 1;
         }
 
-        public void SaveGameState()
+        public void SaveGameState(int saveOrLoad)
         {
-            Console.WriteLine("Saving game state...");
-            Thread.Sleep(1750);
+            Console.WriteLine("Saving/load game state...");
+            // Thread.Sleep(1750);
             
             GameState gameState = new GameState(this);
-            gameState.SaveGameState(this);
+            if (saveOrLoad == 1)
+            {
+                Console.WriteLine("Game state saved to a dictionary");
+                gameState.SaveGameState(this);
+            }
+
+            else if (saveOrLoad == 2)
+            {
+                gameState.LoadGameState(this);
+            }
             
+
         }
+        
 
         public void QuitGame()
         {
