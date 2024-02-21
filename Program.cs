@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -135,12 +136,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Read until the end and updated the dictionary");
                 Thread.Sleep(1750);
                 
-                UpdateGameState(_program, tempDictionary);
+                _program.UpdateProperties(tempDictionary);
             }
         }
 
         public void UpdateGameState(Program _program, Dictionary<string, object> tempDictionary)
         {
+            /*
             foreach (KeyValuePair<string, object> entry in tempDictionary)
             {
                 // what i want to do is:
@@ -148,6 +150,9 @@ namespace Gold_Diggerzz
                 object entryValue = tempDictionary[entry.Key];
                 gameStateDictionary[entry.Key] = entryValue;
             }
+            */
+            
+            
         }
         
     }
@@ -379,15 +384,16 @@ namespace Gold_Diggerzz
         {
             if (!datesOfTradesMade.Contains(_currentDate))
             {
-                if (ratio * fromResource.Quantity > toResource.Quantity)
+                if (ratio * fromResource.Quantity < toResource.Quantity)
                 {
-                    fromResource.Quantity -= ratio;
-                    toResource.Quantity += 1;
-                
-                    Console.WriteLine($"Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName}");
-                    datesOfTradesMade.Add(DateTime.Today);
+                    Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
+                    return;
                 }
-                Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
+                fromResource.Quantity -= ratio;
+                toResource.Quantity += 1;
+                
+                Console.WriteLine($"Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName}");
+                datesOfTradesMade.Add(DateTime.Today);
                 return;
             }
             Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
@@ -1734,11 +1740,10 @@ namespace Gold_Diggerzz
 
                         break;
                     case 14:
-                        Console.WriteLine("This feature doesn't exist yet. re-download the .exe file later on to see if it's been added\nFor now, you'll be sent back to the main menu in 5 seconds");
-                        Thread.Sleep(1000);
                         SaveGameState(1);
                         break;
                     case 15:
+                        Console.WriteLine("This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
                     default:
@@ -1922,10 +1927,17 @@ namespace Gold_Diggerzz
             {
                 gameState.LoadGameState(this);
             }
-            
 
         }
         
+        public void UpdateProperties(Dictionary<string, object> properties)
+        {
+            // eg dollars.Quantity = (double) properties["dollars"];
+            Console.WriteLine("THIS DOES NOT WORK YET");
+            Console.WriteLine("re-download the .exe file later on to see if it's been added");
+            Console.WriteLine("For now, you'll be sent back to the main menu in 5 seconds");
+            Thread.Sleep(5000);
+        }
 
         public void QuitGame()
         {
