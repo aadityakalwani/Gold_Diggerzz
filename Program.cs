@@ -392,7 +392,7 @@ namespace Gold_Diggerzz
                 fromResource.Quantity -= ratio;
                 toResource.Quantity += 1;
                 
-                Console.WriteLine($"Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName}");
+                Console.WriteLine($"\u2705 Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName} \u2705");
                 datesOfTradesMade.Add(DateTime.Today);
                 return;
             }
@@ -1785,7 +1785,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)");
                 Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save game state (and quit game)\n");
-                Console.WriteLine("TESTING OPTION 15 TO LOAD GAME STATE - do not use if youre a player and youre not me");
+                Console.WriteLine("testing option 15 to load a game state - DO NOT USE if you're not me");
                 Console.WriteLine("Your choice:");
 
                 int userOption = GetValidInt(0, 15);
