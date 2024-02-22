@@ -277,7 +277,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
-            Console.WriteLine("\n_____________________________________________________________________");
+            Console.WriteLine("_____________________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
             Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
@@ -652,7 +652,7 @@ namespace Gold_Diggerzz
 
                 if (daysToDig >= 2)
                 {
-                    Console.WriteLine($"Current balance = {_program.dollars.Quantity}");
+                    Console.WriteLine($"Current balance = {Math.Round(_program.dollars.Quantity, 2)}");
                     Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
                 }
 
@@ -2461,16 +2461,16 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(this);
             Console.WriteLine("Here are the options for today:");
             Console.WriteLine("\n0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {coalToStone.Ratio}kg of coal for stone");
-            Console.WriteLine($"2 - Convert {coalToIron.Ratio}kg of coal for iron");
-            Console.WriteLine($"3 - Convert {coalToGold.Ratio}kg of coal for gold");
-            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio}kg of coal for diamond");
-            Console.WriteLine($"5 - Convert {stoneToIron.Ratio}kg of stone for iron");
-            Console.WriteLine($"6 - Convert {stoneToGold.Ratio}kg of stone for gold");
-            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio}kg of stone for diamond");
-            Console.WriteLine($"8 - Convert {ironToGold.Ratio}kg of iron for gold");
-            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio}kg of iron for diamond");
-            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio}kg of gold for diamond");
+            Console.WriteLine($"1 - Convert {coalToStone.Ratio} coal --> stone");
+            Console.WriteLine($"2 - Convert {coalToIron.Ratio} coal --> iron");
+            Console.WriteLine($"3 - Convert {coalToGold.Ratio} coal --> gold");
+            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio} coal --> diamond");
+            Console.WriteLine($"5 - Convert {stoneToIron.Ratio} stone --> iron");
+            Console.WriteLine($"6 - Convert {stoneToGold.Ratio} stone --> gold");
+            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio} stone --> diamond");
+            Console.WriteLine($"8 - Convert {ironToGold.Ratio} iron --> gold");
+            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio} iron --> diamond");
+            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio} gold --> diamond");
             Console.WriteLine("Remember, you can only make one trader per day. Choose wisely!");
             Console.WriteLine("_________________________________________");
 
@@ -2561,4 +2561,3 @@ namespace Gold_Diggerzz
         }
     }
 }
-    
