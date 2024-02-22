@@ -92,8 +92,7 @@ namespace Gold_Diggerzz
         public bool IsIll;
         public DateTime ReturnToWorkDate;
 
-        public Worker(string type, string name, double wage, double price, double employeeIllProbability,
-            double defaultEfficiency)
+        public Worker(string type, string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
         {
             if (type == "mid")
             {
@@ -323,8 +322,7 @@ namespace Gold_Diggerzz
 
     class MiningOperation
     {
-        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations,
-            List<string> achievements)
+        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
 
         {
             for (int days = 0; days < daysToDig; days++)
@@ -1672,7 +1670,7 @@ namespace Gold_Diggerzz
 
         public List<string> achievementsList = new List<string>();
 
-        // 163 possible names for the workers
+        // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         private static List<string> _possibleNames = new List<string>()
@@ -2292,7 +2290,7 @@ namespace Gold_Diggerzz
 
         public void HireNewWorker(int numberOfWorkers, string type)
         {
-            if (_possibleNames.Count > 0)
+            if (_possibleNames.Count > numberOfWorkers)
             {
                 for (int i = 0; i < numberOfWorkers; i++)
                 {
@@ -2451,8 +2449,8 @@ namespace Gold_Diggerzz
             }
             else
             {
-                Console.WriteLine(
-                    "You've hired all 163/163 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                Console.WriteLine("Wait for some to retire");
             }
         }
 
