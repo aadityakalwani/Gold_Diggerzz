@@ -19,6 +19,27 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * SAVE/LOAD GAME
+     * Enter your choice instead of “your choice”
+       
+       More obvious weather effects
+       
+       “What does the trader do”
+       
+       Print resources as you enter the market
+       
+       Remove the “you found this much stone”
+       
+       Prices are 4% what they were
+       Should say “104%”
+       
+       Get a certain number of resource to build something
+       
+       Fix trader logic because she has -16iron
+       
+       Print retirement days for each type of employee when hiring
+       
+       Option to cancel commiting a crime
+       
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * adding more incentive to keep playing
         * goals to reach
@@ -165,7 +186,6 @@ namespace Gold_Diggerzz
 
     class DisplayStuff
     {
-
         public static void DisplayGameMechanics(Program program)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -179,8 +199,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Chance of finding iron = {Math.Round(program.iron.Probability, 2)}%");
             Console.WriteLine($"Chance of finding gold = {Math.Round(program.gold.Probability, 2)}%");
             Console.WriteLine($"Chance of finding diamond = {Math.Round(program.diamond.Probability, 2)}%");
-            Console.WriteLine(
-                $"Chance of finding Ancient Artefact = {Math.Round(program.ancientArtefact.Probability, 2)}%");
+            Console.WriteLine($"Chance of finding Ancient Artefact = {Math.Round(program.ancientArtefact.Probability, 2)}%");
 
             Console.WriteLine($"\nCost of hiring employee = ${program._currentEmployeePrice}");
             Console.WriteLine($"Coal value = ${Math.Round(program.coal.Price, 2)}");
@@ -191,25 +210,18 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
-            Console.WriteLine(
-                "The resources you gain are equal to the number of employees you have times their efficiency");
+            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency");
             Console.WriteLine($"Baseline wage = ${program._currentWageRate} per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10%");
-            Console.WriteLine(
-                "On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-            Console.WriteLine(
-                "One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
+            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 5%");
-            Console.WriteLine(
-                $"You can bribe the govt with ${program.bribe.Price} and not pay any wages for the next 3 days");
-            Console.WriteLine(
-                "At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine(
-                "If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
+            Console.WriteLine($"You can bribe the govt with ${program.bribe.Price} and not pay any wages for the next 3 days");
+            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
-
         }
 
         public static void DisplayStats(Program program)
@@ -235,17 +247,13 @@ namespace Gold_Diggerzz
 
         public static void DisplayResources(Program program)
         {
-            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"                     You have ${Math.Round(program.dollars.Quantity, 2)}\n");
-            Console.WriteLine(
-                $"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
-            Console.WriteLine(
-                $"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
-            Console.WriteLine(
-                $"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
-            Console.WriteLine(
-                $"| You have {program.workersList.Count} employees         | Your employees' average efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
-            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine($"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
+            Console.WriteLine($"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
+            Console.WriteLine($"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
+            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' average efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine("__________________________________________________________________________");
         }
 
         public static void DisplayEmployees(Program program)
@@ -255,8 +263,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine(
-                    $"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             Console.WriteLine("_____________________________________________________________________");
@@ -267,17 +274,14 @@ namespace Gold_Diggerzz
             {
                 totalWages += worker.Wage;
                 j++;
-                Console.WriteLine(
-                    $"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             Console.WriteLine("\n_____________________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
-            Console.WriteLine(
-                $"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("_____________________________________________________________________");
         }
-
     }
 
     class Trade
@@ -308,8 +312,7 @@ namespace Gold_Diggerzz
                 fromResource.Quantity -= ratio;
                 toResource.Quantity += 1;
 
-                Console.WriteLine(
-                    $"\u2705 Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName} \u2705");
+                Console.WriteLine($"\u2705 Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName} \u2705");
                 datesOfTradesMade.Add(DateTime.Today);
                 return;
             }
@@ -392,8 +395,7 @@ namespace Gold_Diggerzz
                             Console.Clear();
                         }
 
-                        Console.WriteLine(
-                            $"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
+                        Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
                         Console.WriteLine("Here are the changes to your resources:");
 
                         // creating randoms for the chance of finding all the stuff
@@ -412,8 +414,7 @@ namespace Gold_Diggerzz
                         // if there is a changed chance of finding gold due to the Ancient Artefact powerup
                         if (_program._increasedGoldChanceDays != 0)
                         {
-                            Console.WriteLine(
-                                $"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
+                            Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
                             _program.gold.Probability = 50;
                             _program._increasedGoldChanceDays -= 1;
                         }
@@ -436,34 +437,37 @@ namespace Gold_Diggerzz
 
                         // update values within the resources dictionary
 
-                        double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency;
-
                         if (coalFound)
                         {
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
                             _program.coal.Quantity += newResourcesFound;
                             _program.coal.TotalFound += newResourcesFound;
                         }
 
                         if (stoneFound)
                         {
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
                             _program.stone.Quantity += newResourcesFound;
                             _program.stone.TotalFound += newResourcesFound;
                         }
 
                         if (ironFound)
                         {
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
                             _program.iron.Quantity += newResourcesFound;
                             _program.iron.TotalFound += newResourcesFound;
                         }
 
                         if (goldFound)
                         {
+                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             Console.WriteLine(
                                 $"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
                             _program.gold.Quantity += newResourcesFound;
@@ -472,6 +476,8 @@ namespace Gold_Diggerzz
 
                         if (diamondFound)
                         {
+                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             Console.WriteLine(
                                 $"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
                             _program.diamond.Quantity += newResourcesFound;
@@ -1819,7 +1825,7 @@ namespace Gold_Diggerzz
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
+            Console.WriteLine("\n   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            ");
             Console.ResetColor();
 
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
@@ -2071,21 +2077,14 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine(
-                    "___________________________________________________________________________________________________________\n");
-                Console.WriteLine(
-                    "Main Features:              Display Options:                  Other Features:\n");
-                Console.WriteLine(
-                    "0 - Quit game               5 - Display game mechanics        10 - Skip one day");
-                Console.WriteLine(
-                    "1 - Dig one day             6 - Display stats                 11 - Use a powerup");
-                Console.WriteLine(
-                    "2 - Dig multiple days       7 - Display achievements          12 - Send employees for training");
-                Console.WriteLine(
-                    "3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)");
-                Console.WriteLine(
-                    "4 - Go To Trader            9 - Display employees             14 - Save game state (and quit game)\n");
-                Console.WriteLine("testing option 15 to load a game state - DO NOT USE if you're not me");
+                Console.WriteLine("_____________________________________________________________________________________________________________");
+                Console.WriteLine("Main Features:              Display Options:                  Other Features:                                |");
+                Console.WriteLine("                                                                                                             |");
+                Console.WriteLine("0 - Quit game               5 - Display game mechanics        10 - Skip one day                              |");
+                Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup                             |");
+                Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
+                Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
+                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save & quit                          (15) |\n");
                 Console.WriteLine("Your choice:");
 
                 int userOption = GetValidInt(0, 15);
