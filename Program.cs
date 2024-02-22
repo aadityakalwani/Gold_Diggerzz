@@ -21,24 +21,16 @@ namespace Gold_Diggerzz
      * SAVE/LOAD GAME
      * Enter your choice instead of “your choice”
        
-       More obvious weather effects
-       
-       “What does the trader do”
-       
-       Print resources as you enter the market
-       
-       Remove the “you found this much stone”
-       
-       Prices are 4% what they were
-       Should say “104%”
-       
-       Get a certain number of resource to build something
-       
-       Fix trader logic because she has -16iron
-       
-       Print retirement days for each type of employee when hiring
-       
-       Option to cancel commiting a crime
+        More obvious weather effects
+        “What does the trader do”
+        Print resources as you enter the market
+        Remove the “you found this much stone” on a multiple day dig - just show the final result
+        Prices are 4% what they were
+        Should say “104%”
+        Get a certain number of resource to build something
+        Fix trader logic because she has -16iron
+        Print retirement days for each type of employee when hiring
+        Option to cancel commiting a crime
        
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * adding more incentive to keep playing
@@ -186,7 +178,7 @@ namespace Gold_Diggerzz
 
     class DisplayStuff
     {
-        public static void DisplayGameMechanics(Program program)
+        public static void DisplayGameMechanics(Program _program)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -194,31 +186,31 @@ namespace Gold_Diggerzz
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
-            Console.WriteLine($"Chance of finding coal = {Math.Round(program.coal.Probability, 2)}%");
-            Console.WriteLine($"Chance of finding stone = {Math.Round(program.coal.Probability, 2)}%");
-            Console.WriteLine($"Chance of finding iron = {Math.Round(program.iron.Probability, 2)}%");
-            Console.WriteLine($"Chance of finding gold = {Math.Round(program.gold.Probability, 2)}%");
-            Console.WriteLine($"Chance of finding diamond = {Math.Round(program.diamond.Probability, 2)}%");
-            Console.WriteLine($"Chance of finding Ancient Artefact = {Math.Round(program.ancientArtefact.Probability, 2)}%");
-
-            Console.WriteLine($"\nCost of hiring employee = ${program._currentEmployeePrice}");
-            Console.WriteLine($"Coal value = ${Math.Round(program.coal.Price, 2)}");
-            Console.WriteLine($"Stone value = ${Math.Round(program.stone.Price, 2)}");
-            Console.WriteLine($"Iron value = ${Math.Round(program.iron.Price, 2)}");
-            Console.WriteLine($"Gold value = ${Math.Round(program.gold.Price, 2)}");
-            Console.WriteLine($"Diamond value = ${Math.Round(program.diamond.Price, 2)}");
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine("Current probabilities of finding resources:");
+            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Probability, 2)}%           | Stone: ${Math.Round(_program.stone.Probability, 2)}}}%\"");
+            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Probability, 2)}%          | Gold: ${Math.Round(_program.gold.Probability, 2)}%");
+            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Probability, 2)}%      | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
+            Console.WriteLine($"| Market Master: ${Math.Round(_program.marketMaster.Probability, 2)}%      | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
+            Console.WriteLine($"| Time Machine: {Math.Round(_program.timeMachine.Probability, 2)}%");
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine("Current Prices:");
+            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg           | Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg          | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg      | Employees: {Math.Round(_program._currentEmployeePrice, 2)} per employee");
+            Console.WriteLine("__________________________________________________________");
 
             Console.WriteLine("Resource values fluctuate by upto ±10% per day");
             Console.WriteLine("You can find powerups that have different effects");
             Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency");
-            Console.WriteLine($"Baseline wage = ${program._currentWageRate} per employee per day");
+            Console.WriteLine($"Baseline wage = ${_program._currentWageRate} per employee per day");
             Console.WriteLine("10% chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10%");
             Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("One x date every month, there is a stock market crash where iron, gold, and employee hiring prices halve");
             Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 5%");
-            Console.WriteLine($"You can bribe the govt with ${program.bribe.Price} and not pay any wages for the next 3 days");
+            Console.WriteLine($"You can bribe the govt with ${_program.bribe.Price} and not pay any wages for the next 3 days");
             Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
@@ -233,6 +225,7 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             Console.WriteLine($"Here are your stats as of {program._currentDate.Date: dddd, dd MMMM yyyy}:");
+            Console.WriteLine("__________________________________________________________");
             Console.WriteLine($"Total coal found: {Math.Round(program.coal.TotalFound, 2)}kg");
             Console.WriteLine($"Total stone found: {Math.Round(program.stone.TotalFound, 2)}kg");
             Console.WriteLine($"Total iron found: {Math.Round(program.iron.TotalFound, 2)}kg");
@@ -241,6 +234,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total powerups used: {program._totalPowerUpsUsed}");
             Console.WriteLine($"Total employees hired: {program._totalEmployeesHired}");
             Console.WriteLine($"Total bribes paid: {program._totalBribes}");
+            Console.WriteLine("__________________________________________________________");
             Console.WriteLine($"\nTotal dollars earned: ${Math.Round(program._totalDollarsEarned, 2)}");
             Console.WriteLine($"Total days dug: {program._totalDaysDug}");
         }
@@ -2068,6 +2062,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("You can also quit the game");
             Console.WriteLine("You can also dig for multiple days");
             Console.WriteLine("Here are the game mechanics:");
+            Console.WriteLine("THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT\n");
         }
 
         public int UserMenuOption()
@@ -2559,5 +2554,5 @@ namespace Gold_Diggerzz
             return GetValidDouble(min, max);
         }
     }
-    }
-
+}
+    
