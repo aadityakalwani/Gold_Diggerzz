@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -13,7 +11,7 @@ namespace Gold_Diggerzz
 
     /*
      * current issues
-     * error in clipboard probably about hiring more than 163 workers
+     * you can not load a game state because of either casting issues or enumeration operation errors
      * apparently price of gold fluctuates like crazy
      * inconsistent between weather effect Displaying and actual
      * eg "6 days left of bad weather" but then it's only 5 days
@@ -21,8 +19,8 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * SAVE/LOAD GAME
-     * adding more incentive to keep playin15
-     g
+     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
+     * adding more incentive to keep playing
         * goals to reach
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
@@ -1453,7 +1451,7 @@ namespace Gold_Diggerzz
                 Dictionary<string, object> tempDictionary = new Dictionary<string, object>(gameStateDictionary);
                 foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
-                    Console.WriteLine("Reading the next line");
+                    Console.WriteLine($"Reading the next line: {entry}");
                     line = reader.ReadLine();
                     if (line != "end")
                     {
