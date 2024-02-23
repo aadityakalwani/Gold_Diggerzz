@@ -11,7 +11,7 @@ namespace Gold_Diggerzz
 
     /*
      * current issues
-     * multiple dig day review shows 0 resources found, fix this
+     * cancelling buying employees doesn't work
      * you are allowed to make multiple trades per day
      * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
@@ -27,8 +27,6 @@ namespace Gold_Diggerzz
             castle can collapse
             lol turn it into a real estate game
         Fix trader logic because sister had -16iron after going to the trader.... long
-       Multiple day dig “overview” rather than individual printing of each day
-            “Digging done for the last 7 days here are the changes to your resources”
        If weather became fine, no more effects that day
        When one employee returns I get a big enumeration operation error
        (Check screenshots)
@@ -256,6 +254,7 @@ namespace Gold_Diggerzz
 
         public static void DisplayEmployees(Program program)
         {
+            Console.WriteLine("\n  ______                       _                                     \n |  ____|                     | |                                    \n | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___ \n |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|\n | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\\n |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/\n                      | |                   __/ |                    \n                      |_|                  |___/                     \n");
             Console.WriteLine("_____________________________________________________________________");
             int i = 0;
             foreach (Worker worker in program.retiredWorkersList)
@@ -447,10 +446,10 @@ namespace Gold_Diggerzz
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             _program.coal.Quantity += newResourcesFound;
                             _program.coal.TotalFound += newResourcesFound;
+                            newCoal += newResourcesFound;
                             
                             if (!multipleDayDig)
                             {
-                                newCoal += newResourcesFound;
                                 Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
                             }
                         }
@@ -461,10 +460,10 @@ namespace Gold_Diggerzz
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             _program.stone.Quantity += newResourcesFound;
                             _program.stone.TotalFound += newResourcesFound;
+                            newStone += newResourcesFound;
 
                             if (!multipleDayDig)
                             {
-                                newStone += newResourcesFound;
                                 Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
                             }
                         }
@@ -475,10 +474,10 @@ namespace Gold_Diggerzz
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             _program.iron.Quantity += newResourcesFound;
                             _program.iron.TotalFound += newResourcesFound;
+                            newIron += newResourcesFound;
                             
                             if (!multipleDayDig)
                             {
-                                newIron += newResourcesFound;
                                 Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
                             }
                         }
@@ -489,10 +488,10 @@ namespace Gold_Diggerzz
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             _program.gold.Quantity += newResourcesFound;
                             _program.gold.TotalFound += newResourcesFound;
+                            newGold += newResourcesFound;
                             
                             if (!multipleDayDig)
                             {
-                                newGold += newResourcesFound;
                                 Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
                             }
                         }
@@ -503,10 +502,10 @@ namespace Gold_Diggerzz
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
                             _program.diamond.Quantity += newResourcesFound;
                             _program.diamond.TotalFound += newResourcesFound;
+                            newDiamond += newResourcesFound;
 
                             if (!multipleDayDig)
                             {
-                                newDiamond += newResourcesFound;
                                 Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
                             }
                         }
@@ -736,10 +735,7 @@ namespace Gold_Diggerzz
                 _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
                 _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
                 _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
-
-                Console.WriteLine("___________________________________");
             }
-            
             
             if (multipleDayDig)
             {
@@ -1535,7 +1531,7 @@ namespace Gold_Diggerzz
             
             else if (!multipleDaysOrNot && randomChange < 1)
             { 
-                Console.WriteLine($"Prices have fallen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
+                Console.WriteLine($"Prices have fallen by {Math.Round(Math.Abs(randomChange * 100 - 100), 2)}% from what they were yesterday");
             }
         }
     }
@@ -2009,8 +2005,7 @@ namespace Gold_Diggerzz
                         break;
                     case 2:
                         _animation = false;
-                        Console.WriteLine(
-                            "\n___  ___        _  _    _         _        ______               ______  _        \n|  \\/  |       | || |  (_)       | |       |  _  \\              |  _  \\(_)       \n| .  . | _   _ | || |_  _  _ __  | |  ___  | | | | __ _  _   _  | | | | _   __ _ \n| |\\/| || | | || || __|| || '_ \\ | | / _ \\ | | | |/ _` || | | | | | | || | / _` |\n| |  | || |_| || || |_ | || |_) || ||  __/ | |/ /| (_| || |_| | | |/ / | || (_| |\n\\_|  |_/ \\__,_||_| \\__||_|| .__/ |_| \\___| |___/  \\__,_| \\__, | |___/  |_| \\__, |\n                          | |                             __/ |             __/ |\n                          |_|                            |___/             |___/ \n");
+                        Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(1, 30);
                         miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
@@ -2120,6 +2115,7 @@ namespace Gold_Diggerzz
 
                         break;
                     case 12:
+                        Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
                         Console.WriteLine(
                             $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
                         int employeesToSend = GetValidInt(-1, workersList.Count);
@@ -2150,11 +2146,12 @@ namespace Gold_Diggerzz
 
                         break;
                     case 13:
+                        Console.WriteLine("\n   _____                                   _   _                           _____          _                    \n  / ____|                                 (_) | |            /\\           / ____|        (_)                   \n | |        ___    _ __ ___    _ __ ___    _  | |_          /  \\         | |       _ __   _   _ __ ___     ___ \n | |       / _ \\  | '_ ` _ \\  | '_ ` _ \\  | | | __|        / /\\ \\        | |      | '__| | | | '_ ` _ \\   / _ \\\n | |____  | (_) | | | | | | | | | | | | | | | | |_        / ____ \\       | |____  | |    | | | | | | | | |  __/\n  \\_____|  \\___/  |_| |_| |_| |_| |_| |_| |_|  \\__|      /_/    \\_\\       \\_____| |_|    |_| |_| |_| |_|  \\___|\n");
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
                         Console.WriteLine("0 - NO IM SCARED OF GOING TO JAIL... CANCEL!!!");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
-                        int crimeChoice = GetValidInt(1, 2);
+                        int crimeChoice = GetValidInt(0, 2);
 
                         switch (crimeChoice)
                         {
@@ -2256,23 +2253,23 @@ namespace Gold_Diggerzz
                 if (inDebt == "true")
                 {
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     Console.WriteLine("You are in debt, bossman is coming for you");
                     Console.WriteLine(
-                        "The government will come and sell all your resources for 40% the current market rate");
+                        "The government will come and sell all your resources for 40% the current market rate...");
+                    Thread.Sleep(1500);
                     Console.WriteLine(
-                        $"Right now you have ${(Math.Round(dollars.Quantity), 2)}, {(Math.Round(coal.Quantity), 2)}kg of coal, {(Math.Round(stone.Quantity), 2)}kg of stone, {(Math.Round(iron.Quantity), 2)}kg of iron, {(Math.Round(gold.Quantity), 2)}kg of gold, and {(Math.Round(diamond.Quantity), 2)}kg of diamond");
+                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2}stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
                     Console.WriteLine("Unlucky bro...");
                     Thread.Sleep(750);
                     Console.WriteLine("After bossman stole your resources, you now have:");
 
-                    dollars.Quantity += (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                         iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                         diamond.Quantity * diamond.Price) * 0.4;
+                    double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                              iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                              diamond.Quantity * diamond.Price) * 0.4;
+                    dollars.Quantity += changeInDollars;
 
-                    _totalDollarsEarned += (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                            iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                            diamond.Quantity * diamond.Price) * 0.4;
+                    _totalDollarsEarned += changeInDollars;
 
                     coal.Quantity = 0;
                     stone.Quantity = 0;
