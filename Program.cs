@@ -12,37 +12,26 @@ namespace Gold_Diggerzz
     /*
      * current issues
      * you can not load a game state because of either casting issues or enumeration operation errors
-     * apparently price of gold fluctuates like crazy
-     * inconsistent between weather effect Displaying and actual
+     * inconsistent between weather effect displaying and actual time left
         * eg "6 days left of bad weather" but then it's only 5 days
      */
 
     /* to-do ideas
      * SAVE/LOAD GAME
      
-    More obvious weather effects
-    “What does the trader do”
-    Remove the “you found this much stone” on a multiple day dig - just show the final result
-    Get a certain number of resource to build something eg. a stone castle which given in income or other house
-        eg. a wedding happened or dracula came into the castle and scared away they guests
-        castle can collapse1
-        lol turn it into a real estate game
-    Fix trader logic because she has -16iron after going to the trader.... long
-    Print retirement days for each type of employee when hiring
-    
-    
-    It’s always raining
-       Market master emojis and other more obviousness for power ups
+        More obvious weather effects
+        “What does the trader do”
+        Get a certain number of resource to build something eg. a stone castle which given in income or other house
+            eg. a wedding happened or dracula came into the castle and scared away they guests
+            castle can collapse1
+            lol turn it into a real estate game
+        Fix trader logic because she has -16iron after going to the trader.... long
+       It’s always raining
        Recommendation to hire employees
-       Prices have fluctuated 10%% percentage twice
-       Profit sharing rounding
-       Rounding of prices risen by
-       “Let us cook” thread.sleep is too long
        Multiple day dig “overview” rather than individual printing of each day
             “Digging done for the last 7 days here are the changes to your resources”
        Only one weather effect per day
        If weather became fine, no more effects that day
-       Give your first employee a name
        When one employee returns I get a big enumeration operation error
        (Check screenshots)
     
@@ -144,7 +133,7 @@ namespace Gold_Diggerzz
                 Price = price * 0.5;
                 EmployeeIllProbability = employeeIllProbability * 2;
                 DefaultEfficiency = defaultEfficiency * 0.5;
-                DaysUntilRetirement = 60;
+                DaysUntilRetirement = 30;
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
@@ -348,8 +337,6 @@ namespace Gold_Diggerzz
                     {
                         if (_program._animation)
                         {
-                            Console.WriteLine("We are about to dig, let us cook");
-
                             // ASCII art animation for digging
                             string[] shovel = new string[]
                             {
@@ -364,12 +351,10 @@ namespace Gold_Diggerzz
                             };
 
                             Console.WriteLine("Starting to dig...");
-
-                            Thread.Sleep(1000);
-
+                            
                             for (int i = 0; i < 10; i++)
                             {
-                                Thread.Sleep(150);
+                                Thread.Sleep(125);
                                 Console.Clear();
                                 for (int j = 0; j < shovel.Length; j++)
                                 {
@@ -501,11 +486,12 @@ namespace Gold_Diggerzz
                         if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
                             !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound)
                         {
-                            Console.WriteLine("You found nothing today \ud83d\udeab");
+                            Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
                         }
 
                         if (ancientArtefactFound)
                         {
+                            Console.WriteLine("__________________________________________________________");
                             Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
                             Console.WriteLine("\nChoose an option:");
                             Console.WriteLine(
@@ -537,6 +523,7 @@ namespace Gold_Diggerzz
 
                         if (timeMachineFound)
                         {
+                            Console.WriteLine("__________________________________________________________");
                             Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
                             Console.WriteLine("\nChoose an option:");
                             Console.WriteLine(
@@ -564,6 +551,7 @@ namespace Gold_Diggerzz
 
                         if (magicTokenFound && _program.magicTokens.Quantity < _program.magicTokens.MaxQuantity)
                         {
+                            Console.WriteLine("__________________________________________________________");
                             _program.magicTokens.Quantity += 1;
                             Console.WriteLine(
                                 $"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
@@ -578,7 +566,8 @@ namespace Gold_Diggerzz
 
                         if (marketMasterFound)
                         {
-                            Console.WriteLine("You found the Market Master power up");
+                            Console.WriteLine("__________________________________________________________");
+                            Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
                             Console.WriteLine("Choose an option:");
                             Console.WriteLine(
                                 "1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
@@ -704,7 +693,7 @@ namespace Gold_Diggerzz
 
             else
             {
-                Console.WriteLine("Prices have fluctuated ± 10%% from what they were yesterday");
+                Console.WriteLine("Prices have fluctuated ± 10% from what they were yesterday");
             }
             
             DisplayStuff.DisplayResources(_program);
@@ -878,11 +867,11 @@ namespace Gold_Diggerzz
                             "  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
                         Console.WriteLine($"What type of employee do you want to hire?");
                         Console.WriteLine(
-                            $"1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x");
+                            $"1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
                         Console.WriteLine(
-                            $"2- Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x");
+                            $"2- Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
                         Console.WriteLine(
-                            $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x");
+                            $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
                         Console.WriteLine("4 - Cancel and return to market menu");
                         int employeeType = _program.GetValidInt(1, 4);
                         Console.WriteLine(
@@ -1140,11 +1129,11 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("Each employee gets 10% of your current $$$ stash");
                     Console.WriteLine(
-                        $"Your {_program.workersList.Count} employees get ${_program.dollars.Quantity * 0.1} each");
+                        $"Your {_program.workersList.Count} employees get ${Math.Round(_program.dollars.Quantity * 0.1, 2)} each");
                     double dollarsToLose = _program.dollars.Quantity * 0.1 * _program.workersList.Count;
                     _program.dollars.Quantity -= dollarsToLose;
                     Console.WriteLine(
-                        $"Your employees have been paid, you have lost $ {dollarsToLose} in the process");
+                        $"Your employees have been paid, you have lost $ {Math.Round(dollarsToLose, 2)} in the process");
                 }
 
                 else
@@ -1408,12 +1397,12 @@ namespace Gold_Diggerzz
 
             if (randomChange > 1)
             { 
-                Console.WriteLine($"Prices have risen by {randomChange * 100 - 100}% from what they were yesterday");
+                Console.WriteLine($"Prices have risen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
             }
             
             else if (randomChange < 1)
             { 
-                Console.WriteLine($"Prices have fallen by {randomChange * 100 - 100}% from what they were yesterday");
+                Console.WriteLine($"Prices have fallen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
             }
         }
     }
@@ -1664,7 +1653,7 @@ namespace Gold_Diggerzz
         public List<Worker> toSendToTrainingList = new();
 
         public List<Worker> workersList = new()
-            { new Worker("mid", "Your First Worker", 10, 100, 10, 1) };
+            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1) };
 
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
