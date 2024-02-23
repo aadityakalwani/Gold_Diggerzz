@@ -23,10 +23,28 @@ namespace Gold_Diggerzz
     More obvious weather effects
     “What does the trader do”
     Remove the “you found this much stone” on a multiple day dig - just show the final result
-    Get a certain number of resource to build something eg. a stone castle which given in income
+    Get a certain number of resource to build something eg. a stone castle which given in income or other house
+        eg. a wedding happened or dracula came into the castle and scared away they guests
+        castle can collapse1
         lol turn it into a real estate game
     Fix trader logic because she has -16iron after going to the trader.... long
     Print retirement days for each type of employee when hiring
+    
+    
+    It’s always raining
+       Market master emojis and other more obviousness for power ups
+       Recommendation to hire employees
+       Prices have fluctuated 10%% percentage twice
+       Profit sharing rounding
+       Rounding of prices risen by
+       “Let us cook” thread.sleep is too long
+       Multiple day dig “overview” rather than individual printing of each day
+            “Digging done for the last 7 days here are the changes to your resources”
+       Only one weather effect per day
+       If weather became fine, no more effects that day
+       Give your first employee a name
+       When one employee returns I get a big enumeration operation error
+       (Check screenshots)
     
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * a proper tutorial with images and arrows? (or just a better tutorial)
@@ -2474,7 +2492,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"8 - Convert {ironToGold.Ratio} iron --> gold");
             Console.WriteLine($"9 - Convert {ironToDiamond.Ratio} iron --> diamond");
             Console.WriteLine($"10 - Convert {goldToDiamond.Ratio} gold --> diamond");
-            Console.WriteLine("Remember, you can only make one trader per day. Choose wisely!");
+            Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
             Console.WriteLine("_________________________________________");
 
             int userTrade = GetValidInt(0, 10);
