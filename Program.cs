@@ -13,13 +13,13 @@ namespace Gold_Diggerzz
      * current issues
      * cancelling buying employees doesn't work
      * you are allowed to make multiple trades per day
-     * you can not load a game state because of either casting issues or enumeration operation errors
+     * LOAD GAME STATE
+        * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
         * eg "6 days left of bad weather" but then it's only 5 days
      */
 
     /* to-do ideas
-     * SAVE/LOAD GAME
      
     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * update ascii art for menu options
