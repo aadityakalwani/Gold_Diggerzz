@@ -21,26 +21,25 @@ namespace Gold_Diggerzz
     /* to-do ideas
      * SAVE/LOAD GAME
      
-        “What does the trader do”
-        Get a certain number of resource to build something eg. a stone castle which given in income or other house
-            eg. a wedding happened or dracula came into the castle and scared away they guests
-            castle can collapse
-            lol turn it into a real estate game
-        Fix trader logic because sister had -16iron after going to the trader.... long
-       If weather became fine, no more effects that day
-       When one employee returns I get a big enumeration operation error
-       (Check screenshots)
-    
-     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
+    * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * update ascii art for menu options
+     * Get a certain number of resource to build something eg. a stone castle which given in income or other house
+         * eg. a wedding happened or dracula came into the castle and scared away they guests
+         * castle can collapse
+         * lol turn it into a real estate game
+     * Fix trader logic because sister had -16iron after going to the trader.... long
+     * If weather became fine, no more effects that day
+     * When one employee returns I get a big enumeration operation error
+        * (Check screenshots)
      * a proper tutorial with images and arrows? (or just a better tutorial)
-     * when the tutorial is better, an option before the game starts to play the tutorial
+        * when the tutorial is better, an option before the game starts to play the tutorial
      * adding more incentive to keep playing
+        * option to print all achievements and show if unlocked or not yet 
         * goals to reach
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
      * OOP the weather effects
-     * * create morale and reputation
+     * create morale and reputation
      *  employee morale --> if morale is low, the employee could be less efficient.
         * morale-boosting powerup
      * the player could choose to offer them a retirement package in exchange for a morale boost for the remaining workers.
@@ -52,8 +51,9 @@ namespace Gold_Diggerzz
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
      * Trader's prices fluctuate (one of the factors can be reputation)
      * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
-     * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
+        * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * achievements are OOP-ed? idk about this one
+     * otherwise option to print all achievements as an incentive to work towards them/keep playing
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
      * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
      * loans - you can take a loan from the bank and pay it back with interest
@@ -582,12 +582,13 @@ namespace Gold_Diggerzz
 
                         if (magicTokenFound && _program.magicTokens.Quantity < _program.magicTokens.MaxQuantity)
                         {
-                            Console.WriteLine("__________________________________________________________");
-                            _program.magicTokens.Quantity += 1;
-                            Console.WriteLine(
-                                $"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
-                            Console.WriteLine(
-                                $"Selling price increased by a total of {_program.magicTokens.Quantity * 20}%");
+                            if (!multipleDayDig)
+                            {
+                                Console.WriteLine("__________________________________________________________");
+                                _program.magicTokens.Quantity += 1;
+                                Console.WriteLine($"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
+                                Console.WriteLine($"Selling price increased by a total of {_program.magicTokens.Quantity * 20}%");
+                            }
                             _program.coal.Price += _program.coal.InitialPrice * 0.2;
                             _program.stone.Price += _program.stone.InitialPrice * 0.2;
                             _program.iron.Price += _program.iron.InitialPrice * 0.2;
@@ -600,8 +601,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine("__________________________________________________________");
                             Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
                             Console.WriteLine("Choose an option:");
-                            Console.WriteLine(
-                                "1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
+                            Console.WriteLine("1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
                             Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
 
