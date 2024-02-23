@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
 
     /*
      * current issues
+     * you are allowed to make multiple trades per day
      * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
         * eg "6 days left of bad weather" but then it's only 5 days
@@ -19,18 +20,14 @@ namespace Gold_Diggerzz
     /* to-do ideas
      * SAVE/LOAD GAME
      
-        More obvious weather effects
         “What does the trader do”
         Get a certain number of resource to build something eg. a stone castle which given in income or other house
             eg. a wedding happened or dracula came into the castle and scared away they guests
-            castle can collapse1
+            castle can collapse
             lol turn it into a real estate game
-        Fix trader logic because she has -16iron after going to the trader.... long
-       It’s always raining
-       Recommendation to hire employees
+        Fix trader logic because sister had -16iron after going to the trader.... long
        Multiple day dig “overview” rather than individual printing of each day
             “Digging done for the last 7 days here are the changes to your resources”
-       Only one weather effect per day
        If weather became fine, no more effects that day
        When one employee returns I get a big enumeration operation error
        (Check screenshots)
@@ -58,18 +55,14 @@ namespace Gold_Diggerzz
      * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
      * achievements are OOP-ed? idk about this one
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
-     * a "mine collapse" event could temporarily reduce the player's digging efficiency and kill some employees ++ morale lost
-     * a tutorial mode that is actually functional
+     * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
      * loans - you can take a loan from the bank and pay it back with interest
-     * more power-ups
-        * "Resource Rush": This powerup could increase the amount of all resources found for a certain number of days.
-        * "Resource Radar" (for each resource): This powerup could increase the chance of finding a specific resource for a certain number of days. For example, if the powerup is activated for gold, then for the next few days, the chance of finding gold would be increased.
      * stock market feature (kinda done?)
          * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
      * managers that do shit
         * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies and you're also trying to beat them (give em a quadratic rate of growth)
+     * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth)
      */
 
     class Resource
@@ -329,13 +322,22 @@ namespace Gold_Diggerzz
         public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
 
         {
+            bool multipleDayDig = daysToDig > 1;
+            
+            // for multiple day dig outputs in one go
+            double newCoal = 0;
+            double newStone = 0;
+            double newIron = 0;
+            double newGold = 0;
+            double newDiamond = 0;
+            
             for (int days = 0; days < daysToDig; days++)
             {
                 if (_program.CheckIfInDebt() != "true")
                 {
                     if (!_program.skipDay.skipDayOrNot)
                     {
-                        if (_program._animation)
+                        if (!multipleDayDig)
                         {
                             // ASCII art animation for digging
                             string[] shovel = new string[]
@@ -391,11 +393,10 @@ namespace Gold_Diggerzz
                             }
 
                             Thread.Sleep(500);
+                            Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
+                            Console.WriteLine("Here are the changes to your resources:");
                             Console.Clear();
                         }
-
-                        Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
-                        Console.WriteLine("Here are the changes to your resources:");
 
                         // creating randoms for the chance of finding all the stuff
                         Random random = new Random();
@@ -408,14 +409,18 @@ namespace Gold_Diggerzz
                         int randomForMarketMaster = random.Next(0, 100);
                         int randomForTimeMachine = random.Next(0, 100);
                         int randomForMagicToken = random.Next(0, 100);
-
-
+                        
+                        
                         // if there is a changed chance of finding gold due to the Ancient Artefact powerup
                         if (_program._increasedGoldChanceDays != 0)
                         {
-                            Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
                             _program.gold.Probability = 50;
                             _program._increasedGoldChanceDays -= 1;
+                            
+                            if (!multipleDayDig)
+                            {
+                                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
+                            }
                         }
 
                         else
@@ -433,54 +438,75 @@ namespace Gold_Diggerzz
                         bool marketMasterFound = randomForMarketMaster < _program.marketMaster.Probability;
                         bool timeMachineFound = randomForTimeMachine < _program.timeMachine.Probability;
                         bool magicTokenFound = randomForMagicToken < _program.magicTokens.Probability;
-
-                        // update values within the resources dictionary
-
+                        
                         if (coalFound)
                         {
                             double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
                             _program.coal.Quantity += newResourcesFound;
                             _program.coal.TotalFound += newResourcesFound;
+                            
+                            if (!multipleDayDig)
+                            {
+                                newCoal += newResourcesFound;
+                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                            }
                         }
 
                         if (stoneFound)
                         {
                             double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
                             _program.stone.Quantity += newResourcesFound;
                             _program.stone.TotalFound += newResourcesFound;
+
+                            if (!multipleDayDig)
+                            {
+                                newStone += newResourcesFound;
+                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                            }
                         }
 
                         if (ironFound)
                         {
                             double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
                             _program.iron.Quantity += newResourcesFound;
                             _program.iron.TotalFound += newResourcesFound;
+                            
+                            if (!multipleDayDig)
+                            {
+                                newIron += newResourcesFound;
+                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                            }
                         }
 
                         if (goldFound)
                         {
                             double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
                             _program.gold.Quantity += newResourcesFound;
                             _program.gold.TotalFound += newResourcesFound;
+                            
+                            if (!multipleDayDig)
+                            {
+                                newGold += newResourcesFound;
+                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
+                            }
                         }
 
                         if (diamondFound)
                         {
                             double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
                             double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            Console.WriteLine(
-                                $"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
                             _program.diamond.Quantity += newResourcesFound;
                             _program.diamond.TotalFound += newResourcesFound;
+
+                            if (!multipleDayDig)
+                            {
+                                newDiamond += newResourcesFound;
+                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                            }
                         }
 
                         if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
@@ -594,71 +620,115 @@ namespace Gold_Diggerzz
                     }
 
                     // calendar/weather etc effects 
-                    Console.WriteLine("Here are the current active effects affecting your game:");
-
-                    if (_program._noWageDaysLeft != 0)
+                    if (!multipleDayDig)
                     {
-                        Console.WriteLine(
-                            $"You don't have to pay wages today, or for the next {_program._noWageDaysLeft} days");
-                        _program._noWageDaysLeft -= 1;
-                    }
+                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("Here are the current active effects affecting your game:");
 
-                    else
-                    {
-                        double totalWages = 0;
-                        foreach (Worker worker in _program.workersList)
+                        if (_program._noWageDaysLeft != 0)
                         {
-                            totalWages += worker.Wage;
+                            Console.WriteLine(
+                                $"You don't have to pay wages today, or for the next {_program._noWageDaysLeft} days");
+                            _program._noWageDaysLeft -= 1;
                         }
 
-                        _program.dollars.Quantity -= totalWages;
+                        else
+                        {
+                            double totalWages = 0;
+                            foreach (Worker worker in _program.workersList)
+                            {
+                                totalWages += worker.Wage;
+                            }
 
-                        Console.WriteLine(
-                            $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                            _program.dollars.Quantity -= totalWages;
+
+                            Console.WriteLine(
+                                $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                        }
+
+                        if (_program._badWeatherDaysLeft > 0)
+                        {
+                            _program._badWeatherDaysLeft -= 1;
+                            Console.WriteLine($"{_program._badWeatherDaysLeft} days left of torrential rain");
+                        }
+
+                        if (_program._hurricaneDaysLeft > 0)
+                        {
+                            _program._hurricaneDaysLeft -= 1;
+                            Console.WriteLine($"{_program._hurricaneDaysLeft} days left of hurricane");
+                        }
+
+                        if (_program._beautifulSkyDaysLeft > 0)
+                        {
+                            _program._beautifulSkyDaysLeft -= 1;
+                            Console.WriteLine($"{_program._beautifulSkyDaysLeft} days left of beautiful weather");
+                        }
+
+                        if (_program._marketMasterDaysLeft == 1)
+                        {
+                            _program._marketMasterDaysLeft = 0;
+                            Console.WriteLine("Your Market Master powerup is no longer active");
+                        }
+
+                        else if (_program._marketMasterDaysLeft > 1)
+                        {
+                            Console.WriteLine(
+                                $"{_program._marketMasterDaysLeft} days left of the Market Master powerup");
+                            _program._marketMasterDaysLeft -= 1;
+                        }
+                    
                     }
 
-                    if (_program._badWeatherDaysLeft > 0)
+                    if (multipleDayDig)
                     {
-                        _program._badWeatherDaysLeft -= 1;
-                        Console.WriteLine($"{_program._badWeatherDaysLeft} days left of torrential rain");
-                    }
+                        if (_program._noWageDaysLeft != 0)
+                        {
+                            _program._noWageDaysLeft -= 1;
+                        }
 
-                    if (_program._hurricaneDaysLeft > 0)
-                    {
-                        _program._hurricaneDaysLeft -= 1;
-                        Console.WriteLine($"{_program._hurricaneDaysLeft} days left of hurricane");
-                    }
+                        else
+                        {
+                            double totalWages = 0;
+                            foreach (Worker worker in _program.workersList)
+                            {
+                                totalWages += worker.Wage;
+                            }
 
-                    if (_program._beautifulSkyDaysLeft > 0)
-                    {
-                        _program._beautifulSkyDaysLeft -= 1;
-                        Console.WriteLine($"{_program._beautifulSkyDaysLeft} days left of beautiful weather");
-                    }
+                            _program.dollars.Quantity -= totalWages;
 
-                    if (_program._marketMasterDaysLeft == 1)
-                    {
-                        _program._marketMasterDaysLeft = 0;
-                        Console.WriteLine("Your Market Master powerup is no longer active");
-                    }
+                        }
 
-                    else if (_program._marketMasterDaysLeft > 1)
-                    {
-                        Console.WriteLine(
-                            $"{_program._marketMasterDaysLeft} days left of the Market Master powerup");
-                        _program._marketMasterDaysLeft -= 1;
+                        if (_program._badWeatherDaysLeft > 0)
+                        {
+                            _program._badWeatherDaysLeft -= 1;
+                        }
+
+                        if (_program._hurricaneDaysLeft > 0)
+                        {
+                            _program._hurricaneDaysLeft -= 1;
+                        }
+
+                        if (_program._beautifulSkyDaysLeft > 0)
+                        {
+                            _program._beautifulSkyDaysLeft -= 1;
+                        }
+
+                        if (_program._marketMasterDaysLeft == 1)
+                        {
+                            _program._marketMasterDaysLeft = 0;
+                        }
+
+                        else if (_program._marketMasterDaysLeft > 1)
+                        {
+                            _program._marketMasterDaysLeft -= 1;
+                        }
                     }
 
                     _program._currentDate = _program._currentDate.AddDays(1);
                 }
 
                 _program._totalDaysDug += 1;
-
-                if (daysToDig >= 2)
-                {
-                    Console.WriteLine($"Current balance = {Math.Round(_program.dollars.Quantity, 2)}");
-                    Console.WriteLine($"There are {daysToDig - days - 1} days left to dig");
-                }
-
+                
                 // post-digging effects
                 _DayToDayOperations.CalendarEffects(_program);
                 _DayToDayOperations.WeatherEffects(_program);
@@ -667,10 +737,22 @@ namespace Gold_Diggerzz
 
                 Console.WriteLine("___________________________________");
             }
+            
+            
+            if (multipleDayDig)
+            {
+                Console.WriteLine("__________________________________________________________");
+                Console.WriteLine($"Here are the changes to your resources after {daysToDig} days of digging:");
+                Console.WriteLine($"You found {Math.Round(newCoal, 2)}kg of coal");
+                Console.WriteLine($"You found {Math.Round(newStone, 2)}kg of stone");
+                Console.WriteLine($"You found {Math.Round(newIron, 2)}kg of iron");
+                Console.WriteLine($"You found {Math.Round(newGold, 2)}kg of gold");
+                Console.WriteLine($"You found {Math.Round(newDiamond, 2)}kg of diamond");
+            }
 
             _DayToDayOperations.CheckAchievements(achievements, _program);
 
-            Console.WriteLine($"After {daysToDig} days of digging, here are your updated resources:");
+            Console.WriteLine($"Here are your updated resources:");
             DisplayStuff.DisplayResources(_program);
 
             _program.skipDay.skipDayOrNot = false;
@@ -1003,6 +1085,7 @@ namespace Gold_Diggerzz
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     " \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
                 foreach (Worker worker in _program.workersList)
@@ -1014,8 +1097,9 @@ namespace Gold_Diggerzz
             }
 
             // rain reducing efficiency
-            else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
+            else if (random.Next(0, 100) < 25 && noActiveWeatherEffects)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
                 foreach (Worker worker in _program.workersList)
@@ -1029,6 +1113,7 @@ namespace Gold_Diggerzz
             // 30% chance beautiful sky increasing efficiency
             else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     "\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
                 foreach (Worker worker in _program.workersList)
@@ -1048,6 +1133,7 @@ namespace Gold_Diggerzz
             // every 10 days, probability of finding resources is reduced by 5%
             if (_program._currentDate.Day % 10 == 0)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     "Congratulations for surviving for another 10 days. The game is now getting even harder...");
                 Console.WriteLine(
@@ -1062,6 +1148,7 @@ namespace Gold_Diggerzz
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (_program._currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine("It's the weekend, your employees want 30% more pay");
                 _program._currentWageRate *= 1.3;
                 foreach (Worker workers in _program.workersList)
@@ -1084,6 +1171,7 @@ namespace Gold_Diggerzz
             // to undo the effects of the crash
             if (_program._crashDaysLeft > 1)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
                 _program.coal.Price *= 2;
                 _program.stone.Price *= 2;
@@ -1096,6 +1184,7 @@ namespace Gold_Diggerzz
 
             if (_program._currentDate.Day == _program._crashDate && _program._crashDaysLeft == 0)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     "\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
 
@@ -1111,6 +1200,7 @@ namespace Gold_Diggerzz
             // 10% raise on the first of every month (apart from January)
             if (_program._currentDate.Month != 1 && _program._currentDate.Day == 1)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine(
                     "\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
                 _program._currentWageRate *= 1.1;
@@ -1123,6 +1213,7 @@ namespace Gold_Diggerzz
             // 10% profit sharing to each employee on the 15th of every month
             if (_program._currentDate.Day == 15)
             {
+                Console.WriteLine("__________________________________________________________");
                 Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
 
                 if (_program.workersList.Count < 7)
@@ -1140,7 +1231,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine(
                         "Because you have so many employees, 70% of your current $$$ stash is given to them");
-                    Console.WriteLine($"This means you'll lose {_program.dollars.Quantity * 0.7}");
+                    Console.WriteLine($"This means you'll lose {Math.Round(_program.dollars.Quantity * 0.7, 2)}");
                     _program.dollars.Quantity -= _program.dollars.Quantity * 0.7;
                 }
             }
