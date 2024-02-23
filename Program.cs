@@ -14,24 +14,20 @@ namespace Gold_Diggerzz
      * you can not load a game state because of either casting issues or enumeration operation errors
      * apparently price of gold fluctuates like crazy
      * inconsistent between weather effect Displaying and actual
-     * eg "6 days left of bad weather" but then it's only 5 days
+        * eg "6 days left of bad weather" but then it's only 5 days
      */
 
     /* to-do ideas
      * SAVE/LOAD GAME
-     * Enter your choice instead of “your choice”
-       
-        More obvious weather effects
-        “What does the trader do”
-        Print resources as you enter the market
-        Remove the “you found this much stone” on a multiple day dig - just show the final result
-        Prices are 4% what they were
-        Should say “104%”
-        Get a certain number of resource to build something
-        Fix trader logic because she has -16iron
-        Print retirement days for each type of employee when hiring
-        Option to cancel commiting a crime
-       
+     
+    More obvious weather effects
+    “What does the trader do”
+    Remove the “you found this much stone” on a multiple day dig - just show the final result
+    Get a certain number of resource to build something eg. a stone castle which given in income
+        lol turn it into a real estate game
+    Fix trader logic because she has -16iron after going to the trader.... long
+    Print retirement days for each type of employee when hiring
+    
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
      * a proper tutorial with images and arrows? (or just a better tutorial)
      * when the tutorial is better, an option before the game starts to play the tutorial
@@ -692,6 +688,8 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Prices have fluctuated ± 10%% from what they were yesterday");
             }
+            
+            DisplayStuff.DisplayResources(_program);
 
             Console.WriteLine($"Here are the rates for {_program._currentDate:dddd dd MMMM, yyyy}:");
 
@@ -1390,7 +1388,15 @@ namespace Gold_Diggerzz
             _program.gold.Price *= randomChange;
             _program.diamond.Price *= randomChange;
 
-            Console.WriteLine($"Prices are {randomChange * 100 - 100}% what they were yesterday");
+            if (randomChange > 1)
+            { 
+                Console.WriteLine($"Prices have risen by {randomChange * 100 - 100}% from what they were yesterday");
+            }
+            
+            else if (randomChange < 1)
+            { 
+                Console.WriteLine($"Prices have fallen by {randomChange * 100 - 100}% from what they were yesterday");
+            }
         }
     }
     
@@ -2006,21 +2012,18 @@ namespace Gold_Diggerzz
                         break;
                     case 13:
                         Console.WriteLine("You've chosen to commit a crime. Choose an option:");
-                        Console.WriteLine(
-                            $"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
-                        Console.WriteLine(
-                            $"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
+                        Console.WriteLine("0 - NO IM SCARED OF GOING TO JAIL... CANCEL!!!");
+                        Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                        Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(1, 2);
 
                         switch (crimeChoice)
                         {
                             case 1:
-                                Console.WriteLine(
-                                    $"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                                Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
                                 dollars.Quantity -= stockMarketCrash.Price;
                                 Console.WriteLine("Giving you the information now...");
-                                Console.WriteLine(
-                                    $"Expect a stock market crash on the {_crashDate}th of every month");
+                                Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
                             case 2:
                                 Console.WriteLine("You have chosen to bribe the government");
@@ -2086,7 +2089,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
                 Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save & quit                          (15) |\n");
-                Console.WriteLine("Your choice:");
+                Console.WriteLine("Enter your choice:");
 
                 int userOption = GetValidInt(0, 15);
                 Console.Clear();
