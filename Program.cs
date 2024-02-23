@@ -263,7 +263,11 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
-            Console.WriteLine("_____________________________________________________________________");
+            if (program.retiredWorkersList.Count != 0)
+            {
+                Console.WriteLine("_____________________________________________________________________");
+            }
+            
             Console.WriteLine("Here are your current working employees:");
             int j = 0;
             double totalWages = 0;
@@ -274,10 +278,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
-            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine("___________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
             Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
-            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine("___________________________________________________________");
         }
     }
 
@@ -731,7 +735,7 @@ namespace Gold_Diggerzz
                 _program._totalDaysDug += 1;
                 
                 // post-digging effects
-                _DayToDayOperations.CalendarEffects(_program);
+                _DayToDayOperations.CalendarEffects(_program, multipleDayDig);
                 _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
                 _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
                 _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
@@ -1148,7 +1152,7 @@ namespace Gold_Diggerzz
 
         }
 
-        public void CalendarEffects(Program _program)
+        public void CalendarEffects(Program _program, bool MultipleDaysOrNot)
         {
             // weekend pay, stock market crash, wage increase, employee illness, profit sharing, reduced probability of finding resources
 
@@ -1170,9 +1174,13 @@ namespace Gold_Diggerzz
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
             if (_program._currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine("It's the weekend, your employees want 30% more pay");
-                _program._currentWageRate *= 1.3;
+                if (!MultipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("It's the weekend, your employees want 30% more pay today and tomorrow");
+                }
+
+            _program._currentWageRate *= 1.3;
                 foreach (Worker workers in _program.workersList)
                 {
                     workers.Wage *= 1.3;
@@ -1193,8 +1201,12 @@ namespace Gold_Diggerzz
             // to undo the effects of the crash
             if (_program._crashDaysLeft > 1)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
+                if (!MultipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
+                }
+                
                 _program.coal.Price *= 2;
                 _program.stone.Price *= 2;
                 _program.iron.Price *= 2;
@@ -1206,9 +1218,13 @@ namespace Gold_Diggerzz
 
             if (_program._currentDate.Day == _program._crashDate && _program._crashDaysLeft == 0)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine(
-                    "\ud83d\udcc9 The stock market has crashed, your iron and gold prices have plummeted but you can hire employees for cheaper \ud83d\udcc9");
+                if (!MultipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine(
+                        "\ud83d\udcc9 The stock market has crashed; prices for everything have plummeted \ud83d\udcc9");
+                    Console.WriteLine("(\ud83d\ude09 Now is the best time to hire employees \ud83d\ude09)");
+                }
 
                 _program.coal.Price /= 2;
                 _program.stone.Price /= 2;
@@ -1222,9 +1238,13 @@ namespace Gold_Diggerzz
             // 10% raise on the first of every month (apart from January)
             if (_program._currentDate.Month != 1 && _program._currentDate.Day == 1)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine(
-                    "\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
+                if (!MultipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine(
+                        "\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
+                }
+                
                 _program._currentWageRate *= 1.1;
                 foreach (Worker workers in _program.workersList)
                 {
@@ -1967,7 +1987,7 @@ namespace Gold_Diggerzz
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
+            Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
             Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
