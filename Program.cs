@@ -11,6 +11,7 @@ namespace Gold_Diggerzz
 
     /*
      * current issues
+     * multiple dig day review shows 0 resources found, fix this
      * you are allowed to make multiple trades per day
      * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
@@ -33,6 +34,7 @@ namespace Gold_Diggerzz
        (Check screenshots)
     
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
+     * update ascii art for menu options
      * a proper tutorial with images and arrows? (or just a better tutorial)
      * when the tutorial is better, an option before the game starts to play the tutorial
      * adding more incentive to keep playing
@@ -351,8 +353,7 @@ namespace Gold_Diggerzz
                                 "       ||",
                                 "       ||"
                             };
-
-                            Console.WriteLine("Starting to dig...");
+                            
                             
                             for (int i = 0; i < 10; i++)
                             {
@@ -393,6 +394,7 @@ namespace Gold_Diggerzz
                             }
 
                             Thread.Sleep(500);
+                            Console.WriteLine("___________________________________________________________________________");
                             Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
                             Console.WriteLine("Here are the changes to your resources:");
                             Console.Clear();
@@ -532,7 +534,7 @@ namespace Gold_Diggerzz
                                     _program.UsePowerUp(1, 1);
                                     break;
                                 case 2:
-                                    _program.UsePowerUp(1, 1);
+                                    _program.UsePowerUp(1, 2);
                                     break;
                                 case 3:
                                     if (_program.ancientArtefact.Quantity < _program.ancientArtefact.MaxQuantity)
@@ -731,9 +733,9 @@ namespace Gold_Diggerzz
                 
                 // post-digging effects
                 _DayToDayOperations.CalendarEffects(_program);
-                _DayToDayOperations.WeatherEffects(_program);
-                _DayToDayOperations.DealWithEmployees(_program);
-                _DayToDayOperations.FluctuatePrices(_program);
+                _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
+                _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
+                _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
 
                 Console.WriteLine("___________________________________");
             }
@@ -752,6 +754,7 @@ namespace Gold_Diggerzz
 
             _DayToDayOperations.CheckAchievements(achievements, _program);
 
+            Console.WriteLine("__________________________________________________________");
             Console.WriteLine($"Here are your updated resources:");
             DisplayStuff.DisplayResources(_program);
 
@@ -1040,7 +1043,7 @@ namespace Gold_Diggerzz
 
     class DayToDayOperations
     {
-        public void WeatherEffects(Program _program)
+        public void WeatherEffects(Program _program, bool multipleDaysOrNot)
         {
             Random random = new Random();
 
@@ -1049,8 +1052,12 @@ namespace Gold_Diggerzz
             // undoing weather effects 
             if (_program._badWeatherDaysLeft == 1)
             {
-                Console.WriteLine(
-                    "\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine(
+                        "\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                }
+                
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency *= 1.3;
@@ -1059,8 +1066,11 @@ namespace Gold_Diggerzz
 
             if (_program._beautifulSkyDaysLeft == 1)
             {
-                Console.WriteLine(
-                    "\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine(
+                        "\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                }
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency /= 1.2;
@@ -1071,8 +1081,12 @@ namespace Gold_Diggerzz
 
             if (_program._hurricaneDaysLeft == 1)
             {
-                Console.WriteLine(
-                    "\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine(
+                        "\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
+                }
+
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency *= 1.4;
@@ -1085,9 +1099,13 @@ namespace Gold_Diggerzz
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
             if (random.Next(0, 100) < 5 && noActiveWeatherEffects)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine(
-                    " \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine(
+                        " \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
+                }
+                
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency /= 1.4;
@@ -1099,9 +1117,13 @@ namespace Gold_Diggerzz
             // rain reducing efficiency
             else if (random.Next(0, 100) < 25 && noActiveWeatherEffects)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine(
-                    "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine(
+                        "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
+                }
+                
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency /= 1.3;
@@ -1113,9 +1135,13 @@ namespace Gold_Diggerzz
             // 30% chance beautiful sky increasing efficiency
             else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
             {
-                Console.WriteLine("__________________________________________________________");
-                Console.WriteLine(
-                    "\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine(
+                        "\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
+                }
+                
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.DefaultEfficiency *= 1.2;
@@ -1237,7 +1263,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        public void DealWithEmployees(Program _program)
+        public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
 
             Random random = new Random();
@@ -1263,11 +1289,15 @@ namespace Gold_Diggerzz
 
                 if (worker.DaysUntilRetirement == 0)
                 {
-                    Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
                     worker.RetirementDate = _program._currentDate.Date;
                     _program.retiredWorkersList.Add(worker);
                     _program.workersList.Remove(worker);
-                    Console.WriteLine($"You now have {_program.workersList.Count} employees");
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
+                        Console.WriteLine($"You now have {_program.workersList.Count} employees");
+                    }
+                    
                 }
             }
 
@@ -1276,8 +1306,12 @@ namespace Gold_Diggerzz
             {
                 if (worker.ReturnToWorkDate == _program._currentDate.Date)
                 {
-                    Console.WriteLine(
-                        $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine(
+                            $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
+                    }
+                    
                     _program.trainingWorkersList.Remove(worker);
                     _program.workersList.Add(worker);
                 }
@@ -1292,8 +1326,12 @@ namespace Gold_Diggerzz
                 {
                     if (random.Next(0, 100) < worker.EmployeeIllProbability)
                     {
-                        Console.WriteLine(
-                            $"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        if (!multipleDaysOrNot)
+                        {
+                            Console.WriteLine(
+                                $"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                        }
+                        
                         newlyIllWorkers.Add(worker);
                     }
                 }
@@ -1314,8 +1352,12 @@ namespace Gold_Diggerzz
             {
                 if (worker.IsIll && worker.ReturnToWorkDate == _program._currentDate.Date)
                 {
-                    Console.WriteLine(
-                        $"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine(
+                            $"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                    }
+                    
                     noLongerIllWorkersList.Add(worker);
                 }
             }
@@ -1474,7 +1516,7 @@ namespace Gold_Diggerzz
             }
         }
 
-        public void FluctuatePrices(Program _program)
+        public void FluctuatePrices(Program _program, bool multipleDaysOrNot)
         {
             // upto a 20% fluctuation in prices based on random probability
             Random random = new Random();
@@ -1486,12 +1528,12 @@ namespace Gold_Diggerzz
             _program.gold.Price *= randomChange;
             _program.diamond.Price *= randomChange;
 
-            if (randomChange > 1)
+            if (!multipleDaysOrNot && randomChange > 1)
             { 
                 Console.WriteLine($"Prices have risen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
             }
             
-            else if (randomChange < 1)
+            else if (!multipleDaysOrNot && randomChange < 1)
             { 
                 Console.WriteLine($"Prices have fallen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
             }
@@ -1963,7 +2005,6 @@ namespace Gold_Diggerzz
                         break;
                     case 1:
                         _animation = true;
-                        Console.WriteLine("You have chosen to dig one day");
                         miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         break;
                     case 2:
