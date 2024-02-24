@@ -282,6 +282,8 @@ namespace Gold_Diggerzz
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
             Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("___________________________________________________________");
+            Console.WriteLine("\n\n[ENTER]");
+            Console.ReadLine();
         }
     }
 
@@ -787,7 +789,7 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("__________________________________________________________");
             Console.WriteLine(
-                $"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg           | Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
+                $"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg           | Stone: {Math.Round(_program.stone.Price, 2)} per kg");
             Console.WriteLine(
                 $"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg          | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
             Console.WriteLine(
@@ -952,9 +954,9 @@ namespace Gold_Diggerzz
                             "  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
                         Console.WriteLine($"What type of employee do you want to hire?");
                         Console.WriteLine(
-                            $"1- Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
+                            $"1 - Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
                         Console.WriteLine(
-                            $"2- Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
+                            $"2 - Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
                         Console.WriteLine(
                             $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
                         Console.WriteLine("4 - Cancel and return to market menu");
@@ -1305,6 +1307,7 @@ namespace Gold_Diggerzz
 
                 if (worker.DaysUntilRetirement == 0)
                 {
+                    Program._usedNames.Remove(worker.Name);
                     worker.RetirementDate = _program._currentDate.Date;
                     _program.retiredWorkersList.Add(worker);
                     _program.workersList.Remove(worker);
@@ -1947,7 +1950,7 @@ namespace Gold_Diggerzz
             "Ronda Rousey-n-feathers"
         };
 
-        private static List<string> _usedNames = new List<string>();
+        public static List<string> _usedNames = new ();
 
         # endregion
 
@@ -2182,13 +2185,27 @@ namespace Gold_Diggerzz
                                 Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                 break;
                             case 2:
-                                Console.WriteLine("You have chosen to bribe the government");
-                                Console.WriteLine($"You have been charged {bribe.Price} for the bribe");
-                                dollars.Quantity -= bribe.Price;
-                                Console.WriteLine("You don't have to pay wages for the next three days");
-                                _noWageDaysLeft = 3;
-                                _totalBribes += 1;
+                                if (dollars.Quantity > bribe.Price)
+                                {
+                                    Console.WriteLine("You have chosen to bribe the government");
+                                    Console.WriteLine($"You have been charged {bribe.Price} for the bribe");
+                                    dollars.Quantity -= bribe.Price;
+                                    Console.WriteLine("You don't have to pay wages for the next three days");
+                                    _noWageDaysLeft = 3;
+                                    _totalBribes += 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\u274c You can't afford to do this broke \u274c");
+                                }
+
                                 break;
+
+                                
+
+                                
+                                
                         }
 
                         break;
@@ -2244,7 +2261,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup                             |");
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
-                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save & quit                          (15) |\n");
+                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                          (15) |\n");
                 Console.WriteLine("Enter your choice:");
 
                 int userOption = GetValidInt(0, 15);
