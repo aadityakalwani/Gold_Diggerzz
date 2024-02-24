@@ -20,11 +20,12 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      
+     * OOP the weather effects
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * remove printed line at the start that says:
         * /Library/Frameworks/Mono.framework/Versions/6. 12. O/bin/mono-sgen64 /Users/aadityakalwani/Documents/Coding/Gold_Diggerzz/bin/Debug/Gold_Diggerzz. exe 
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved
-     * Get a certain number of resource to build something eg. a stone castle which given in income or other house
+     * Get a certain number of resource to build something eg. a stone castle which gives income or a house or a flat or a mansion
          * eg. a wedding happened or dracula came into the castle and scared away they guests, castle can collapse etc
          * lol turn it into a real estate game
      * Fix trader logic because sister had -16iron after going to the trader.... long
@@ -36,11 +37,10 @@ namespace Gold_Diggerzz
         * goals to reach
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
-     * OOP the weather effects
      * create morale and reputation
      *  employee morale --> if morale is low, the employee could be less efficient.
         * morale-boosting powerup
-     * the player could choose to offer them a retirement package in exchange for a morale boost for the remaining workers.
+     * player can offer employees a retirement package in exchange for a morale boost for the remaining workers
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
@@ -1980,16 +1980,16 @@ namespace Gold_Diggerzz
             program.bribe = new PayForStuff(200);
             program.trainingCourse = new PayForStuff(400);
 
-            program.coalToStone = new Trade(2, program.coal, program.stone);
-            program.coalToIron = new Trade(5, program.coal, program.iron);
-            program.coalToGold = new Trade(12, program.coal, program.gold);
-            program.coalToDiamond = new Trade(70, program.coal, program.diamond);
-            program.stoneToIron = new Trade(3, program.stone, program.iron);
-            program.stoneToGold = new Trade(13, program.stone, program.gold);
-            program.stoneToDiamond = new Trade(40, program.stone, program.diamond);
-            program.ironToGold = new Trade(5, program.iron, program.gold);
-            program.ironToDiamond = new Trade(16, program.iron, program.diamond);
-            program.goldToDiamond = new Trade(3, program.gold, program.diamond);
+            program.coalToStone = new Trade(2 * (_random.Next(80,100)/100), program.coal, program.stone);
+            program.coalToIron = new Trade(5 * (_random.Next(80,100)/100), program.coal, program.iron);
+            program.coalToGold = new Trade(12 * (_random.Next(80,100)/100), program.coal, program.gold);
+            program.coalToDiamond = new Trade(70 * (_random.Next(80,100)/100), program.coal, program.diamond);
+            program.stoneToIron = new Trade(3 * (_random.Next(80,100)/100), program.stone, program.iron);
+            program.stoneToGold = new Trade(13 * (_random.Next(80,100)/100), program.stone, program.gold);
+            program.stoneToDiamond = new Trade(40 * (_random.Next(80,100)/100), program.stone, program.diamond);
+            program.ironToGold = new Trade(5 * (_random.Next(80,100)/100), program.iron, program.gold);
+            program.ironToDiamond = new Trade(16 * (_random.Next(80,100)/100), program.iron, program.diamond);
+            program.goldToDiamond = new Trade(3 * (_random.Next(80,100)/100), program.gold, program.diamond);
 
             # endregion
 
