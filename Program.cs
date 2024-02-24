@@ -9,9 +9,8 @@ namespace Gold_Diggerzz
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
 
-    /*
-     * current issues
-     * cancelling buying employees doesn't work
+    /* current issues
+     
      * you are allowed to make multiple trades per day
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
@@ -21,16 +20,15 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      
-    * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class
-     * update ascii art for menu options
+     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
+     * remove printed line at the start that says:
+        * /Library/Frameworks/Mono.framework/Versions/6. 12. O/bin/mono-sgen64 /Users/aadityakalwani/Documents/Coding/Gold_Diggerzz/bin/Debug/Gold_Diggerzz. exe 
+     * update ascii art for menu options: achievements, tutorial, use powerups, game state saved
      * Get a certain number of resource to build something eg. a stone castle which given in income or other house
-         * eg. a wedding happened or dracula came into the castle and scared away they guests
-         * castle can collapse
+         * eg. a wedding happened or dracula came into the castle and scared away they guests, castle can collapse etc
          * lol turn it into a real estate game
      * Fix trader logic because sister had -16iron after going to the trader.... long
      * If weather became fine, no more effects that day
-     * When one employee returns I get a big enumeration operation error
-        * (Check screenshots)
      * a proper tutorial with images and arrows? (or just a better tutorial)
         * when the tutorial is better, an option before the game starts to play the tutorial
      * adding more incentive to keep playing
@@ -50,11 +48,9 @@ namespace Gold_Diggerzz
         * as the mine gets emptier, chance of finding resources decreases
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
      * Trader's prices fluctuate (one of the factors can be reputation)
-     * Introduce Difficulty Levels: You can introduce difficulty levels that the player can choose at the start of the game.
-        * Higher difficulty levels can have more frequent negative events, higher costs, and lower probabilities of finding resources.
-     * achievements are OOP-ed? idk about this one
+     * achievements are OOP-ed? idk about this one - give it some thought
      * otherwise option to print all achievements as an incentive to work towards them/keep playing
-     * earthquakes that loosen soil and make shit easier to find (+ cool animations possible)
+     * earthquakes that loosen soil and make shit easier to find (+ cool animations possible) ++ kill some employees ++ morale lost
      * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
      * loans - you can take a loan from the bank and pay it back with interest
      * stock market feature (kinda done?)
@@ -62,7 +58,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth)
+     * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth?)
      */
 
     class Resource
@@ -1322,6 +1318,8 @@ namespace Gold_Diggerzz
             }
 
             // workers that return (due to training course)
+
+            List<Worker> tempList = new();
             foreach (Worker worker in _program.trainingWorkersList)
             {
                 if (worker.ReturnToWorkDate == _program._currentDate.Date)
@@ -1333,9 +1331,15 @@ namespace Gold_Diggerzz
                     }
                     
                     _program.trainingWorkersList.Remove(worker);
-                    _program.workersList.Add(worker);
+                    tempList.Add(worker);
                 }
             }
+
+            foreach (Worker worker in tempList)
+            {
+                _program.workersList.Add(worker);
+            }
+            
 
             // unwell workers
             if (_program.workersList.Count > 1)
@@ -2610,13 +2614,26 @@ namespace Gold_Diggerzz
                         efficiency /= 100;
                     }
 
-                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate,
-                        _currentEmployeePrice, _currentEmployeeIllProbability, efficiency);
+                    double employeePrice = 0;
+
+                    if (type == "bad")
+                    {
+                        employeePrice = 50;
+                    }
+                    if (type == "mid")
+                    {
+                        employeePrice = 100;
+                    }
+                    if (type == "good")
+                    {
+                        employeePrice = 200;
+                    }
+
+                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine(
-                        $"{newWorker.Name}, Efficiency {Math.Round(newWorker.DefaultEfficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.DefaultEfficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
 
                     // updating bribe price
                     bribe.Price = _currentWageRate * workersList.Count * 2;
@@ -2635,9 +2652,11 @@ namespace Gold_Diggerzz
             Console.WriteLine(
                 "             _______                      _               \n            |__   __|                    | |              \n               | |     _ __    __ _    __| |   ___   _ __ \n               | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n               | |    | |    | (_| | | (_| | |  __/ | |   \n               |_|    |_|     \\__,_|  \\__,_|  \\___| |_|");
             Console.ResetColor();
+            
             DisplayStuff.DisplayResources(this);
-            Console.WriteLine("Here are the options for today:");
-            Console.WriteLine("\n0 - Cancel and return");
+            
+            Console.WriteLine("Here are the options for today:\n");
+            Console.WriteLine("0 - Cancel and return");
             Console.WriteLine($"1 - Convert {coalToStone.Ratio} coal --> stone");
             Console.WriteLine($"2 - Convert {coalToIron.Ratio} coal --> iron");
             Console.WriteLine($"3 - Convert {coalToGold.Ratio} coal --> gold");
