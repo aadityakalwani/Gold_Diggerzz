@@ -960,12 +960,16 @@ namespace Gold_Diggerzz
                         Console.WriteLine(
                             $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
                         Console.WriteLine("4 - Cancel and return to market menu");
+                        
                         int employeeType = _program.GetValidInt(1, 4);
-                        Console.WriteLine(
-                            $"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
-                        int employeesToHire = _program.GetValidInt(0, 163);
-                        switch (employeeType)
+                        
+                        if (employeeType != 4)
                         {
+                            Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
+                            
+                            int employeesToHire = _program.GetValidInt(0, 163);
+                            switch (employeeType)
+                            {
                             case 1:
                                 if (employeesToHire * _program._currentEmployeePrice * 0.5 >
                                     _program.dollars.Quantity)
@@ -1025,11 +1029,8 @@ namespace Gold_Diggerzz
                                     Console.WriteLine($"You now have {_program.workersList.Count} total employees");
                                     _program._totalEmployeesHired += employeesToHire;
                                 }
-
                                 break;
-                            case 4:
-                                Console.WriteLine("Returning to the market menu...");
-                                break;
+                            }
                         }
 
                         break;
