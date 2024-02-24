@@ -2657,16 +2657,16 @@ namespace Gold_Diggerzz
             
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {coalToStone.Ratio} coal --> stone");
-            Console.WriteLine($"2 - Convert {coalToIron.Ratio} coal --> iron");
-            Console.WriteLine($"3 - Convert {coalToGold.Ratio} coal --> gold");
-            Console.WriteLine($"4 - Convert {coalToDiamond.Ratio} coal --> diamond");
-            Console.WriteLine($"5 - Convert {stoneToIron.Ratio} stone --> iron");
-            Console.WriteLine($"6 - Convert {stoneToGold.Ratio} stone --> gold");
-            Console.WriteLine($"7 - Convert {stoneToDiamond.Ratio} stone --> diamond");
-            Console.WriteLine($"8 - Convert {ironToGold.Ratio} iron --> gold");
-            Console.WriteLine($"9 - Convert {ironToDiamond.Ratio} iron --> diamond");
-            Console.WriteLine($"10 - Convert {goldToDiamond.Ratio} gold --> diamond");
+            Console.WriteLine($"1 - Convert {Math.Round(coalToStone.Ratio,2)} coal --> stone");
+            Console.WriteLine($"2 - Convert {Math.Round(coalToIron.Ratio, 2)} coal --> iron");
+            Console.WriteLine($"3 - Convert {Math.Round(coalToGold.Ratio, 2)} coal --> gold");
+            Console.WriteLine($"4 - Convert {Math.Round(coalToDiamond.Ratio, 2)} coal --> diamond");
+            Console.WriteLine($"5 - Convert {Math.Round(stoneToIron.Ratio, 2)} stone --> iron");
+            Console.WriteLine($"6 - Convert {Math.Round(stoneToGold.Ratio, 2)} stone --> gold");
+            Console.WriteLine($"7 - Convert {Math.Round(stoneToDiamond.Ratio, 2)} stone --> diamond");
+            Console.WriteLine($"8 - Convert {Math.Round(ironToGold.Ratio, 2)} iron --> gold");
+            Console.WriteLine($"9 - Convert {Math.Round(ironToDiamond.Ratio, 2)} iron --> diamond");
+            Console.WriteLine($"10 - Convert {Math.Round(goldToDiamond.Ratio, 2)} gold --> diamond");
             Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
             Console.WriteLine("_________________________________________");
 
