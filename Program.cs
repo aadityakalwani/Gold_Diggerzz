@@ -12,6 +12,9 @@ namespace Gold_Diggerzz
     /* current issues
      
      * you are allowed to make multiple trades per day
+       weird bad printing of weather effects
+       hiring a bad employee gives it an efficiency of 0
+       employees that are ill don't have the weather effect multiplier applied to them
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
@@ -98,7 +101,21 @@ namespace Gold_Diggerzz
 
         public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency)
         {
-            if (type == "mid")
+            if (type == "bad")
+            {
+                Type = "bad";
+                Name = name;
+                Wage = wage * 0.5;
+                Price = price * 0.5;
+                EmployeeIllProbability = employeeIllProbability * 2;
+                efficiency = Efficiency * 0.5;
+                DaysUntilRetirement = 30;
+                IsIll = false;
+                HireDate = DateTime.Today;
+                ReturnToWorkDate = DateTime.Today;
+            }
+            
+            else if (type == "mid")
             {
                 Type = "mid";
                 Name = name;
@@ -113,20 +130,6 @@ namespace Gold_Diggerzz
                 ReturnToWorkDate = DateTime.Today;
             }
 
-            else if (type == "bad")
-            {
-                Type = "bad";
-                Name = name;
-                Wage = wage * 0.5;
-                Price = price * 0.5;
-                EmployeeIllProbability = employeeIllProbability * 2;
-                efficiency = efficiency * 0.5;
-                DaysUntilRetirement = 30;
-                IsIll = false;
-                HireDate = DateTime.Today;
-                ReturnToWorkDate = DateTime.Today;
-            }
-
             else if (type == "good")
             {
                 Type = "good";
@@ -134,7 +137,7 @@ namespace Gold_Diggerzz
                 Wage = wage * 2;
                 Price = price * 2.5;
                 EmployeeIllProbability = employeeIllProbability * 0.5;
-                efficiency = efficiency * 2;
+                efficiency = Efficiency * 2;
                 DaysUntilRetirement = 30;
                 IsIll = false;
                 HireDate = DateTime.Today;
@@ -321,18 +324,19 @@ namespace Gold_Diggerzz
     
     class WeatherEffectsClass
     {
-        public bool Active;
         public string Name;
         public int DaysLeft;
         public double Probability;
         public double EfficiencyMultiplier;
+        public int Duration;
         
-        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, Program _program)
+        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, int duration)
         {
             Name = name;
             DaysLeft = daysLeft;
             Probability = probability;
             EfficiencyMultiplier = efficiencyMultiplier;
+            Duration = duration;
         }
 
     }
@@ -1033,70 +1037,76 @@ namespace Gold_Diggerzz
             foreach (WeatherEffectsClass weatherEffect in _program.ActiveWeatherEffectsList)
             {
                 weatherEffect.DaysLeft -= 1;
-                Console.WriteLine($"{weatherEffect.DaysLeft} days left of {weatherEffect.Name}");
+                if (!multipleDaysOrNot && weatherEffect.DaysLeft != 0)
+                {
+                    Console.WriteLine($"{weatherEffect.DaysLeft} days left of {weatherEffect.Name}");
+                }
             }
             
-            WeatherEffectsClass Rain = new WeatherEffectsClass("Rain", 3, 30, 0.7, _program);
-            WeatherEffectsClass Hurricane = new WeatherEffectsClass("Hurricane", 6, 6, 0.4, _program);
-            WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("Beautiful Sky", 3, 30, 1.2, _program);
+            WeatherEffectsClass Rain = new WeatherEffectsClass("rain", 0, 30, 0.7, 3);
+            WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 6, 0.4, 5);
+            WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("beautiful sky", 0, 30, 1.2, 3);
             
             Random random = new Random();
 
             // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
-            
-            // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
-            if (random.Next(0, 100) < Hurricane.Probability)
-            {
-                if (!multipleDaysOrNot)
-                {
-                    Console.WriteLine("__________________________________________________________");
-                    Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
-                }
-                
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.efficiency *= Hurricane.EfficiencyMultiplier;
-                }
-                Hurricane.DaysLeft = 4;
-                _program.ActiveWeatherEffectsList.Add(Hurricane);
-            }
 
-            // rain reducing efficiency
-            else if (random.Next(0, 100) < Rain.Probability)
-            {
-                if (!multipleDaysOrNot)
+            if (_program.ActiveWeatherEffectsList.Count == 0)
+            { 
+                // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
+                if (random.Next(0, 100) < Hurricane.Probability)
                 {
-                    Console.WriteLine("__________________________________________________________");
-                    Console.WriteLine(
-                        "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
-                }
-                
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.efficiency *= Rain.EfficiencyMultiplier;
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
+                    }
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency *= Hurricane.EfficiencyMultiplier;
+                    }
+                    Hurricane.DaysLeft = 4;
+                    _program.ActiveWeatherEffectsList.Add(Hurricane);
                 }
 
-                Rain.DaysLeft = 3;
-                _program.ActiveWeatherEffectsList.Add(Rain);
-            }
-
-            // 30% chance beautiful sky increasing efficiency
-            else if (random.Next(0, 100) < BeautifulSky.Probability)
-            {
-                if (!multipleDaysOrNot)
+                // rain reducing efficiency
+                else if (random.Next(0, 100) < Rain.Probability)
                 {
-                    Console.WriteLine("__________________________________________________________");
-                    Console.WriteLine(
-                        "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
-                }
-                
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.efficiency *= BeautifulSky.EfficiencyMultiplier;
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine(
+                            "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
+                    }
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency *= Rain.EfficiencyMultiplier;
+                    }
+
+                    Rain.DaysLeft = 3;
+                    _program.ActiveWeatherEffectsList.Add(Rain);
                 }
 
-                BeautifulSky.DaysLeft = 3;
-                _program.ActiveWeatherEffectsList.Add(BeautifulSky);
+                // beautiful sky increasing efficiency
+                else if (random.Next(0, 100) < BeautifulSky.Probability)
+                {
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine(
+                            "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
+                    }
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency *= BeautifulSky.EfficiencyMultiplier;
+                    }
+
+                    BeautifulSky.DaysLeft = 3;
+                    _program.ActiveWeatherEffectsList.Add(BeautifulSky);
+                }
             }
             
             // undo weather effects
@@ -1116,12 +1126,16 @@ namespace Gold_Diggerzz
                 {
                     worker.efficiency /= finishedWeatherEffect.EfficiencyMultiplier;
                 }
+                foreach (Worker worker in _program.illWorkersList)
+                {
+                    worker.efficiency /= finishedWeatherEffect.EfficiencyMultiplier;
+                }
                 
                 _program.ActiveWeatherEffectsList.Remove(finishedWeatherEffect);
                 
                 if (!multipleDaysOrNot)
                 {
-                    Console.WriteLine($"\ud83c\udf21\ufe0f The weather effect {finishedWeatherEffect.Name} has ended \ud83c\udf21\ufe0f.\nEmployees are back to their normal efficiency.");
+                    Console.WriteLine($"\ud83c\udf21\ufe0f The {finishedWeatherEffect.Name} has ended \ud83c\udf21\ufe0f - employees are back to their normal efficiency.");
                 }
             }
         }
