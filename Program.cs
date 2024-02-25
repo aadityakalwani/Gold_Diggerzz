@@ -90,14 +90,14 @@ namespace Gold_Diggerzz
         public double Price;
         public double EmployeeIllProbability;
         public DateTime HireDate;
-        public double DefaultEfficiency;
+        public double efficiency;
         public double DaysWorked;
         public int DaysUntilRetirement;
         public DateTime RetirementDate;
         public bool IsIll;
         public DateTime ReturnToWorkDate;
 
-        public Worker(string type, string name, double wage, double price, double employeeIllProbability, double defaultEfficiency)
+        public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency)
         {
             if (type == "mid")
             {
@@ -106,7 +106,7 @@ namespace Gold_Diggerzz
                 Wage = wage;
                 Price = price;
                 EmployeeIllProbability = employeeIllProbability;
-                DefaultEfficiency = defaultEfficiency;
+                efficiency = Efficiency;
                 DaysWorked = 0;
                 DaysUntilRetirement = 45;
                 IsIll = false;
@@ -121,7 +121,7 @@ namespace Gold_Diggerzz
                 Wage = wage * 0.5;
                 Price = price * 0.5;
                 EmployeeIllProbability = employeeIllProbability * 2;
-                DefaultEfficiency = defaultEfficiency * 0.5;
+                efficiency = efficiency * 0.5;
                 DaysUntilRetirement = 30;
                 IsIll = false;
                 HireDate = DateTime.Today;
@@ -135,7 +135,7 @@ namespace Gold_Diggerzz
                 Wage = wage * 2;
                 Price = price * 2.5;
                 EmployeeIllProbability = employeeIllProbability * 0.5;
-                DefaultEfficiency = defaultEfficiency * 2;
+                efficiency = efficiency * 2;
                 DaysUntilRetirement = 30;
                 IsIll = false;
                 HireDate = DateTime.Today;
@@ -256,7 +256,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             if (program.retiredWorkersList.Count != 0)
@@ -271,7 +271,7 @@ namespace Gold_Diggerzz
             {
                 totalWages += worker.Wage;
                 j++;
-                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.DefaultEfficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             Console.WriteLine("___________________________________________________________");
@@ -318,6 +318,24 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
         }
+    }
+    
+    class WeatherEffectsClass
+    {
+        public bool Active;
+        public string Name;
+        public int DaysLeft;
+        public double Probability;
+        public double EfficiencyMultiplier;
+        
+        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, Program _program)
+        {
+            Name = name;
+            DaysLeft = daysLeft;
+            Probability = probability;
+            EfficiencyMultiplier = efficiencyMultiplier;
+        }
+
     }
 
     class MiningOperation
@@ -648,24 +666,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(
                                 $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
                         }
-
-                        if (_program._badWeatherDaysLeft > 0)
-                        {
-                            _program._badWeatherDaysLeft -= 1;
-                            Console.WriteLine($"{_program._badWeatherDaysLeft} days left of torrential rain");
-                        }
-
-                        if (_program._hurricaneDaysLeft > 0)
-                        {
-                            _program._hurricaneDaysLeft -= 1;
-                            Console.WriteLine($"{_program._hurricaneDaysLeft} days left of hurricane");
-                        }
-
-                        if (_program._beautifulSkyDaysLeft > 0)
-                        {
-                            _program._beautifulSkyDaysLeft -= 1;
-                            Console.WriteLine($"{_program._beautifulSkyDaysLeft} days left of beautiful weather");
-                        }
+                        
 
                         if (_program._marketMasterDaysLeft == 1)
                         {
@@ -699,21 +700,6 @@ namespace Gold_Diggerzz
 
                             _program.dollars.Quantity -= totalWages;
 
-                        }
-
-                        if (_program._badWeatherDaysLeft > 0)
-                        {
-                            _program._badWeatherDaysLeft -= 1;
-                        }
-
-                        if (_program._hurricaneDaysLeft > 0)
-                        {
-                            _program._hurricaneDaysLeft -= 1;
-                        }
-
-                        if (_program._beautifulSkyDaysLeft > 0)
-                        {
-                            _program._beautifulSkyDaysLeft -= 1;
                         }
 
                         if (_program._marketMasterDaysLeft == 1)
@@ -1042,79 +1028,42 @@ namespace Gold_Diggerzz
 
     class DayToDayOperations
     {
+
         public void WeatherEffects(Program _program, bool multipleDaysOrNot)
         {
+            foreach (WeatherEffectsClass weatherEffect in _program.ActiveWeatherEffectsList)
+            {
+                weatherEffect.DaysLeft -= 1;
+                Console.WriteLine($"{weatherEffect.DaysLeft} days left of {weatherEffect.Name}");
+            }
+            
+            WeatherEffectsClass Rain = new WeatherEffectsClass("Rain", 3, 30, 0.7, _program);
+            WeatherEffectsClass Hurricane = new WeatherEffectsClass("Hurricane", 6, 6, 0.4, _program);
+            WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("Beautiful Sky", 3, 30, 1.2, _program);
+            
             Random random = new Random();
 
             // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
-
-            // undoing weather effects 
-            if (_program._badWeatherDaysLeft == 1)
-            {
-                if (!multipleDaysOrNot)
-                {
-                    Console.WriteLine(
-                        "\ud83c\udf21\ufe0f The weather has cleared up, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                }
-                
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.DefaultEfficiency *= 1.3;
-                }
-            }
-
-            if (_program._beautifulSkyDaysLeft == 1)
-            {
-                if (!multipleDaysOrNot)
-                {
-                    Console.WriteLine(
-                        "\ud83c\udf21\ufe0f The weather is mid, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                }
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.DefaultEfficiency /= 1.2;
-                }
-
-                _program._beautifulSkyDaysLeft = 0;
-            }
-
-            if (_program._hurricaneDaysLeft == 1)
-            {
-                if (!multipleDaysOrNot)
-                {
-                    Console.WriteLine(
-                        "\ud83c\udf21\ufe0f The hurricane has passed, your employees are back to normal efficiency \ud83c\udf21\ufe0f");
-                }
-
-                foreach (Worker worker in _program.workersList)
-                {
-                    worker.DefaultEfficiency *= 1.4;
-                }
-            }
-
-            bool noActiveWeatherEffects = _program._badWeatherDaysLeft == 0 && _program._hurricaneDaysLeft == 0 &&
-                                          _program._beautifulSkyDaysLeft == 0;
-
+            
             // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
-            if (random.Next(0, 100) < 5 && noActiveWeatherEffects)
+            if (random.Next(0, 100) < Hurricane.Probability)
             {
                 if (!multipleDaysOrNot)
                 {
                     Console.WriteLine("__________________________________________________________");
-                    Console.WriteLine(
-                        " \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
+                    Console.WriteLine(" \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
                 }
                 
                 foreach (Worker worker in _program.workersList)
                 {
-                    worker.DefaultEfficiency /= 1.4;
+                    worker.efficiency *= Hurricane.EfficiencyMultiplier;
                 }
 
-                _program._hurricaneDaysLeft = 6;
+                _program.ActiveWeatherEffectsList.Add(Hurricane);
             }
 
             // rain reducing efficiency
-            else if (random.Next(0, 100) < 25 && noActiveWeatherEffects)
+            else if (random.Next(0, 100) < Rain.Probability)
             {
                 if (!multipleDaysOrNot)
                 {
@@ -1125,14 +1074,15 @@ namespace Gold_Diggerzz
                 
                 foreach (Worker worker in _program.workersList)
                 {
-                    worker.DefaultEfficiency /= 1.3;
+                    worker.efficiency *= Rain.EfficiencyMultiplier;
                 }
 
-                _program._badWeatherDaysLeft = 3;
+                Rain.DaysLeft = 3;
+                _program.ActiveWeatherEffectsList.Add(Rain);
             }
 
             // 30% chance beautiful sky increasing efficiency
-            else if (random.Next(0, 100) < 30 && noActiveWeatherEffects)
+            else if (random.Next(0, 100) < BeautifulSky.Probability)
             {
                 if (!multipleDaysOrNot)
                 {
@@ -1143,12 +1093,37 @@ namespace Gold_Diggerzz
                 
                 foreach (Worker worker in _program.workersList)
                 {
-                    worker.DefaultEfficiency *= 1.2;
+                    worker.efficiency *= BeautifulSky.EfficiencyMultiplier;
                 }
 
-                _program._beautifulSkyDaysLeft = 3;
+                BeautifulSky.DaysLeft = 3;
+                _program.ActiveWeatherEffectsList.Add(BeautifulSky);
             }
-
+            
+            // undo weather effects
+            List<WeatherEffectsClass> toRemoveWeatherEffectsList = new();
+            
+            foreach (WeatherEffectsClass weatherEffect in _program.ActiveWeatherEffectsList)
+            {
+                if (weatherEffect.DaysLeft == 0)
+                {
+                    toRemoveWeatherEffectsList.Add(weatherEffect);
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency /= weatherEffect.EfficiencyMultiplier;
+                    }
+                }
+            }
+            
+            foreach (WeatherEffectsClass finishedWeatherEffect in toRemoveWeatherEffectsList)
+            {
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine($"\ud83c\udf21\ufe0f The weather effect {finishedWeatherEffect.Name} has ended \ud83c\udf21\ufe0f.\nEmployees are back to their normal efficiency.");
+                }
+                _program.ActiveWeatherEffectsList.Remove(finishedWeatherEffect);
+            }
         }
 
         public void CalendarEffects(Program _program, bool MultipleDaysOrNot)
@@ -1287,7 +1262,7 @@ namespace Gold_Diggerzz
             double totalEfficiency = 0;
             foreach (Worker worker in _program.workersList)
             {
-                totalEfficiency += worker.DefaultEfficiency;
+                totalEfficiency += worker.efficiency;
             }
 
             _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
@@ -1577,9 +1552,6 @@ namespace Gold_Diggerzz
                 { "marketMasterDaysLeft", _program._marketMasterDaysLeft },
                 { "noWageDaysLeft", _program._noWageDaysLeft },
                 { "crashDaysLeft", _program._crashDaysLeft },
-                { "badWeatherDaysLeft", _program._badWeatherDaysLeft },
-                { "hurricaneDaysLeft", _program._hurricaneDaysLeft },
-                { "beautifulSkyDaysLeft", _program._beautifulSkyDaysLeft },
                 { "totalBribes", _program._totalBribes },
                 { "totalPowerUpsUsed", _program._totalPowerUpsUsed },
                 { "totalDaysDug", _program._totalDaysDug },
@@ -1623,14 +1595,14 @@ namespace Gold_Diggerzz
             Console.WriteLine("Loading game state...");
             using StreamReader reader = new StreamReader(filename);
             {
-                string line;
                 Dictionary<string, object> tempDictionary = new Dictionary<string, object>(gameStateDictionary);
                 foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
                     Console.WriteLine($"Reading the next line: {entry}");
-                    line = reader.ReadLine();
+                    string line = reader.ReadLine();
                     if (line != "end")
                     {
+                        // ReSharper disable once PossibleNullReferenceException
                         string[] parts = line.Split(':');
                         string key = parts[0];
                         object value = parts[1];
@@ -1680,15 +1652,6 @@ namespace Gold_Diggerzz
                         break;
                     case "crashDaysLeft":
                         _program._crashDaysLeft = (int)entry.Value;
-                        break;
-                    case "badWeatherDaysLeft":
-                        _program._badWeatherDaysLeft = (int)entry.Value;
-                        break;
-                    case "hurricaneDaysLeft":
-                        _program._hurricaneDaysLeft = (int)entry.Value;
-                        break;
-                    case "beautifulSkyDaysLeft":
-                        _program._beautifulSkyDaysLeft = (int)entry.Value;
                         break;
                     case "totalBribes":
                         _program._totalBribes = (int)entry.Value;
@@ -1768,9 +1731,6 @@ namespace Gold_Diggerzz
         public int _marketMasterDaysLeft;
         public int _noWageDaysLeft;
         public int _crashDaysLeft;
-        public int _badWeatherDaysLeft;
-        public int _hurricaneDaysLeft;
-        public int _beautifulSkyDaysLeft;
         public int _totalBribes;
         public int _totalPowerUpsUsed;
         public double _totalDaysDug;
@@ -1808,6 +1768,8 @@ namespace Gold_Diggerzz
         public List<Worker> retiredWorkersList = new();
         public List<Worker> trainingWorkersList = new();
         public List<Worker> toSendToTrainingList = new();
+        
+        public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
 
         public List<Worker> workersList = new()
             { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1) };
@@ -2198,7 +2160,6 @@ namespace Gold_Diggerzz
                                     Console.WriteLine("You don't have to pay wages for the next three days");
                                     _noWageDaysLeft = 3;
                                     _totalBribes += 1;
-                                    break;
                                 }
                                 else
                                 {
@@ -2266,7 +2227,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup                             |");
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
-                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                          (15) |\n");
+                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                (15) |\n");
                 Console.WriteLine("Enter your choice:");
 
                 int userOption = GetValidInt(0, 15);
@@ -2454,7 +2415,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine(
                     $"Employee {workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
                 workersList[i].ReturnToWorkDate = _currentDate.AddDays(7);
-                workersList[i].DefaultEfficiency *= 1.3;
+                workersList[i].efficiency *= 1.3;
                 toSendToTrainingList.Add(workersList[i]);
             }
 
@@ -2469,15 +2430,17 @@ namespace Gold_Diggerzz
 
         public void HireNewWorker(int numberOfWorkers, string type)
         {
-            if (_possibleNames.Count > numberOfWorkers)
+            
+            for (int i = 0; i < numberOfWorkers; i++)
             {
-                for (int i = 0; i < numberOfWorkers; i++)
+                double efficiency = 15;
+
+                if (_possibleNames.Count > 1)
                 {
                     int randomName = _random.Next(0, _possibleNames.Count);
 
                     // making 'levels' of efficiency based on the number of employees
                     // this is to make the game harder over time as the player hires more employees
-                    double efficiency = 1;
                     if (workersList.Count > 0)
                     {
                         efficiency = _random.Next(70, 130);
@@ -2610,7 +2573,7 @@ namespace Gold_Diggerzz
                     }
                     else if (workersList.Count > 78)
                     {
-                        efficiency = _random.Next(0, 5);
+                        efficiency = _random.Next(1, 5);
                         efficiency /= 100;
                     }
 
@@ -2628,22 +2591,25 @@ namespace Gold_Diggerzz
                     {
                         employeePrice = 200;
                     }
-
+                    
                     Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency);
                     workersList.Add(newWorker);
                     _usedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.DefaultEfficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
 
                     // updating bribe price
                     bribe.Price = _currentWageRate * workersList.Count * 2;
                 }
+                
+                else
+                {
+                    Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                    Console.WriteLine("Wait for some to retire");
+                    break;
+                }
             }
-            else
-            {
-                Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
-                Console.WriteLine("Wait for some to retire");
-            }
+            
         }
 
         public void GoToTrader()
