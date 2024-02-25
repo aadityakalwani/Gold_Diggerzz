@@ -2654,7 +2654,7 @@ namespace Gold_Diggerzz
             Console.ResetColor();
             
             DisplayStuff.DisplayResources(this);
-            
+             
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
             Console.WriteLine($"1 - Convert {Math.Round(coalToStone.Ratio,2)} coal --> stone");
