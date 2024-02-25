@@ -20,11 +20,10 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      
-     * OOP the weather effects
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * remove printed line at the start that says:
         * /Library/Frameworks/Mono.framework/Versions/6. 12. O/bin/mono-sgen64 /Users/aadityakalwani/Documents/Coding/Gold_Diggerzz/bin/Debug/Gold_Diggerzz. exe 
-     * update ascii art for menu options: achievements, tutorial, use powerups, game state saved
+     * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
      * Get a certain number of resource to build something eg. a stone castle which gives income or a house or a flat or a mansion
          * eg. a wedding happened or dracula came into the castle and scared away they guests, castle can collapse etc
          * lol turn it into a real estate game
@@ -175,9 +174,9 @@ namespace Gold_Diggerzz
         public static void DisplayGameMechanics(Program _program)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                    GAME MECHANICS                          ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.WriteLine("╔════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                    GAME MECHANICS                      ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             
             Console.WriteLine("__________________________________________________________");
@@ -1051,14 +1050,14 @@ namespace Gold_Diggerzz
                 if (!multipleDaysOrNot)
                 {
                     Console.WriteLine("__________________________________________________________");
-                    Console.WriteLine(" \ud83c\udf00 A hurricane is coming, efficiency is now 40% less the next five days \ud83c\udf00");
+                    Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
                 }
                 
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.efficiency *= Hurricane.EfficiencyMultiplier;
                 }
-
+                Hurricane.DaysLeft = 4;
                 _program.ActiveWeatherEffectsList.Add(Hurricane);
             }
 
@@ -1069,7 +1068,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("__________________________________________________________");
                     Console.WriteLine(
-                        "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next two days \ud83c\udf27\ufe0f");
+                        "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
                 }
                 
                 foreach (Worker worker in _program.workersList)
@@ -1088,7 +1087,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("__________________________________________________________");
                     Console.WriteLine(
-                        "\ud83c\udfd6\ufe0f The weather is beautiful today, your employees are 20% more efficient for two days \ud83c\udfd6\ufe0f");
+                        "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
                 }
                 
                 foreach (Worker worker in _program.workersList)
@@ -1108,21 +1107,22 @@ namespace Gold_Diggerzz
                 if (weatherEffect.DaysLeft == 0)
                 {
                     toRemoveWeatherEffectsList.Add(weatherEffect);
-                    
-                    foreach (Worker worker in _program.workersList)
-                    {
-                        worker.efficiency /= weatherEffect.EfficiencyMultiplier;
-                    }
                 }
             }
             
             foreach (WeatherEffectsClass finishedWeatherEffect in toRemoveWeatherEffectsList)
             {
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.efficiency /= finishedWeatherEffect.EfficiencyMultiplier;
+                }
+                
+                _program.ActiveWeatherEffectsList.Remove(finishedWeatherEffect);
+                
                 if (!multipleDaysOrNot)
                 {
                     Console.WriteLine($"\ud83c\udf21\ufe0f The weather effect {finishedWeatherEffect.Name} has ended \ud83c\udf21\ufe0f.\nEmployees are back to their normal efficiency.");
                 }
-                _program.ActiveWeatherEffectsList.Remove(finishedWeatherEffect);
             }
         }
 
