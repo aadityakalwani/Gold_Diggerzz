@@ -24,8 +24,6 @@ namespace Gold_Diggerzz
        Maybe another section for “employee stuff”
      * 
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
-     * remove printed line at the start that says:
-        * /Library/Frameworks/Mono.framework/Versions/6. 12. O/bin/mono-sgen64 /Users/aadityakalwani/Documents/Coding/Gold_Diggerzz/bin/Debug/Gold_Diggerzz. exe 
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
      * Get a certain number of resource to build something eg. a stone castle which gives income or a house or a flat or a mansion
          * eg. a wedding happened or dracula came into the castle and scared away they guests, castle can collapse etc
@@ -730,6 +728,7 @@ namespace Gold_Diggerzz
                 _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
                 _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
                 _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
+                _DayToDayOperations.CheckRealEstate(_program, multipleDayDig);
             }
             
             if (multipleDayDig)
@@ -1273,7 +1272,8 @@ namespace Gold_Diggerzz
 
         public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
-
+            // retirements, returning workers, unwell workers, etc
+            
             Random random = new Random();
 
             // recalculate the average efficiency of the employees
@@ -1555,6 +1555,38 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Prices have fallen by {Math.Round(Math.Abs(randomChange * 100 - 100), 2)}% from what they were yesterday");
             }
         }
+
+        public void CheckRealEstate(Program _program, bool multipleDaysOrNot)
+        {
+            List<RealEstate> toRemoveRealEstateList = new();
+            foreach (RealEstate realEstate in _program.buildingRealEsateList)
+            {
+                if (realEstate.DaysLeftToBuild > 0)
+                {
+                    realEstate.DaysLeftToBuild -= 1;
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine($"Your {realEstate.Type} will be ready in {realEstate.DaysLeftToBuild} days");
+                    }
+                }
+
+                if (realEstate.DaysLeftToBuild == 0)
+                {
+                    _program.activeRealEstate.Add(realEstate);
+                    toRemoveRealEstateList.Add(realEstate);
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine($"Your {realEstate.Type} has been built");
+                    }
+                }
+            }
+            
+            foreach (RealEstate realEstate in toRemoveRealEstateList)
+            {
+                _program.buildingRealEsateList.Remove(realEstate);
+            }
+            
+        }
     }
     
     class GameState
@@ -1762,6 +1794,71 @@ namespace Gold_Diggerzz
 
     }
 
+    class RealEstate
+    {
+        public string Type;
+        public int DaysLeftToBuild;
+        public double Cost;
+        
+        public RealEstate(string type, int daysLeftToBuild, double cost)
+        {
+            Type = type;
+            DaysLeftToBuild = daysLeftToBuild;
+            Cost = cost;
+        }
+
+        public static void BuildRealEstate(int choice, Program _program)
+        {
+            switch (choice)
+            {
+                case 0:
+                    Console.WriteLine("Cancelled");
+                    break;
+                case 1:
+                    Console.WriteLine("You have chosen to build a new apartment");
+                    Console.WriteLine("Your apartment will be ready in 5 days");
+                    RealEstate apartment = new RealEstate("apartment", 5, 1000);
+                    _program.buildingRealEsateList.Add(apartment);
+                    break;
+                
+                case 2:
+                    Console.WriteLine("You have chosen to build a new house");
+                    Console.WriteLine("Your house will be ready in 10 days");
+                    RealEstate house = new RealEstate("house", 10, 2000);
+                    _program.buildingRealEsateList.Add(house);
+                    break;
+                
+                case 3:
+                    Console.WriteLine("You have chosen to build a new office");
+                    Console.WriteLine("Your office will be ready in 15 days");
+                    RealEstate office = new RealEstate("office", 15, 3000);
+                    _program.buildingRealEsateList.Add(office);
+                    break;
+                
+                case 4:
+                    Console.WriteLine("You have chosen to build a new mansion");
+                    Console.WriteLine("Your mansion will be ready in 20 days");
+                    RealEstate mansion = new RealEstate("mansion", 20, 4000);
+                    _program.buildingRealEsateList.Add(mansion);
+                    break;
+                
+                case 5:
+                    Console.WriteLine("You have chosen to build a new castle");
+                    Console.WriteLine("Your castle will be ready in 25 days");
+                    RealEstate castle = new RealEstate("castle", 25, 5000);
+                    _program.buildingRealEsateList.Add(castle);
+                    break;
+                
+                case 6:
+                    Console.WriteLine("You have chosen to build a new palace");
+                    Console.WriteLine("Your palace will be ready in 30 days");
+                    RealEstate palace = new RealEstate("palace", 30, 6000);
+                    _program.buildingRealEsateList.Add(palace);
+                    break;
+            }
+        }
+    }
+
     class Program
     {
         # region global variables
@@ -1813,6 +1910,9 @@ namespace Gold_Diggerzz
 
         public List<Worker> workersList = new()
             { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1) };
+        
+        public List<RealEstate> buildingRealEsateList = new();
+        public List<RealEstate> activeRealEstate = new();
 
         MiningOperation miningOperation = new MiningOperation();
         MarketOperation marketOperation = new MarketOperation();
@@ -1963,6 +2063,7 @@ namespace Gold_Diggerzz
 
         public static void Main()
         {
+            Console.Clear();
             
             Program program = new Program();
             
@@ -2211,6 +2312,21 @@ namespace Gold_Diggerzz
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
+                    case 20:
+                        Console.WriteLine("This is a feature under development - pls dont use unless you want to break the game");
+                        Console.WriteLine("Welcome to the real estate building place!");
+                        Console.WriteLine("what do u want to build");
+                        Console.WriteLine("0 - Cancel");
+                        Console.WriteLine("1. Apartment");
+                        Console.WriteLine("2. House");
+                        Console.WriteLine("3. Office");
+                        Console.WriteLine("4. Mansion");
+                        Console.WriteLine("5. Castle");
+                        Console.WriteLine("6. Palace");
+                        int choice = GetValidInt(0, 6);
+                        RealEstate.BuildRealEstate(choice, this);
+                        
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -2256,9 +2372,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
                 Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                (15) |\n");
+                Console.WriteLine("20 - testing new real estate thing (pls dont use it wont work)");
                 Console.WriteLine("Enter your choice:");
 
-                int userOption = GetValidInt(0, 15);
+                int userOption = GetValidInt(0, 20);
                 Console.Clear();
                 return userOption;
             }
