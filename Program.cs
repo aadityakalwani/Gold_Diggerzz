@@ -1558,6 +1558,7 @@ namespace Gold_Diggerzz
 
         public void CheckRealEstate(Program _program, bool multipleDaysOrNot)
         {
+            // reduce the days left to build by 1 and move the real estate to the active list if it's been built
             List<RealEstate> toRemoveRealEstateList = new();
             foreach (RealEstate realEstate in _program.buildingRealEsateList)
             {
@@ -1586,6 +1587,18 @@ namespace Gold_Diggerzz
                 _program.buildingRealEsateList.Remove(realEstate);
             }
             
+            // give rent to the player
+            if (_program._currentDate.DayOfWeek is DayOfWeek.Sunday)
+            {
+                foreach (RealEstate realEstate in _program.activeRealEstate)
+                {
+                    _program.dollars.Quantity += realEstate.WeeklyRent;
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine($"You have received ${realEstate.WeeklyRent} in rent from your {realEstate.Type}");
+                    }
+                }
+            }
         }
     }
     
@@ -1791,7 +1804,6 @@ namespace Gold_Diggerzz
                 }
             }
         }
-
     }
 
     class RealEstate
@@ -1799,12 +1811,14 @@ namespace Gold_Diggerzz
         public string Type;
         public int DaysLeftToBuild;
         public double Cost;
+        public double WeeklyRent;
         
-        public RealEstate(string type, int daysLeftToBuild, double cost)
+        public RealEstate(string type, int daysLeftToBuild, double cost, double weeklyRent)
         {
             Type = type;
             DaysLeftToBuild = daysLeftToBuild;
             Cost = cost;
+            WeeklyRent = weeklyRent;
         }
 
         public static void BuildRealEstate(int choice, Program _program)
@@ -1815,44 +1829,92 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Cancelled");
                     break;
                 case 1:
+                    if (_program.dollars.Quantity < 1000)
+                    {
+                        Console.WriteLine("You don't have enough money to build an apartment");
+                        break;
+                    }
+                    
                     Console.WriteLine("You have chosen to build a new apartment");
                     Console.WriteLine("Your apartment will be ready in 5 days");
-                    RealEstate apartment = new RealEstate("apartment", 5, 1000);
+                    Console.WriteLine("You will earn $300 every Monday from this apartment");
+                    Console.WriteLine("You have been charged $1000 for the construction of this apartment");
+                    RealEstate apartment = new RealEstate("apartment", 5, 1000, 300);
                     _program.buildingRealEsateList.Add(apartment);
                     break;
                 
                 case 2:
+                    if (_program.dollars.Quantity < 2000)
+                    {
+                        Console.WriteLine("You don't have enough money to build a house");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new house");
                     Console.WriteLine("Your house will be ready in 10 days");
-                    RealEstate house = new RealEstate("house", 10, 2000);
+                    Console.WriteLine("You will earn $600 every Monday from this house");
+                    Console.WriteLine("You have been charged $2000 for the construction of this house");
+                    _program.dollars.Quantity -= 2000;
+                    RealEstate house = new RealEstate("house", 10, 2000, 600);
                     _program.buildingRealEsateList.Add(house);
                     break;
                 
                 case 3:
+                    if (_program.dollars.Quantity < 3000)
+                    {
+                        Console.WriteLine("You don't have enough money to build an office");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new office");
                     Console.WriteLine("Your office will be ready in 15 days");
-                    RealEstate office = new RealEstate("office", 15, 3000);
+                    Console.WriteLine("You will earn $1000 every Monday from this office");
+                    Console.WriteLine("You have been charged $3000 for the construction of this office");
+                    _program.dollars.Quantity -= 3000;
+                    RealEstate office = new RealEstate("office", 15, 3000, 1000);
                     _program.buildingRealEsateList.Add(office);
                     break;
                 
                 case 4:
+                    if (_program.dollars.Quantity < 4000)
+                    {
+                        Console.WriteLine("You don't have enough money to build a mansion");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new mansion");
                     Console.WriteLine("Your mansion will be ready in 20 days");
-                    RealEstate mansion = new RealEstate("mansion", 20, 4000);
+                    Console.WriteLine("You will earn $1300 every Monday from this mansion");
+                    Console.WriteLine("You have been charged $4000 for the construction of this mansion");
+                    _program.dollars.Quantity -= 4000;
+                    RealEstate mansion = new RealEstate("mansion", 20, 4000, 1300);
                     _program.buildingRealEsateList.Add(mansion);
                     break;
                 
                 case 5:
+                    if (_program.dollars.Quantity < 5000)
+                    {
+                        Console.WriteLine("You don't have enough money to build a castle");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new castle");
                     Console.WriteLine("Your castle will be ready in 25 days");
-                    RealEstate castle = new RealEstate("castle", 25, 5000);
+                    Console.WriteLine("You will earn $1600 every Monday from this castle");
+                    Console.WriteLine("You have been charged $5000 for the construction of this castle");
+                    _program.dollars.Quantity -= 5000;
+                    RealEstate castle = new RealEstate("castle", 25, 5000, 1600);
                     _program.buildingRealEsateList.Add(castle);
                     break;
                 
                 case 6:
+                    if (_program.dollars.Quantity < 6000)
+                    {
+                        Console.WriteLine("You don't have enough money to build a palace");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new palace");
                     Console.WriteLine("Your palace will be ready in 30 days");
-                    RealEstate palace = new RealEstate("palace", 30, 6000);
+                    Console.WriteLine("You will earn $2000 every Monday from this palace");
+                    Console.WriteLine("You have been charged $6000 for the construction of this palace");
+                    _program.dollars.Quantity -= 6000;
+                    RealEstate palace = new RealEstate("palace", 30, 6000, 2000);
                     _program.buildingRealEsateList.Add(palace);
                     break;
             }
@@ -2313,16 +2375,18 @@ namespace Gold_Diggerzz
                         SaveGameState(2);
                         break;
                     case 20:
-                        Console.WriteLine("This is a feature under development - pls dont use unless you want to break the game");
+                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
+                        Console.WriteLine("Gave ya $100000000 to test it bro");
+                        dollars.Quantity += 100000000;
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("what do u want to build");
                         Console.WriteLine("0 - Cancel");
-                        Console.WriteLine("1. Apartment");
-                        Console.WriteLine("2. House");
-                        Console.WriteLine("3. Office");
-                        Console.WriteLine("4. Mansion");
-                        Console.WriteLine("5. Castle");
-                        Console.WriteLine("6. Palace");
+                        Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
+                        Console.WriteLine("2. House - $2000, 10 days to build, $1000 weekly rent");
+                        Console.WriteLine("3. Office - $3000, 15 days to build, $2000 weekly rent");
+                        Console.WriteLine("4. Mansion - $4000, 20 days to build, $3000 weekly rent");
+                        Console.WriteLine("5. Castle - $5000, 25 days to build, $4000 weekly rent");
+                        Console.WriteLine("6. Palace - $6000, 30 days to build, $5000 weekly rent");
                         int choice = GetValidInt(0, 6);
                         RealEstate.BuildRealEstate(choice, this);
                         
@@ -2372,7 +2436,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
                 Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
                 Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                (15) |\n");
-                Console.WriteLine("20 - testing new real estate thing (pls dont use it wont work)");
+                Console.WriteLine("20 - testing new real estate thing (pls don't use it wont work)");
                 Console.WriteLine("Enter your choice:");
 
                 int userOption = GetValidInt(0, 20);
