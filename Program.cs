@@ -142,6 +142,93 @@ namespace Gold_Diggerzz
                 ReturnToWorkDate = DateTime.Today;
             }
         }
+
+        public static void EmployeeHiringScreen(Program _program)
+        {
+            Console.Clear();
+            Console.WriteLine(
+                "  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
+            Console.WriteLine($"What type of employee do you want to hire?");
+            Console.WriteLine(
+                $"1 - Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
+            Console.WriteLine(
+                $"2 - Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
+            Console.WriteLine(
+                $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
+            Console.WriteLine("4 - Cancel and return to market menu");
+            
+            int employeeType = _program.GetValidInt(1, 4);
+            
+            if (employeeType != 4)
+            {
+                Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
+                
+                int employeesToHire = _program.GetValidInt(0, 163);
+                switch (employeeType)
+                {
+                case 1:
+                    if (employeesToHire * _program._currentEmployeePrice * 0.5 >
+                        _program.dollars.Quantity)
+                    {
+                        Console.WriteLine(
+                            "You don't have enough dollars to hire that many bad employees");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            $"You have hired {employeesToHire} more bad employees.\nSay hello to:");
+
+                        _program.HireNewWorker(employeesToHire, "bad");
+
+                        _program.dollars.Quantity -=
+                            employeesToHire * _program._currentEmployeePrice * 0.5;
+                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                        _program._totalEmployeesHired += employeesToHire;
+                    }
+
+                    break;
+                case 2:
+                    if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
+                    {
+                        Console.WriteLine(
+                            "You don't have enough dollars to hire that many mid employees");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            $"You have hired {employeesToHire} more mid employees.\nSay hello to:");
+
+                        _program.HireNewWorker(employeesToHire, "mid");
+
+                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
+                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                        _program._totalEmployeesHired += employeesToHire;
+                    }
+
+                    break;
+                case 3:
+                    if (employeesToHire * _program._currentEmployeePrice * 2 >
+                        _program.dollars.Quantity)
+                    {
+                        Console.WriteLine(
+                            "You don't have enough dollars to hire that many good employees");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            $"You have hired {employeesToHire} more good employees.\nSay hello to:");
+
+                        _program.HireNewWorker(employeesToHire, "good");
+
+                        _program.dollars.Quantity -=
+                            employeesToHire * _program._currentEmployeePrice * 2;
+                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                        _program._totalEmployeesHired += employeesToHire;
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     class PowerUp
@@ -937,90 +1024,7 @@ namespace Gold_Diggerzz
                         break;
 
                     case 3:
-                        Console.Clear();
-                        Console.WriteLine(
-                            "  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
-                        Console.WriteLine($"What type of employee do you want to hire?");
-                        Console.WriteLine(
-                            $"1 - Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
-                        Console.WriteLine(
-                            $"2 - Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
-                        Console.WriteLine(
-                            $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
-                        Console.WriteLine("4 - Cancel and return to market menu");
-                        
-                        int employeeType = _program.GetValidInt(1, 4);
-                        
-                        if (employeeType != 4)
-                        {
-                            Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
-                            
-                            int employeesToHire = _program.GetValidInt(0, 163);
-                            switch (employeeType)
-                            {
-                            case 1:
-                                if (employeesToHire * _program._currentEmployeePrice * 0.5 >
-                                    _program.dollars.Quantity)
-                                {
-                                    Console.WriteLine(
-                                        "You don't have enough dollars to hire that many bad employees");
-                                }
-                                else
-                                {
-                                    Console.WriteLine(
-                                        $"You have hired {employeesToHire} more bad employees.\nSay hello to:");
-
-                                    _program.HireNewWorker(employeesToHire, "bad");
-
-                                    _program.dollars.Quantity -=
-                                        employeesToHire * _program._currentEmployeePrice * 0.5;
-                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                                    _program._totalEmployeesHired += employeesToHire;
-                                }
-
-                                break;
-                            case 2:
-                                if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
-                                {
-                                    Console.WriteLine(
-                                        "You don't have enough dollars to hire that many mid employees");
-                                }
-                                else
-                                {
-                                    Console.WriteLine(
-                                        $"You have hired {employeesToHire} more mid employees.\nSay hello to:");
-
-                                    _program.HireNewWorker(employeesToHire, "mid");
-
-                                    _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
-                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                                    _program._totalEmployeesHired += employeesToHire;
-                                }
-
-                                break;
-                            case 3:
-                                if (employeesToHire * _program._currentEmployeePrice * 2 >
-                                    _program.dollars.Quantity)
-                                {
-                                    Console.WriteLine(
-                                        "You don't have enough dollars to hire that many good employees");
-                                }
-                                else
-                                {
-                                    Console.WriteLine(
-                                        $"You have hired {employeesToHire} more good employees.\nSay hello to:");
-
-                                    _program.HireNewWorker(employeesToHire, "good");
-
-                                    _program.dollars.Quantity -=
-                                        employeesToHire * _program._currentEmployeePrice * 2;
-                                    Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                                    _program._totalEmployeesHired += employeesToHire;
-                                }
-                                break;
-                            }
-                        }
-
+                        Worker.EmployeeHiringScreen(_program);
                         break;
 
                     case 4:
@@ -1562,22 +1566,22 @@ namespace Gold_Diggerzz
             List<RealEstate> toRemoveRealEstateList = new();
             foreach (RealEstate realEstate in _program.buildingRealEsateList)
             {
-                if (realEstate.DaysLeftToBuild > 0)
-                {
-                    realEstate.DaysLeftToBuild -= 1;
-                    if (!multipleDaysOrNot)
-                    {
-                        Console.WriteLine($"Your {realEstate.Type} will be ready in {realEstate.DaysLeftToBuild} days");
-                    }
-                }
-
-                if (realEstate.DaysLeftToBuild == 0)
+                if (realEstate.DaysLeftToBuild == 1)
                 {
                     _program.activeRealEstate.Add(realEstate);
                     toRemoveRealEstateList.Add(realEstate);
                     if (!multipleDaysOrNot)
                     {
                         Console.WriteLine($"Your {realEstate.Type} has been built");
+                    }
+                }
+                
+                else
+                {
+                    realEstate.DaysLeftToBuild -= 1;
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine($"Your {realEstate.Type} will be ready in {realEstate.DaysLeftToBuild} days");
                     }
                 }
             }
@@ -2327,20 +2331,23 @@ namespace Gold_Diggerzz
 
                         break;
                     case 13:
-                        Console.WriteLine("\n   _____                                   _   _                           _____          _                    \n  / ____|                                 (_) | |            /\\           / ____|        (_)                   \n | |        ___    _ __ ___    _ __ ___    _  | |_          /  \\         | |       _ __   _   _ __ ___     ___ \n | |       / _ \\  | '_ ` _ \\  | '_ ` _ \\  | | | __|        / /\\ \\        | |      | '__| | | | '_ ` _ \\   / _ \\\n | |____  | (_) | | | | | | | | | | | | | | | | |_        / ____ \\       | |____  | |    | | | | | | | | |  __/\n  \\_____|  \\___/  |_| |_| |_| |_| |_| |_| |_|  \\__|      /_/    \\_\\       \\_____| |_|    |_| |_| |_| |_|  \\___|\n");
-                        Console.WriteLine("You've chosen to commit a crime. Choose an option:");
-                        Console.WriteLine("0 - NO IM SCARED OF GOING TO JAIL... CANCEL!!!");
+                        Console.WriteLine("0 - no im scared of commiting crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(0, 2);
-
                         switch (crimeChoice)
                         {
                             case 1:
-                                Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
-                                dollars.Quantity -= stockMarketCrash.Price;
-                                Console.WriteLine("Giving you the information now...");
-                                Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                                if (dollars.Quantity > stockMarketCrash.Price)
+                                {
+                                    Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                                    dollars.Quantity -= stockMarketCrash.Price;
+                                    Console.WriteLine("Giving you the information now...");
+                                    Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                                    break;
+                                }
+                                
+                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
                                 break;
                             case 2:
                                 if (dollars.Quantity > bribe.Price)
@@ -2351,19 +2358,13 @@ namespace Gold_Diggerzz
                                     Console.WriteLine("You don't have to pay wages for the next three days");
                                     _noWageDaysLeft = 3;
                                     _totalBribes += 1;
+                                    break;
                                 }
-                                else
-                                {
-                                    Console.WriteLine("\u274c You can't afford to do this broke \u274c");
-                                }
-
+                               
+                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
                                 break;
-
-                                
-
-                                
-                                
                         }
+                        
 
                         break;
                     case 14:
@@ -2374,10 +2375,13 @@ namespace Gold_Diggerzz
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
+                    case 17:
+                        Worker.EmployeeHiringScreen(this);
+                        break;
                     case 20:
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
-                        Console.WriteLine("Gave ya $100000000 to test it bro");
-                        dollars.Quantity += 100000000;
+                        Console.WriteLine("Gave ya $1000 to test it bro");
+                        dollars.Quantity += 1000;
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("what do u want to build");
                         Console.WriteLine("0 - Cancel");
@@ -2428,18 +2432,18 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("_____________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Display Options:                  Other Features:                                |");
-                Console.WriteLine("                                                                                                             |");
-                Console.WriteLine("0 - Quit game               5 - Display game mechanics        10 - Skip one day                              |");
-                Console.WriteLine("1 - Dig one day             6 - Display stats                 11 - Use a powerup                             |");
-                Console.WriteLine("2 - Dig multiple days       7 - Display achievements          12 - Send employees for training               |");
-                Console.WriteLine("3 - Go to market            8 - Display tutorial              13 - Commit a crime (further options inside)   |");
-                Console.WriteLine("4 - Go To Trader            9 - Display employees             14 - Save current progress                (15) |\n");
-                Console.WriteLine("20 - testing new real estate thing (pls don't use it wont work)");
-                Console.WriteLine("Enter your choice:");
+                Console.WriteLine("___________________________________________________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("I'm reworking the whole menu system, so this is a bit of a mess right now. Periodically re-download the .exe file to get the latest version");
+                Console.WriteLine("Digging Features:           Display Options:                    Employee Features:                 Real Estate Features:    Other Features:             |");
+                Console.WriteLine("0 - Quit game               5 - Display game mechanics             17 - Hire more employees                                  11 - Use a powerup                                               |");
+                Console.WriteLine("1 - Dig one day             6 - Display stats                      9 - Display employees                                                                                                      |");
+                Console.WriteLine("2 - Dig multiple days       7 - Display achievements                                        12 - Send employees for training                                                                  |");
+                Console.WriteLine("3 - Go to market            8 - Display tutorial                                                                                            13 - Commit a crime (further options inside)      |");
+                Console.WriteLine("4 - Go To Trader                                                                                                             15 - Load game state                                                                             14 - Save current progress     |");
+                Console.WriteLine("10 - Skip one day                                                                                  16 - Build a building                   |");
+                Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 20);
+                int userOption = GetValidInt(0, 17);
                 Console.Clear();
                 return userOption;
             }
