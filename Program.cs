@@ -10,9 +10,7 @@ namespace Gold_Diggerzz
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
 
     /* current issues
-     
      * you are allowed to make multiple trades per day
-       employees that are ill don't have the weather effect multiplier applied to them
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
      * inconsistent between weather effect displaying and actual time left
@@ -20,20 +18,12 @@ namespace Gold_Diggerzz
      */
 
     /* to-do ideas
-     *Probability of finding stone still says 70%}”
        
        You have negative power ups 
        
        Sell employees
        
-       All employees retired so you had infinite / NaN resources
-       
-       “We’re selling all your resources” rather than specify iron and gold
-       
-       Make it more obvious when you sell employees because of bankruptcy
-       
-       Apply !multiple day did to “you found nothing today”
-       
+       All employees retired so you had infinite / NaN resources - do not let dig if no employees, force buying new employees
        
        Move hire more employees out of the market option
        Maybe another section for “employee stuff”
@@ -200,7 +190,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("__________________________________________________________");
             Thread.Sleep(750);
             Console.WriteLine("Current probabilities of finding resources:");
-            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: {Math.Round(_program.stone.Probability, 2)}}}%\"");
+            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: {Math.Round(_program.stone.Probability, 2)}");
             Console.WriteLine($"| Iron: {Math.Round(_program.iron.Probability, 2)}%                | Gold: {Math.Round(_program.gold.Probability, 2)}%");
             Console.WriteLine($"| Diamond: {Math.Round(_program.diamond.Probability, 2)}%              | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
             Console.WriteLine($"| Market Master: {Math.Round(_program.marketMaster.Probability, 2)}%        | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
@@ -273,7 +263,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             if (program.retiredWorkersList.Count != 0)
@@ -286,8 +276,8 @@ namespace Gold_Diggerzz
             double totalWages = 0;
             foreach (Worker worker in program.workersList)
             {
-                totalWages += worker.Wage;
                 j++;
+                totalWages += worker.Wage;
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
@@ -549,7 +539,7 @@ namespace Gold_Diggerzz
                         }
 
                         if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
-                            !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound)
+                            !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
                         {
                             Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
                         }
@@ -559,8 +549,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine("__________________________________________________________");
                             Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
                             Console.WriteLine("\nChoose an option:");
-                            Console.WriteLine(
-                                "1 - Get a guaranteed 50% chance of finding gold for the next five days");
+                            Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
                             Console.WriteLine("2 - $200 instantly");
                             Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
                             int userInput = _program.GetValidInt(1, 2);
@@ -922,7 +911,7 @@ namespace Gold_Diggerzz
 
                     case 2:
                         Console.WriteLine(
-                            "We're selling all your coal and iron and gold and stone and diamond for dollars");
+                            "\ud83e\udd11 Selling all your resources for dollars \ud83e\udd11 ");
 
                         _program.dollars.Quantity +=
                             _program.coal.Quantity * _program.coal.Price +
@@ -1183,7 +1172,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("It's the weekend, your employees want 30% more pay today and tomorrow");
                 }
 
-            _program._currentWageRate *= 1.3;
+                _program._currentWageRate *= 1.3;
                 foreach (Worker workers in _program.workersList)
                 {
                     workers.Wage *= 1.3;
@@ -1378,7 +1367,7 @@ namespace Gold_Diggerzz
 
             foreach (Worker worker in _program.illWorkersList)
             {
-                if (worker.IsIll && worker.ReturnToWorkDate == _program._currentDate.Date)
+                if (worker.IsIll && worker.ReturnToWorkDate.Date == _program._currentDate.Date)
                 {
                     if (!multipleDaysOrNot)
                     {
@@ -1603,6 +1592,28 @@ namespace Gold_Diggerzz
                 { "currentDate", _program._currentDate },
                 { "crashDate", _program._crashDate }
             };
+        }
+
+        public static void CreateNewGameState(Program program)
+        {
+            # region initialisation of all resource and other objects
+            
+            program.coal = new Resource("Coal", 80, 3, 0, 0);
+            program.stone = new Resource("Stone", 70, 6, 0, 0);
+            program.iron = new Resource("Iron", 60, 13, 0, 0);
+            program.gold = new Resource("Gold", 15, 65, 0, 0);
+            program.diamond = new Resource("Diamond", 3, 200, 0, 0);
+            program.dollars = new Resource("Dollars", 0, 0, 100, 0);
+            program.magicTokens = new PowerUp(0, 6, 3);
+            program.timeMachine = new PowerUp(0, 3, 3);
+            program.ancientArtefact = new PowerUp(0, 7, 3);
+            program.marketMaster = new PowerUp(0, 4, 3);
+            program.stockMarketCrash = new PayForStuff(100);
+            program.skipDay = new PayForStuff(50);
+            program.bribe = new PayForStuff(200);
+            program.trainingCourse = new PayForStuff(400);
+            
+            # endregion
         }
 
         public void SaveGameState(Program _program)
@@ -1952,24 +1963,12 @@ namespace Gold_Diggerzz
 
         public static void Main()
         {
+            
             Program program = new Program();
+            
+            GameState.CreateNewGameState(program);
 
-            # region initialisation of all objects
-
-            program.coal = new Resource("Coal", 80, 3, 0, 0);
-            program.stone = new Resource("Stone", 70, 6, 0, 0);
-            program.iron = new Resource("Iron", 60, 13, 0, 0);
-            program.gold = new Resource("Gold", 15, 65, 0, 0);
-            program.diamond = new Resource("Diamond", 3, 200, 0, 0);
-            program.dollars = new Resource("Dollars", 0, 0, 100, 0);
-            program.magicTokens = new PowerUp(0, 6, 3);
-            program.timeMachine = new PowerUp(0, 3, 3);
-            program.ancientArtefact = new PowerUp(0, 7, 3);
-            program.marketMaster = new PowerUp(0, 4, 3);
-            program.stockMarketCrash = new PayForStuff(100);
-            program.skipDay = new PayForStuff(50);
-            program.bribe = new PayForStuff(200);
-            program.trainingCourse = new PayForStuff(400);
+            # region initialisation of all trade objects
 
             program.coalToStone = new Trade(2 * (_random.Next(80,100)/100), program.coal, program.stone);
             program.coalToIron = new Trade(5 * (_random.Next(80,100)/100), program.coal, program.iron);
@@ -1989,13 +1988,13 @@ namespace Gold_Diggerzz
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
-            Console.WriteLine("The aim of the game is to survive for as long as possible before bankruptcy");
+            Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
-            Thread.Sleep(1750);
+            Thread.Sleep(1500);
 
             DisplayStuff.DisplayResources(program);
 
-            Thread.Sleep(1750);
+            Thread.Sleep(1500);
             Console.WriteLine("The game is about to start, good luck...");
             program.RunGame();
         }
@@ -2320,8 +2319,7 @@ namespace Gold_Diggerzz
 
                 if (inDebt == "true" && noResources && workersList.Count >= 2)
                 {
-                    Console.WriteLine(
-                        "You don't have resources to sell, so we're selling workers for $50 per guy.");
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy \ud83d\udc77 \ud83d\udd2b");
                     dollars.Quantity += workersList.Count * 50;
                     _totalDollarsEarned += workersList.Count * 50;
 
