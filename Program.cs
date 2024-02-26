@@ -12,8 +12,6 @@ namespace Gold_Diggerzz
     /* current issues
      
      * you are allowed to make multiple trades per day
-       weird bad printing of weather effects
-       hiring a bad employee gives it an efficiency of 0
        employees that are ill don't have the weather effect multiplier applied to them
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
@@ -22,7 +20,24 @@ namespace Gold_Diggerzz
      */
 
     /* to-do ideas
-     
+     *Probability of finding stone still says 70%}”
+       
+       You have negative power ups 
+       
+       Sell employees
+       
+       All employees retired so you had infinite / NaN resources
+       
+       “We’re selling all your resources” rather than specify iron and gold
+       
+       Make it more obvious when you sell employees because of bankruptcy
+       
+       Apply !multiple day did to “you found nothing today”
+       
+       
+       Move hire more employees out of the market option
+       Maybe another section for “employee stuff”
+     * 
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * remove printed line at the start that says:
         * /Library/Frameworks/Mono.framework/Versions/6. 12. O/bin/mono-sgen64 /Users/aadityakalwani/Documents/Coding/Gold_Diggerzz/bin/Debug/Gold_Diggerzz. exe 
