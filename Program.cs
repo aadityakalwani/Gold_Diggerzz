@@ -149,21 +149,22 @@ namespace Gold_Diggerzz
             Console.WriteLine(
                 "  _    _   _                      ______                       _                                       \n | |  | | (_)                    |  ____|                     | |                                      \n | |__| |  _   _ __    ___       | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___   \n |  __  | | | | '__|  / _ \\      |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|  \n | |  | | | | | |    |  __/      | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\  \n |_|  |_| |_| |_|     \\___|      |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/  \n                                                      | |                   __/ |                      \n                                                      |_|                  |___/                     ");
             Console.WriteLine($"What type of employee do you want to hire?");
+            Console.WriteLine("0 - Cancel and return to the menu");
             Console.WriteLine(
                 $"1 - Hire a bad employee: Price = ${_program._currentEmployeePrice * 0.5} Wage = ${_program._currentWageRate * 0.5}, Efficiency = 0.5x, Retires in 30 days");
             Console.WriteLine(
                 $"2 - Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
             Console.WriteLine(
                 $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
-            Console.WriteLine("4 - Cancel and return to market menu");
             
-            int employeeType = _program.GetValidInt(1, 4);
             
-            if (employeeType != 4)
+            int employeeType = _program.GetValidInt(0, 3);
+            
+            if (employeeType != 0)
             {
                 Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
                 
-                int employeesToHire = _program.GetValidInt(0, 163);
+                int employeesToHire = _program.GetValidInt(0, 350);
                 switch (employeeType)
                 {
                 case 1:
@@ -240,8 +241,8 @@ namespace Gold_Diggerzz
         public PowerUp(double initialQuantity, double initialProbability, double maxQuantity)
         {
             Quantity = initialQuantity;
-            MaxQuantity = maxQuantity;
             Probability = initialProbability;
+            MaxQuantity = maxQuantity;
         }
     }
 
@@ -367,6 +368,21 @@ namespace Gold_Diggerzz
             Console.WriteLine("___________________________________________________________");
             Console.WriteLine("\n\n[ENTER]");
             Console.ReadLine();
+        }
+
+        public static void DisplayRealEstate(Program program)
+        {
+            if (program.activeRealEstate.Count == 0)
+            {
+                Console.WriteLine("You have no real estate properties active right now, level up brokie");
+                return;
+            }
+            
+            Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
+            foreach (RealEstate realEstate in program.activeRealEstate)
+            {
+                Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRent} dollars per week");
+            }
         }
     }
 
@@ -2155,15 +2171,14 @@ namespace Gold_Diggerzz
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
+            Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("These are your initial resources...");
-            Console.WriteLine("This game is still a work in progress. Periodically re-download the .exe file to get the latest version of the game as I update it");
+            Console.WriteLine("The game is about to start, good luck...");
             Thread.Sleep(1500);
 
             DisplayStuff.DisplayResources(program);
 
             Thread.Sleep(1500);
-            Console.WriteLine("The game is about to start, good luck...");
             program.RunGame();
         }
 
@@ -2379,6 +2394,9 @@ namespace Gold_Diggerzz
                     case 17:
                         Worker.EmployeeHiringScreen(this);
                         break;
+                    case 19:
+                        DisplayStuff.DisplayRealEstate(this);
+                        break;
                     case 20:
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
                         Console.WriteLine("Gave ya $1000 to test it bro");
@@ -2432,17 +2450,19 @@ namespace Gold_Diggerzz
 
             if (takeUserInput == "false")
             {
-                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${dollars.Quantity}");
+                Console.WriteLine("Choose an option:");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |\n");
+                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |");
+                Console.WriteLine("                                                                                                                                                                         |");
                 Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
                 Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
                 Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
                 Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |                                     |                              |  15 - Load game state                    |");
-                Console.WriteLine("4 - Go To Trader        |                                |                                     |                              |  10 - Skip one day                       |");
+                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  10 - Skip one day                       |");
                 Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 17);
+                int userOption = GetValidInt(0, 20);
                 Console.Clear();
                 return userOption;
             }
