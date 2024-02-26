@@ -10,19 +10,14 @@ namespace Gold_Diggerzz
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
 
     /* current issues
-     * you are allowed to make multiple trades per day
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
-     * inconsistent between weather effect displaying and actual time left
-        * eg "6 days left of bad weather" but then it's only 5 days
      */
 
     /* to-do ideas
-       
+       * you are allowed to make multiple trades per day
        You have negative power ups 
-       
        Sell employees
-       
        All employees retired so you had infinite / NaN resources - do not let dig if no employees, force buying new employees
        
        Move hire more employees out of the market option
@@ -349,8 +344,13 @@ namespace Gold_Diggerzz
     class MiningOperation
     {
         public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
-
         {
+            if (_program.workersList.Count == 0)
+            {
+                Console.WriteLine("You have no employees to dig for you. Hire some employees first");
+                Console.WriteLine("Go to the market (menu option 3) -> Hire more employees (menu option 3) -> select type and hire");
+                return;
+            }
             bool multipleDayDig = daysToDig > 1;
             
             // for multiple day dig outputs in one go
@@ -1303,7 +1303,7 @@ namespace Gold_Diggerzz
                     _program.workersList.Remove(worker);
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine($"Employee {worker.Name} has retired. Goodbye!");
+                        Console.WriteLine($"Employee {worker.Name} has retired. Goodbye! \ud83d\udc4b");
                         Console.WriteLine($"You now have {_program.workersList.Count} employees");
                     }
                     
