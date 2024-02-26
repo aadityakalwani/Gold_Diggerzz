@@ -2157,6 +2157,7 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("These are your initial resources...");
+            Console.WriteLine("This game is still a work in progress. Periodically re-download the .exe file to get the latest version of the game as I update it");
             Thread.Sleep(1500);
 
             DisplayStuff.DisplayResources(program);
@@ -2432,15 +2433,13 @@ namespace Gold_Diggerzz
             if (takeUserInput == "false")
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}");
-                Console.WriteLine("___________________________________________________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("I'm reworking the whole menu system, so this is a bit of a mess right now. Periodically re-download the .exe file to get the latest version");
-                Console.WriteLine("Digging Features:           Display Options:                    Employee Features:                 Real Estate Features:    Other Features:             |");
-                Console.WriteLine("0 - Quit game               5 - Display game mechanics             17 - Hire more employees                                  11 - Use a powerup                                               |");
-                Console.WriteLine("1 - Dig one day             6 - Display stats                      9 - Display employees                                                                                                      |");
-                Console.WriteLine("2 - Dig multiple days       7 - Display achievements                                        12 - Send employees for training                                                                  |");
-                Console.WriteLine("3 - Go to market            8 - Display tutorial                                                                                            13 - Commit a crime (further options inside)      |");
-                Console.WriteLine("4 - Go To Trader                                                                                                             15 - Load game state                                                                             14 - Save current progress     |");
-                Console.WriteLine("10 - Skip one day                                                                                  16 - Build a building                   |");
+                Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |\n");
+                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
+                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
+                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |                                     |                              |  15 - Load game state                    |");
+                Console.WriteLine("4 - Go To Trader        |                                |                                     |                              |  10 - Skip one day                       |");
                 Console.WriteLine("\nEnter your choice:");
 
                 int userOption = GetValidInt(0, 17);
