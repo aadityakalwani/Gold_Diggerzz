@@ -245,7 +245,7 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    }// employee morale boosts need to be done
+    } // employee morale boosts need to be done
 
     class DisplayStuff
     {
@@ -1773,7 +1773,7 @@ namespace Gold_Diggerzz
                 }
             }
         }
-    }// applying a loaded game state
+    } // applying a loaded game state
 
     class RealEstate
     {
@@ -1890,7 +1890,7 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    }// balance updates
+    } // balance updates
 
     class Program
     {
@@ -2125,6 +2125,7 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
             Thread.Sleep(250);
+            
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...");
             Thread.Sleep(1500);
@@ -2137,6 +2138,8 @@ namespace Gold_Diggerzz
 
         public void RunGame()
         {
+            RunTutorial();
+            
             int menuOption;
             do
             {
@@ -2375,25 +2378,38 @@ namespace Gold_Diggerzz
 
         public void RunTutorial()
         {
-            Console.WriteLine("Welcome to the tutorial");
-            Console.WriteLine(
-                "You are a gold digger, and you have to survive for as long as possible before bankruptcy");
-            Console.WriteLine("You have a few resources to start with:");
-            Console.WriteLine(
-                "You have $100, 0kg of coal, 0kg of iron, 0kg of gold, 0kg stone, 0kg diamond and 1 employee");
-            Console.WriteLine("You can hire more employees, dig for resources, and sell resources at the market");
-            Console.WriteLine("You can also bribe the government to not pay wages for the next three days");
-            Console.WriteLine(
-                $"You can also pay ${stockMarketCrash.Price} for information on the next stock market crash");
-            Console.WriteLine(
-                "You can also send all employees for a training course for $400 per employee (+30% efficiency) (7 days)");
-            Console.WriteLine("You can also sell all your iron and gold for dollars");
-            Console.WriteLine($"You can also skip one day for ${skipDay.Price}");
-            Console.WriteLine("You can also quit the game");
-            Console.WriteLine("You can also dig for multiple days");
-            Console.WriteLine("Here are the game mechanics:");
-            Console.WriteLine("THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT\n");
-        } // make this actually do something, eg. you're dad teaches you how to play the game if you choose ++ option to run at the start
+            Console.WriteLine("Your father is the manager of a large, successful and respectable gold mining company");
+            Thread.Sleep(500);
+            Console.WriteLine("However, as he ages, he begins to worry about the future of the company");
+            Console.WriteLine("He decides to teach you the ropes of the business");
+            Console.WriteLine("One day, you may have to take over the company");
+            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run");
+            Console.WriteLine("He offers you the chance to learn the business before your begin... Do you want to get the tutorial? (y/n)");
+            
+            string tutorialChoice = Console.ReadLine().ToLower();
+            if (tutorialChoice == "n")
+            {
+                Console.WriteLine("He frowns upon your arrogance and decides to give you the company anyway, but you have to learn on the job");
+            }
+            else if (tutorialChoice == "y")
+            {
+                Console.WriteLine("Welcome to the tutorial");
+                Thread.Sleep(500);
+                Console.WriteLine("You are now the manager of a new gold digging business.");
+                Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father");
+                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'");
+                Thread.Sleep(1000);
+                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money");
+                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu)");
+                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet)");
+                Thread.Sleep(1750);
+                Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
+                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins");
+                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options");
+                Console.WriteLine("Here are the game mechanics:");
+                Console.WriteLine("\nTHIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT\n");
+            }
+        }
 
         public int UserMenuOption()
         {
