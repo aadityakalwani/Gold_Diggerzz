@@ -21,5 +21,4 @@ namespace Gold_Diggerzz
             TotalFound = totalFound;
         }
     }
-    
 }
