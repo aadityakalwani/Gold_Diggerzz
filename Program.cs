@@ -263,7 +263,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("__________________________________________________________");
             Thread.Sleep(750);
             Console.WriteLine("Current probabilities of finding resources:");
-            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: {Math.Round(_program.stone.Probability, 2)}");
+            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: ${Math.Round(_program.stone.Probability, 2)}");
             Console.WriteLine($"| Iron: {Math.Round(_program.iron.Probability, 2)}%                | Gold: {Math.Round(_program.gold.Probability, 2)}%");
             Console.WriteLine($"| Diamond: {Math.Round(_program.diamond.Probability, 2)}%              | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
             Console.WriteLine($"| Market Master: {Math.Round(_program.marketMaster.Probability, 2)}%        | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
@@ -1239,6 +1239,12 @@ namespace Gold_Diggerzz
         public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
             // retirements, returning workers, unwell workers, etc
+            
+            // reduce morale by 2% for every day worked
+            foreach (Worker worker in _program.workersList)
+            {
+                worker.Morale *= 0.98;
+            }
             
             Random random = new Random();
 
