@@ -288,7 +288,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
             Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
             Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
-            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
         }
 
         public static void DisplayStats(Program program)
@@ -338,7 +338,7 @@ namespace Gold_Diggerzz
 
             if (program.retiredWorkersList.Count != 0)
             {
-                Console.WriteLine("_____________________________________________________________________");
+                Console.WriteLine("__________________________________________________________________________");
             }
             
             Console.WriteLine("Here are your current working employees:");
@@ -351,11 +351,11 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Morale {Math.Round(worker.Morale, 2)} Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
-            Console.WriteLine("___________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
             Console.WriteLine($"Average employee morale right now: {Math.Round(program._averageEmployeeMorale, 2)}");
             Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
-            Console.WriteLine("___________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine("\n\n[ENTER]");
             Console.ReadLine();
         }
@@ -365,7 +365,7 @@ namespace Gold_Diggerzz
             if (program.activeRealEstate.Count == 0)
             {
                 Console.WriteLine("You have no real estate properties active right now, level up brokie \ud83d\ude45\u200d\u2642\ufe0f ");
-                Console.WriteLine("______________________________________________________________________");
+                Console.WriteLine("__________________________________________________________________________");
                 return;
             }
             
@@ -459,7 +459,7 @@ namespace Gold_Diggerzz
                             }
 
                             Thread.Sleep(500);
-                            Console.WriteLine("___________________________________________________________________________");
+                            Console.WriteLine("__________________________________________________________________________");
                             Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
                             Console.WriteLine("Here are the changes to your resources:");
                             Console.Clear();
@@ -688,7 +688,7 @@ namespace Gold_Diggerzz
                     // calendar/weather etc effects 
                     if (!multipleDayDig)
                     {
-                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine("Here are the current active effects affecting your game:");
 
                         if (_program._noWageDaysLeft != 0)
@@ -773,7 +773,7 @@ namespace Gold_Diggerzz
             
             if (multipleDayDig)
             {
-                Console.WriteLine("__________________________________________________________");
+                Console.WriteLine("__________________________________________________________________________");
                 Console.WriteLine($"Here are the changes to your resources after {daysToDig} days of digging:");
                 Console.WriteLine($"You found {Math.Round(newCoal, 2)}kg of coal");
                 Console.WriteLine($"You found {Math.Round(newStone, 2)}kg of stone");
@@ -784,7 +784,7 @@ namespace Gold_Diggerzz
 
             _DayToDayOperations.CheckAchievements(achievements, _program);
 
-            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"Here are your updated resources:");
             DisplayStuff.DisplayResources(_program);
 
@@ -1017,7 +1017,7 @@ namespace Gold_Diggerzz
                 {
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
                         Console.WriteLine("They also lose 45% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
                     }
@@ -1036,7 +1036,7 @@ namespace Gold_Diggerzz
                 {
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
                         Console.WriteLine("They also lose 15% of their morale because nobody likes working when its raining \ud83d\ude2d");
@@ -1057,7 +1057,7 @@ namespace Gold_Diggerzz
                 {
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine("__________________________________________________________");
+                        Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
                         Console.WriteLine("They also gaines 10% of their morale because everybody likes working when its sunny \ud83d\ude2d");
@@ -1112,7 +1112,7 @@ namespace Gold_Diggerzz
             // every 10 days, probability of finding resources is reduced by 5%
             if (_program._currentDate.Day % 10 == 0)
             {
-                Console.WriteLine("__________________________________________________________");
+                Console.WriteLine("__________________________________________________________________________");
                 Console.WriteLine(
                     "Congratulations for surviving for another 10 days. The game is now getting even harder...");
                 Console.WriteLine(
@@ -1129,7 +1129,7 @@ namespace Gold_Diggerzz
             {
                 if (!MultipleDaysOrNot)
                 {
-                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine("It's the weekend, your employees want 30% more pay today and tomorrow");
                 }
 
@@ -1156,7 +1156,7 @@ namespace Gold_Diggerzz
             {
                 if (!MultipleDaysOrNot)
                 {
-                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
                 }
                 
@@ -1173,7 +1173,7 @@ namespace Gold_Diggerzz
             {
                 if (!MultipleDaysOrNot)
                 {
-                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine(
                         "\ud83d\udcc9 The stock market has crashed; prices for everything have plummeted \ud83d\udcc9");
                     Console.WriteLine("(\ud83d\ude09 Now is the best time to hire employees \ud83d\ude09)");
@@ -1193,7 +1193,7 @@ namespace Gold_Diggerzz
             {
                 if (!MultipleDaysOrNot)
                 {
-                    Console.WriteLine("__________________________________________________________");
+                    Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine(
                         "\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
                 }
@@ -1208,7 +1208,7 @@ namespace Gold_Diggerzz
             // 10% profit sharing to each employee on the 15th of every month
             if (_program._currentDate.Day == 15)
             {
-                Console.WriteLine("__________________________________________________________");
+                Console.WriteLine("__________________________________________________________________________");
                 Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
 
                 if (_program.workersList.Count < 7)
@@ -2124,21 +2124,22 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
-            Thread.Sleep(250);
+            Thread.Sleep(1500);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...");
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
+            Console.Clear();
 
-            DisplayStuff.DisplayResources(program);
-
-            Thread.Sleep(1500);
             program.RunGame();
         }
 
         public void RunGame()
         {
             RunTutorial();
+            Console.Clear();
+            
+            DisplayStuff.DisplayResources(this);
             
             int menuOption;
             do
@@ -2378,36 +2379,44 @@ namespace Gold_Diggerzz
 
         public void RunTutorial()
         {
-            Console.WriteLine("Your father is the manager of a large, successful and respectable gold mining company");
-            Thread.Sleep(500);
-            Console.WriteLine("However, as he ages, he begins to worry about the future of the company");
-            Console.WriteLine("He decides to teach you the ropes of the business");
-            Console.WriteLine("One day, you may have to take over the company");
-            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run");
-            Console.WriteLine("He offers you the chance to learn the business before your begin... Do you want to get the tutorial? (y/n)");
+            Thread.Sleep(1250);
+            Console.WriteLine("Your father is the manager of a large, successful and respectable gold mining company.");
+            Thread.Sleep(1750);
+            Console.WriteLine("However, as he ages, he begins to worry about the future of the company.");
+            Console.WriteLine("He decides to teach you the ropes of the business - one day, you may have to take over the company.");
+            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.");
+            Console.WriteLine("\nHe offers you the chance to learn the business before you begin...");
+            Console.WriteLine("Do you want to go through a tutorial? (y/n): ");
             
             string tutorialChoice = Console.ReadLine().ToLower();
             if (tutorialChoice == "n")
             {
-                Console.WriteLine("He frowns upon your arrogance and decides to give you the company anyway, but you have to learn on the job");
+                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
+                Thread.Sleep(2000);
             }
             else if (tutorialChoice == "y")
             {
-                Console.WriteLine("Welcome to the tutorial");
-                Thread.Sleep(500);
+                Console.WriteLine("He smiles and says 'Good choice, my child'.");
+                Thread.Sleep(2000);
+                Console.Clear();
+                Console.WriteLine("\n  _______           _                    _           _ \n |__   __|         | |                  (_)         | |\n    | |     _   _  | |_    ___    _ __   _    __ _  | |\n    | |    | | | | | __|  / _ \\  | '__| | |  / _` | | |\n    | |    | |_| | | |_  | (_) | | |    | | | (_| | | |\n    |_|     \\__,_|  \\__|  \\___/  |_|    |_|  \\__,_| |_|\n");
+                Console.WriteLine("Welcome to the tutorial!");
+                Thread.Sleep(2000);
                 Console.WriteLine("You are now the manager of a new gold digging business.");
-                Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father");
-                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'");
-                Thread.Sleep(1000);
-                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money");
-                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu)");
-                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet)");
-                Thread.Sleep(1750);
+                Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
+                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
+                Thread.Sleep(2500);
+                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money.");
+                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
+                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet).");
+                Console.WriteLine("________________________________________________________________________________________________________________________________________");
+                Thread.Sleep(2000);
                 Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
-                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins");
-                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options");
-                Console.WriteLine("Here are the game mechanics:");
-                Console.WriteLine("\nTHIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT\n");
+                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins.");
+                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options.");
+                Thread.Sleep(2000);
+                Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
+                Console.ReadLine();
             }
         }
 
@@ -2836,7 +2845,7 @@ namespace Gold_Diggerzz
             Console.WriteLine($"9 - Convert {Math.Round(ironToDiamond.Ratio, 2)} iron --> diamond");
             Console.WriteLine($"10 - Convert {Math.Round(goldToDiamond.Ratio, 2)} gold --> diamond");
             Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
-            Console.WriteLine("_________________________________________");
+            Console.WriteLine("__________________________________________________________________________");
 
             int userTrade = GetValidInt(0, 10);
 
