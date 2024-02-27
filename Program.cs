@@ -54,6 +54,972 @@ namespace Gold_Diggerzz
      * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth?)
      */
 
+    class Program
+    {
+        # region global variables
+
+        public bool _animation = true;
+        public int _increasedGoldChanceDays;
+        public int _marketMasterDaysLeft;
+        public int _noWageDaysLeft;
+        public int _crashDaysLeft;
+        public int _totalBribes;
+        public int _totalPowerUpsUsed;
+        public double _totalDaysDug;
+        public double _totalEmployeesHired;
+        public double _totalDollarsEarned;
+        public double _averageEmployeeEfficiency = 1;
+        public double _averageEmployeeMorale = 1;
+        public bool _achievement1;
+        public bool _achievement2;
+        public bool _achievement3;
+        public bool _achievement4;
+        public bool _achievement5;
+        public bool _achievement6;
+        public bool _achievement7;
+        public bool _achievement8;
+        public bool _achievement9;
+        public bool _achievement10;
+        public bool _achievement11;
+        public bool _achievement12;
+        public bool _achievement13;
+        public bool _achievement14;
+        public bool _achievement15;
+        public bool _achievement16;
+        public bool _achievement17;
+        public bool _achievement18;
+        public bool _achievement19;
+        public bool _achievement20;
+        public double _currentWageRate = 10;
+        public double _currentEmployeeIllProbability = 5;
+        public double _currentEmployeePrice = 100;
+        public DateTime _currentDate = new DateTime(2024, 1, 1);
+        public static Random _random = new();
+        public int _crashDate = _random.Next(0, 28);
+
+        public List<Worker> illWorkersList = new();
+        public List<Worker> retiredWorkersList = new();
+        public List<Worker> trainingWorkersList = new();
+        public List<Worker> toSendToTrainingList = new();
+        
+        public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
+
+        public List<Worker> workersList = new()
+            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
+        
+        public List<RealEstate> buildingRealEsateList = new();
+        public List<RealEstate> activeRealEstate = new();
+
+        MiningOperation miningOperation = new MiningOperation();
+        MarketOperation marketOperation = new MarketOperation();
+        DayToDayOperations dayToDayOperations = new DayToDayOperations();
+
+        // Declare your variables at the class level
+        public Resource coal;
+        public Resource stone;
+        public Resource iron;
+        public Resource gold;
+        public Resource diamond;
+        public Resource dollars;
+        public PowerUp magicTokens;
+        public PowerUp timeMachine;
+        public PowerUp ancientArtefact;
+        public PowerUp marketMaster;
+        public PayForStuff stockMarketCrash;
+        public PayForStuff skipDay;
+        public PayForStuff bribe;
+        public PayForStuff trainingCourse;
+        public Trade coalToStone;
+        public Trade coalToIron;
+        public Trade coalToGold;
+        public Trade coalToDiamond;
+        public Trade stoneToIron;
+        public Trade stoneToGold;
+        public Trade stoneToDiamond;
+        public Trade ironToGold;
+        public Trade ironToDiamond;
+        public Trade goldToDiamond;
+
+        public List<string> achievementsList = new List<string>();
+
+        // 307 possible names for the workers
+        // to stop screaming at me for names it doesn't recognise/think are typos
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        private static List<string> _possibleNames = new List<string>()
+        {
+            "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
+            "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
+            "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein",
+            "Dwayne 'The Rocking Chair, Johnson", "Marilyn Mon-roll", "Mark Zuckerburger",
+            "Oprah Win-free", "Steve Jobsite", "Hillary Cling-on",
+            "Emma Stoned", "Donald Duck Trump", "Bruce Spring-chicken",
+            "Bill Gateskeeper", "Justin Beaver", "Kim Car-dashing",
+            "Shakira-law", "Charlie Sheen-bean", "Ellen DeGenerous",
+            "Jennif er Lawn-mower", "Will Smithereens", "Cristiano Armani",
+            "Serena Williams-son", "Vladimir Poutine", "Ariana Grand-piano",
+            "Jackie Chan-deliep", "Scarlett Johandsome", "Vin Diesel-truck",
+            "Harrison Ford F-150", "Gordon Rams-lamb", "Ryan Gooseling",
+            "Nicolas Cage-f ree", "Johnny Depp-fryer", "Arnold Schwarzenegger-schnitzel",
+            "Jessica Al-bacon", "Keanu Reefs", "Denzel Washing-done",
+            "Samuel L. Vodka", "Matt Damon-salad", "Angelina Jolie-ox",
+            "Tom Cruise-control", "Kate Wins-lit", "Julia Robberies",
+            "Robert Downey Jp. High", "Chris Prattfall", "Jennif er Aniston-bake",
+            "George Clooney-tunes", "Leonardo DiCapriSun", "Kanye East",
+            "Benedict Cucumberbatch", "Taylor Swiftboat", "Morgan Free-wheeling",
+            "Jimmy Fallon-over", "Nicole Kidneybean", "Hugh Jackman-go",
+            "John Lemonade", "Miley Virus", "Katy Perry-able",
+            "Jennifer Lawrence-of-arabia", "Jennifer Garner-den", "Daniel Radish-cliffe",
+            "Ryan Goose-down", "Emma Watson-burgep", "Justin Timberlake-up",
+            "Tom Hanks-giving", "Leonardo DiCaprio-daVinci", "Jack Black-hole",
+            "Miley Cyrus-virus", "Katy Perry-corn", "Hugh Grant-ed",
+            "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
+            "Eddie Murphy-bed", "Bruce Willis-tower", "Johnny Cash-flow",
+            "Celine Dion-osaur", "Jennif er Lopez-ing", "Ellen DeGeneres-erator",
+            "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule",
+            "Zach Galif ianakis-bar", "Brad Pitt-stop", "Eva Longoria-lunch",
+            "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful",
+            "Charlize Thereon", "Amy Wine-handy", "Tommy Lee Bones",
+            "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar",
+            "Bruce Spring-clean", "Jennif er Aniston-the-pants", "Hugh Jacked-man",
+            "Johnny Deep-fry", "Rihanna-na-na", "Bruce Lee-sure",
+            "Chris Pineapple", "Leonardo DiCapri-pants", "Jackie Chain-reaction",
+            "Morgan Freeman-dle", "Robert Downey Jr. Low", "Chris Rocking Chair",
+            "Helen Mirren-aged", "Jamie Foxx-in-the-box", "Dwayne 'The Flocking Chair'  Johnson",
+            "Arnold Schwarzenegger-salad", "Will Ferrell-y-good", "Gwyneth Paltrow-lint",
+            "Bradley Cooper-ate", "Liam Neeson-light", "Tom Hardy-har-har",
+            "Daniel Day-Lewis and Clark", "Johnny Depp-o", "Ben Affleck-tion",
+            "Julia Roberts-ized", "Russell Crow-bar", "Reese Witherspoon-fed",
+            "Jennif er Garner-ner", "Ben Stiller-ware", "Halle Berry-licious",
+            "John Travolted", "Amy Adams-apples", "Kevin Bacon-ator",
+            "Will Smithen", "Owen Wilson-you-over", "Jake Gyllen-hall",
+            "Matthew McConaughey-mind", "Cate Blanchett-et", "Natalie Port-man",
+            "Sylvester Stall-own", "Emily Blunt-ed", "Emma Stone-throw",
+            "Mel Gibson-soup", "Ryan Reynolds-wrap", "Nicole Kid-man",
+            "Amanda Seyf ried-rice", "James Franco-american", "Harrison Ford Focus",
+            "Johnny Deep-fryer", "Cameron Diaz-up", "Ryan Gosling-along",
+            "Keanu Reeves and Butthead", "Meryl Streep-ing", "Charlize Theron-ament",
+            "Kevin Space- jam", "Daniel Radishcliffe", "Amy Wine-house",
+            "Steve Carell-ing", "Horrid Henry", "Perfect Peter", "Moody Margaret",
+            "Sour Susan", "Rude Ralph", "Aerobic Al", "Greedy Graham", "Lazy Linda",
+            "Anxious Andrew", "Weepy William", "Tidy Ted", "Goody-Goody Gordon",
+            "Singing Soraya", "Beefy Bert", "Jolly Josh", "Sour-faced Simon",
+            "Stuck-up Steve", "Igglepiggle", "Upsy Daisy",
+            "Makka Pakka", "Hugh Jack-o-lantern", "Amanda Seyfried-rice",
+            "Jennifer Garner-den", "Jennifer Lawrence-of-arabia", "Dwayne 'The Rocking Chair' Johnson",
+            "Robert Downey Jr. High", "Jennifer Aniston-bake", "Usain Bolt-of-lightning",
+            "Cristiano Ronaldoughnut", "Lionel Messy", "Serena William-son",
+            "Michael Jordan-almond", "Tiger Woods-chips", "LeBron Jam",
+            "Rafael Nada-lot", "Roger Fed-her", "Novak Jokewitch",
+            "Tom Brady-punch", "Kobe Beef Bryant", "Wayne Goofy Rooney",
+            "Muhammad Alley-oop", "Miley Virus", "Elvis Parsley",
+            "Dolly Part-on", "Madonna-nna", "Frank Sinatra-ture",
+            "Britney Spears-it", "Freddie Mercury-fish", "Eminem & M",
+            "Mariah Car-rear", "Adele-dazeem", "Ed Sheeran-will",
+            "Selena Gómez", "Whitney Houston-we-have-a-problem", "Alicia Keypers",
+            "Stevie Wonder-ful", "John Lennon-ade", "Ed Shear-stress",
+            "Mick Jagger-not", "Britney Spearmint", "Freddy Mer-curly",
+            "Taylor Swift-key", "Miley Cyclone", "John Lemon",
+            "Mariah Carrot", "Nickelback-ache", "Madonna-lisa",
+            "Jennifer Lopezhole", "Bruno Mars-bar", "Lana Del Spray",
+            "Axl Rose-thorn", "Sam Smith-and-Wesson", "Chris Brown-sugar",
+            "Bob Marley-ed cheese", "Dua Lipa-stick", "Sting-ray", "Snoop Doggy Bag",
+            "Cardi No-B", "Drake-up", "Eminem-and-a-half",
+            "Charli Chaplin", "Addison Rae of sunshine", "Bella Porridge",
+            "Dixie D'Amelion", "David Dollop", "Zach Kinda-funny",
+            "Loren Beer Gray", "Spencer What-does-he-do", "James Cha-rlie's-bro",
+            "Noah Smiley", "Amber of the evening", "Josh Kool-Aid",
+            "Avani Bandage", "Chase Soap Hudson", "D'Amelion",
+            "J.K. Rolling-pin", "Stephen Peanut King", "Agatha Crispie",
+            "Dan Brown-bag", "Dr. Seuss and desist", "George R.R. Jar Jar Martin",
+            "Jane Awful", "Ernest Hemingweigh", "Charles Dick-in-son",
+            "Mark Twain-wreck", "Oscar Wilde-berry", "Virginia Wolf-down",
+            "William Shake-a-spear", "Lewis Carrot", "Tolkien-ish",
+            "J.D. Salami-nger", "F. Scott Fitchgerald", "Homer's Odyssey",
+            "Arthur Conan Doughnut", "Leo Tolstoyed", "Rolling-pin",
+            "Peanut King", "Crispie", "Brown-bag", "and desist",
+            "Jar Jar Martin", "Awful", "Hemingweigh", "Dick-in-son",
+            "Twain-wreck", "Wilde-berry", "Wolf-down", "Shake-a-spear",
+            "Bill Gaps", "Tim Cook-e", "Larry Page-turner", "Sergey Brin-ger",
+            "Satya Nutella", "Jack Dorsey-doody", "Reed Hastings-hound",
+            "Susan YouTube", "Felix Kjellberg-fish", "Mr. Beastie Boys",
+            "MKBHTea", "Ninja - the CEO of Fortnite", "Casey Nice-dad",
+            "PewDiePie-rce", "T-Series of Unfortunate Events", "Jake Paul-itician",
+            "Logan Paul-itics", "Barack O'Banana", "Jennifer Lawn-mower",
+            "Jackie Chan-delier", "Nicolas Cage-free", "Julia Rob",
+            "LeBron Slam James", "Tom Terrific Brady", "Michael Grand Slam Jordan",
+            "Serena Smash Williams", "Lionel Fast Messi", "Roger Slam-derer",
+            "Dale Earn-heart Junior", "Usain Streak Bolt", "Steph Curry-flavored",
+            "Alex Rodriguez-n-roll", "Shaquille O'Peel", "Michael Phelps-water",
+            "Ronda Rousey-n-feathers"
+        };
+
+        public static List<string> UsedNames = new ();
+
+        # endregion
+
+        public static void Main()
+        {
+            Console.Clear();
+            
+            Program program = new Program();
+            
+            GameState.CreateNewGameState(program);
+
+            # region initialisation of all trade objects
+
+            program.coalToStone = new Trade(2 * (_random.Next(80,100)/100), program.coal, program.stone);
+            program.coalToIron = new Trade(5 * (_random.Next(80,100)/100), program.coal, program.iron);
+            program.coalToGold = new Trade(12 * (_random.Next(80,100)/100), program.coal, program.gold);
+            program.coalToDiamond = new Trade(70 * (_random.Next(80,100)/100), program.coal, program.diamond);
+            program.stoneToIron = new Trade(3 * (_random.Next(80,100)/100), program.stone, program.iron);
+            program.stoneToGold = new Trade(13 * (_random.Next(80,100)/100), program.stone, program.gold);
+            program.stoneToDiamond = new Trade(40 * (_random.Next(80,100)/100), program.stone, program.diamond);
+            program.ironToGold = new Trade(5 * (_random.Next(80,100)/100), program.iron, program.gold);
+            program.ironToDiamond = new Trade(16 * (_random.Next(80,100)/100), program.iron, program.diamond);
+            program.goldToDiamond = new Trade(3 * (_random.Next(80,100)/100), program.gold, program.diamond);
+
+            # endregion
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
+            Console.ResetColor();
+
+            Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
+            Thread.Sleep(1500);
+            
+            Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
+            Console.WriteLine("The game is about to start, good luck...");
+            Thread.Sleep(3000);
+            Console.Clear();
+
+            program.RunGame();
+        }
+
+        public void RunGame()
+        {
+            RunTutorial();
+            Console.Clear();
+            
+            DisplayStuff.DisplayResources(this);
+            
+            int menuOption;
+            do
+            {
+                menuOption = UserMenuOption();
+
+                switch (menuOption)
+                {
+                    case -2:
+                        Console.WriteLine("You were in debt, bossman have paid that off so we good now");
+                        break;
+                    case -1:
+                        GameFailed();
+                        break;
+                    case 0:
+                        QuitGame();
+                        break;
+                    case 1:
+                        _animation = true;
+                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
+                        break;
+                    case 2:
+                        _animation = false;
+                        Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
+                        Console.WriteLine("Enter number of days to dig in one go (upto 30)");
+                        int daysToDig = GetValidInt(1, 30);
+                        miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
+                        break;
+                    case 3:
+                        marketOperation.GoToMarket(this);
+                        break;
+                    case 4:
+                        Trade.GoToTrader(this);
+                        break;
+                    case 5:
+                        DisplayStuff.DisplayGameMechanics(this);
+                        break;
+                    case 6:
+                        DisplayStuff.DisplayStats(this);
+                        break;
+                    case 7:
+                        for (int achievementNumber = 0;
+                             achievementNumber < achievementsList.Count;
+                             achievementNumber++)
+                        {
+                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
+                        }
+
+                        break;
+                    case 8:
+                        RunTutorial();
+                        break;
+                    case 9:
+                        DisplayStuff.DisplayEmployees(this);
+                        break;
+                    case 10:
+                        Console.WriteLine("Skipping one day");
+                        Console.WriteLine(
+                            $"You have been charged ${skipDay.Price} for the costs of skipping a day");
+                        dollars.Quantity -= skipDay.Price;
+                        skipDay.skipDayOrNot = true;
+                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
+                        DisplayStuff.DisplayResources(this);
+                        break;
+                    case 11:
+
+                        if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 &&
+                            marketMaster.Quantity == 0)
+                        {
+                            Console.WriteLine("\u274c You don't have any powerups to use \u274c");
+                            break;
+                        }
+
+                        Console.WriteLine("What powerup do you want to use?");
+                        Console.WriteLine($"You have {ancientArtefact.Quantity} Ancient Artefacts, {timeMachine.Quantity} Time Machines and {marketMaster.Quantity} Market Masters\n");
+                        Console.WriteLine("0 - Cancel & Return");
+                        Console.WriteLine("1 - Ancient Artefact --> 2 options inside");
+                        Console.WriteLine("2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
+                        Console.WriteLine("3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
+                        int powerUpChoice = GetValidInt(0, 3);
+
+                        switch (powerUpChoice)
+                        {
+                            case 1:
+                                if (ancientArtefact.Quantity >= 0)
+                                {
+                                    Console.WriteLine(
+                                        "You have chosen to use an Ancient Artefact. Choose an option:");
+                                    Console.WriteLine(
+                                        "1 - Increase the probability of finding gold to 50% for 3 days");
+                                    Console.WriteLine("2 - $200 instantly");
+                                    int ancientArtefactChoice = GetValidInt(1, 2);
+                                    UsePowerUp(powerUpChoice, ancientArtefactChoice);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Ancient Artefacts to use");
+                                }
+
+                                break;
+
+                            case 2:
+
+                                if (timeMachine.Quantity >= 0)
+                                {
+                                    UsePowerUp(powerUpChoice, 0);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Time Machines to use");
+                                }
+
+                                break;
+
+                            case 3:
+                                if (marketMaster.Quantity >= 0)
+                                {
+                                    UsePowerUp(powerUpChoice, 0);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have any Market Masters to use");
+                                }
+
+                                break;
+                        }
+
+                        break;
+                    case 12:
+                        Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
+                        Console.WriteLine(
+                            $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
+                        int employeesToSend = GetValidInt(-1, workersList.Count);
+                        if (employeesToSend == -1)
+                        {
+                            employeesToSend = workersList.Count;
+                        }
+
+                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
+                        {
+                            Console.WriteLine(
+                                $"You have chosen to send {employeesToSend} employees on a training course");
+                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
+                            Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
+                            EmployeeTrainingCourse(employeesToSend);
+                        }
+                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend &&
+                                 workersList.Count == 0)
+                        {
+                            Console.WriteLine("You don't have any employees to send on a training course");
+                            Console.WriteLine("This could be because of employee illness - try again later");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"You don't have enough money to send {employeesToSend} employees on a training course");
+                        }
+
+                        break;
+                    case 13:
+                        Console.WriteLine("0 - no im scared of commiting crimes");
+                        Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                        Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
+                        int crimeChoice = GetValidInt(0, 2);
+                        switch (crimeChoice)
+                        {
+                            case 1:
+                                if (dollars.Quantity > stockMarketCrash.Price)
+                                {
+                                    Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
+                                    dollars.Quantity -= stockMarketCrash.Price;
+                                    Console.WriteLine("Giving you the information now...");
+                                    Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
+                                    break;
+                                }
+                                
+                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
+                                break;
+                            case 2:
+                                if (dollars.Quantity > bribe.Price)
+                                {
+                                    Console.WriteLine("You have chosen to bribe the government");
+                                    Console.WriteLine($"You have been charged {bribe.Price} for the bribe");
+                                    dollars.Quantity -= bribe.Price;
+                                    Console.WriteLine("You don't have to pay wages for the next three days");
+                                    _noWageDaysLeft = 3;
+                                    _totalBribes += 1;
+                                    break;
+                                }
+                               
+                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
+                                break;
+                        }
+                        
+
+                        break;
+                    case 14:
+                        SaveGameState(1);
+                        break;
+                    case 15:
+                        Console.WriteLine(
+                            "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
+                        SaveGameState(2);
+                        break;
+                    case 16:
+                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
+                        Console.WriteLine("Welcome to the real estate building place!");
+                        Console.WriteLine("what do u want to build");
+                        Console.WriteLine("0 - Cancel");
+                        Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
+                        Console.WriteLine("2. House - $2000, 10 days to build, $1000 weekly rent");
+                        Console.WriteLine("3. Office - $3000, 15 days to build, $2000 weekly rent");
+                        Console.WriteLine("4. Mansion - $4000, 20 days to build, $3000 weekly rent");
+                        Console.WriteLine("5. Castle - $5000, 25 days to build, $4000 weekly rent");
+                        Console.WriteLine("6. Palace - $6000, 30 days to build, $5000 weekly rent");
+                        int choice = GetValidInt(0, 6);
+                        RealEstate.BuildRealEstate(choice, this);
+                        
+                        break;
+                    case 17:
+                        Worker.EmployeeHiringScreen(this);
+                        break;
+                    case 18:
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
+                        Worker.EmployeeMoraleBoostingScreen(this);
+                        break;
+                    case 19:
+                        DisplayStuff.DisplayRealEstate(this);
+                        break;
+                    default:
+                        Console.WriteLine("Please enter a valid option");
+                        break;
+                }
+            } while (menuOption != 0 && menuOption != -1);
+
+        }
+
+        public void RunTutorial()
+        {
+            Thread.Sleep(1250);
+            Console.WriteLine("Your father is the manager of a large, successful and respectable gold mining company.");
+            Thread.Sleep(1750);
+            Console.WriteLine("However, as he ages, he begins to worry about the future of the company.");
+            Console.WriteLine("He decides to teach you the ropes of the business - one day, you may have to take over the company.");
+            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.");
+            Console.WriteLine("\nHe offers you the chance to learn the business before you begin...");
+            Console.WriteLine("Do you want to go through a tutorial? (y/n): ");
+            
+            string tutorialChoice = Console.ReadLine().ToLower();
+            if (tutorialChoice == "n")
+            {
+                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
+                Thread.Sleep(2000);
+            }
+            else if (tutorialChoice == "y")
+            {
+                Console.WriteLine("He smiles and says 'Good choice, my child'.");
+                Thread.Sleep(2000);
+                Console.Clear();
+                Console.WriteLine("\n  _______           _                    _           _ \n |__   __|         | |                  (_)         | |\n    | |     _   _  | |_    ___    _ __   _    __ _  | |\n    | |    | | | | | __|  / _ \\  | '__| | |  / _` | | |\n    | |    | |_| | | |_  | (_) | | |    | | | (_| | | |\n    |_|     \\__,_|  \\__|  \\___/  |_|    |_|  \\__,_| |_|\n");
+                Console.WriteLine("Welcome to the tutorial!");
+                Thread.Sleep(2000);
+                Console.WriteLine("You are now the manager of a new gold digging business.");
+                Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
+                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
+                Thread.Sleep(2500);
+                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money.");
+                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
+                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet).");
+                Console.WriteLine("________________________________________________________________________________________________________________________________________");
+                Thread.Sleep(2000);
+                Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
+                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins.");
+                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options.");
+                Thread.Sleep(2000);
+                Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
+                Console.ReadLine();
+            }
+        }
+
+        public int UserMenuOption()
+        {
+            string takeUserInput = CheckIfInDebt();
+
+            if (takeUserInput == "false")
+            {
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
+                Console.WriteLine("Choose an option:");
+                Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |");
+                Console.WriteLine("                                                                                                                                                                         |");
+                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
+                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
+                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   18 - Boost employee morale        |                              |  15 - Load game state                    |");
+                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  10 - Skip one day                       |");
+                Console.WriteLine("\nEnter your choice:");
+
+                int userOption = GetValidInt(0, 20);
+                Console.Clear();
+                return userOption;
+            }
+
+            if (takeUserInput == "bankrupt")
+            {
+                return -1;
+            }
+
+            return -2;
+        } // prettify and reorder menu options
+
+        public string CheckIfInDebt()
+        {
+            string inDebt = "false";
+            if (dollars.Quantity < 0)
+            {
+                inDebt = "true";
+                bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
+                                   gold.Quantity == 0 && diamond.Quantity == 0;
+
+
+                if (inDebt == "true")
+                {
+                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Thread.Sleep(2000);
+                    Console.WriteLine("You are in debt, bossman is coming for you");
+                    Console.WriteLine(
+                        "The government will come and sell all your resources for 40% the current market rate...");
+                    Thread.Sleep(1500);
+                    Console.WriteLine(
+                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2} stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
+                    Console.WriteLine("Unlucky bro...");
+                    Thread.Sleep(750);
+                    Console.WriteLine("After bossman stole your resources, you now have:");
+
+                    double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                              iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                              diamond.Quantity * diamond.Price) * 0.4;
+                    dollars.Quantity += changeInDollars;
+
+                    _totalDollarsEarned += changeInDollars;
+
+                    coal.Quantity = 0;
+                    stone.Quantity = 0;
+                    iron.Quantity = 0;
+                    gold.Quantity = 0;
+                    diamond.Quantity = 0;
+
+                    DisplayStuff.DisplayResources(this);
+                }
+
+                if (inDebt == "true" && noResources && workersList.Count < 2)
+                {
+                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
+                    return "bankrupt";
+                }
+
+                if (inDebt == "true" && noResources && workersList.Count >= 2)
+                {
+                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy \ud83d\udc77 \ud83d\udd2b");
+                    dollars.Quantity += workersList.Count * 50;
+                    _totalDollarsEarned += workersList.Count * 50;
+
+                    while (workersList.Count > 1)
+                    {
+                        workersList.RemoveAt(0);
+                    }
+                }
+            }
+
+            return inDebt;
+        }
+
+        public void UsePowerUp(int powerUpChoice, int subChoice)
+        {
+            switch (powerUpChoice)
+            {
+                case 1:
+                {
+                    if (subChoice == 1)
+                    {
+                        Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
+                        _increasedGoldChanceDays = 5;
+                    }
+                    else if (subChoice == 2)
+                    {
+                        Console.WriteLine("You have chosen the $200 instantly");
+                        dollars.Quantity += 200;
+                        _totalDollarsEarned += 200;
+                    }
+
+                    ancientArtefact.Quantity -= 1;
+                    break;
+                }
+
+                case 2:
+                {
+                    Console.WriteLine("You have chosen to use the Time Machine powerup");
+                    _noWageDaysLeft = 10;
+                    _animation = false;
+                    miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
+                    timeMachine.Quantity -= 1;
+                    break;
+                }
+
+                case 3:
+                    Console.WriteLine("Applying the Market Master power up...");
+                    Console.WriteLine(
+                        "The selling price of all resources has increased by 50% for the next 5 days");
+                    _marketMasterDaysLeft = 5;
+
+                    coal.Price *= 1.5;
+                    stone.Price *= 1.5;
+                    iron.Price *= 1.5;
+                    gold.Price *= 1.5;
+                    diamond.Price *= 1.5;
+
+                    marketMaster.Quantity -= 1;
+                    break;
+            }
+
+            _totalPowerUpsUsed += 1;
+        } // you can have negative powerups
+
+        public void SaveGameState(int saveOrLoad)
+        {
+            Console.WriteLine("Saving/load game state...");
+            // Thread.Sleep(1750);
+
+            GameState gameState = new GameState(this);
+            if (saveOrLoad == 1)
+            {
+                Console.WriteLine("Game state saved to a dictionary");
+                gameState.SaveGameState(this);
+            }
+
+            else if (saveOrLoad == 2)
+            {
+                gameState.LoadGameState(this);
+            }
+
+        }
+
+        public void UpdateProperties(Dictionary<string, object> properties)
+        {
+
+            // eg dollars.Quantity = (double) properties["dollars"];
+            Console.WriteLine("THIS DOES NOT WORK YET");
+            Console.WriteLine("re-download the .exe file later on to see if it's been added");
+            Console.WriteLine("For now, you'll be sent back to the main menu in 5 seconds");
+            Thread.Sleep(5000);
+        } // applying a loaded game state
+
+        public void QuitGame()
+        {
+            DisplayStuff.DisplayStats(this);
+            Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
+            Console.WriteLine("\nGoodbye!");
+        }
+
+        public void GameFailed()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                         YOU FAILED                         ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            QuitGame();
+        }
+        
+        public void EmployeeTrainingCourse(int numberOfEmployees)
+        {
+            // to boost the productivity of employees
+            Console.WriteLine($"Training {numberOfEmployees} employees...");
+            Console.WriteLine($"This course charged you {trainingCourse.Price * numberOfEmployees} in fees");
+            dollars.Quantity -= trainingCourse.Price * numberOfEmployees;
+            for (int i = 0; i < numberOfEmployees; i++)
+            {
+                Console.WriteLine(
+                    $"Employee {workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
+                workersList[i].ReturnToWorkDate = _currentDate.AddDays(7);
+                workersList[i].efficiency *= 1.3;
+                toSendToTrainingList.Add(workersList[i]);
+            }
+
+            foreach (Worker worker in toSendToTrainingList)
+            {
+                workersList.Remove(worker);
+                trainingWorkersList.Add(worker);
+            }
+
+            Thread.Sleep(1250);
+        } // move to the appropriate own class
+
+        public void HireNewWorker(int numberOfWorkers, string type)
+        {
+            
+            for (int i = 0; i < numberOfWorkers; i++)
+            {
+                double efficiency = 15;
+
+                if (_possibleNames.Count > 1)
+                {
+                    int randomName = _random.Next(0, _possibleNames.Count);
+
+                    // making 'levels' of efficiency based on the number of employees
+                    // this is to make the game harder over time as the player hires more employees
+                    if (workersList.Count > 0)
+                    {
+                        efficiency = _random.Next(70, 130);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 3)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 6)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 9)
+                    {
+                        efficiency = _random.Next(60, 120);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 12)
+                    {
+                        efficiency = _random.Next(55, 115);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 15)
+                    {
+                        efficiency = _random.Next(50, 110);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 18)
+                    {
+                        efficiency = _random.Next(45, 105);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 21)
+                    {
+                        efficiency = _random.Next(40, 100);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 24)
+                    {
+                        efficiency = _random.Next(35, 95);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 27)
+                    {
+                        efficiency = _random.Next(30, 90);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 30)
+                    {
+                        efficiency = _random.Next(25, 85);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 33)
+                    {
+                        efficiency = _random.Next(20, 80);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 36)
+                    {
+                        efficiency = _random.Next(15, 75);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 39)
+                    {
+                        efficiency = _random.Next(10, 70);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 42)
+                    {
+                        efficiency = _random.Next(5, 65);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 45)
+                    {
+                        efficiency = _random.Next(0, 60);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 28)
+                    {
+                        efficiency = _random.Next(0, 55);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 51)
+                    {
+                        efficiency = _random.Next(0, 50);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 54)
+                    {
+                        efficiency = _random.Next(0, 45);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 57)
+                    {
+                        efficiency = _random.Next(0, 40);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 60)
+                    {
+                        efficiency = _random.Next(0, 35);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 63)
+                    {
+                        efficiency = _random.Next(0, 30);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 66)
+                    {
+                        efficiency = _random.Next(0, 25);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 69)
+                    {
+                        efficiency = _random.Next(0, 20);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 72)
+                    {
+                        efficiency = _random.Next(0, 15);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 75)
+                    {
+                        efficiency = _random.Next(0, 10);
+                        efficiency /= 100;
+                    }
+                    else if (workersList.Count > 78)
+                    {
+                        efficiency = _random.Next(1, 5);
+                        efficiency /= 100;
+                    }
+
+                    double employeePrice = 0;
+                    double baseMorale = 0;
+
+                    if (type == "bad")
+                    {
+                        employeePrice = 50;
+                        baseMorale = 0.75;
+                    }
+                    if (type == "mid")
+                    {
+                        employeePrice = 100;
+                        baseMorale = 1;
+                    }
+                    if (type == "good")
+                    {
+                        employeePrice = 200;
+                        baseMorale = 1.25;
+                    }
+                    
+                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency, baseMorale);
+                    workersList.Add(newWorker);
+                    UsedNames.Add(newWorker.Name);
+                    _possibleNames.Remove(newWorker.Name);
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
+
+                    // updating bribe price
+                    bribe.Price = _currentWageRate * workersList.Count * 2;
+                }
+                
+                else
+                {
+                    Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                    Console.WriteLine("Wait for some to retire");
+                    break;
+                }
+            }
+            
+        } // move to the appropriate own class
+        
+        public int GetValidInt(int min, int max)
+        {
+            if (int.TryParse(Console.ReadLine(), out int validInt))
+            {
+                if (validInt >= min && validInt <= max)
+                {
+                    return validInt;
+                }
+
+                Console.WriteLine($"No bro enter a number between {min} and {max}");
+                return GetValidInt(min, max);
+            }
+
+            Console.WriteLine("Please enter a valid integer");
+            return GetValidInt(min, max);
+        }
+
+        public double GetValidDouble(double min, double max)
+        {
+            if (double.TryParse(Console.ReadLine(), out double validDouble))
+            {
+                if (validDouble >= min && validDouble <= max)
+                {
+                    return validDouble;
+                }
+
+                Console.WriteLine($"No bro enter a number between {min} and {max}");
+                return GetValidDouble(min, max);
+            }
+
+            Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
+            return GetValidDouble(min, max);
+        }
+    }
+    
     class Worker
     {
         public string Type;
@@ -248,8 +1214,121 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    } // employee morale boosts need to be done
+    }
+    
+    class Trade
+    {
+        public static List<DateTime> datesOfTradesMade = new List<DateTime>();
+        public double Ratio;
+        public Resource FromResource;
+        public Resource ToResource;
 
+        public Trade(double ratio, Resource fromResource, Resource toResource)
+        {
+            Ratio = ratio;
+            FromResource = fromResource;
+            ToResource = toResource;
+        }
+
+        public static void MakeTrade(double ratio, Resource fromResource, Resource toResource,
+            DateTime _currentDate)
+        {
+            if (!datesOfTradesMade.Contains(_currentDate))
+            {
+                if (ratio * fromResource.Quantity < toResource.Quantity)
+                {
+                    Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
+                    return;
+                }
+
+                fromResource.Quantity -= ratio;
+                toResource.Quantity += 1;
+
+                Console.WriteLine($"\u2705 Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName} \u2705");
+                datesOfTradesMade.Add(DateTime.Today);
+                return;
+            }
+
+            Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
+        }
+        
+        public static void GoToTrader(Program program)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(
+                "             _______                      _               \n            |__   __|                    | |              \n               | |     _ __    __ _    __| |   ___   _ __ \n               | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n               | |    | |    | (_| | | (_| | |  __/ | |   \n               |_|    |_|     \\__,_|  \\__,_|  \\___| |_|");
+            Console.ResetColor();
+            
+            DisplayStuff.DisplayResources(program);
+             
+            Console.WriteLine("Here are the options for today:\n");
+            Console.WriteLine("0 - Cancel and return");
+            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio,2)} coal --> stone");
+            Console.WriteLine($"2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron");
+            Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold");
+            Console.WriteLine($"4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond");
+            Console.WriteLine($"5 - Convert {Math.Round(program.stoneToIron.Ratio, 2)} stone --> iron");
+            Console.WriteLine($"6 - Convert {Math.Round(program.stoneToGold.Ratio, 2)} stone --> gold");
+            Console.WriteLine($"7 - Convert {Math.Round(program.stoneToDiamond.Ratio, 2)} stone --> diamond");
+            Console.WriteLine($"8 - Convert {Math.Round(program.ironToGold.Ratio, 2)} iron --> gold");
+            Console.WriteLine($"9 - Convert {Math.Round(program.ironToDiamond.Ratio, 2)} iron --> diamond");
+            Console.WriteLine($"10 - Convert {Math.Round(program.goldToDiamond.Ratio, 2)} gold --> diamond");
+            Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
+            Console.WriteLine("__________________________________________________________________________");
+
+            int userTrade = program.GetValidInt(0, 10);
+
+            switch (userTrade)
+            {
+                case 0:
+                    break;
+                case 1:
+                    Console.WriteLine($"You've chosen to convert {program.coalToStone.Ratio}kg coal for stone");
+                    Trade.MakeTrade(program.coalToStone.Ratio, program.coal, program.stone, program._currentDate);
+                    break;
+                case 2:
+                    Console.WriteLine($"You've chosen to convert {program.coalToIron.Ratio}kg coal for iron");
+                    Trade.MakeTrade(program.coalToIron.Ratio, program.coal, program.iron, program._currentDate);
+                    break;
+                case 3:
+                    Console.WriteLine($"You've chosen to convert {program.coalToGold.Ratio}kg coal for gold");
+                    Trade.MakeTrade(program.coalToGold.Ratio, program.coal, program.gold, program._currentDate);
+                    break;
+                case 4:
+                    Console.WriteLine($"You've chosen to convert {program.coalToDiamond.Ratio}kg coal for diamond");
+                    Trade.MakeTrade(program.coalToDiamond.Ratio, program.coal, program.diamond, program._currentDate);
+                    break;
+                case 5:
+                    Console.WriteLine($"You've chosen to convert {program.stoneToIron.Ratio}kg stone for iron");
+                    Trade.MakeTrade(program.stoneToIron.Ratio, program.stone, program.iron, program._currentDate);
+                    break;
+                case 6:
+                    Console.WriteLine($"You've chosen to convert {program.stoneToGold.Ratio}kg stone for gold");
+                    Trade.MakeTrade(program.stoneToGold.Ratio, program.stone, program.gold, program._currentDate);
+                    break;
+                case 7:
+                    Console.WriteLine($"You've chosen to convert {program.stoneToDiamond.Ratio}kg stone for diamond");
+                    Trade.MakeTrade(program.stoneToDiamond.Ratio, program.stone, program.diamond, program._currentDate);
+                    break;
+                case 8:
+                    Console.WriteLine($"You've chosen to convert {program.ironToGold.Ratio}kg iron for gold");
+                    Trade.MakeTrade(program.ironToGold.Ratio, program.iron, program.gold, program._currentDate);
+                    break;
+                case 9:
+                    Console.WriteLine($"You've chosen to convert {program.ironToDiamond.Ratio}kg gold for diamond");
+                    Trade.MakeTrade(program.ironToDiamond.Ratio, program.iron, program.diamond, program._currentDate);
+                    break;
+                case 10:
+                    Console.WriteLine($"You've chosen to convert {program.goldToDiamond.Ratio}kg gold for diamond");
+                    Trade.MakeTrade(program.goldToDiamond.Ratio, program.gold, program.diamond, program._currentDate);
+                    break;
+            }
+
+            DisplayStuff.DisplayResources(program);
+            Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
+        }
+    }// you're allowed multiple trades per day ++ trade prices don't fluctuate
+    
     class DisplayStuff
     {
         public static void DisplayGameMechanics(Program _program)
@@ -1901,1046 +2980,5 @@ namespace Gold_Diggerzz
             }
         }
     } // balance updates
-
-    class Program
-    {
-        # region global variables
-
-        public bool _animation = true;
-        public int _increasedGoldChanceDays;
-        public int _marketMasterDaysLeft;
-        public int _noWageDaysLeft;
-        public int _crashDaysLeft;
-        public int _totalBribes;
-        public int _totalPowerUpsUsed;
-        public double _totalDaysDug;
-        public double _totalEmployeesHired;
-        public double _totalDollarsEarned;
-        public double _averageEmployeeEfficiency = 1;
-        public double _averageEmployeeMorale = 1;
-        public bool _achievement1;
-        public bool _achievement2;
-        public bool _achievement3;
-        public bool _achievement4;
-        public bool _achievement5;
-        public bool _achievement6;
-        public bool _achievement7;
-        public bool _achievement8;
-        public bool _achievement9;
-        public bool _achievement10;
-        public bool _achievement11;
-        public bool _achievement12;
-        public bool _achievement13;
-        public bool _achievement14;
-        public bool _achievement15;
-        public bool _achievement16;
-        public bool _achievement17;
-        public bool _achievement18;
-        public bool _achievement19;
-        public bool _achievement20;
-        public double _currentWageRate = 10;
-        public double _currentEmployeeIllProbability = 5;
-        public double _currentEmployeePrice = 100;
-        public DateTime _currentDate = new DateTime(2024, 1, 1);
-        public static Random _random = new();
-        public int _crashDate = _random.Next(0, 28);
-
-        public List<Worker> illWorkersList = new();
-        public List<Worker> retiredWorkersList = new();
-        public List<Worker> trainingWorkersList = new();
-        public List<Worker> toSendToTrainingList = new();
-        
-        public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
-
-        public List<Worker> workersList = new()
-            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
-        
-        public List<RealEstate> buildingRealEsateList = new();
-        public List<RealEstate> activeRealEstate = new();
-
-        MiningOperation miningOperation = new MiningOperation();
-        MarketOperation marketOperation = new MarketOperation();
-        DayToDayOperations dayToDayOperations = new DayToDayOperations();
-
-        // Declare your variables at the class level
-        public Resource coal;
-        public Resource stone;
-        public Resource iron;
-        public Resource gold;
-        public Resource diamond;
-        public Resource dollars;
-        public PowerUp magicTokens;
-        public PowerUp timeMachine;
-        public PowerUp ancientArtefact;
-        public PowerUp marketMaster;
-        public PayForStuff stockMarketCrash;
-        public PayForStuff skipDay;
-        public PayForStuff bribe;
-        public PayForStuff trainingCourse;
-        public Trade coalToStone;
-        public Trade coalToIron;
-        public Trade coalToGold;
-        public Trade coalToDiamond;
-        public Trade stoneToIron;
-        public Trade stoneToGold;
-        public Trade stoneToDiamond;
-        public Trade ironToGold;
-        public Trade ironToDiamond;
-        public Trade goldToDiamond;
-
-        public List<string> achievementsList = new List<string>();
-
-        // 307 possible names for the workers
-        // to stop screaming at me for names it doesn't recognise/think are typos
-        [SuppressMessage("ReSharper", "StringLiteralTypo")]
-        private static List<string> _possibleNames = new List<string>()
-        {
-            "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
-            "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
-            "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein",
-            "Dwayne 'The Rocking Chair, Johnson", "Marilyn Mon-roll", "Mark Zuckerburger",
-            "Oprah Win-free", "Steve Jobsite", "Hillary Cling-on",
-            "Emma Stoned", "Donald Duck Trump", "Bruce Spring-chicken",
-            "Bill Gateskeeper", "Justin Beaver", "Kim Car-dashing",
-            "Shakira-law", "Charlie Sheen-bean", "Ellen DeGenerous",
-            "Jennif er Lawn-mower", "Will Smithereens", "Cristiano Armani",
-            "Serena Williams-son", "Vladimir Poutine", "Ariana Grand-piano",
-            "Jackie Chan-deliep", "Scarlett Johandsome", "Vin Diesel-truck",
-            "Harrison Ford F-150", "Gordon Rams-lamb", "Ryan Gooseling",
-            "Nicolas Cage-f ree", "Johnny Depp-fryer", "Arnold Schwarzenegger-schnitzel",
-            "Jessica Al-bacon", "Keanu Reefs", "Denzel Washing-done",
-            "Samuel L. Vodka", "Matt Damon-salad", "Angelina Jolie-ox",
-            "Tom Cruise-control", "Kate Wins-lit", "Julia Robberies",
-            "Robert Downey Jp. High", "Chris Prattfall", "Jennif er Aniston-bake",
-            "George Clooney-tunes", "Leonardo DiCapriSun", "Kanye East",
-            "Benedict Cucumberbatch", "Taylor Swiftboat", "Morgan Free-wheeling",
-            "Jimmy Fallon-over", "Nicole Kidneybean", "Hugh Jackman-go",
-            "John Lemonade", "Miley Virus", "Katy Perry-able",
-            "Jennifer Lawrence-of-arabia", "Jennifer Garner-den", "Daniel Radish-cliffe",
-            "Ryan Goose-down", "Emma Watson-burgep", "Justin Timberlake-up",
-            "Tom Hanks-giving", "Leonardo DiCaprio-daVinci", "Jack Black-hole",
-            "Miley Cyrus-virus", "Katy Perry-corn", "Hugh Grant-ed",
-            "Anne Hathaway with Words", "Sandra Bullockbuster", "Jim Carrey-on",
-            "Eddie Murphy-bed", "Bruce Willis-tower", "Johnny Cash-flow",
-            "Celine Dion-osaur", "Jennif er Lopez-ing", "Ellen DeGeneres-erator",
-            "Chris Hemsworth-the-clock", "Halle Berry-good", "Julia Roberts-rule",
-            "Zach Galif ianakis-bar", "Brad Pitt-stop", "Eva Longoria-lunch",
-            "Julianne Moore-or-less", "Chris Evans-sive", "Reese Witherspoonful",
-            "Charlize Thereon", "Amy Wine-handy", "Tommy Lee Bones",
-            "Kurt Russell Sprouts", "Alicia Keys-to-the-city", "Adam Sand-dollar",
-            "Bruce Spring-clean", "Jennif er Aniston-the-pants", "Hugh Jacked-man",
-            "Johnny Deep-fry", "Rihanna-na-na", "Bruce Lee-sure",
-            "Chris Pineapple", "Leonardo DiCapri-pants", "Jackie Chain-reaction",
-            "Morgan Freeman-dle", "Robert Downey Jr. Low", "Chris Rocking Chair",
-            "Helen Mirren-aged", "Jamie Foxx-in-the-box", "Dwayne 'The Flocking Chair'  Johnson",
-            "Arnold Schwarzenegger-salad", "Will Ferrell-y-good", "Gwyneth Paltrow-lint",
-            "Bradley Cooper-ate", "Liam Neeson-light", "Tom Hardy-har-har",
-            "Daniel Day-Lewis and Clark", "Johnny Depp-o", "Ben Affleck-tion",
-            "Julia Roberts-ized", "Russell Crow-bar", "Reese Witherspoon-fed",
-            "Jennif er Garner-ner", "Ben Stiller-ware", "Halle Berry-licious",
-            "John Travolted", "Amy Adams-apples", "Kevin Bacon-ator",
-            "Will Smithen", "Owen Wilson-you-over", "Jake Gyllen-hall",
-            "Matthew McConaughey-mind", "Cate Blanchett-et", "Natalie Port-man",
-            "Sylvester Stall-own", "Emily Blunt-ed", "Emma Stone-throw",
-            "Mel Gibson-soup", "Ryan Reynolds-wrap", "Nicole Kid-man",
-            "Amanda Seyf ried-rice", "James Franco-american", "Harrison Ford Focus",
-            "Johnny Deep-fryer", "Cameron Diaz-up", "Ryan Gosling-along",
-            "Keanu Reeves and Butthead", "Meryl Streep-ing", "Charlize Theron-ament",
-            "Kevin Space- jam", "Daniel Radishcliffe", "Amy Wine-house",
-            "Steve Carell-ing", "Horrid Henry", "Perfect Peter", "Moody Margaret",
-            "Sour Susan", "Rude Ralph", "Aerobic Al", "Greedy Graham", "Lazy Linda",
-            "Anxious Andrew", "Weepy William", "Tidy Ted", "Goody-Goody Gordon",
-            "Singing Soraya", "Beefy Bert", "Jolly Josh", "Sour-faced Simon",
-            "Stuck-up Steve", "Igglepiggle", "Upsy Daisy",
-            "Makka Pakka", "Hugh Jack-o-lantern", "Amanda Seyfried-rice",
-            "Jennifer Garner-den", "Jennifer Lawrence-of-arabia", "Dwayne 'The Rocking Chair' Johnson",
-            "Robert Downey Jr. High", "Jennifer Aniston-bake", "Usain Bolt-of-lightning",
-            "Cristiano Ronaldoughnut", "Lionel Messy", "Serena William-son",
-            "Michael Jordan-almond", "Tiger Woods-chips", "LeBron Jam",
-            "Rafael Nada-lot", "Roger Fed-her", "Novak Jokewitch",
-            "Tom Brady-punch", "Kobe Beef Bryant", "Wayne Goofy Rooney",
-            "Muhammad Alley-oop", "Miley Virus", "Elvis Parsley",
-            "Dolly Part-on", "Madonna-nna", "Frank Sinatra-ture",
-            "Britney Spears-it", "Freddie Mercury-fish", "Eminem & M",
-            "Mariah Car-rear", "Adele-dazeem", "Ed Sheeran-will",
-            "Selena Gómez", "Whitney Houston-we-have-a-problem", "Alicia Keypers",
-            "Stevie Wonder-ful", "John Lennon-ade", "Ed Shear-stress",
-            "Mick Jagger-not", "Britney Spearmint", "Freddy Mer-curly",
-            "Taylor Swift-key", "Miley Cyclone", "John Lemon",
-            "Mariah Carrot", "Nickelback-ache", "Madonna-lisa",
-            "Jennifer Lopezhole", "Bruno Mars-bar", "Lana Del Spray",
-            "Axl Rose-thorn", "Sam Smith-and-Wesson", "Chris Brown-sugar",
-            "Bob Marley-ed cheese", "Dua Lipa-stick", "Sting-ray", "Snoop Doggy Bag",
-            "Cardi No-B", "Drake-up", "Eminem-and-a-half",
-            "Charli Chaplin", "Addison Rae of sunshine", "Bella Porridge",
-            "Dixie D'Amelion", "David Dollop", "Zach Kinda-funny",
-            "Loren Beer Gray", "Spencer What-does-he-do", "James Cha-rlie's-bro",
-            "Noah Smiley", "Amber of the evening", "Josh Kool-Aid",
-            "Avani Bandage", "Chase Soap Hudson", "D'Amelion",
-            "J.K. Rolling-pin", "Stephen Peanut King", "Agatha Crispie",
-            "Dan Brown-bag", "Dr. Seuss and desist", "George R.R. Jar Jar Martin",
-            "Jane Awful", "Ernest Hemingweigh", "Charles Dick-in-son",
-            "Mark Twain-wreck", "Oscar Wilde-berry", "Virginia Wolf-down",
-            "William Shake-a-spear", "Lewis Carrot", "Tolkien-ish",
-            "J.D. Salami-nger", "F. Scott Fitchgerald", "Homer's Odyssey",
-            "Arthur Conan Doughnut", "Leo Tolstoyed", "Rolling-pin",
-            "Peanut King", "Crispie", "Brown-bag", "and desist",
-            "Jar Jar Martin", "Awful", "Hemingweigh", "Dick-in-son",
-            "Twain-wreck", "Wilde-berry", "Wolf-down", "Shake-a-spear",
-            "Bill Gaps", "Tim Cook-e", "Larry Page-turner", "Sergey Brin-ger",
-            "Satya Nutella", "Jack Dorsey-doody", "Reed Hastings-hound",
-            "Susan YouTube", "Felix Kjellberg-fish", "Mr. Beastie Boys",
-            "MKBHTea", "Ninja - the CEO of Fortnite", "Casey Nice-dad",
-            "PewDiePie-rce", "T-Series of Unfortunate Events", "Jake Paul-itician",
-            "Logan Paul-itics", "Barack O'Banana", "Jennifer Lawn-mower",
-            "Jackie Chan-delier", "Nicolas Cage-free", "Julia Rob",
-            "LeBron Slam James", "Tom Terrific Brady", "Michael Grand Slam Jordan",
-            "Serena Smash Williams", "Lionel Fast Messi", "Roger Slam-derer",
-            "Dale Earn-heart Junior", "Usain Streak Bolt", "Steph Curry-flavored",
-            "Alex Rodriguez-n-roll", "Shaquille O'Peel", "Michael Phelps-water",
-            "Ronda Rousey-n-feathers"
-        };
-
-        public static List<string> UsedNames = new ();
-
-        # endregion
-
-        public static void Main()
-        {
-            Console.Clear();
-            
-            Program program = new Program();
-            
-            GameState.CreateNewGameState(program);
-
-            # region initialisation of all trade objects
-
-            program.coalToStone = new Trade(2 * (_random.Next(80,100)/100), program.coal, program.stone);
-            program.coalToIron = new Trade(5 * (_random.Next(80,100)/100), program.coal, program.iron);
-            program.coalToGold = new Trade(12 * (_random.Next(80,100)/100), program.coal, program.gold);
-            program.coalToDiamond = new Trade(70 * (_random.Next(80,100)/100), program.coal, program.diamond);
-            program.stoneToIron = new Trade(3 * (_random.Next(80,100)/100), program.stone, program.iron);
-            program.stoneToGold = new Trade(13 * (_random.Next(80,100)/100), program.stone, program.gold);
-            program.stoneToDiamond = new Trade(40 * (_random.Next(80,100)/100), program.stone, program.diamond);
-            program.ironToGold = new Trade(5 * (_random.Next(80,100)/100), program.iron, program.gold);
-            program.ironToDiamond = new Trade(16 * (_random.Next(80,100)/100), program.iron, program.diamond);
-            program.goldToDiamond = new Trade(3 * (_random.Next(80,100)/100), program.gold, program.diamond);
-
-            # endregion
-
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
-            Console.ResetColor();
-
-            Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
-            Thread.Sleep(1500);
-            
-            Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("The game is about to start, good luck...");
-            Thread.Sleep(3000);
-            Console.Clear();
-
-            program.RunGame();
-        }
-
-        public void RunGame()
-        {
-            RunTutorial();
-            Console.Clear();
-            
-            DisplayStuff.DisplayResources(this);
-            
-            int menuOption;
-            do
-            {
-                menuOption = UserMenuOption();
-
-                switch (menuOption)
-                {
-                    case -2:
-                        Console.WriteLine("You were in debt, bossman have paid that off so we good now");
-                        break;
-                    case -1:
-                        GameFailed();
-                        break;
-                    case 0:
-                        QuitGame();
-                        break;
-                    case 1:
-                        _animation = true;
-                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
-                        break;
-                    case 2:
-                        _animation = false;
-                        Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
-                        Console.WriteLine("Enter number of days to dig in one go (upto 30)");
-                        int daysToDig = GetValidInt(1, 30);
-                        miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
-                        break;
-                    case 3:
-                        marketOperation.GoToMarket(this);
-                        break;
-                    case 4:
-                        GoToTrader();
-                        break;
-                    case 5:
-                        DisplayStuff.DisplayGameMechanics(this);
-                        break;
-                    case 6:
-                        DisplayStuff.DisplayStats(this);
-                        break;
-                    case 7:
-                        for (int achievementNumber = 0;
-                             achievementNumber < achievementsList.Count;
-                             achievementNumber++)
-                        {
-                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
-                        }
-
-                        break;
-                    case 8:
-                        RunTutorial();
-                        break;
-                    case 9:
-                        DisplayStuff.DisplayEmployees(this);
-                        break;
-                    case 10:
-                        Console.WriteLine("Skipping one day");
-                        Console.WriteLine(
-                            $"You have been charged ${skipDay.Price} for the costs of skipping a day");
-                        dollars.Quantity -= skipDay.Price;
-                        skipDay.skipDayOrNot = true;
-                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
-                        DisplayStuff.DisplayResources(this);
-                        break;
-                    case 11:
-
-                        if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 &&
-                            marketMaster.Quantity == 0)
-                        {
-                            Console.WriteLine("\u274c You don't have any powerups to use \u274c");
-                            break;
-                        }
-
-                        Console.WriteLine("What powerup do you want to use?");
-                        Console.WriteLine($"You have {ancientArtefact.Quantity} Ancient Artefacts, {timeMachine.Quantity} Time Machines and {marketMaster.Quantity} Market Masters\n");
-                        Console.WriteLine("0 - Cancel & Return");
-                        Console.WriteLine("1 - Ancient Artefact --> 2 options inside");
-                        Console.WriteLine("2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
-                        Console.WriteLine("3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
-                        int powerUpChoice = GetValidInt(0, 3);
-
-                        switch (powerUpChoice)
-                        {
-                            case 1:
-                                if (ancientArtefact.Quantity >= 0)
-                                {
-                                    Console.WriteLine(
-                                        "You have chosen to use an Ancient Artefact. Choose an option:");
-                                    Console.WriteLine(
-                                        "1 - Increase the probability of finding gold to 50% for 3 days");
-                                    Console.WriteLine("2 - $200 instantly");
-                                    int ancientArtefactChoice = GetValidInt(1, 2);
-                                    UsePowerUp(powerUpChoice, ancientArtefactChoice);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("You don't have any Ancient Artefacts to use");
-                                }
-
-                                break;
-
-                            case 2:
-
-                                if (timeMachine.Quantity >= 0)
-                                {
-                                    UsePowerUp(powerUpChoice, 0);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("You don't have any Time Machines to use");
-                                }
-
-                                break;
-
-                            case 3:
-                                if (marketMaster.Quantity >= 0)
-                                {
-                                    UsePowerUp(powerUpChoice, 0);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("You don't have any Market Masters to use");
-                                }
-
-                                break;
-                        }
-
-                        break;
-                    case 12:
-                        Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
-                        Console.WriteLine(
-                            $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
-                        int employeesToSend = GetValidInt(-1, workersList.Count);
-                        if (employeesToSend == -1)
-                        {
-                            employeesToSend = workersList.Count;
-                        }
-
-                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
-                        {
-                            Console.WriteLine(
-                                $"You have chosen to send {employeesToSend} employees on a training course");
-                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
-                            Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
-                            EmployeeTrainingCourse(employeesToSend);
-                        }
-                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend &&
-                                 workersList.Count == 0)
-                        {
-                            Console.WriteLine("You don't have any employees to send on a training course");
-                            Console.WriteLine("This could be because of employee illness - try again later");
-                        }
-                        else
-                        {
-                            Console.WriteLine(
-                                $"You don't have enough money to send {employeesToSend} employees on a training course");
-                        }
-
-                        break;
-                    case 13:
-                        Console.WriteLine("0 - no im scared of commiting crimes");
-                        Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
-                        Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
-                        int crimeChoice = GetValidInt(0, 2);
-                        switch (crimeChoice)
-                        {
-                            case 1:
-                                if (dollars.Quantity > stockMarketCrash.Price)
-                                {
-                                    Console.WriteLine($"You have chosen to pay ${stockMarketCrash.Price} for information on the next stock market crash");
-                                    dollars.Quantity -= stockMarketCrash.Price;
-                                    Console.WriteLine("Giving you the information now...");
-                                    Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
-                                    break;
-                                }
-                                
-                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
-                                break;
-                            case 2:
-                                if (dollars.Quantity > bribe.Price)
-                                {
-                                    Console.WriteLine("You have chosen to bribe the government");
-                                    Console.WriteLine($"You have been charged {bribe.Price} for the bribe");
-                                    dollars.Quantity -= bribe.Price;
-                                    Console.WriteLine("You don't have to pay wages for the next three days");
-                                    _noWageDaysLeft = 3;
-                                    _totalBribes += 1;
-                                    break;
-                                }
-                               
-                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
-                                break;
-                        }
-                        
-
-                        break;
-                    case 14:
-                        SaveGameState(1);
-                        break;
-                    case 15:
-                        Console.WriteLine(
-                            "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
-                        SaveGameState(2);
-                        break;
-                    case 16:
-                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
-                        Console.WriteLine("Welcome to the real estate building place!");
-                        Console.WriteLine("what do u want to build");
-                        Console.WriteLine("0 - Cancel");
-                        Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
-                        Console.WriteLine("2. House - $2000, 10 days to build, $1000 weekly rent");
-                        Console.WriteLine("3. Office - $3000, 15 days to build, $2000 weekly rent");
-                        Console.WriteLine("4. Mansion - $4000, 20 days to build, $3000 weekly rent");
-                        Console.WriteLine("5. Castle - $5000, 25 days to build, $4000 weekly rent");
-                        Console.WriteLine("6. Palace - $6000, 30 days to build, $5000 weekly rent");
-                        int choice = GetValidInt(0, 6);
-                        RealEstate.BuildRealEstate(choice, this);
-                        
-                        break;
-                    case 17:
-                        Worker.EmployeeHiringScreen(this);
-                        break;
-                    case 18:
-                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
-                        Worker.EmployeeMoraleBoostingScreen(this);
-                        break;
-                    case 19:
-                        DisplayStuff.DisplayRealEstate(this);
-                        break;
-                    default:
-                        Console.WriteLine("Please enter a valid option");
-                        break;
-                }
-            } while (menuOption != 0 && menuOption != -1);
-
-        }
-
-        public void RunTutorial()
-        {
-            Thread.Sleep(1250);
-            Console.WriteLine("Your father is the manager of a large, successful and respectable gold mining company.");
-            Thread.Sleep(1750);
-            Console.WriteLine("However, as he ages, he begins to worry about the future of the company.");
-            Console.WriteLine("He decides to teach you the ropes of the business - one day, you may have to take over the company.");
-            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.");
-            Console.WriteLine("\nHe offers you the chance to learn the business before you begin...");
-            Console.WriteLine("Do you want to go through a tutorial? (y/n): ");
-            
-            string tutorialChoice = Console.ReadLine().ToLower();
-            if (tutorialChoice == "n")
-            {
-                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
-                Thread.Sleep(2000);
-            }
-            else if (tutorialChoice == "y")
-            {
-                Console.WriteLine("He smiles and says 'Good choice, my child'.");
-                Thread.Sleep(2000);
-                Console.Clear();
-                Console.WriteLine("\n  _______           _                    _           _ \n |__   __|         | |                  (_)         | |\n    | |     _   _  | |_    ___    _ __   _    __ _  | |\n    | |    | | | | | __|  / _ \\  | '__| | |  / _` | | |\n    | |    | |_| | | |_  | (_) | | |    | | | (_| | | |\n    |_|     \\__,_|  \\__|  \\___/  |_|    |_|  \\__,_| |_|\n");
-                Console.WriteLine("Welcome to the tutorial!");
-                Thread.Sleep(2000);
-                Console.WriteLine("You are now the manager of a new gold digging business.");
-                Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
-                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
-                Thread.Sleep(2500);
-                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money.");
-                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
-                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet).");
-                Console.WriteLine("________________________________________________________________________________________________________________________________________");
-                Thread.Sleep(2000);
-                Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
-                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins.");
-                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options.");
-                Thread.Sleep(2000);
-                Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
-                Console.ReadLine();
-            }
-        }
-
-        public int UserMenuOption()
-        {
-            string takeUserInput = CheckIfInDebt();
-
-            if (takeUserInput == "false")
-            {
-                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
-                Console.WriteLine("Choose an option:");
-                Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |");
-                Console.WriteLine("                                                                                                                                                                         |");
-                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
-                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
-                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   18 - Boost employee morale        |                              |  15 - Load game state                    |");
-                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  10 - Skip one day                       |");
-                Console.WriteLine("\nEnter your choice:");
-
-                int userOption = GetValidInt(0, 20);
-                Console.Clear();
-                return userOption;
-            }
-
-            if (takeUserInput == "bankrupt")
-            {
-                return -1;
-            }
-
-            return -2;
-        } // prettify and reorder menu options
-
-        public string CheckIfInDebt()
-        {
-            string inDebt = "false";
-            if (dollars.Quantity < 0)
-            {
-                inDebt = "true";
-                bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
-                                   gold.Quantity == 0 && diamond.Quantity == 0;
-
-
-                if (inDebt == "true")
-                {
-                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                    Thread.Sleep(2000);
-                    Console.WriteLine("You are in debt, bossman is coming for you");
-                    Console.WriteLine(
-                        "The government will come and sell all your resources for 40% the current market rate...");
-                    Thread.Sleep(1500);
-                    Console.WriteLine(
-                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2} stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
-                    Console.WriteLine("Unlucky bro...");
-                    Thread.Sleep(750);
-                    Console.WriteLine("After bossman stole your resources, you now have:");
-
-                    double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                              iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                              diamond.Quantity * diamond.Price) * 0.4;
-                    dollars.Quantity += changeInDollars;
-
-                    _totalDollarsEarned += changeInDollars;
-
-                    coal.Quantity = 0;
-                    stone.Quantity = 0;
-                    iron.Quantity = 0;
-                    gold.Quantity = 0;
-                    diamond.Quantity = 0;
-
-                    DisplayStuff.DisplayResources(this);
-                }
-
-                if (inDebt == "true" && noResources && workersList.Count < 2)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
-                    return "bankrupt";
-                }
-
-                if (inDebt == "true" && noResources && workersList.Count >= 2)
-                {
-                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy \ud83d\udc77 \ud83d\udd2b");
-                    dollars.Quantity += workersList.Count * 50;
-                    _totalDollarsEarned += workersList.Count * 50;
-
-                    while (workersList.Count > 1)
-                    {
-                        workersList.RemoveAt(0);
-                    }
-                }
-            }
-
-            return inDebt;
-        }
-
-        public void UsePowerUp(int powerUpChoice, int subChoice)
-        {
-            switch (powerUpChoice)
-            {
-                case 1:
-                {
-                    if (subChoice == 1)
-                    {
-                        Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
-                        _increasedGoldChanceDays = 5;
-                    }
-                    else if (subChoice == 2)
-                    {
-                        Console.WriteLine("You have chosen the $200 instantly");
-                        dollars.Quantity += 200;
-                        _totalDollarsEarned += 200;
-                    }
-
-                    ancientArtefact.Quantity -= 1;
-                    break;
-                }
-
-                case 2:
-                {
-                    Console.WriteLine("You have chosen to use the Time Machine powerup");
-                    _noWageDaysLeft = 10;
-                    _animation = false;
-                    miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
-                    timeMachine.Quantity -= 1;
-                    break;
-                }
-
-                case 3:
-                    Console.WriteLine("Applying the Market Master power up...");
-                    Console.WriteLine(
-                        "The selling price of all resources has increased by 50% for the next 5 days");
-                    _marketMasterDaysLeft = 5;
-
-                    coal.Price *= 1.5;
-                    stone.Price *= 1.5;
-                    iron.Price *= 1.5;
-                    gold.Price *= 1.5;
-                    diamond.Price *= 1.5;
-
-                    marketMaster.Quantity -= 1;
-                    break;
-            }
-
-            _totalPowerUpsUsed += 1;
-        } // you can have negative powerups
-
-        public void SaveGameState(int saveOrLoad)
-        {
-            Console.WriteLine("Saving/load game state...");
-            // Thread.Sleep(1750);
-
-            GameState gameState = new GameState(this);
-            if (saveOrLoad == 1)
-            {
-                Console.WriteLine("Game state saved to a dictionary");
-                gameState.SaveGameState(this);
-            }
-
-            else if (saveOrLoad == 2)
-            {
-                gameState.LoadGameState(this);
-            }
-
-        }
-
-        public void UpdateProperties(Dictionary<string, object> properties)
-        {
-
-            // eg dollars.Quantity = (double) properties["dollars"];
-            Console.WriteLine("THIS DOES NOT WORK YET");
-            Console.WriteLine("re-download the .exe file later on to see if it's been added");
-            Console.WriteLine("For now, you'll be sent back to the main menu in 5 seconds");
-            Thread.Sleep(5000);
-        } // applying a loaded game state
-
-        public void QuitGame()
-        {
-            DisplayStuff.DisplayStats(this);
-            Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
-            Console.WriteLine("\nGoodbye!");
-        }
-
-        public void GameFailed()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                         YOU FAILED                         ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
-            Console.ResetColor();
-
-            QuitGame();
-        }
-        
-        public void EmployeeTrainingCourse(int numberOfEmployees)
-        {
-            // to boost the productivity of employees
-            Console.WriteLine($"Training {numberOfEmployees} employees...");
-            Console.WriteLine($"This course charged you {trainingCourse.Price * numberOfEmployees} in fees");
-            dollars.Quantity -= trainingCourse.Price * numberOfEmployees;
-            for (int i = 0; i < numberOfEmployees; i++)
-            {
-                Console.WriteLine(
-                    $"Employee {workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
-                workersList[i].ReturnToWorkDate = _currentDate.AddDays(7);
-                workersList[i].efficiency *= 1.3;
-                toSendToTrainingList.Add(workersList[i]);
-            }
-
-            foreach (Worker worker in toSendToTrainingList)
-            {
-                workersList.Remove(worker);
-                trainingWorkersList.Add(worker);
-            }
-
-            Thread.Sleep(1250);
-        } // move to the appropriate own class
-
-        public void HireNewWorker(int numberOfWorkers, string type)
-        {
-            
-            for (int i = 0; i < numberOfWorkers; i++)
-            {
-                double efficiency = 15;
-
-                if (_possibleNames.Count > 1)
-                {
-                    int randomName = _random.Next(0, _possibleNames.Count);
-
-                    // making 'levels' of efficiency based on the number of employees
-                    // this is to make the game harder over time as the player hires more employees
-                    if (workersList.Count > 0)
-                    {
-                        efficiency = _random.Next(70, 130);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 3)
-                    {
-                        efficiency = _random.Next(65, 125);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 6)
-                    {
-                        efficiency = _random.Next(65, 125);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 9)
-                    {
-                        efficiency = _random.Next(60, 120);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 12)
-                    {
-                        efficiency = _random.Next(55, 115);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 15)
-                    {
-                        efficiency = _random.Next(50, 110);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 18)
-                    {
-                        efficiency = _random.Next(45, 105);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 21)
-                    {
-                        efficiency = _random.Next(40, 100);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 24)
-                    {
-                        efficiency = _random.Next(35, 95);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 27)
-                    {
-                        efficiency = _random.Next(30, 90);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 30)
-                    {
-                        efficiency = _random.Next(25, 85);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 33)
-                    {
-                        efficiency = _random.Next(20, 80);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 36)
-                    {
-                        efficiency = _random.Next(15, 75);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 39)
-                    {
-                        efficiency = _random.Next(10, 70);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 42)
-                    {
-                        efficiency = _random.Next(5, 65);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 45)
-                    {
-                        efficiency = _random.Next(0, 60);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 28)
-                    {
-                        efficiency = _random.Next(0, 55);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 51)
-                    {
-                        efficiency = _random.Next(0, 50);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 54)
-                    {
-                        efficiency = _random.Next(0, 45);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 57)
-                    {
-                        efficiency = _random.Next(0, 40);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 60)
-                    {
-                        efficiency = _random.Next(0, 35);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 63)
-                    {
-                        efficiency = _random.Next(0, 30);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 66)
-                    {
-                        efficiency = _random.Next(0, 25);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 69)
-                    {
-                        efficiency = _random.Next(0, 20);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 72)
-                    {
-                        efficiency = _random.Next(0, 15);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 75)
-                    {
-                        efficiency = _random.Next(0, 10);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 78)
-                    {
-                        efficiency = _random.Next(1, 5);
-                        efficiency /= 100;
-                    }
-
-                    double employeePrice = 0;
-                    double baseMorale = 0;
-
-                    if (type == "bad")
-                    {
-                        employeePrice = 50;
-                        baseMorale = 0.75;
-                    }
-                    if (type == "mid")
-                    {
-                        employeePrice = 100;
-                        baseMorale = 1;
-                    }
-                    if (type == "good")
-                    {
-                        employeePrice = 200;
-                        baseMorale = 1.25;
-                    }
-                    
-                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency, baseMorale);
-                    workersList.Add(newWorker);
-                    UsedNames.Add(newWorker.Name);
-                    _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
-
-                    // updating bribe price
-                    bribe.Price = _currentWageRate * workersList.Count * 2;
-                }
-                
-                else
-                {
-                    Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
-                    Console.WriteLine("Wait for some to retire");
-                    break;
-                }
-            }
-            
-        } // move to the appropriate own class
-
-        public void GoToTrader()
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(
-                "             _______                      _               \n            |__   __|                    | |              \n               | |     _ __    __ _    __| |   ___   _ __ \n               | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n               | |    | |    | (_| | | (_| | |  __/ | |   \n               |_|    |_|     \\__,_|  \\__,_|  \\___| |_|");
-            Console.ResetColor();
-            
-            DisplayStuff.DisplayResources(this);
-             
-            Console.WriteLine("Here are the options for today:\n");
-            Console.WriteLine("0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {Math.Round(coalToStone.Ratio,2)} coal --> stone");
-            Console.WriteLine($"2 - Convert {Math.Round(coalToIron.Ratio, 2)} coal --> iron");
-            Console.WriteLine($"3 - Convert {Math.Round(coalToGold.Ratio, 2)} coal --> gold");
-            Console.WriteLine($"4 - Convert {Math.Round(coalToDiamond.Ratio, 2)} coal --> diamond");
-            Console.WriteLine($"5 - Convert {Math.Round(stoneToIron.Ratio, 2)} stone --> iron");
-            Console.WriteLine($"6 - Convert {Math.Round(stoneToGold.Ratio, 2)} stone --> gold");
-            Console.WriteLine($"7 - Convert {Math.Round(stoneToDiamond.Ratio, 2)} stone --> diamond");
-            Console.WriteLine($"8 - Convert {Math.Round(ironToGold.Ratio, 2)} iron --> gold");
-            Console.WriteLine($"9 - Convert {Math.Round(ironToDiamond.Ratio, 2)} iron --> diamond");
-            Console.WriteLine($"10 - Convert {Math.Round(goldToDiamond.Ratio, 2)} gold --> diamond");
-            Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
-            Console.WriteLine("__________________________________________________________________________");
-
-            int userTrade = GetValidInt(0, 10);
-
-            switch (userTrade)
-            {
-                case 0:
-                    break;
-                case 1:
-                    Console.WriteLine($"You've chosen to convert {coalToStone.Ratio}kg coal for stone");
-                    Trade.MakeTrade(coalToStone.Ratio, coal, stone, _currentDate);
-                    break;
-                case 2:
-                    Console.WriteLine($"You've chosen to convert {coalToIron.Ratio}kg coal for iron");
-                    Trade.MakeTrade(coalToIron.Ratio, coal, iron, _currentDate);
-                    break;
-                case 3:
-                    Console.WriteLine($"You've chosen to convert {coalToGold.Ratio}kg coal for gold");
-                    Trade.MakeTrade(coalToGold.Ratio, coal, gold, _currentDate);
-                    break;
-                case 4:
-                    Console.WriteLine($"You've chosen to convert {coalToDiamond.Ratio}kg coal for diamond");
-                    Trade.MakeTrade(coalToDiamond.Ratio, coal, diamond, _currentDate);
-                    break;
-                case 5:
-                    Console.WriteLine($"You've chosen to convert {stoneToIron.Ratio}kg stone for iron");
-                    Trade.MakeTrade(stoneToIron.Ratio, stone, iron, _currentDate);
-                    break;
-                case 6:
-                    Console.WriteLine($"You've chosen to convert {stoneToGold.Ratio}kg stone for gold");
-                    Trade.MakeTrade(stoneToGold.Ratio, stone, gold, _currentDate);
-                    break;
-                case 7:
-                    Console.WriteLine($"You've chosen to convert {stoneToDiamond.Ratio}kg stone for diamond");
-                    Trade.MakeTrade(stoneToDiamond.Ratio, stone, diamond, _currentDate);
-                    break;
-                case 8:
-                    Console.WriteLine($"You've chosen to convert {ironToGold.Ratio}kg iron for gold");
-                    Trade.MakeTrade(ironToGold.Ratio, iron, gold, _currentDate);
-                    break;
-                case 9:
-                    Console.WriteLine($"You've chosen to convert {ironToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(ironToDiamond.Ratio, iron, diamond, _currentDate);
-                    break;
-                case 10:
-                    Console.WriteLine($"You've chosen to convert {goldToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(goldToDiamond.Ratio, gold, diamond, _currentDate);
-                    break;
-            }
-
-            DisplayStuff.DisplayResources(this);
-            Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
-        } // move to trader class?
-
-        public int GetValidInt(int min, int max)
-        {
-            if (int.TryParse(Console.ReadLine(), out int validInt))
-            {
-                if (validInt >= min && validInt <= max)
-                {
-                    return validInt;
-                }
-
-                Console.WriteLine($"No bro enter a number between {min} and {max}");
-                return GetValidInt(min, max);
-            }
-
-            Console.WriteLine("Please enter a valid integer");
-            return GetValidInt(min, max);
-        }
-
-        public double GetValidDouble(double min, double max)
-        {
-            if (double.TryParse(Console.ReadLine(), out double validDouble))
-            {
-                if (validDouble >= min && validDouble <= max)
-                {
-                    return validDouble;
-                }
-
-                Console.WriteLine($"No bro enter a number between {min} and {max}");
-                return GetValidDouble(min, max);
-            }
-
-            Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
-            return GetValidDouble(min, max);
-        }
-    }
+    
 }
