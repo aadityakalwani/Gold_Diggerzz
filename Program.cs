@@ -95,7 +95,8 @@ namespace Gold_Diggerzz
         public int DaysUntilRetirement;
         public DateTime RetirementDate;
         public bool IsIll;
-        public DateTime ReturnToWorkDate; 
+        public DateTime ReturnToWorkDate;
+        public double Morale;
 
         public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency)
         {
@@ -111,6 +112,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
+                Morale = 1;
             }
             
             else if (type == "mid")
@@ -126,6 +128,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
+                Morale = 1;
             }
 
             else if (type == "good")
@@ -140,6 +143,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
+                Morale = 1;
             }
         }
 
@@ -227,6 +231,11 @@ namespace Gold_Diggerzz
                     break;
                 }
             }
+        }
+
+        public static void EmployeeMoraleBoostingScreen(Program _program)
+        {
+            Console.WriteLine("You've called the employee morale boosting screen");
         }
     }
 
@@ -357,11 +366,12 @@ namespace Gold_Diggerzz
             {
                 j++;
                 totalWages += worker.Wage;
-                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Morale {Math.Round(worker.Morale, 2)} Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             Console.WriteLine("___________________________________________________________");
             Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
+            Console.WriteLine($"Average employee morale right now: {Math.Round(program._averageEmployeeMorale, 2)}");
             Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("___________________________________________________________");
             Console.WriteLine("\n\n[ENTER]");
@@ -1080,11 +1090,13 @@ namespace Gold_Diggerzz
                     {
                         Console.WriteLine("__________________________________________________________");
                         Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
+                        Console.WriteLine("They also lose 45% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
                     }
                     
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Hurricane.EfficiencyMultiplier;
+                        worker.Morale /= 1.45;
                     }
                     Hurricane.DaysLeft = 4;
                     _program.ActiveWeatherEffectsList.Add(Hurricane);
@@ -1098,11 +1110,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("__________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
+                        Console.WriteLine("They also lose 15% of their morale because nobody likes working when its raining \ud83d\ude2d");
                     }
                     
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Rain.EfficiencyMultiplier;
+                        worker.Morale /= 1.15;
                     }
 
                     Rain.DaysLeft = 3;
@@ -1117,11 +1131,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("__________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
+                        Console.WriteLine("They also gaines 10% of their morale because everybody likes working when its sunny \ud83d\ude2d");
                     }
                     
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= BeautifulSky.EfficiencyMultiplier;
+                        worker.Morale *= 1.1;
                     }
 
                     BeautifulSky.DaysLeft = 3;
@@ -1955,6 +1971,7 @@ namespace Gold_Diggerzz
         public double _totalEmployeesHired;
         public double _totalDollarsEarned;
         public double _averageEmployeeEfficiency = 1;
+        public double _averageEmployeeMorale = 1;
         public bool _achievement1;
         public bool _achievement2;
         public bool _achievement3;
@@ -2405,6 +2422,10 @@ namespace Gold_Diggerzz
                     case 17:
                         Worker.EmployeeHiringScreen(this);
                         break;
+                    case 18:
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
+                        Worker.EmployeeHiringScreen(this);
+                        break;
                     case 19:
                         DisplayStuff.DisplayRealEstate(this);
                         break;
@@ -2452,7 +2473,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
                 Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
                 Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
-                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |                                     |                              |  15 - Load game state                    |");
+                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   18 - Boost employee morale        |                              |  15 - Load game state                    |");
                 Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  10 - Skip one day                       |");
                 Console.WriteLine("\nEnter your choice:");
 
