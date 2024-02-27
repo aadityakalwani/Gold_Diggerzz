@@ -265,7 +265,7 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    }
+    }// employee morale boosts
 
     class PowerUp
     {
@@ -291,7 +291,7 @@ namespace Gold_Diggerzz
             Price = price;
             skipDayOrNot = false;
         }
-    }
+    }// add employee morale boost activities here
 
     class DisplayStuff
     {
@@ -410,15 +410,18 @@ namespace Gold_Diggerzz
         {
             if (program.activeRealEstate.Count == 0)
             {
-                Console.WriteLine("You have no real estate properties active right now, level up brokie");
+                Console.WriteLine("You have no real estate properties active right now, level up brokie \ud83d\ude45\u200d\u2642\ufe0f ");
+                Console.WriteLine("______________________________________________________________________");
                 return;
             }
             
+            Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
             foreach (RealEstate realEstate in program.activeRealEstate)
             {
                 Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRent} dollars per week");
             }
+            Console.WriteLine("__________________________________________________________________________");
         }
     }
 
@@ -457,7 +460,7 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
         }
-    }
+    }// you're allowed multiple trades per day ++ trade prices don't fluctuate
     
     class WeatherEffectsClass
     {
@@ -475,7 +478,6 @@ namespace Gold_Diggerzz
             EfficiencyMultiplier = efficiencyMultiplier;
             Duration = duration;
         }
-
     }
 
     class MiningOperation
@@ -1663,7 +1665,7 @@ namespace Gold_Diggerzz
                     _program.dollars.Quantity += realEstate.WeeklyRent;
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine($"You have received ${realEstate.WeeklyRent} in rent from your {realEstate.Type}");
+                        Console.WriteLine($"You have received ${realEstate.WeeklyRent} in rent from your {realEstate.Type} \ud83c\udfd8\ufe0f \ud83e\udd11");
                     }
                 }
             }
@@ -1872,7 +1874,7 @@ namespace Gold_Diggerzz
                 }
             }
         }
-    }
+    }// applying a loaded game state
 
     class RealEstate
     {
@@ -1989,7 +1991,7 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    }
+    }// balance updates
 
     class Program
     {
@@ -2492,7 +2494,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("You can also dig for multiple days");
             Console.WriteLine("Here are the game mechanics:");
             Console.WriteLine("THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT\n");
-        }
+        } // make this actually do something, eg. you're dad teaches you how to play the game if you choose ++ option to run at the start
 
         public int UserMenuOption()
         {
@@ -2523,7 +2525,7 @@ namespace Gold_Diggerzz
             }
 
             return -2;
-        }
+        } // prettify and reorder menu options
 
         public string CheckIfInDebt()
         {
@@ -2636,7 +2638,7 @@ namespace Gold_Diggerzz
             }
 
             _totalPowerUpsUsed += 1;
-        }
+        } // you can have negative powerups
 
         public void SaveGameState(int saveOrLoad)
         {
@@ -2665,7 +2667,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("re-download the .exe file later on to see if it's been added");
             Console.WriteLine("For now, you'll be sent back to the main menu in 5 seconds");
             Thread.Sleep(5000);
-        }
+        } // applying a loaded game state
 
         public void QuitGame()
         {
@@ -2684,7 +2686,7 @@ namespace Gold_Diggerzz
 
             QuitGame();
         }
-
+        
         public void EmployeeTrainingCourse(int numberOfEmployees)
         {
             // to boost the productivity of employees
@@ -2707,7 +2709,7 @@ namespace Gold_Diggerzz
             }
 
             Thread.Sleep(1250);
-        }
+        } // move to the appropriate own class
 
         public void HireNewWorker(int numberOfWorkers, string type)
         {
@@ -2895,7 +2897,7 @@ namespace Gold_Diggerzz
                 }
             }
             
-        }
+        } // move to the appropriate own class
 
         public void GoToTrader()
         {
@@ -2971,7 +2973,7 @@ namespace Gold_Diggerzz
 
             DisplayStuff.DisplayResources(this);
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
-        }
+        } // move to trader class?
 
         public int GetValidInt(int min, int max)
         {
