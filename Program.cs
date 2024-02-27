@@ -181,8 +181,7 @@ namespace Gold_Diggerzz
 
                         _program.HireNewWorker(employeesToHire, "bad");
 
-                        _program.dollars.Quantity -=
-                            employeesToHire * _program._currentEmployeePrice * 0.5;
+                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 0.5;
                         Console.WriteLine($"You now have {_program.workersList.Count} total employees");
                         _program._totalEmployeesHired += employeesToHire;
                     }
@@ -221,8 +220,7 @@ namespace Gold_Diggerzz
 
                         _program.HireNewWorker(employeesToHire, "good");
 
-                        _program.dollars.Quantity -=
-                            employeesToHire * _program._currentEmployeePrice * 2;
+                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 2;
                         Console.WriteLine($"You now have {_program.workersList.Count} total employees");
                         _program._totalEmployeesHired += employeesToHire;
                     }
@@ -892,15 +890,19 @@ namespace Gold_Diggerzz
             do
             {
                 Console.WriteLine("\nHere is the menu for the market:");
+                Console.WriteLine("0 - Exit market");
                 Console.WriteLine("1 - Sell a specific resource");
                 Console.WriteLine("2 - Sell all resources for dollars");
                 Console.WriteLine("3 - Hire More Employees");
-                Console.WriteLine("4 - Exit market");
                 Console.WriteLine("\nChoose Option:");
-                marketOption = _program.GetValidInt(1, 4);
+                marketOption = _program.GetValidInt(0, 3);
 
                 switch (marketOption)
                 {
+                    case 0:
+                        Console.WriteLine("Thanks for coming to the market!");
+                        break;
+                    
                     case 1:
                         Console.WriteLine(
                             "You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
@@ -1042,13 +1044,8 @@ namespace Gold_Diggerzz
                     case 3:
                         Worker.EmployeeHiringScreen(_program);
                         break;
-
-                    case 4:
-                        Console.WriteLine("Thanks for coming to the market!");
-                        break;
-
                 }
-            } while (marketOption != 4);
+            } while (marketOption != 0);
         }
     }
 
@@ -1860,6 +1857,8 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You will earn $300 every Monday from this apartment");
                     Console.WriteLine("You have been charged $1000 for the construction of this apartment");
                     RealEstate apartment = new RealEstate("apartment", 5, 1000, 300);
+                    _program.dollars.Quantity -= 1000;
+                    Console.WriteLine("Lost 1k lol bcs apartment");
                     _program.buildingRealEsateList.Add(apartment);
                     break;
                 
@@ -2172,6 +2171,7 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
+            Thread.Sleep(250);
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...");
             Thread.Sleep(1500);
@@ -2228,8 +2228,7 @@ namespace Gold_Diggerzz
                              achievementNumber < achievementsList.Count;
                              achievementNumber++)
                         {
-                            Console.WriteLine(
-                                $"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
+                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
                         }
 
                         break;
@@ -2258,14 +2257,11 @@ namespace Gold_Diggerzz
                         }
 
                         Console.WriteLine("What powerup do you want to use?");
-                        Console.WriteLine(
-                            $"You have {ancientArtefact.Quantity} Ancient Artefacts, {timeMachine.Quantity} Time Machines and {marketMaster.Quantity} Market Masters\n");
+                        Console.WriteLine($"You have {ancientArtefact.Quantity} Ancient Artefacts, {timeMachine.Quantity} Time Machines and {marketMaster.Quantity} Market Masters\n");
                         Console.WriteLine("0 - Cancel & Return");
                         Console.WriteLine("1 - Ancient Artefact --> 2 options inside");
-                        Console.WriteLine(
-                            "2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
-                        Console.WriteLine(
-                            "3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
+                        Console.WriteLine("2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
+                        Console.WriteLine("3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
                         int powerUpChoice = GetValidInt(0, 3);
 
                         switch (powerUpChoice)
@@ -2391,16 +2387,8 @@ namespace Gold_Diggerzz
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
-                    case 17:
-                        Worker.EmployeeHiringScreen(this);
-                        break;
-                    case 19:
-                        DisplayStuff.DisplayRealEstate(this);
-                        break;
-                    case 20:
+                    case 16:
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
-                        Console.WriteLine("Gave ya $1000 to test it bro");
-                        dollars.Quantity += 1000;
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("what do u want to build");
                         Console.WriteLine("0 - Cancel");
@@ -2413,6 +2401,12 @@ namespace Gold_Diggerzz
                         int choice = GetValidInt(0, 6);
                         RealEstate.BuildRealEstate(choice, this);
                         
+                        break;
+                    case 17:
+                        Worker.EmployeeHiringScreen(this);
+                        break;
+                    case 19:
+                        DisplayStuff.DisplayRealEstate(this);
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -2450,7 +2444,7 @@ namespace Gold_Diggerzz
 
             if (takeUserInput == "false")
             {
-                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${dollars.Quantity}");
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
                 Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |");
@@ -2494,7 +2488,7 @@ namespace Gold_Diggerzz
                         "The government will come and sell all your resources for 40% the current market rate...");
                     Thread.Sleep(1500);
                     Console.WriteLine(
-                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2}stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
+                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2} stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
                     Console.WriteLine("Unlucky bro...");
                     Thread.Sleep(750);
                     Console.WriteLine("After bossman stole your resources, you now have:");
