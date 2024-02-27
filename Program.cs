@@ -107,7 +107,7 @@ namespace Gold_Diggerzz
         public List<Worker> workersList = new()
             { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
         
-        public List<RealEstate> buildingRealEsateList = new();
+        public List<RealEstate> buildingRealEstateList = new();
         public List<RealEstate> activeRealEstate = new();
 
         MiningOperation miningOperation = new MiningOperation();
@@ -145,7 +145,7 @@ namespace Gold_Diggerzz
         // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
-        private static List<string> _possibleNames = new List<string>()
+        public List<string> _possibleNames = new List<string>()
         {
             "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
             "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
@@ -253,7 +253,7 @@ namespace Gold_Diggerzz
             "Ronda Rousey-n-feathers"
         };
 
-        public static List<string> UsedNames = new ();
+        public List<string> UsedNames = new ();
 
         # endregion
 
@@ -462,7 +462,7 @@ namespace Gold_Diggerzz
 
                         break;
                     case 13:
-                        Console.WriteLine("0 - no im scared of commiting crimes");
+                        Console.WriteLine("0 - no im scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(0, 2);
@@ -796,194 +796,6 @@ namespace Gold_Diggerzz
 
             Thread.Sleep(1250);
         } // move to the appropriate own class
-
-        public void HireNewWorker(int numberOfWorkers, string type)
-        {
-            
-            for (int i = 0; i < numberOfWorkers; i++)
-            {
-                double efficiency = 15;
-
-                if (_possibleNames.Count > 1)
-                {
-                    int randomName = _random.Next(0, _possibleNames.Count);
-
-                    // making 'levels' of efficiency based on the number of employees
-                    // this is to make the game harder over time as the player hires more employees
-                    if (workersList.Count > 0)
-                    {
-                        efficiency = _random.Next(70, 130);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 3)
-                    {
-                        efficiency = _random.Next(65, 125);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 6)
-                    {
-                        efficiency = _random.Next(65, 125);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 9)
-                    {
-                        efficiency = _random.Next(60, 120);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 12)
-                    {
-                        efficiency = _random.Next(55, 115);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 15)
-                    {
-                        efficiency = _random.Next(50, 110);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 18)
-                    {
-                        efficiency = _random.Next(45, 105);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 21)
-                    {
-                        efficiency = _random.Next(40, 100);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 24)
-                    {
-                        efficiency = _random.Next(35, 95);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 27)
-                    {
-                        efficiency = _random.Next(30, 90);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 30)
-                    {
-                        efficiency = _random.Next(25, 85);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 33)
-                    {
-                        efficiency = _random.Next(20, 80);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 36)
-                    {
-                        efficiency = _random.Next(15, 75);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 39)
-                    {
-                        efficiency = _random.Next(10, 70);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 42)
-                    {
-                        efficiency = _random.Next(5, 65);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 45)
-                    {
-                        efficiency = _random.Next(0, 60);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 28)
-                    {
-                        efficiency = _random.Next(0, 55);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 51)
-                    {
-                        efficiency = _random.Next(0, 50);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 54)
-                    {
-                        efficiency = _random.Next(0, 45);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 57)
-                    {
-                        efficiency = _random.Next(0, 40);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 60)
-                    {
-                        efficiency = _random.Next(0, 35);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 63)
-                    {
-                        efficiency = _random.Next(0, 30);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 66)
-                    {
-                        efficiency = _random.Next(0, 25);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 69)
-                    {
-                        efficiency = _random.Next(0, 20);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 72)
-                    {
-                        efficiency = _random.Next(0, 15);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 75)
-                    {
-                        efficiency = _random.Next(0, 10);
-                        efficiency /= 100;
-                    }
-                    else if (workersList.Count > 78)
-                    {
-                        efficiency = _random.Next(1, 5);
-                        efficiency /= 100;
-                    }
-
-                    double employeePrice = 0;
-                    double baseMorale = 0;
-
-                    if (type == "bad")
-                    {
-                        employeePrice = 50;
-                        baseMorale = 0.75;
-                    }
-                    if (type == "mid")
-                    {
-                        employeePrice = 100;
-                        baseMorale = 1;
-                    }
-                    if (type == "good")
-                    {
-                        employeePrice = 200;
-                        baseMorale = 1.25;
-                    }
-                    
-                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency, baseMorale);
-                    workersList.Add(newWorker);
-                    UsedNames.Add(newWorker.Name);
-                    _possibleNames.Remove(newWorker.Name);
-                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
-
-                    // updating bribe price
-                    bribe.Price = _currentWageRate * workersList.Count * 2;
-                }
-                
-                else
-                {
-                    Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
-                    Console.WriteLine("Wait for some to retire");
-                    break;
-                }
-            }
-            
-        } // move to the appropriate own class
         
         public int GetValidInt(int min, int max)
         {
@@ -1121,7 +933,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine(
                             $"You have hired {employeesToHire} more bad employees.\nSay hello to:");
 
-                        _program.HireNewWorker(employeesToHire, "bad");
+                        HireNewWorker(employeesToHire, "bad", _program);
 
                         _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 0.5;
                         Console.WriteLine($"You now have {_program.workersList.Count} total employees");
@@ -1140,7 +952,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine(
                             $"You have hired {employeesToHire} more mid employees.\nSay hello to:");
 
-                        _program.HireNewWorker(employeesToHire, "mid");
+                        HireNewWorker(employeesToHire, "mid", _program);
 
                         _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
                         Console.WriteLine($"You now have {_program.workersList.Count} total employees");
@@ -1160,7 +972,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine(
                             $"You have hired {employeesToHire} more good employees.\nSay hello to:");
 
-                        _program.HireNewWorker(employeesToHire, "good");
+                        HireNewWorker(employeesToHire, "good", _program);
 
                         _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 2;
                         Console.WriteLine($"You now have {_program.workersList.Count} total employees");
@@ -1169,6 +981,196 @@ namespace Gold_Diggerzz
                     break;
                 }
             }
+        }
+        
+        public static void HireNewWorker(int numberOfWorkers, string type, Program _program)
+        {
+            
+            Random _random = new Random();
+            
+            for (int i = 0; i < numberOfWorkers; i++)
+            {
+                double efficiency = 15;
+
+                if (_program._possibleNames.Count > 1)
+                {
+                    int randomName = _random.Next(0, _program._possibleNames.Count);
+
+                    // making 'levels' of efficiency based on the number of employees
+                    // this is to make the game harder over time as the player hires more employees
+                    if (_program.workersList.Count > 0)
+                    {
+                        efficiency = _random.Next(70, 130);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 3)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 6)
+                    {
+                        efficiency = _random.Next(65, 125);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 9)
+                    {
+                        efficiency = _random.Next(60, 120);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 12)
+                    {
+                        efficiency = _random.Next(55, 115);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 15)
+                    {
+                        efficiency = _random.Next(50, 110);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 18)
+                    {
+                        efficiency = _random.Next(45, 105);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 21)
+                    {
+                        efficiency = _random.Next(40, 100);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 24)
+                    {
+                        efficiency = _random.Next(35, 95);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 27)
+                    {
+                        efficiency = _random.Next(30, 90);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 30)
+                    {
+                        efficiency = _random.Next(25, 85);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 33)
+                    {
+                        efficiency = _random.Next(20, 80);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 36)
+                    {
+                        efficiency = _random.Next(15, 75);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 39)
+                    {
+                        efficiency = _random.Next(10, 70);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 42)
+                    {
+                        efficiency = _random.Next(5, 65);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 45)
+                    {
+                        efficiency = _random.Next(0, 60);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 28)
+                    {
+                        efficiency = _random.Next(0, 55);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 51)
+                    {
+                        efficiency = _random.Next(0, 50);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 54)
+                    {
+                        efficiency = _random.Next(0, 45);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 57)
+                    {
+                        efficiency = _random.Next(0, 40);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 60)
+                    {
+                        efficiency = _random.Next(0, 35);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 63)
+                    {
+                        efficiency = _random.Next(0, 30);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 66)
+                    {
+                        efficiency = _random.Next(0, 25);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 69)
+                    {
+                        efficiency = _random.Next(0, 20);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 72)
+                    {
+                        efficiency = _random.Next(0, 15);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 75)
+                    {
+                        efficiency = _random.Next(0, 10);
+                        efficiency /= 100;
+                    }
+                    else if (_program.workersList.Count > 78)
+                    {
+                        efficiency = _random.Next(1, 5);
+                        efficiency /= 100;
+                    }
+
+                    double employeePrice = 0;
+                    double baseMorale = 0;
+
+                    if (type == "bad")
+                    {
+                        employeePrice = 50;
+                        baseMorale = 0.75;
+                    }
+                    if (type == "mid")
+                    {
+                        employeePrice = 100;
+                        baseMorale = 1;
+                    }
+                    if (type == "good")
+                    {
+                        employeePrice = 200;
+                        baseMorale = 1.25;
+                    }
+                    
+                    Worker newWorker = new Worker(type, _program._possibleNames[randomName], _program._currentWageRate, employeePrice, _program._currentEmployeeIllProbability, efficiency, baseMorale);
+                    _program.workersList.Add(newWorker);
+                    _program.UsedNames.Add(newWorker.Name);
+                    _program._possibleNames.Remove(newWorker.Name);
+                    Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
+
+                    // updating bribe price
+                    _program.bribe.Price = _program._currentWageRate * _program.workersList.Count * 2;
+                }
+                
+                else
+                {
+                    Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
+                    Console.WriteLine("Wait for some to retire");
+                    break;
+                }
+            }
+            
         }
 
         public static void EmployeeMoraleBoostingScreen(Program _program)
@@ -2355,7 +2357,7 @@ namespace Gold_Diggerzz
 
                 if (worker.DaysUntilRetirement == 0)
                 {
-                    Program.UsedNames.Remove(worker.Name);
+                    _program.UsedNames.Remove(worker.Name);
                     worker.RetirementDate = _program._currentDate.Date;
                     _program.retiredWorkersList.Add(worker);
                     _program.workersList.Remove(worker);
@@ -2618,7 +2620,7 @@ namespace Gold_Diggerzz
         {
             // reduce the days left to build by 1 and move the real estate to the active list if it's been built
             List<RealEstate> toRemoveRealEstateList = new();
-            foreach (RealEstate realEstate in _program.buildingRealEsateList)
+            foreach (RealEstate realEstate in _program.buildingRealEstateList)
             {
                 if (realEstate.DaysLeftToBuild == 1)
                 {
@@ -2642,7 +2644,7 @@ namespace Gold_Diggerzz
             
             foreach (RealEstate realEstate in toRemoveRealEstateList)
             {
-                _program.buildingRealEsateList.Remove(realEstate);
+                _program.buildingRealEstateList.Remove(realEstate);
             }
             
             // give rent to the player
@@ -2900,7 +2902,7 @@ namespace Gold_Diggerzz
                     RealEstate apartment = new RealEstate("apartment", 5, 1000, 300);
                     _program.dollars.Quantity -= 1000;
                     Console.WriteLine("Lost 1k lol bcs apartment");
-                    _program.buildingRealEsateList.Add(apartment);
+                    _program.buildingRealEstateList.Add(apartment);
                     break;
                 
                 case 2:
@@ -2915,7 +2917,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $2000 for the construction of this house");
                     _program.dollars.Quantity -= 2000;
                     RealEstate house = new RealEstate("house", 10, 2000, 600);
-                    _program.buildingRealEsateList.Add(house);
+                    _program.buildingRealEstateList.Add(house);
                     break;
                 
                 case 3:
@@ -2930,7 +2932,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $3000 for the construction of this office");
                     _program.dollars.Quantity -= 3000;
                     RealEstate office = new RealEstate("office", 15, 3000, 1000);
-                    _program.buildingRealEsateList.Add(office);
+                    _program.buildingRealEstateList.Add(office);
                     break;
                 
                 case 4:
@@ -2945,7 +2947,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $4000 for the construction of this mansion");
                     _program.dollars.Quantity -= 4000;
                     RealEstate mansion = new RealEstate("mansion", 20, 4000, 1300);
-                    _program.buildingRealEsateList.Add(mansion);
+                    _program.buildingRealEstateList.Add(mansion);
                     break;
                 
                 case 5:
@@ -2960,7 +2962,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $5000 for the construction of this castle");
                     _program.dollars.Quantity -= 5000;
                     RealEstate castle = new RealEstate("castle", 25, 5000, 1600);
-                    _program.buildingRealEsateList.Add(castle);
+                    _program.buildingRealEstateList.Add(castle);
                     break;
                 
                 case 6:
@@ -2975,7 +2977,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $6000 for the construction of this palace");
                     _program.dollars.Quantity -= 6000;
                     RealEstate palace = new RealEstate("palace", 30, 6000, 2000);
-                    _program.buildingRealEsateList.Add(palace);
+                    _program.buildingRealEstateList.Add(palace);
                     break;
             }
         }
