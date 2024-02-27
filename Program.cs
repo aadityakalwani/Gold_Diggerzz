@@ -95,7 +95,7 @@ namespace Gold_Diggerzz
         public int DaysUntilRetirement;
         public DateTime RetirementDate;
         public bool IsIll;
-        public DateTime ReturnToWorkDate;
+        public DateTime ReturnToWorkDate; 
 
         public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency)
         {
