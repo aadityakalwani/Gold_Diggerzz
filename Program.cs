@@ -98,7 +98,7 @@ namespace Gold_Diggerzz
         public DateTime ReturnToWorkDate;
         public double Morale;
 
-        public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency)
+        public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency, double baseMorale)
         {
             if (type == "bad")
             {
@@ -112,7 +112,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
-                Morale = 1;
+                Morale = baseMorale;
             }
             
             else if (type == "mid")
@@ -128,7 +128,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
-                Morale = 1;
+                Morale = baseMorale;
             }
 
             else if (type == "good")
@@ -143,7 +143,7 @@ namespace Gold_Diggerzz
                 IsIll = false;
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
-                Morale = 1;
+                Morale = baseMorale;
             }
         }
 
@@ -236,6 +236,34 @@ namespace Gold_Diggerzz
         public static void EmployeeMoraleBoostingScreen(Program _program)
         {
             Console.WriteLine("You've called the employee morale boosting screen");
+            Console.WriteLine($"Your current average employee morale is {_program._averageEmployeeMorale}");
+            Console.WriteLine("Choose an option to improve employee morale:");
+            Console.WriteLine("0 - Cancel and return to the menu");
+            Console.WriteLine("1 - Increase wage by 20% --> 20% morale increase");
+            Console.WriteLine($"2 - Give a bonus of {100 + _program._totalDaysDug * 3} to each employee --> 10% morale increase");
+            Console.WriteLine($"3 - Offer a retirement package for {100 + _program._totalDaysDug * 10} for all employees when they retire --> 25% morale increase");
+            
+            int userInput = _program.GetValidInt(0, 3);
+            switch (userInput)
+            {
+                case 0:
+                    Console.WriteLine("Returning to the menu...");
+                    Thread.Sleep(500);
+                    break;
+                case 1:
+                    Console.WriteLine("You have chosen to increase the wage of all employees by 20%");
+                    _program._currentWageRate *= 1.2;
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.Wage *= 1.2;
+                        worker.Morale *= 1.2;
+                    }
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }
     }
 
@@ -1315,9 +1343,16 @@ namespace Gold_Diggerzz
             {
                 totalEfficiency += worker.efficiency;
             }
-
             _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
 
+            // recalculate the average morale of the employees
+            double totalMorale = 0;
+            foreach (Worker worker in _program.workersList)
+            {
+                totalMorale += worker.Morale;
+            }
+            _program._averageEmployeeMorale = totalMorale / _program.workersList.Count;
+            
             // retiring workers
             for (int i = _program.workersList.Count - 1; i >= 0; i--)
             {
@@ -1330,7 +1365,7 @@ namespace Gold_Diggerzz
 
                 if (worker.DaysUntilRetirement == 0)
                 {
-                    Program._usedNames.Remove(worker.Name);
+                    Program.UsedNames.Remove(worker.Name);
                     worker.RetirementDate = _program._currentDate.Date;
                     _program.retiredWorkersList.Add(worker);
                     _program.workersList.Remove(worker);
@@ -2007,7 +2042,7 @@ namespace Gold_Diggerzz
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
 
         public List<Worker> workersList = new()
-            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1) };
+            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
         
         public List<RealEstate> buildingRealEsateList = new();
         public List<RealEstate> activeRealEstate = new();
@@ -2155,7 +2190,7 @@ namespace Gold_Diggerzz
             "Ronda Rousey-n-feathers"
         };
 
-        public static List<string> _usedNames = new ();
+        public static List<string> UsedNames = new ();
 
         # endregion
 
@@ -2424,7 +2459,7 @@ namespace Gold_Diggerzz
                         break;
                     case 18:
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
-                        Worker.EmployeeHiringScreen(this);
+                        Worker.EmployeeMoraleBoostingScreen(this);
                         break;
                     case 19:
                         DisplayStuff.DisplayRealEstate(this);
@@ -2824,23 +2859,27 @@ namespace Gold_Diggerzz
                     }
 
                     double employeePrice = 0;
+                    double baseMorale = 0;
 
                     if (type == "bad")
                     {
                         employeePrice = 50;
+                        baseMorale = 0.75;
                     }
                     if (type == "mid")
                     {
                         employeePrice = 100;
+                        baseMorale = 1;
                     }
                     if (type == "good")
                     {
                         employeePrice = 200;
+                        baseMorale = 1.25;
                     }
                     
-                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency);
+                    Worker newWorker = new Worker(type, _possibleNames[randomName], _currentWageRate, employeePrice, _currentEmployeeIllProbability, efficiency, baseMorale);
                     workersList.Add(newWorker);
-                    _usedNames.Add(newWorker.Name);
+                    UsedNames.Add(newWorker.Name);
                     _possibleNames.Remove(newWorker.Name);
                     Console.WriteLine($"{newWorker.Name}, Efficiency {Math.Round(newWorker.efficiency, 2)}\ud83e\uddcd\u200d\u2642\ufe0f");
 
