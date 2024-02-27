@@ -336,12 +336,13 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             if (program.retiredWorkersList.Count != 0)
             {
                 Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
             }
             
             Console.WriteLine("Here are your current working employees:");
@@ -1063,7 +1064,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
-                        Console.WriteLine("They also gaines 10% of their morale because everybody likes working when its sunny \ud83d\ude2d");
+                        Console.WriteLine("Their morale also increased by 10% because everybody likes working when its sunny \ud83d\ude04");
                     }
                     
                     foreach (Worker worker in _program.workersList)
@@ -1295,13 +1296,13 @@ namespace Gold_Diggerzz
                             $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
                     }
                     
-                    _program.trainingWorkersList.Remove(worker);
                     tempList.Add(worker);
                 }
             }
 
             foreach (Worker worker in tempList)
             {
+                _program.trainingWorkersList.Remove(worker);
                 _program.workersList.Add(worker);
             }
             
