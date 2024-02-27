@@ -19,11 +19,6 @@ namespace Gold_Diggerzz
      * add employee morale boost activities as a PayForStuff object
        You have negative power ups 
        Sell employees
-       All employees retired so you had infinite / NaN resources - do not let dig if no employees, force buying new employees
-       
-       Move hire more employees out of the market option
-       Maybe another section for “employee stuff”
-     * 
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
      * Get a certain number of resource to build something eg. a stone castle which gives income or a house or a flat or a mansion
@@ -31,8 +26,6 @@ namespace Gold_Diggerzz
          * lol turn it into a real estate game
      * Fix trader logic because sister had -16iron after going to the trader.... long
      * If weather became fine, no more effects that day
-     * a proper tutorial with images and arrows? (or just a better tutorial)
-        * when the tutorial is better, an option before the game starts to play the tutorial
      * adding more incentive to keep playing
         * option to print all achievements and show if unlocked or not yet 
         * goals to reach
@@ -41,7 +34,6 @@ namespace Gold_Diggerzz
      * create morale and reputation
      *  employee morale --> if morale is low, the employee could be less efficient.
         * morale-boosting powerup
-     * player can offer employees a retirement package in exchange for a morale boost for the remaining workers
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
@@ -240,8 +232,19 @@ namespace Gold_Diggerzz
                     }
                     break;
                 case 2:
+                    Console.WriteLine($"You have chosen to give a bonus of {100 + _program._totalDaysDug * 3} to each employee");
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.Morale *= 1.1;
+                    }
+                    _program.dollars.Quantity -= _program.workersList.Count * (100 + _program._totalDaysDug * 3);
                     break;
                 case 3:
+                    Console.WriteLine($"You have chosen to offer a retirement package for {100 + _program._totalDaysDug * 10} for all employees when they retire");
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.Morale *= 1.25;
+                    }
                     break;
             }
         }
