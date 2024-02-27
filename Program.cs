@@ -16,6 +16,7 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
        * you are allowed to make multiple trades per day
+     * add employee morale boost activities as a PayForStuff object
        You have negative power ups 
        Sell employees
        All employees retired so you had infinite / NaN resources - do not let dig if no employees, force buying new employees
@@ -60,27 +61,6 @@ namespace Gold_Diggerzz
         * or a 'diamond' manager to double chance of finding gold for 10 days
      * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth?)
      */
-
-    class Resource
-        {
-            public string ResourceName;
-            public double InitialPrice;
-            public double Probability;
-            public double Price;
-            public double Quantity;
-            public double TotalFound;
-
-            public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
-                double totalFound)
-            {
-                ResourceName = resourceName;
-                Probability = initialProbability;
-                InitialPrice = initialPrice;
-                Price = initialPrice;
-                Quantity = initialQuantity;
-                TotalFound = totalFound;
-            }
-        }
 
     class Worker
     {
@@ -265,33 +245,7 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    }// employee morale boosts
-
-    class PowerUp
-    {
-        public double Quantity;
-        public double MaxQuantity;
-        public double Probability;
-
-        public PowerUp(double initialQuantity, double initialProbability, double maxQuantity)
-        {
-            Quantity = initialQuantity;
-            Probability = initialProbability;
-            MaxQuantity = maxQuantity;
-        }
-    }
-
-    class PayForStuff
-    {
-        public double Price;
-        public bool skipDayOrNot;
-
-        public PayForStuff(double price)
-        {
-            Price = price;
-            skipDayOrNot = false;
-        }
-    }// add employee morale boost activities here
+    }// employee morale boosts need to be done
 
     class DisplayStuff
     {
@@ -422,61 +376,6 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRent} dollars per week");
             }
             Console.WriteLine("__________________________________________________________________________");
-        }
-    }
-
-    class Trade
-    {
-        public static List<DateTime> datesOfTradesMade = new List<DateTime>();
-        public double Ratio;
-        public Resource FromResource;
-        public Resource ToResource;
-
-        public Trade(double ratio, Resource fromResource, Resource toResource)
-        {
-            Ratio = ratio;
-            FromResource = fromResource;
-            ToResource = toResource;
-        }
-
-        public static void MakeTrade(double ratio, Resource fromResource, Resource toResource,
-            DateTime _currentDate)
-        {
-            if (!datesOfTradesMade.Contains(_currentDate))
-            {
-                if (ratio * fromResource.Quantity < toResource.Quantity)
-                {
-                    Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
-                    return;
-                }
-
-                fromResource.Quantity -= ratio;
-                toResource.Quantity += 1;
-
-                Console.WriteLine($"\u2705 Trade Complete! You traded {ratio}kg of {fromResource.ResourceName} for 1kg of {toResource.ResourceName} \u2705");
-                datesOfTradesMade.Add(DateTime.Today);
-                return;
-            }
-
-            Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
-        }
-    }// you're allowed multiple trades per day ++ trade prices don't fluctuate
-    
-    class WeatherEffectsClass
-    {
-        public string Name;
-        public int DaysLeft;
-        public double Probability;
-        public double EfficiencyMultiplier;
-        public int Duration;
-        
-        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, int duration)
-        {
-            Name = name;
-            DaysLeft = daysLeft;
-            Probability = probability;
-            EfficiencyMultiplier = efficiencyMultiplier;
-            Duration = duration;
         }
     }
 
