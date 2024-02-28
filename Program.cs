@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -17,7 +18,7 @@ namespace Gold_Diggerzz
     /* to-do ideas
        * you are allowed to make multiple trades per day
        You have negative power ups
-    * Sell/fire employees
+     * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
      * Fix trader logic because sister had -16iron after going to the trader.... long
@@ -29,7 +30,7 @@ namespace Gold_Diggerzz
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
      * create reputation (do i need to? ++ how will this work with morale?)
      * create some functionality such that employee morale actually does something
-        * a morale-boosting powerup
+     * a morale-boosting powerup
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
@@ -39,7 +40,7 @@ namespace Gold_Diggerzz
      * Trader's prices fluctuate (one of the factors can be reputation/morale)
      * achievements are OOP-ed? idk about this one - give it some thought
      * otherwise option to print all achievements as an incentive to work towards them/keep playing
-     * earthquakes that loosen soil and make shit easier to find (+ cool animations possible) ++ kill some employees ++ morale lost
+     * earthquakes code to loosen soil and make shit easier to find (+ cool animations possible) ++ kill some employees ++ morale lost
      * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
      * loans - you can take a loan from the bank and pay it back with interest
      * stock market feature (kinda done?)
@@ -508,13 +509,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("what do u want to build");
-                        Console.WriteLine("0 - Cancel");
+                        Console.WriteLine("0. Cancel");
                         Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
-                        Console.WriteLine("2. House - $2000, 10 days to build, $1000 weekly rent");
-                        Console.WriteLine("3. Office - $3000, 15 days to build, $2000 weekly rent");
-                        Console.WriteLine("4. Mansion - $4000, 20 days to build, $3000 weekly rent");
-                        Console.WriteLine("5. Castle - $5000, 25 days to build, $4000 weekly rent");
-                        Console.WriteLine("6. Palace - $6000, 30 days to build, $5000 weekly rent");
+                        Console.WriteLine("2. House - 100kg coal, 10 days to build, $1000 weekly rent");
+                        Console.WriteLine("3. Office - 100kg stone, 15 days to build, $2000 weekly rent");
+                        Console.WriteLine("4. Mansion - 100kg iron, 20 days to build, $3000 weekly rent");
+                        Console.WriteLine("5. Castle - 100kg gold, 25 days to build, $4000 weekly rent");
+                        Console.WriteLine("6. Palace - 100kg diamond, 30 days to build, $5000 weekly rent");
                         int choice = GetValidInt(0, 6);
                         RealEstate.BuildRealEstate(choice, this);
                         
@@ -574,10 +575,12 @@ namespace Gold_Diggerzz
                 Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
                 Console.ReadLine();
             }
-            
-            Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
-            Thread.Sleep(2000);
-            
+
+            else
+            {
+                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
+                Thread.Sleep(2000);
+            }
         }
 
         public int UserMenuOption()
@@ -2103,6 +2106,7 @@ namespace Gold_Diggerzz
             WeatherEffectsClass Rain = new WeatherEffectsClass("rain", 0, 30, 0.7, 3);
             WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 6, 0.4, 5);
             WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("beautiful sky", 0, 30, 1.2, 3);
+            WeatherEffectsClass Earthquake = new WeatherEffectsClass("earthquake", 0, 5, 1.5, 3);
             
             Random random = new Random();
 
@@ -2169,6 +2173,45 @@ namespace Gold_Diggerzz
 
                     BeautifulSky.DaysLeft = 3;
                     _program.ActiveWeatherEffectsList.Add(BeautifulSky);
+                }
+                
+                else if (random.Next(0, 100) < Earthquake.Probability)
+                {
+                    int employeesDied = (int)Math.Ceiling(_program.workersList.Count * 0.15);
+                    Console.WriteLine("An earthquake happened, but there is no coding done for this yet");
+                    Console.WriteLine($"The earthquake killed {employeesDied}, what a shame!");
+                    Console.WriteLine("Your other employees got scared, their morale has halved!!");
+
+                    List<Worker> newlyDeadEmployees = new();
+
+                    while (newlyDeadEmployees.Count < employeesDied)
+                    {
+                        int randomWorkerToDie = random.Next(0, _program.workersList.Count);
+                        newlyDeadEmployees.Add(_program.workersList[randomWorkerToDie]);
+                    }
+
+                    foreach (Worker worker in newlyDeadEmployees)
+                    {
+                        _program.workersList.Remove(worker);
+                    }
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.Morale *= 0.5;
+                    }
+                    
+                    Console.WriteLine("The soil has been loosened");
+                    Console.WriteLine("Glancing over the deaths, this means it is easier to find resources.");
+                    Console.WriteLine("The probability of finding each resource has increased by 20%, permanently!");
+                    
+                    _program.coal.Probability *= 1.2;
+                    _program.stone.Probability *= 1.2;
+                    _program.iron.Probability *= 1.2;
+                    _program.gold.Probability *= 1.2;
+                    _program.diamond.Probability *= 1.2;
+                    
+                    Earthquake.DaysLeft = 3;
+                    _program.ActiveWeatherEffectsList.Add(Earthquake);
                 }
             }
             
@@ -2884,14 +2927,12 @@ namespace Gold_Diggerzz
     {
         public string Type;
         public int DaysLeftToBuild;
-        public double Cost;
         public double WeeklyRent;
         
-        public RealEstate(string type, int daysLeftToBuild, double cost, double weeklyRent)
+        public RealEstate(string type, int daysLeftToBuild, double weeklyRent)
         {
             Type = type;
             DaysLeftToBuild = daysLeftToBuild;
-            Cost = cost;
             WeeklyRent = weeklyRent;
         }
 
@@ -2913,14 +2954,14 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your apartment will be ready in 5 days");
                     Console.WriteLine("You will earn $300 every Monday from this apartment");
                     Console.WriteLine("You have been charged $1000 for the construction of this apartment");
-                    RealEstate apartment = new RealEstate("apartment", 5, 1000, 300);
+                    RealEstate apartment = new RealEstate("apartment", 5, 300);
                     _program.dollars.Quantity -= 1000;
                     Console.WriteLine("Lost 1k lol bcs apartment");
                     _program.buildingRealEstateList.Add(apartment);
                     break;
                 
                 case 2:
-                    if (_program.dollars.Quantity < 2000)
+                    if (_program.coal.Quantity < 100)
                     {
                         Console.WriteLine("You don't have enough money to build a house");
                         break;
@@ -2929,13 +2970,13 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your house will be ready in 10 days");
                     Console.WriteLine("You will earn $600 every Monday from this house");
                     Console.WriteLine("You have been charged $2000 for the construction of this house");
-                    _program.dollars.Quantity -= 2000;
-                    RealEstate house = new RealEstate("house", 10, 2000, 600);
+                    _program.coal.Quantity -= 100;
+                    RealEstate house = new RealEstate("house", 10, 600);
                     _program.buildingRealEstateList.Add(house);
                     break;
                 
                 case 3:
-                    if (_program.dollars.Quantity < 3000)
+                    if (_program.stone.Quantity < 100)
                     {
                         Console.WriteLine("You don't have enough money to build an office");
                         break;
@@ -2944,13 +2985,13 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your office will be ready in 15 days");
                     Console.WriteLine("You will earn $1000 every Monday from this office");
                     Console.WriteLine("You have been charged $3000 for the construction of this office");
-                    _program.dollars.Quantity -= 3000;
-                    RealEstate office = new RealEstate("office", 15, 3000, 1000);
+                    _program.stone.Quantity -= 100;
+                    RealEstate office = new RealEstate("office", 15, 1000);
                     _program.buildingRealEstateList.Add(office);
                     break;
                 
                 case 4:
-                    if (_program.dollars.Quantity < 4000)
+                    if (_program.iron.Quantity < 100)
                     {
                         Console.WriteLine("You don't have enough money to build a mansion");
                         break;
@@ -2959,13 +3000,13 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your mansion will be ready in 20 days");
                     Console.WriteLine("You will earn $1300 every Monday from this mansion");
                     Console.WriteLine("You have been charged $4000 for the construction of this mansion");
-                    _program.dollars.Quantity -= 4000;
-                    RealEstate mansion = new RealEstate("mansion", 20, 4000, 1300);
+                    _program.iron.Quantity -= 100;
+                    RealEstate mansion = new RealEstate("mansion", 20, 1300);
                     _program.buildingRealEstateList.Add(mansion);
                     break;
                 
                 case 5:
-                    if (_program.dollars.Quantity < 5000)
+                    if (_program.gold.Quantity < 100)
                     {
                         Console.WriteLine("You don't have enough money to build a castle");
                         break;
@@ -2974,13 +3015,13 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your castle will be ready in 25 days");
                     Console.WriteLine("You will earn $1600 every Monday from this castle");
                     Console.WriteLine("You have been charged $5000 for the construction of this castle");
-                    _program.dollars.Quantity -= 5000;
-                    RealEstate castle = new RealEstate("castle", 25, 5000, 1600);
+                    _program.gold.Quantity -= 100;
+                    RealEstate castle = new RealEstate("castle", 25, 1600);
                     _program.buildingRealEstateList.Add(castle);
                     break;
                 
                 case 6:
-                    if (_program.dollars.Quantity < 6000)
+                    if (_program.diamond.Quantity < 100)
                     {
                         Console.WriteLine("You don't have enough money to build a palace");
                         break;
@@ -2989,8 +3030,8 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Your palace will be ready in 30 days");
                     Console.WriteLine("You will earn $2000 every Monday from this palace");
                     Console.WriteLine("You have been charged $6000 for the construction of this palace");
-                    _program.dollars.Quantity -= 6000;
-                    RealEstate palace = new RealEstate("palace", 30, 6000, 2000);
+                    _program.diamond.Quantity -= 100;
+                    RealEstate palace = new RealEstate("palace", 30, 2000);
                     _program.buildingRealEstateList.Add(palace);
                     break;
             }
