@@ -356,7 +356,7 @@ namespace Gold_Diggerzz
                     case 9:
                         DisplayStuff.DisplayEmployees(this);
                         break;
-                    case 10:
+                    case 19:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine(
                             $"You have been charged ${skipDay.Price} for the costs of skipping a day");
@@ -365,7 +365,7 @@ namespace Gold_Diggerzz
                         miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         DisplayStuff.DisplayResources(this);
                         break;
-                    case 11:
+                    case 15:
 
                         if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 &&
                             marketMaster.Quantity == 0)
@@ -429,7 +429,7 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 12:
+                    case 11:
                         Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
                         Console.WriteLine(
                             $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
@@ -460,7 +460,7 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 13:
+                    case 16:
                         Console.WriteLine("0 - no im scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
@@ -497,15 +497,15 @@ namespace Gold_Diggerzz
                         
 
                         break;
-                    case 14:
+                    case 17:
                         SaveGameState(1);
                         break;
-                    case 15:
+                    case 18:
                         Console.WriteLine(
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
-                    case 16:
+                    case 14:
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("what do u want to build");
@@ -520,14 +520,14 @@ namespace Gold_Diggerzz
                         RealEstate.BuildRealEstate(choice, this);
                         
                         break;
-                    case 17:
+                    case 10:
                         Worker.EmployeeHiringScreen(this);
                         break;
-                    case 18:
+                    case 12:
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
                         Worker.EmployeeMoraleBoostingScreen(this);
                         break;
-                    case 19:
+                    case 13:
                         DisplayStuff.DisplayRealEstate(this);
                         break;
                     default:
@@ -591,17 +591,17 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
-                Console.WriteLine("________________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                         |");
-                Console.WriteLine("                                                                                                                                                                         |");
-                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   19 - Display real estate   |  11 - Use a powerup                      |");
-                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   17 - Hire more employees          |   16 - Build real estate     |  13 - Commit a crime (more inside)       |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   12 - Send employees for training  |                              |  14 - Save current progress              |");
-                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   18 - Boost employee morale        |                              |  15 - Load game state                    |");
-                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  10 - Skip one day                       |");
+                Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                      |");
+                Console.WriteLine("                                                                                                                                                                      |");
+                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   13 - Display real estate   |  15 - Use a powerup                   |");
+                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   10 - Hire more employees          |   14 - Build real estate     |  16 - Commit a crime (more inside)    |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   11 - Send employees for training  |                              |  17 - Save current progress           |");
+                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   12 - Boost employee morale        |                              |  18 - Load game state                 |");
+                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  19 - Skip one day                    |");
                 Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 20);
+                int userOption = GetValidInt(0, 19);
                 Console.Clear();
                 return userOption;
             }
