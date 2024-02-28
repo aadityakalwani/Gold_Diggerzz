@@ -4,11 +4,13 @@ namespace Gold_Diggerzz
     {
         public double Price;
         public bool skipDayOrNot;
+        public double MoraleMultiplier;
 
-        public PayForStuff(double price)
+        public PayForStuff(double price, double moraleMultiplier)
         {
             Price = price;
             skipDayOrNot = false;
+            MoraleMultiplier = moraleMultiplier;
         }
     }
 }

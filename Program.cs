@@ -16,14 +16,10 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
        * you are allowed to make multiple trades per day
-     * add employee morale boost activities as a PayForStuff object
-       You have negative power ups 
-       Sell employees
+       You have negative power ups
+    * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
-     * Get a certain number of resource to build something eg. a stone castle which gives income or a house or a flat or a mansion
-         * eg. a wedding happened or dracula came into the castle and scared away they guests, castle can collapse etc
-         * lol turn it into a real estate game
      * Fix trader logic because sister had -16iron after going to the trader.... long
      * If weather became fine, no more effects that day
      * adding more incentive to keep playing
@@ -31,16 +27,16 @@ namespace Gold_Diggerzz
         * goals to reach
         * if you reach _______ income you can find ______
      * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
-     * create morale and reputation
-     *  employee morale --> if morale is low, the employee could be less efficient.
-        * morale-boosting powerup
+     * create reputation (do i need to? ++ how will this work with morale?)
+     * create some functionality such that employee morale actually does something
+        * a morale-boosting powerup
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
      * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
      * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
         * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
         * as the mine gets emptier, chance of finding resources decreases
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
-     * Trader's prices fluctuate (one of the factors can be reputation)
+     * Trader's prices fluctuate (one of the factors can be reputation/morale)
      * achievements are OOP-ed? idk about this one - give it some thought
      * otherwise option to print all achievements as an incentive to work towards them/keep playing
      * earthquakes that loosen soil and make shit easier to find (+ cool animations possible) ++ kill some employees ++ morale lost
@@ -51,7 +47,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies and you're also trying to beat them (give them a quadratic rate of growth?)
+     * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
      */
 
     class Program
@@ -129,6 +125,8 @@ namespace Gold_Diggerzz
         public PayForStuff skipDay;
         public PayForStuff bribe;
         public PayForStuff trainingCourse;
+        public PayForStuff bonus;
+        public PayForStuff retirementPackage;
         public Trade coalToStone;
         public Trade coalToIron;
         public Trade coalToGold;
@@ -548,15 +546,11 @@ namespace Gold_Diggerzz
             Console.WriteLine("He decides to teach you the ropes of the business - one day, you may have to take over the company.");
             Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.");
             Console.WriteLine("\nHe offers you the chance to learn the business before you begin...");
-            Console.WriteLine("Do you want to go through a tutorial? (y/n): ");
+            Console.WriteLine("Do you want to go through a tutorial? ('y' for 'yes', anything else for 'no'): ");
             
             string tutorialChoice = Console.ReadLine().ToLower();
-            if (tutorialChoice == "n")
-            {
-                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
-                Thread.Sleep(2000);
-            }
-            else if (tutorialChoice == "y")
+            
+            if (tutorialChoice == "y")
             {
                 Console.WriteLine("He smiles and says 'Good choice, my child'.");
                 Thread.Sleep(2000);
@@ -580,6 +574,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
                 Console.ReadLine();
             }
+            
+            Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
+            Thread.Sleep(2000);
+            
         }
 
         public int UserMenuOption()
@@ -1180,8 +1178,8 @@ namespace Gold_Diggerzz
             Console.WriteLine("Choose an option to improve employee morale:");
             Console.WriteLine("0 - Cancel and return to the menu");
             Console.WriteLine("1 - Increase wage by 20% --> 20% morale increase");
-            Console.WriteLine($"2 - Give a bonus of {100 + _program._totalDaysDug * 3} to each employee --> 10% morale increase");
-            Console.WriteLine($"3 - Offer a retirement package for {100 + _program._totalDaysDug * 10} for all employees when they retire --> 25% morale increase");
+            Console.WriteLine($"2 - Give a bonus of {_program.bonus.Price} to each employee --> 10% morale increase");
+            Console.WriteLine($"3 - Offer a retirement package for {_program.retirementPackage} for all employees when they retire --> 25% morale increase");
             
             int userInput = _program.GetValidInt(0, 3);
             switch (userInput)
@@ -1190,6 +1188,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Returning to the menu...");
                     Thread.Sleep(500);
                     break;
+                
                 case 1:
                     Console.WriteLine("You have chosen to increase the wage of all employees by 20%");
                     _program._currentWageRate *= 1.2;
@@ -1199,20 +1198,34 @@ namespace Gold_Diggerzz
                         worker.Morale *= 1.2;
                     }
                     break;
+                
                 case 2:
-                    Console.WriteLine($"You have chosen to give a bonus of {100 + _program._totalDaysDug * 3} to each employee");
-                    foreach (Worker worker in _program.workersList)
+                    if (_program.dollars.Quantity > _program.workersList.Count * _program.bonus.Price)
                     {
-                        worker.Morale *= 1.1;
+                        Console.WriteLine($"You have chosen to give a bonus of {_program.bonus.Price} to each employee");
+                        foreach (Worker worker in _program.workersList)
+                        {
+                            worker.Morale *= _program.retirementPackage.MoraleMultiplier;
+                        }
+                        _program.dollars.Quantity -= _program.workersList.Count * _program.bonus.Price;
+                        break;
                     }
-                    _program.dollars.Quantity -= _program.workersList.Count * (100 + _program._totalDaysDug * 3);
+                    Console.WriteLine($"You can't afford to pay for a bonus of ${_program.bonus.Price} per employee \ud83d\ude45\u200d\u2642\ufe0f");
                     break;
+                
                 case 3:
-                    Console.WriteLine($"You have chosen to offer a retirement package for {100 + _program._totalDaysDug * 10} for all employees when they retire");
-                    foreach (Worker worker in _program.workersList)
+                    if (_program.dollars.Quantity > _program.retirementPackage.Price)
                     {
-                        worker.Morale *= 1.25;
+                        Console.WriteLine($"You have chosen to offer a retirement package for {_program.retirementPackage} for all employees when they retire");
+                        foreach (Worker worker in _program.workersList)
+                        {
+                            worker.Morale *= _program.retirementPackage.MoraleMultiplier;
+                        }
+
+                        _program.dollars.Quantity -= _program.retirementPackage.Price;
+                        break;
                     }
+                    Console.WriteLine($"You can't afford to pay for a retirement package of ${_program.retirementPackage.Price} \ud83d\ude45\u200d\u2642\ufe0f");
                     break;
             }
         }
@@ -2319,7 +2332,7 @@ namespace Gold_Diggerzz
 
         public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
-            // retirements, returning workers, unwell workers, etc
+            // retirements, returning workers, unwell workers, morale, etc.
             
             // reduce morale by 2% for every day worked
             foreach (Worker worker in _program.workersList)
@@ -2366,7 +2379,6 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"Employee {worker.Name} has retired. Goodbye! \ud83d\udc4b");
                         Console.WriteLine($"You now have {_program.workersList.Count} employees");
                     }
-                    
                 }
             }
 
@@ -2707,17 +2719,19 @@ namespace Gold_Diggerzz
             program.stone = new Resource("Stone", 70, 6, 0, 0);
             program.iron = new Resource("Iron", 60, 13, 0, 0);
             program.gold = new Resource("Gold", 15, 65, 0, 0);
-            program.diamond = new Resource("Diamond", 3, 200, 0, 0);
+            program.diamond = new Resource("Diamond", 7, 100, 0, 0);
             program.dollars = new Resource("Dollars", 0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
             program.ancientArtefact = new PowerUp(0, 7, 3);
             program.marketMaster = new PowerUp(0, 4, 3);
-            program.stockMarketCrash = new PayForStuff(100);
-            program.skipDay = new PayForStuff(50);
-            program.bribe = new PayForStuff(200);
-            program.trainingCourse = new PayForStuff(400);
-            
+            program.stockMarketCrash = new PayForStuff(100, 1);
+            program.skipDay = new PayForStuff(50, 1);
+            program.bribe = new PayForStuff(200, 1);
+            program.trainingCourse = new PayForStuff(400, 1);
+            program.bonus = new PayForStuff(100 + program._totalDaysDug * 3, 1.1);
+            program.retirementPackage = new PayForStuff(100 + program._totalDaysDug * 10, 1.25);
+
             # endregion
         }
 
@@ -2981,6 +2995,6 @@ namespace Gold_Diggerzz
                     break;
             }
         }
-    } // balance updates
+    } // balance updates needed
     
 }
