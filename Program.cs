@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -17,6 +16,7 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
        * you are allowed to make multiple trades per day
+      * undo hardc-oding within RealEstate.BuildRealEstate
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
@@ -91,7 +91,7 @@ namespace Gold_Diggerzz
         public double _currentEmployeeIllProbability = 5;
         public double _currentEmployeePrice = 100;
         public DateTime _currentDate = new DateTime(2024, 1, 1);
-        public static Random _random = new();
+        private static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
 
         public List<Worker> illWorkersList = new();
@@ -107,9 +107,9 @@ namespace Gold_Diggerzz
         public List<RealEstate> buildingRealEstateList = new();
         public List<RealEstate> activeRealEstate = new();
 
-        MiningOperation miningOperation = new MiningOperation();
-        MarketOperation marketOperation = new MarketOperation();
-        DayToDayOperations dayToDayOperations = new DayToDayOperations();
+        MiningOperation miningOperation = new();
+        MarketOperation marketOperation = new();
+        DayToDayOperations dayToDayOperations = new();
 
         // Declare your variables at the class level
         public Resource coal;
@@ -139,12 +139,12 @@ namespace Gold_Diggerzz
         public Trade ironToDiamond;
         public Trade goldToDiamond;
 
-        public List<string> achievementsList = new List<string>();
+        public List<string> achievementsList = new();
 
         // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
-        public List<string> _possibleNames = new List<string>()
+        public List<string> _possibleNames = new()
         {
             "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
             "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
@@ -252,7 +252,7 @@ namespace Gold_Diggerzz
             "Ronda Rousey-n-feathers"
         };
 
-        public List<string> UsedNames = new ();
+        public List<string> UsedNames = new();
 
         # endregion
 
@@ -1236,7 +1236,7 @@ namespace Gold_Diggerzz
     
     class Trade
     {
-        public static List<DateTime> datesOfTradesMade = new List<DateTime>();
+        public static List<DateTime> datesOfTradesMade = new();
         public double Ratio;
         public Resource FromResource;
         public Resource ToResource;
@@ -1508,7 +1508,7 @@ namespace Gold_Diggerzz
                         if (!multipleDayDig)
                         {
                             // ASCII art animation for digging
-                            string[] shovel = new string[]
+                            string[] shovel = new[]
                             {
                                 "    ______",
                                 "   /      \\",
@@ -2175,25 +2175,80 @@ namespace Gold_Diggerzz
                     _program.ActiveWeatherEffectsList.Add(BeautifulSky);
                 }
                 
-                else if (random.Next(0, 100) < Earthquake.Probability)
+                // earthquake increasing efficiency but killing workers and reducing morale
+                // else if (random.Next(0, 100) < Earthquake.Probability)
+                else if (random.Next(0, 100) < 99)
                 {
-                    int employeesDied = (int)Math.Ceiling(_program.workersList.Count * 0.15);
-                    Console.WriteLine("An earthquake happened, but there is no coding done for this yet");
-                    Console.WriteLine($"The earthquake killed {employeesDied}, what a shame!");
-                    Console.WriteLine("Your other employees got scared, their morale has halved!!");
-
-                    List<Worker> newlyDeadEmployees = new();
-
-                    while (newlyDeadEmployees.Count < employeesDied)
+                    // earthquake animation
+                    
+                    string[] earthquake = new[]
                     {
-                        int randomWorkerToDie = random.Next(0, _program.workersList.Count);
-                        newlyDeadEmployees.Add(_program.workersList[randomWorkerToDie]);
+                        "______                  _     _                               _           ",
+                        "|  ____|                | |   | |                             | |          ",
+                        "| |__      __ _   _ __  | |_  | |__     __ _   _   _    __ _  | | __   ___ ",
+                        "|  __|    / _` | | '__| | __| | '_ \\   / _` | | | | |  / _` | | |/ /  / _ \\",
+                        "| |____  | (_| | | |    | |_  | | | | | (_| | | |_| | | (_| | |   <  |  __/",
+                        "|______|  \\__,_| |_|     \\__| |_| |_|  \\__, |  \\__,_|  \\__,_| |_|\\_\\  \\___|",
+                        "                                          | |                              ",
+                        "                                          |_|                              "
+                    };
+                    
+                    for (int i = 0; i < 75; i++)
+                    {
+                        Thread.Sleep(125);
+                        Console.Clear();
+                        for (int j = 0; j < earthquake.Length; j++)
+                        {
+                            // Generate a random number between -4 and 4
+                            int move = random.Next(-4, 5);
+
+                            // Create a string of spaces based on the random number
+                            string spaces = "";
+                            
+                            for (int k = 0; k < Math.Abs(move); k++)
+                            {
+                                spaces += " ";
+                            }
+
+                            // Depending on the sign of the random number, add the spaces to the left or right of the line
+                            string line;
+
+                            if (move < 0)
+                            {
+                                line = spaces + earthquake[j];
+                            }
+                            else
+                            {
+                                line = earthquake[j] + spaces;
+                            }
+
+                            Console.WriteLine(line);
+                        }
                     }
 
-                    foreach (Worker worker in newlyDeadEmployees)
+                    if (_program.workersList.Count > 5)
                     {
-                        _program.workersList.Remove(worker);
+                        int employeesDied = (int)Math.Ceiling(_program.workersList.Count * 0.15);
+                        Console.WriteLine($"\u26b0\ufe0f The earthquake killed {employeesDied}, what a shame! \u26b0\ufe0f");
+                        Console.WriteLine("Your other employees got scared, their morale has halved!!");
+
+                        List<Worker> newlyDeadEmployees = new();
+
+                        while (newlyDeadEmployees.Count < employeesDied)
+                        {
+                            int randomWorkerToDie = random.Next(0, _program.workersList.Count);
+                            newlyDeadEmployees.Add(_program.workersList[randomWorkerToDie]);
+                        }
+
+                        foreach (Worker worker in newlyDeadEmployees)
+                        {
+                            _program.workersList.Remove(worker);
+                        }
                     }
+                    
+                    Console.WriteLine("Because you have less than 5 employees, you got lucky");
+                    Console.WriteLine("None of your employees died, but they sure as hell had a fright!!");
+                    Console.WriteLine("Their morale has permanently halved!!");
                     
                     foreach (Worker worker in _program.workersList)
                     {
@@ -2963,13 +3018,13 @@ namespace Gold_Diggerzz
                 case 2:
                     if (_program.coal.Quantity < 100)
                     {
-                        Console.WriteLine("You don't have enough money to build a house");
+                        Console.WriteLine("You don't have enough coal to build a house");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new house");
                     Console.WriteLine("Your house will be ready in 10 days");
                     Console.WriteLine("You will earn $600 every Monday from this house");
-                    Console.WriteLine("You have been charged $2000 for the construction of this house");
+                    Console.WriteLine("You have been charged 100kg of coal for the construction of this house");
                     _program.coal.Quantity -= 100;
                     RealEstate house = new RealEstate("house", 10, 600);
                     _program.buildingRealEstateList.Add(house);
@@ -2978,64 +3033,63 @@ namespace Gold_Diggerzz
                 case 3:
                     if (_program.stone.Quantity < 100)
                     {
-                        Console.WriteLine("You don't have enough money to build an office");
+                        Console.WriteLine("You don't have enough stone to build an office");
                         break;
                     }
+                    RealEstate office = new RealEstate("office", 15, 1000);
                     Console.WriteLine("You have chosen to build a new office");
                     Console.WriteLine("Your office will be ready in 15 days");
                     Console.WriteLine("You will earn $1000 every Monday from this office");
-                    Console.WriteLine("You have been charged $3000 for the construction of this office");
+                    Console.WriteLine("You have been charged 100kg of stone for the construction of this office");
                     _program.stone.Quantity -= 100;
-                    RealEstate office = new RealEstate("office", 15, 1000);
                     _program.buildingRealEstateList.Add(office);
                     break;
                 
                 case 4:
                     if (_program.iron.Quantity < 100)
                     {
-                        Console.WriteLine("You don't have enough money to build a mansion");
+                        Console.WriteLine("You don't have enough iron to build a mansion");
                         break;
                     }
+                    RealEstate mansion = new RealEstate("mansion", 20, 1300);
                     Console.WriteLine("You have chosen to build a new mansion");
                     Console.WriteLine("Your mansion will be ready in 20 days");
                     Console.WriteLine("You will earn $1300 every Monday from this mansion");
-                    Console.WriteLine("You have been charged $4000 for the construction of this mansion");
+                    Console.WriteLine("You have been charged 100kg of iron for the construction of this mansion");
                     _program.iron.Quantity -= 100;
-                    RealEstate mansion = new RealEstate("mansion", 20, 1300);
                     _program.buildingRealEstateList.Add(mansion);
                     break;
                 
                 case 5:
                     if (_program.gold.Quantity < 100)
                     {
-                        Console.WriteLine("You don't have enough money to build a castle");
+                        Console.WriteLine("You don't have enough gold to build a castle");
                         break;
                     }
+                    RealEstate castle = new RealEstate("castle", 25, 1600);
                     Console.WriteLine("You have chosen to build a new castle");
                     Console.WriteLine("Your castle will be ready in 25 days");
                     Console.WriteLine("You will earn $1600 every Monday from this castle");
-                    Console.WriteLine("You have been charged $5000 for the construction of this castle");
+                    Console.WriteLine("You have been charged 100kg of gold for the construction of this castle");
                     _program.gold.Quantity -= 100;
-                    RealEstate castle = new RealEstate("castle", 25, 1600);
                     _program.buildingRealEstateList.Add(castle);
                     break;
                 
                 case 6:
                     if (_program.diamond.Quantity < 100)
                     {
-                        Console.WriteLine("You don't have enough money to build a palace");
+                        Console.WriteLine("You don't have enough diamonds to build a palace");
                         break;
                     }
+                    RealEstate palace = new RealEstate("palace", 30, 2000);
                     Console.WriteLine("You have chosen to build a new palace");
                     Console.WriteLine("Your palace will be ready in 30 days");
                     Console.WriteLine("You will earn $2000 every Monday from this palace");
-                    Console.WriteLine("You have been charged $6000 for the construction of this palace");
+                    Console.WriteLine("You have been charged 100kg of diamonds for the construction of this palace");
                     _program.diamond.Quantity -= 100;
-                    RealEstate palace = new RealEstate("palace", 30, 2000);
                     _program.buildingRealEstateList.Add(palace);
                     break;
             }
         }
     } // balance updates needed
-    
 }
