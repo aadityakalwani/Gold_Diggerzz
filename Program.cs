@@ -97,8 +97,10 @@ namespace Gold_Diggerzz
 
         public List<Worker> illWorkersList = new();
         public List<Worker> retiredWorkersList = new();
+        public List<Worker> deadWorkersList = new();
         public List<Worker> trainingWorkersList = new();
         public List<Worker> toSendToTrainingList = new();
+        
         public List<Trade> tradeList = new();
         
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
@@ -1406,10 +1408,29 @@ namespace Gold_Diggerzz
             Console.WriteLine("\n  ______                       _                                     \n |  ____|                     | |                                    \n | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___ \n |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|\n | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\\n |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/\n                      | |                   __/ |                    \n                      |_|                  |___/                     \n");
             Console.WriteLine("_____________________________________________________________________");
             int i = 0;
+            
+            foreach (Worker worker in program.deadWorkersList)
+            {
+                i++;
+                Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
+            
+            if (program.deadWorkersList.Count != 0)
+            {
+                Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
+            }
+            
+            if (program.retiredWorkersList.Count != 0)
+            {
+                Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
+            }
+            
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Day}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             if (program.retiredWorkersList.Count != 0)
@@ -1429,9 +1450,9 @@ namespace Gold_Diggerzz
             }
 
             Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine($"Total wages right now: ${Math.Round(totalWages, 2)}");
-            Console.WriteLine($"Average employee morale right now: {Math.Round(program._averageEmployeeMorale, 2)}");
-            Console.WriteLine($"Average employee efficiency right now: {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine($"Total wages: ${Math.Round(totalWages, 2)}");
+            Console.WriteLine($"Average employee morale: {Math.Round(program._averageEmployeeMorale, 2)}");
+            Console.WriteLine($"Average employee efficiency: {Math.Round(program._averageEmployeeEfficiency, 2)}");
             Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine("\n\n[ENTER]");
             Console.ReadLine();
@@ -2199,6 +2220,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(line);
                         }
                     }
+                    Console.WriteLine(earthquake);
 
                     // earthquake effects
                     if (_program.workersList.Count >= 5)
@@ -2218,6 +2240,7 @@ namespace Gold_Diggerzz
                         foreach (Worker worker in newlyDeadEmployees)
                         {
                             _program.workersList.Remove(worker);
+                            _program.deadWorkersList.Add(worker);
                         }
                     }
 
@@ -3017,6 +3040,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate apartment = new RealEstate("apartment", 5, 300, "dollars");
+                    if (_program.activeRealEstate.Contains(apartment))
+                    {
+                        Console.WriteLine("You already have an apartment");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new apartment");
                     Console.WriteLine("Your apartment will be ready in 5 days");
                     Console.WriteLine("You will earn $300 every Monday from this apartment");
@@ -3033,6 +3061,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate house = new RealEstate("house", 10, 30, "coal");
+                    if (_program.activeRealEstate.Contains(house))
+                    {
+                        Console.WriteLine("You already have a house");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new house");
                     Console.WriteLine("Your house will be ready in 10 days");
                     Console.WriteLine($"You will earn 30kg coal every Monday from this house");
@@ -3049,6 +3082,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate office = new RealEstate("office", 15, 30, "stone");
+                    if (_program.activeRealEstate.Contains(office))
+                    {
+                        Console.WriteLine("You already have an office");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new office");
                     Console.WriteLine("Your office will be ready in 15 days");
                     Console.WriteLine("You will earn 30kg stone every Monday from this office");
@@ -3065,6 +3103,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate mansion = new RealEstate("mansion", 20, 30, "iron");
+                    if (_program.activeRealEstate.Contains(mansion))
+                    {
+                        Console.WriteLine("You already have a mansion");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new mansion");
                     Console.WriteLine("Your mansion will be ready in 20 days");
                     Console.WriteLine("You will earn 30kg iron every Monday from this mansion");
@@ -3081,6 +3124,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate castle = new RealEstate("castle", 25, 30, "gold");
+                    if (_program.activeRealEstate.Contains(castle))
+                    {
+                        Console.WriteLine("You already have a castle");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new castle");
                     Console.WriteLine("Your castle will be ready in 25 days");
                     Console.WriteLine("You will earn 30kg iron every Monday from this castle");
@@ -3097,6 +3145,11 @@ namespace Gold_Diggerzz
                     }
                     
                     RealEstate palace = new RealEstate("palace", 30, 30, "diamond");
+                    if (_program.activeRealEstate.Contains(palace))
+                    {
+                        Console.WriteLine("You already have a palace");
+                        break;
+                    }
                     Console.WriteLine("You have chosen to build a new palace");
                     Console.WriteLine("Your palace will be ready in 30 days");
                     Console.WriteLine("You will earn 30kg diamond every Monday from this palace");
