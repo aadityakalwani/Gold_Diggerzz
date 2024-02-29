@@ -1587,8 +1587,8 @@ namespace Gold_Diggerzz
             {
                 if (_program.workersList.Count == 0)
                 {
-                    Console.WriteLine("You have no employees to dig for you. Hire some employees first");
-                    Console.WriteLine("Go to the market (menu option 3) -> Hire more employees (menu option 3) -> select type and hire");
+                    Console.WriteLine("__________________________________________________________________________");
+                    Console.WriteLine("\u2b55 You have no employees to dig for you\u2b55\n. Hire some employees first");
                     return;
                 }
                 
@@ -2318,7 +2318,7 @@ namespace Gold_Diggerzz
                     }
                     
                     // print the original earthquake array
-                    for (int i = 0; i < 60; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         Thread.Sleep(125);
                         Console.Clear();
