@@ -15,8 +15,9 @@ namespace Gold_Diggerzz
      */
 
     /* to-do ideas
+     * convert to proper OOP via getters and setters
        * you are allowed to make multiple trades per day
-      * undo hardc-oding within RealEstate.BuildRealEstate
+      * undo hard-coding within RealEstate.BuildRealEstate
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
@@ -98,6 +99,7 @@ namespace Gold_Diggerzz
         public List<Worker> retiredWorkersList = new();
         public List<Worker> trainingWorkersList = new();
         public List<Worker> toSendToTrainingList = new();
+        public List<Trade> tradeList = new();
         
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
 
@@ -264,21 +266,6 @@ namespace Gold_Diggerzz
             
             GameState.CreateNewGameState(program);
 
-            # region initialisation of all trade objects
-
-            program.coalToStone = new Trade(2 * (_random.Next(80,100)/100), program.coal, program.stone);
-            program.coalToIron = new Trade(5 * (_random.Next(80,100)/100), program.coal, program.iron);
-            program.coalToGold = new Trade(12 * (_random.Next(80,100)/100), program.coal, program.gold);
-            program.coalToDiamond = new Trade(70 * (_random.Next(80,100)/100), program.coal, program.diamond);
-            program.stoneToIron = new Trade(3 * (_random.Next(80,100)/100), program.stone, program.iron);
-            program.stoneToGold = new Trade(13 * (_random.Next(80,100)/100), program.stone, program.gold);
-            program.stoneToDiamond = new Trade(40 * (_random.Next(80,100)/100), program.stone, program.diamond);
-            program.ironToGold = new Trade(5 * (_random.Next(80,100)/100), program.iron, program.gold);
-            program.ironToDiamond = new Trade(16 * (_random.Next(80,100)/100), program.iron, program.diamond);
-            program.goldToDiamond = new Trade(3 * (_random.Next(80,100)/100), program.gold, program.diamond);
-
-            # endregion
-
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
@@ -288,8 +275,8 @@ namespace Gold_Diggerzz
             Thread.Sleep(1500);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
-            Console.WriteLine("The game is about to start, good luck...");
-            Thread.Sleep(3000);
+            Console.WriteLine("The game is about to start, good luck...\n\n[ENTER]");
+            Console.ReadLine();
             Console.Clear();
 
             program.RunGame();
@@ -326,7 +313,7 @@ namespace Gold_Diggerzz
                         _animation = false;
                         Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
-                        int daysToDig = GetValidInt(1, 30);
+                        int daysToDig = GetValidInt(0, 30);
                         miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
                         break;
                     case 3:
@@ -561,11 +548,11 @@ namespace Gold_Diggerzz
                 Thread.Sleep(2000);
                 Console.WriteLine("You are now the manager of a new gold digging business.");
                 Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
-                Console.WriteLine("Your dad gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
+                Console.WriteLine("He gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
                 Thread.Sleep(2500);
                 Console.WriteLine("As you dig for resources, you can sell them at the market to earn money.");
                 Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
-                Console.WriteLine("You can also build real estate to earn passive income, but that's for later (and it's also not fully developed yet).");
+                Console.WriteLine("You can also build real estate to earn passive income, but that's for later.");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
                 Thread.Sleep(2000);
                 Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
@@ -681,7 +668,7 @@ namespace Gold_Diggerzz
             switch (powerUpChoice)
             {
                 case 1:
-                {
+                
                     if (subChoice == 1)
                     {
                         Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
@@ -696,17 +683,15 @@ namespace Gold_Diggerzz
 
                     ancientArtefact.Quantity -= 1;
                     break;
-                }
 
                 case 2:
-                {
+                
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
                     _noWageDaysLeft = 10;
                     _animation = false;
                     miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
                     timeMachine.Quantity -= 1;
                     break;
-                }
 
                 case 3:
                     Console.WriteLine("Applying the Market Master power up...");
@@ -1251,9 +1236,9 @@ namespace Gold_Diggerzz
         public static void MakeTrade(double ratio, Resource fromResource, Resource toResource,
             DateTime _currentDate)
         {
-            if (!datesOfTradesMade.Contains(_currentDate))
+            if (!datesOfTradesMade.Contains(_currentDate.Date))
             {
-                if (ratio * fromResource.Quantity < toResource.Quantity)
+                if (fromResource.Quantity < ratio)
                 {
                     Console.WriteLine("\u274c You can't afford to make this trade brokie \u274c");
                     return;
@@ -1279,9 +1264,10 @@ namespace Gold_Diggerzz
             
             DisplayStuff.DisplayResources(program);
              
+            Console.WriteLine("This is where you can convert between resources!");
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio,2)} coal --> stone");
+            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio, 2)} coal --> stone");
             Console.WriteLine($"2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron");
             Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold");
             Console.WriteLine($"4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond");
@@ -1301,44 +1287,34 @@ namespace Gold_Diggerzz
                 case 0:
                     break;
                 case 1:
-                    Console.WriteLine($"You've chosen to convert {program.coalToStone.Ratio}kg coal for stone");
-                    Trade.MakeTrade(program.coalToStone.Ratio, program.coal, program.stone, program._currentDate);
+                    MakeTrade(program.coalToStone.Ratio, program.coal, program.stone, program._currentDate);
                     break;
                 case 2:
-                    Console.WriteLine($"You've chosen to convert {program.coalToIron.Ratio}kg coal for iron");
-                    Trade.MakeTrade(program.coalToIron.Ratio, program.coal, program.iron, program._currentDate);
+                    MakeTrade(program.coalToIron.Ratio, program.coal, program.iron, program._currentDate);
                     break;
                 case 3:
-                    Console.WriteLine($"You've chosen to convert {program.coalToGold.Ratio}kg coal for gold");
-                    Trade.MakeTrade(program.coalToGold.Ratio, program.coal, program.gold, program._currentDate);
+                    MakeTrade(program.coalToGold.Ratio, program.coal, program.gold, program._currentDate);
                     break;
                 case 4:
-                    Console.WriteLine($"You've chosen to convert {program.coalToDiamond.Ratio}kg coal for diamond");
-                    Trade.MakeTrade(program.coalToDiamond.Ratio, program.coal, program.diamond, program._currentDate);
+                    MakeTrade(program.coalToDiamond.Ratio, program.coal, program.diamond, program._currentDate);
                     break;
                 case 5:
-                    Console.WriteLine($"You've chosen to convert {program.stoneToIron.Ratio}kg stone for iron");
-                    Trade.MakeTrade(program.stoneToIron.Ratio, program.stone, program.iron, program._currentDate);
+                    MakeTrade(program.stoneToIron.Ratio, program.stone, program.iron, program._currentDate);
                     break;
                 case 6:
-                    Console.WriteLine($"You've chosen to convert {program.stoneToGold.Ratio}kg stone for gold");
-                    Trade.MakeTrade(program.stoneToGold.Ratio, program.stone, program.gold, program._currentDate);
+                    MakeTrade(program.stoneToGold.Ratio, program.stone, program.gold, program._currentDate);
                     break;
                 case 7:
-                    Console.WriteLine($"You've chosen to convert {program.stoneToDiamond.Ratio}kg stone for diamond");
-                    Trade.MakeTrade(program.stoneToDiamond.Ratio, program.stone, program.diamond, program._currentDate);
+                    MakeTrade(program.stoneToDiamond.Ratio, program.stone, program.diamond, program._currentDate);
                     break;
                 case 8:
-                    Console.WriteLine($"You've chosen to convert {program.ironToGold.Ratio}kg iron for gold");
-                    Trade.MakeTrade(program.ironToGold.Ratio, program.iron, program.gold, program._currentDate);
+                    MakeTrade(program.ironToGold.Ratio, program.iron, program.gold, program._currentDate);
                     break;
                 case 9:
-                    Console.WriteLine($"You've chosen to convert {program.ironToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(program.ironToDiamond.Ratio, program.iron, program.diamond, program._currentDate);
+                    MakeTrade(program.ironToDiamond.Ratio, program.iron, program.diamond, program._currentDate);
                     break;
                 case 10:
-                    Console.WriteLine($"You've chosen to convert {program.goldToDiamond.Ratio}kg gold for diamond");
-                    Trade.MakeTrade(program.goldToDiamond.Ratio, program.gold, program.diamond, program._currentDate);
+                    MakeTrade(program.goldToDiamond.Ratio, program.gold, program.diamond, program._currentDate);
                     break;
             }
 
@@ -2133,27 +2109,6 @@ namespace Gold_Diggerzz
                     _program.ActiveWeatherEffectsList.Add(Hurricane);
                 }
 
-                // rain reducing efficiency
-                else if (random.Next(0, 100) < Rain.Probability)
-                {
-                    if (!multipleDaysOrNot)
-                    {
-                        Console.WriteLine("__________________________________________________________________________");
-                        Console.WriteLine(
-                            "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
-                        Console.WriteLine("They also lose 15% of their morale because nobody likes working when its raining \ud83d\ude2d");
-                    }
-                    
-                    foreach (Worker worker in _program.workersList)
-                    {
-                        worker.efficiency *= Rain.EfficiencyMultiplier;
-                        worker.Morale /= 1.15;
-                    }
-
-                    Rain.DaysLeft = 3;
-                    _program.ActiveWeatherEffectsList.Add(Rain);
-                }
-
                 // beautiful sky increasing efficiency
                 else if (random.Next(0, 100) < BeautifulSky.Probability)
                 {
@@ -2175,9 +2130,29 @@ namespace Gold_Diggerzz
                     _program.ActiveWeatherEffectsList.Add(BeautifulSky);
                 }
                 
+                // rain reducing efficiency
+                else if (random.Next(0, 100) < Rain.Probability)
+                {
+                    if (!multipleDaysOrNot)
+                    {
+                        Console.WriteLine("__________________________________________________________________________");
+                        Console.WriteLine(
+                            "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
+                        Console.WriteLine("They also lose 15% of their morale because nobody likes working when its raining \ud83d\ude2d");
+                    }
+                    
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency *= Rain.EfficiencyMultiplier;
+                        worker.Morale /= 1.15;
+                    }
+
+                    Rain.DaysLeft = 3;
+                    _program.ActiveWeatherEffectsList.Add(Rain);
+                }
+                
                 // earthquake increasing efficiency but killing workers and reducing morale
-                // else if (random.Next(0, 100) < Earthquake.Probability)
-                else if (random.Next(0, 100) < 99)
+                else if (random.Next(0, 100) < Earthquake.Probability)
                 {
                     // earthquake animation
                     
@@ -2724,6 +2699,14 @@ namespace Gold_Diggerzz
             { 
                 Console.WriteLine($"Prices have fallen by {Math.Round(Math.Abs(randomChange * 100 - 100), 2)}% from what they were yesterday");
             }
+            
+            // fluctuate trader price ratio
+            double randomFluctuationOfTraderRatio = random.Next(0, 10) / 100.0 + 1;
+            
+            foreach (Trade trader in _program.tradeList)
+            {
+                trader.Ratio *= randomFluctuationOfTraderRatio;
+            }
         }
 
         public void CheckRealEstate(Program _program, bool multipleDaysOrNot)
@@ -2829,6 +2812,27 @@ namespace Gold_Diggerzz
             program.trainingCourse = new PayForStuff(400, 1);
             program.bonus = new PayForStuff(100 + program._totalDaysDug * 3, 1.1);
             program.retirementPackage = new PayForStuff(100 + program._totalDaysDug * 10, 1.25);
+            # endregion
+            
+            # region initialisation of all trade objects
+            
+            program.coalToStone = new Trade(program.stone.Price / program.coal.Price, program.coal, program.stone);
+            program.coalToIron = new Trade(program.iron.Price / program.coal.Price, program.coal, program.iron);
+            program.coalToGold = new Trade(program.gold.Price / program.coal.Price, program.coal, program.gold);
+            program.coalToDiamond = new Trade(program.diamond.Price / program.coal.Price, program.coal, program.diamond);
+            program.stoneToIron = new Trade(program.iron.Price / program.stone.Price, program.stone, program.iron);
+            program.stoneToGold = new Trade(program.gold.Price / program.stone.Price, program.stone, program.gold);
+            program.stoneToDiamond = new Trade(program.diamond.Price / program.stone.Price, program.stone, program.diamond);
+            program.ironToGold = new Trade(program.gold.Price / program.iron.Price, program.iron, program.gold);
+            program.ironToDiamond = new Trade(program.diamond.Price / program.iron.Price, program.iron, program.diamond);
+            program.goldToDiamond = new Trade(program.diamond.Price / program.gold.Price, program.gold, program.diamond);
+            program.tradeList = new List<Trade>
+            {
+                program.coalToStone, program.coalToIron, program.coalToGold, program.coalToDiamond,
+                program.stoneToIron, program.stoneToGold, program.stoneToDiamond,
+                program.ironToGold, program.ironToDiamond,
+                program.goldToDiamond
+            };
 
             # endregion
         }
@@ -3011,7 +3015,6 @@ namespace Gold_Diggerzz
                     Console.WriteLine("You have been charged $1000 for the construction of this apartment");
                     RealEstate apartment = new RealEstate("apartment", 5, 300);
                     _program.dollars.Quantity -= 1000;
-                    Console.WriteLine("Lost 1k lol bcs apartment");
                     _program.buildingRealEstateList.Add(apartment);
                     break;
                 
