@@ -16,8 +16,8 @@ namespace Gold_Diggerzz
 
     /* to-do ideas
      * convert to proper OOP via getters and setters
-       * you are allowed to make multiple trades per day
-      * undo hard-coding within RealEstate.BuildRealEstate
+    * you are allowed to make multiple trades per day
+      * undo hard-coding within RealEstate.BuildRealEstate - yeah long day
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
@@ -49,7 +49,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
+     * competition / fake in some other mining companies (or your dad's company) and you're also tryi ng to beat (give them a quadratic rate of growth?)
      */
 
     class Program
@@ -1409,16 +1409,16 @@ namespace Gold_Diggerzz
             Console.WriteLine("_____________________________________________________________________");
             int i = 0;
             
-            foreach (Worker worker in program.deadWorkersList)
-            {
-                i++;
-                Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
-            }
-            
             if (program.deadWorkersList.Count != 0)
             {
                 Console.WriteLine("__________________________________________________________________________");
                 Thread.Sleep(2500);
+            }
+            
+            foreach (Worker worker in program.deadWorkersList)
+            {
+                i++;
+                Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
             
             if (program.retiredWorkersList.Count != 0)
