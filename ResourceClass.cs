@@ -9,6 +9,7 @@ namespace Gold_Diggerzz
         public double Price;
         public double Quantity;
         public double TotalFound;
+        public double OriginalProbability;
 
         public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
             double totalFound)
@@ -19,6 +20,7 @@ namespace Gold_Diggerzz
             Price = initialPrice;
             Quantity = initialQuantity;
             TotalFound = totalFound;
+            OriginalProbability = initialProbability;
         }
     }
 }

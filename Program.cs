@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -12,6 +13,7 @@ namespace Gold_Diggerzz
     /* current issues
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
+     * fix the 'Nan' issue - not a number issue when you have 0 workers
      */
 
     /* to-do ideas
@@ -49,7 +51,7 @@ namespace Gold_Diggerzz
      * managers that do shit
         * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
         * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies (or your dad's company) and you're also tryi ng to beat (give them a quadratic rate of growth?)
+     * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
      */
 
     class Program
@@ -88,6 +90,7 @@ namespace Gold_Diggerzz
         public bool _achievement18;
         public bool _achievement19;
         public bool _achievement20;
+        public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
         public double _currentEmployeePrice = 100;
@@ -520,6 +523,11 @@ namespace Gold_Diggerzz
                     case 13:
                         DisplayStuff.DisplayRealEstate(this);
                         break;
+                    case 20:
+                        Console.WriteLine("You have chosen to move to a new mine");
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
+                        MoveToNewMine();
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -587,11 +595,11 @@ namespace Gold_Diggerzz
                 Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   13 - Display real estate   |  15 - Use a powerup                   |");
                 Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   10 - Hire more employees          |   14 - Build real estate     |  16 - Commit a crime (more inside)    |");
                 Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   11 - Send employees for training  |                              |  17 - Save current progress           |");
-                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   12 - Boost employee morale        |                              |  18 - Load game state                 |");
+                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   12 - Boost employee morale        |   20 - Move to a new mine    |  18 - Load game state                 |");
                 Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  19 - Skip one day                    |");
                 Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 19);
+                int userOption = GetValidInt(0, 20);
                 Console.Clear();
                 return userOption;
             }
@@ -602,7 +610,7 @@ namespace Gold_Diggerzz
             }
 
             return -2;
-        } // prettify and reorder menu options
+        }
 
         public string CheckIfInDebt()
         {
@@ -664,6 +672,89 @@ namespace Gold_Diggerzz
             }
 
             return inDebt;
+        }
+
+        public void MoveToNewMine()
+        {
+            Console.WriteLine("You will lose all your current resources and real estate, but keep your employees");
+            Console.WriteLine("Enter what mine you want to move to:");
+            Console.WriteLine("1. bad mine - $100");
+            Console.WriteLine("2. mid mine - $500");
+            Console.WriteLine("3. good mine - $1000");
+            int mineChoice = GetValidInt(1, 3);
+            switch (mineChoice)
+            {
+                case 1:
+                    if (dollars.Quantity >= 100)
+                    {
+
+                        Console.WriteLine("You have moved to the bad mine");
+                        minePercentageFullness = 100;
+                        coal.Probability = coal.OriginalProbability;
+                        stone.Probability = stone.OriginalProbability;
+                        iron.Probability = iron.OriginalProbability;
+                        gold.Probability = gold.OriginalProbability;
+                        diamond.Probability = diamond.OriginalProbability;
+
+                        dollars.Quantity -= 100;
+                        coal.Quantity = 0;
+                        stone.Quantity = 0;
+                        iron.Quantity = 0;
+                        gold.Quantity = 0;
+                        diamond.Quantity = 0;
+
+                    }
+
+                    Console.WriteLine("You don't have enough money to move to the bad mine");
+                    break;
+                case 2:
+                    if (dollars.Quantity >= 500)
+                    {
+
+                        Console.WriteLine("You have moved to the mid mine");
+                        minePercentageFullness = 100;
+                        coal.Probability = coal.OriginalProbability;
+                        stone.Probability = stone.OriginalProbability;
+                        iron.Probability = iron.OriginalProbability;
+                        gold.Probability = gold.OriginalProbability;
+                        diamond.Probability = diamond.OriginalProbability;
+
+                        dollars.Quantity -= 500;
+                        coal.Quantity = 0;
+                        stone.Quantity = 0;
+                        iron.Quantity = 0;
+                        gold.Quantity = 0;
+                        diamond.Quantity = 0;
+
+                    }
+
+                    Console.WriteLine("You don't have enough money to move to the mid mine");
+                    break;
+                case 3:
+                    if (dollars.Quantity >= 1000)
+                    {
+
+                        Console.WriteLine("You have moved to the good mine");
+                        minePercentageFullness = 100;
+                        coal.Probability = coal.OriginalProbability;
+                        stone.Probability = stone.OriginalProbability;
+                        iron.Probability = iron.OriginalProbability;
+                        gold.Probability = gold.OriginalProbability;
+                        diamond.Probability = diamond.OriginalProbability;
+
+                        dollars.Quantity -= 1000;
+                        coal.Quantity = 0;
+                        stone.Quantity = 0;
+                        iron.Quantity = 0;
+                        gold.Quantity = 0;
+                        diamond.Quantity = 0;
+
+                    }
+
+                    Console.WriteLine("You don't have enough money to move to the good mine");
+                    break;
+            }
+
         }
 
         public void UsePowerUp(int powerUpChoice, int subChoice)
@@ -1870,6 +1961,7 @@ namespace Gold_Diggerzz
                 _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
                 _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
                 _DayToDayOperations.CheckRealEstate(_program, multipleDayDig);
+                _DayToDayOperations.MineEmptinessUpdate(_program, multipleDayDig);
             }
             
             if (multipleDayDig)
@@ -2224,7 +2316,17 @@ namespace Gold_Diggerzz
                             Console.WriteLine(line);
                         }
                     }
-                    Console.WriteLine(earthquake);
+                    
+                    // print the original earthquake array
+                    for (int i = 0; i < 60; i++)
+                    {
+                        Thread.Sleep(125);
+                        Console.Clear();
+                        for (int j = 0; j < earthquake.Length; j++)
+                        {
+                            Console.WriteLine(earthquake[j]);
+                        }
+                    }
 
                     // earthquake effects
                     if (_program.workersList.Count >= 5)
@@ -2783,6 +2885,34 @@ namespace Gold_Diggerzz
                     }
                 }
             }
+        }
+
+        public void MineEmptinessUpdate(Program _program, bool multipleDaysOrNot)
+        {
+            // reduce the mine emptiness by 1% for every day dug
+            if (_program.minePercentageFullness == 0)
+            {
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine("__________________________________________________________________________");
+                    Console.WriteLine("Your mine is empty, you need to find a new location to dig");
+                    
+                    _program.coal.Probability = 0;
+                    _program.stone.Probability = 0;
+                    _program.iron.Probability = 0;
+                    _program.gold.Probability = 0;
+                    _program.diamond.Probability = 0;
+                }
+            }
+
+            if (_program.minePercentageFullness <= 10)
+            {
+                Console.WriteLine("Your mine is almost empty, you need to find a new location to dig");
+            }
+            
+            _program.minePercentageFullness -= 1;
+            Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full");
+            
         }
     }
     
