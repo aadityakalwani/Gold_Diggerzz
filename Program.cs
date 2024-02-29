@@ -497,7 +497,8 @@ namespace Gold_Diggerzz
                     case 14:
                         Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
                         Console.WriteLine("Welcome to the real estate building place!");
-                        Console.WriteLine("what do u want to build");
+                        Console.WriteLine("Tip: to gain more of a specific resource, convert resources at the trader");
+                        Console.WriteLine("What real estate do you want to build?");
                         Console.WriteLine("0. Cancel");
                         Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
                         Console.WriteLine("2. House - 100kg coal, 10 days to build, 30kg coal weekly rent");
@@ -507,7 +508,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("6. Palace - 100kg diamond, 30 days to build, 30kg diamond weekly rent");
                         int choice = GetValidInt(0, 6);
                         RealEstate.BuildRealEstate(choice, this);
-                        
+                        Thread.Sleep(2000);
                         break;
                     case 10:
                         Worker.EmployeeHiringScreen(this);
@@ -1481,14 +1482,9 @@ namespace Gold_Diggerzz
     {
         public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
         {
-            if (_program.workersList.Count == 0)
-            {
-                Console.WriteLine("You have no employees to dig for you. Hire some employees first");
-                Console.WriteLine("Go to the market (menu option 3) -> Hire more employees (menu option 3) -> select type and hire");
-                return;
-            }
-            bool multipleDayDig = daysToDig > 1;
             
+            bool multipleDayDig = daysToDig > 1;
+        
             // for multiple day dig outputs in one go
             double newCoal = 0;
             double newStone = 0;
@@ -1498,6 +1494,13 @@ namespace Gold_Diggerzz
             
             for (int days = 0; days < daysToDig; days++)
             {
+                if (_program.workersList.Count == 0)
+                {
+                    Console.WriteLine("You have no employees to dig for you. Hire some employees first");
+                    Console.WriteLine("Go to the market (menu option 3) -> Hire more employees (menu option 3) -> select type and hire");
+                    return;
+                }
+                
                 if (_program.CheckIfInDebt() != "true")
                 {
                     if (!_program.skipDay.skipDayOrNot)
@@ -1887,6 +1890,7 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(_program);
 
             _program.skipDay.skipDayOrNot = false;
+            
         }
     }
 
