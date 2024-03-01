@@ -1375,11 +1375,11 @@ namespace Gold_Diggerzz
             Console.WriteLine("This is where you can convert between resources!");
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio, 2)} coal --> stone      |  2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron");
-            Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold        |  4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond");
-            Console.WriteLine($"5 - Convert {Math.Round(program.stoneToIron.Ratio, 2)} stone --> iron      |  6 - Convert {Math.Round(program.stoneToGold.Ratio, 2)} stone --> gold");
-            Console.WriteLine($"7 - Convert {Math.Round(program.stoneToDiamond.Ratio, 2)} stone --> diamond    |  8 - Convert {Math.Round(program.ironToGold.Ratio, 2)} iron --> gold");
-            Console.WriteLine($"9 - Convert {Math.Round(program.ironToDiamond.Ratio, 2)} iron --> diamond    |  10 - Convert {Math.Round(program.goldToDiamond.Ratio, 2)} gold --> diamond");
+            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio, 2)} coal --> stone    |  6 - Convert {Math.Round(program.stoneToGold.Ratio, 2)} stone --> gold");
+            Console.WriteLine($"2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron       |  7 - Convert {Math.Round(program.stoneToDiamond.Ratio, 2)} stone --> diamond");
+            Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold      |  8 - Convert {Math.Round(program.ironToGold.Ratio, 2)} iron --> gold");
+            Console.WriteLine($"4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond   |  9 - Convert {Math.Round(program.ironToDiamond.Ratio, 2)} iron --> diamond");
+            Console.WriteLine($"5 - Convert {Math.Round(program.stoneToIron.Ratio, 2)} stone --> iron    |  10 - Convert {Math.Round(program.goldToDiamond.Ratio, 2)} gold --> diamond");
             Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!\n");
             Console.WriteLine("Enter the number of the trade you want to make:");
 
