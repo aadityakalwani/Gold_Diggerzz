@@ -12,11 +12,13 @@ namespace Gold_Diggerzz
     /* current issues
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
-     * fix the 'Nan' issue - not a number issue when you have 0 workers
+     * fix the 'Nan' issue - not a number issue (when you have 0 workers?)
+     * 
      */
 
     /* to-do ideas
      * convert to proper OOP via getters and setters
+     * add in comma separations?
     * you are allowed to make multiple trades per day
       * undo hard-coding within RealEstate.BuildRealEstate - yeah long day
        You have negative power ups
@@ -502,7 +504,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Tip: to gain more of a specific resource, convert resources at the trader");
                         Console.WriteLine("What real estate do you want to build?");
                         Console.WriteLine("0. Cancel");
-                        Console.WriteLine("1. Apartment - $1000, 5 days to build, $300 weekly rent");
+                        Console.WriteLine("1. Apartment - $10,000, 5 days to build, $3,000 weekly rent");
                         Console.WriteLine("2. House - 100kg coal, 10 days to build, 30kg coal weekly rent");
                         Console.WriteLine("3. Office - 100kg stone, 15 days to build, 30kg stone weekly rent");
                         Console.WriteLine("4. Mansion - 100kg iron, 20 days to build, 30kg iron weekly rent");
@@ -2352,8 +2354,7 @@ namespace Gold_Diggerzz
                     else
                     {
                         Console.WriteLine("Because you have less than 5 employees, you got lucky");
-                        Console.WriteLine("None of your employees died, but they sure as hell had a fright!!");
-                        Console.WriteLine("Their morale has permanently halved!!");
+                        Console.WriteLine("None of your employees died, but they sure as hell had a fright! their morale has permanently halved");
                     }
                     
                     foreach (Worker worker in _program.workersList)
@@ -2361,7 +2362,8 @@ namespace Gold_Diggerzz
                         worker.Morale *= 0.5;
                     }
                     
-                    Console.WriteLine("Glancing over the deaths, the soil has been loosened\nthis means it is easier to find resources.");
+                    Thread.Sleep(1000);
+                    Console.WriteLine("\nGlancing over the deaths, the soil has been loosened... This means it is easier to find resources.");
                     Console.WriteLine("The probability of finding each resource has increased by 20%, permanently!");
                     
                     _program.coal.Probability *= 1.2;
@@ -3168,6 +3170,7 @@ namespace Gold_Diggerzz
                 case 0:
                     Console.WriteLine("Cancelled");
                     break;
+                
                 case 1:
                     if (_program.dollars.Quantity < 1000)
                     {
@@ -3183,9 +3186,9 @@ namespace Gold_Diggerzz
                     }
                     Console.WriteLine("You have chosen to build a new apartment");
                     Console.WriteLine("Your apartment will be ready in 5 days");
-                    Console.WriteLine("You will earn $300 every Monday from this apartment");
-                    Console.WriteLine("You have been charged $1000 for the construction of this apartment");
-                    _program.dollars.Quantity -= 1000;
+                    Console.WriteLine("You will earn $3,000 every Monday from this apartment");
+                    Console.WriteLine("You have been charged $10,000 for the construction of this apartment");
+                    _program.dollars.Quantity -= 10000;
                     _program.buildingRealEstateList.Add(apartment);
                     break;
                 
