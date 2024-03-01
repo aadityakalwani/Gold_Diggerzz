@@ -1626,9 +1626,9 @@ namespace Gold_Diggerzz
                             };
                             
                             
-                            for (int i = 0; i < 10; i++)
+                            for (int i = 0; i < 15; i++)
                             {
-                                Thread.Sleep(125);
+                                Thread.Sleep(80);
                                 Console.Clear();
                                 for (int j = 0; j < shovel.Length; j++)
                                 {
@@ -1639,7 +1639,7 @@ namespace Gold_Diggerzz
                                     else
                                     {
                                         string spaces = "";
-                                        for (int k = 0; k < i; k++)
+                                        for (int k = 0; k < i/2; k++)
                                         {
                                             spaces += " ";
                                         }
@@ -1648,8 +1648,8 @@ namespace Gold_Diggerzz
                                     }
                                 }
 
-                                Console.WriteLine("Progress:");
-                                for (int j = 0; j < 10; j++)
+                                Console.WriteLine("\nProgress:");
+                                for (int j = 0; j < 15; j++)
                                 {
                                     if (j < i)
                                     {
