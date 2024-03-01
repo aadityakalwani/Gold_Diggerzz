@@ -1418,7 +1418,7 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(program);
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
-    }// you're allowed multiple trades per day ++ trade prices don't fluctuate
+    } // you're allowed multiple trades per day ++ trade prices don't fluctuate
     
     class DisplayStuff
     {
@@ -2974,15 +2974,15 @@ namespace Gold_Diggerzz
         {
             # region initialisation of all resource and other objects
             
-            program.coal = new Resource("Coal", 80, 3, 0, 0);
-            program.stone = new Resource("Stone", 70, 6, 0, 0);
-            program.iron = new Resource("Iron", 60, 13, 0, 0);
-            program.gold = new Resource("Gold", 15, 65, 0, 0);
-            program.diamond = new Resource("Diamond", 7, 100, 0, 0);
+            program.coal = new Resource("Coal", 75, 2, 0, 0);
+            program.stone = new Resource("Stone", 65, 5, 0, 0);
+            program.iron = new Resource("Iron", 50, 12, 0, 0);
+            program.gold = new Resource("Gold", 17, 60, 0, 0);
+            program.diamond = new Resource("Diamond", 8, 90, 0, 0);
             program.dollars = new Resource("Dollars", 0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
-            program.ancientArtefact = new PowerUp(0, 7, 3);
+            program.ancientArtefact = new PowerUp(0, 5, 3);
             program.marketMaster = new PowerUp(0, 4, 3);
             program.stockMarketCrash = new PayForStuff(100, 1);
             program.skipDay = new PayForStuff(50, 1);
@@ -3312,4 +3312,74 @@ namespace Gold_Diggerzz
             }
         }
     } // balance updates needed
+    
+    // classes that can be in their own files:
+    class WeatherEffectsClass
+    {
+        public string Name;
+        public int DaysLeft;
+        public double Probability;
+        public double EfficiencyMultiplier;
+        public int Duration;
+        
+        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, int duration)
+        {
+            Name = name;
+            DaysLeft = daysLeft;
+            Probability = probability;
+            EfficiencyMultiplier = efficiencyMultiplier;
+            Duration = duration;
+        }
+    }
+    
+    class PayForStuff
+    {
+        public double Price;
+        public bool skipDayOrNot;
+        public double MoraleMultiplier;
+
+        public PayForStuff(double price, double moraleMultiplier)
+        {
+            Price = price;
+            skipDayOrNot = false;
+            MoraleMultiplier = moraleMultiplier;
+        }
+    }
+    
+    class PowerUp
+    {
+        public double Quantity;
+        public double MaxQuantity;
+        public double Probability;
+
+        public PowerUp(double initialQuantity, double initialProbability, double maxQuantity)
+        {
+            Quantity = initialQuantity;
+            Probability = initialProbability;
+            MaxQuantity = maxQuantity;
+        }
+    }
+    
+    class Resource
+    {
+        public string ResourceName;
+        public double InitialPrice;
+        public double Probability;
+        public double Price;
+        public double Quantity;
+        public double TotalFound;
+        public double OriginalProbability;
+
+        public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
+            double totalFound)
+        {
+            ResourceName = resourceName;
+            Probability = initialProbability;
+            InitialPrice = initialPrice;
+            Price = initialPrice;
+            Quantity = initialQuantity;
+            TotalFound = totalFound;
+            OriginalProbability = initialProbability;
+        }
+    }
 }
