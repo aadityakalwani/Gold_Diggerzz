@@ -337,28 +337,76 @@ namespace Gold_Diggerzz
                         Trade.GoToTrader(this);
                         break;
                     case 5:
-                        DisplayStuff.DisplayGameMechanics(this);
-                        break;
-                    case 6:
-                        DisplayStuff.DisplayStats(this);
-                        break;
-                    case 7:
-                        DisplayStuff.DisplayAchievements(achievementsList,this);
-                        break;
-                    case 8:
-                        RunTutorial();
-                        break;
-                    case 9:
                         DisplayStuff.DisplayEmployees(this);
                         break;
-                    case 19:
-                        Console.WriteLine("Skipping one day");
+                    case 6:
+                        Worker.EmployeeHiringScreen(this);
+                        break;
+                    case 7:
+                        Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
                         Console.WriteLine(
-                            $"You have been charged ${skipDay.Price} for the costs of skipping a day");
-                        dollars.Quantity -= skipDay.Price;
-                        skipDay.skipDayOrNot = true;
-                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
-                        DisplayStuff.DisplayResources(this);
+                            $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
+                        int employeesToSend = GetValidInt(-1, workersList.Count);
+                        if (employeesToSend == -1)
+                        {
+                            employeesToSend = workersList.Count;
+                        }
+
+                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
+                        {
+                            Console.WriteLine(
+                                $"You have chosen to send {employeesToSend} employees on a training course");
+                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
+                            Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
+                            EmployeeTrainingCourse(employeesToSend);
+                        }
+                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend &&
+                                 workersList.Count == 0)
+                        {
+                            Console.WriteLine("You don't have any employees to send on a training course");
+                            Console.WriteLine("This could be because of employee illness - try again later");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"You don't have enough money to send {employeesToSend} employees on a training course");
+                        }
+
+                        break;
+                    case 8:
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
+                        Worker.EmployeeMoraleBoostingScreen(this);
+                        break;
+                    case 9:
+                        DisplayStuff.DisplayGameMechanics(this);
+                        break;
+                    case 10:
+                        DisplayStuff.DisplayStats(this);
+                        break;
+                    case 11:
+                        DisplayStuff.DisplayAchievements(achievementsList,this);
+                        break;
+                    case 12:
+                        RunTutorial();
+                        break;
+                    case 13:
+                        DisplayStuff.DisplayRealEstate(this);
+                        break;
+                    case 14:
+                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
+                        Console.WriteLine("Welcome to the real estate building place!");
+                        Console.WriteLine("Tip: to gain more of a specific resource, convert resources at the trader");
+                        Console.WriteLine("What real estate do you want to build?");
+                        Console.WriteLine("0. Cancel");
+                        Console.WriteLine("1. Apartment - $10,000, 5 days to build, $3,000 weekly rent");
+                        Console.WriteLine("2. House - 100kg coal, 10 days to build, 30kg coal weekly rent");
+                        Console.WriteLine("3. Office - 100kg stone, 15 days to build, 30kg stone weekly rent");
+                        Console.WriteLine("4. Mansion - 100kg iron, 20 days to build, 30kg iron weekly rent");
+                        Console.WriteLine("5. Castle - 100kg gold, 25 days to build, 30kg gold weekly rent");
+                        Console.WriteLine("6. Palace - 100kg diamond, 30 days to build, 30kg diamond weekly rent");
+                        int choice = GetValidInt(0, 6);
+                        RealEstate.BuildRealEstate(choice, this);
+                        Thread.Sleep(2000);
                         break;
                     case 15:
 
@@ -424,37 +472,6 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 11:
-                        Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
-                        Console.WriteLine(
-                            $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
-                        int employeesToSend = GetValidInt(-1, workersList.Count);
-                        if (employeesToSend == -1)
-                        {
-                            employeesToSend = workersList.Count;
-                        }
-
-                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
-                        {
-                            Console.WriteLine(
-                                $"You have chosen to send {employeesToSend} employees on a training course");
-                            Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
-                            Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
-                            EmployeeTrainingCourse(employeesToSend);
-                        }
-                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend &&
-                                 workersList.Count == 0)
-                        {
-                            Console.WriteLine("You don't have any employees to send on a training course");
-                            Console.WriteLine("This could be because of employee illness - try again later");
-                        }
-                        else
-                        {
-                            Console.WriteLine(
-                                $"You don't have enough money to send {employeesToSend} employees on a training course");
-                        }
-
-                        break;
                     case 16:
                         Console.WriteLine("0 - no im scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
@@ -500,31 +517,14 @@ namespace Gold_Diggerzz
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
-                    case 14:
-                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
-                        Console.WriteLine("Welcome to the real estate building place!");
-                        Console.WriteLine("Tip: to gain more of a specific resource, convert resources at the trader");
-                        Console.WriteLine("What real estate do you want to build?");
-                        Console.WriteLine("0. Cancel");
-                        Console.WriteLine("1. Apartment - $10,000, 5 days to build, $3,000 weekly rent");
-                        Console.WriteLine("2. House - 100kg coal, 10 days to build, 30kg coal weekly rent");
-                        Console.WriteLine("3. Office - 100kg stone, 15 days to build, 30kg stone weekly rent");
-                        Console.WriteLine("4. Mansion - 100kg iron, 20 days to build, 30kg iron weekly rent");
-                        Console.WriteLine("5. Castle - 100kg gold, 25 days to build, 30kg gold weekly rent");
-                        Console.WriteLine("6. Palace - 100kg diamond, 30 days to build, 30kg diamond weekly rent");
-                        int choice = GetValidInt(0, 6);
-                        RealEstate.BuildRealEstate(choice, this);
-                        Thread.Sleep(2000);
-                        break;
-                    case 10:
-                        Worker.EmployeeHiringScreen(this);
-                        break;
-                    case 12:
-                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
-                        Worker.EmployeeMoraleBoostingScreen(this);
-                        break;
-                    case 13:
-                        DisplayStuff.DisplayRealEstate(this);
+                    case 19:
+                        Console.WriteLine("Skipping one day");
+                        Console.WriteLine(
+                            $"You have been charged ${skipDay.Price} for the costs of skipping a day");
+                        dollars.Quantity -= skipDay.Price;
+                        skipDay.skipDayOrNot = true;
+                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
+                        DisplayStuff.DisplayResources(this);
                         break;
                     case 20:
                         Console.WriteLine("You have chosen to move to a new mine");
@@ -593,13 +593,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Display Options:                 Employee Features:                    Real Estate Features:         Other Features:                      |");
+                Console.WriteLine("Main Features:              Employee Options:                    Display Features:                Real Estate Features:          Other Features:                      |");
                 Console.WriteLine("                                                                                                                                                                      |");
-                Console.WriteLine("0 - Quit game           |   5 - Display game mechanics   |   9 - Display employees             |   13 - Display real estate   |  15 - Use a powerup                   |");
-                Console.WriteLine("1 - Dig one day         |   6 - Display stats            |   10 - Hire more employees          |   14 - Build real estate     |  16 - Commit a crime (more inside)    |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Display achievements     |   11 - Send employees for training  |                              |  17 - Save current progress           |");
-                Console.WriteLine("3 - Go to market        |   8 - Display tutorial         |   12 - Boost employee morale        |   20 - Move to a new mine    |  18 - Load game state                 |");
-                Console.WriteLine("4 - Go to Trader        |                                |                                     |                              |  19 - Skip one day                    |");
+                Console.WriteLine("0 - Quit game           |   5 - Display employees            |   9 - Display game mechanics   |   13 - Display real estate   |   15 - Use a powerup                   |");
+                Console.WriteLine("1 - Dig one day         |   6 - Hire more employees          |   10 - Display stats           |   14 - Build real estate     |   16 - Commit a crime (more inside)    |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Send employees for training  |   11 - Display achievements    |                              |   17 - Save current progress           |");
+                Console.WriteLine("3 - Go to market        |   8 - Boost employee morale        |   12 - Display tutorial        |   20 - Move to a new mine    |   18 - Load game state                 |");
+                Console.WriteLine("4 - Go to Trader        |                                    |                                |                              |   19 - Skip one day                    |");
                 Console.WriteLine("\nEnter your choice:");
 
                 int userOption = GetValidInt(0, 20);
