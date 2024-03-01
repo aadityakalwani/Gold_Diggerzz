@@ -22,7 +22,6 @@ namespace Gold_Diggerzz
     * you are allowed to make multiple trades per day
       * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because i
      *
-     * If bankrupt, stop the multiple day dig instantly
        Charged wage should be more visible
        Trader options should use more horizontal space
        More like adventure capitalist; do more
@@ -624,8 +623,8 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have negative money, no resources, and one employee.\nYou have disappointed your father...");
                     Thread.Sleep(2500);
-                    Console.WriteLine("..You have failed the game\ud83d\udca9\ud83d\udca9");
-                    Thread.Sleep(1500);
+                    Console.WriteLine("..You have failed the game \ud83d\udca9\ud83d\udca9");
+                    Thread.Sleep(2000);
                     return "bankrupt";
                 }
                 
@@ -858,12 +857,13 @@ namespace Gold_Diggerzz
 
         public void GameFailed()
         {
+            Thread.Sleep(1750);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
             Console.WriteLine("║                         YOU FAILED                         ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
-
+            Thread.Sleep(1750);
             QuitGame();
         }
         
@@ -1612,377 +1612,384 @@ namespace Gold_Diggerzz
                     Console.WriteLine("\u2b55 You have no employees to dig for you\u2b55\n. Hire some employees first");
                     return;
                 }
-                
-                if (_program.CheckIfInDebt() != "true")
+
+                if (_program.CheckIfInDebt() != "bankrupt")
                 {
-                    if (!_program.skipDay.skipDayOrNot)
+                    if (_program.CheckIfInDebt() != "true")
                     {
-                        if (!multipleDayDig)
+                        if (!_program.skipDay.skipDayOrNot)
                         {
-                            // ASCII art animation for digging
-                            string[] shovel = new[]
+                            if (!multipleDayDig)
                             {
-                                "    ______",
-                                "   /      \\",
-                                "  /        \\",
-                                "  |        |",
-                                "  \\________/",
-                                "       ||",
-                                "       ||",
-                                "       ||"
-                            };
-                            
-                            
-                            for (int i = 0; i < 15; i++)
-                            {
-                                Thread.Sleep(80);
-                                Console.Clear();
-                                for (int j = 0; j < shovel.Length; j++)
+                                // ASCII art animation for digging
+                                string[] shovel = new[]
                                 {
-                                    if (j < shovel.Length - i)
+                                    "    ______",
+                                    "   /      \\",
+                                    "  /        \\",
+                                    "  |        |",
+                                    "  \\________/",
+                                    "       ||",
+                                    "       ||",
+                                    "       ||"
+                                };
+                                
+                                
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    Thread.Sleep(80);
+                                    Console.Clear();
+                                    for (int j = 0; j < shovel.Length; j++)
                                     {
-                                        Console.WriteLine(shovel[j]);
-                                    }
-                                    else
-                                    {
-                                        string spaces = "";
-                                        for (int k = 0; k < i/2; k++)
+                                        if (j < shovel.Length - i)
                                         {
-                                            spaces += " ";
+                                            Console.WriteLine(shovel[j]);
                                         }
+                                        else
+                                        {
+                                            string spaces = "";
+                                            for (int k = 0; k < i/2; k++)
+                                            {
+                                                spaces += " ";
+                                            }
 
-                                        Console.WriteLine(spaces + shovel[j]);
+                                            Console.WriteLine(spaces + shovel[j]);
+                                        }
                                     }
+
+                                    Console.WriteLine("\nProgress:");
+                                    for (int j = 0; j < 15; j++)
+                                    {
+                                        if (j < i)
+                                        {
+                                            Console.Write("##");
+                                        }
+                                        else
+                                        {
+                                            Console.Write(" ");
+                                        }
+                                    }
+
+                                    Console.WriteLine("|");
                                 }
 
-                                Console.WriteLine("\nProgress:");
-                                for (int j = 0; j < 15; j++)
+                                Thread.Sleep(500);
+                                Console.WriteLine("__________________________________________________________________________");
+                                Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
+                                Console.WriteLine("Here are the changes to your resources:");
+                                Console.Clear();
+                            }
+
+                            // creating randoms for the chance of finding all the stuff
+                            Random random = new Random();
+                            int randomForCoal = random.Next(0, 90);
+                            int randomForStone = random.Next(0, 100);
+                            int randomForIron = random.Next(0, 100);
+                            int randomForGold = random.Next(0, 100);
+                            int randomForDiamond = random.Next(0, 100);
+                            int randomForAncientArtefact = random.Next(0, 100);
+                            int randomForMarketMaster = random.Next(0, 100);
+                            int randomForTimeMachine = random.Next(0, 100);
+                            int randomForMagicToken = random.Next(0, 100);
+                            
+                            
+                            // if there is a changed chance of finding gold due to the Ancient Artefact powerup
+                            if (_program._increasedGoldChanceDays != 0)
+                            {
+                                _program.gold.Probability = 50;
+                                _program._increasedGoldChanceDays -= 1;
+                                
+                                if (!multipleDayDig)
                                 {
-                                    if (j < i)
-                                    {
-                                        Console.Write("##");
-                                    }
-                                    else
-                                    {
-                                        Console.Write(" ");
-                                    }
+                                    Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
                                 }
-
-                                Console.WriteLine("|");
                             }
 
-                            Thread.Sleep(500);
-                            Console.WriteLine("__________________________________________________________________________");
-                            Console.WriteLine($"Digging done for the day {_program._currentDate.Date:dddd, dd MMMM, yyyy}");
-                            Console.WriteLine("Here are the changes to your resources:");
-                            Console.Clear();
-                        }
+                            else
+                            {
+                                // restore 15% chance of finding gold
+                                _program.gold.Probability = 15;
+                            }
 
-                        // creating randoms for the chance of finding all the stuff
-                        Random random = new Random();
-                        int randomForCoal = random.Next(0, 90);
-                        int randomForStone = random.Next(0, 100);
-                        int randomForIron = random.Next(0, 100);
-                        int randomForGold = random.Next(0, 100);
-                        int randomForDiamond = random.Next(0, 100);
-                        int randomForAncientArtefact = random.Next(0, 100);
-                        int randomForMarketMaster = random.Next(0, 100);
-                        int randomForTimeMachine = random.Next(0, 100);
-                        int randomForMagicToken = random.Next(0, 100);
-                        
-                        
-                        // if there is a changed chance of finding gold due to the Ancient Artefact powerup
-                        if (_program._increasedGoldChanceDays != 0)
-                        {
-                            _program.gold.Probability = 50;
-                            _program._increasedGoldChanceDays -= 1;
+                            bool coalFound = randomForCoal < _program.coal.Probability;
+                            bool stoneFound = randomForStone < _program.stone.Probability;
+                            bool ironFound = randomForIron < _program.iron.Probability;
+                            bool goldFound = randomForGold < _program.gold.Probability;
+                            bool diamondFound = randomForDiamond < _program.diamond.Probability;
+                            bool ancientArtefactFound = randomForAncientArtefact < _program.ancientArtefact.Probability;
+                            bool marketMasterFound = randomForMarketMaster < _program.marketMaster.Probability;
+                            bool timeMachineFound = randomForTimeMachine < _program.timeMachine.Probability;
+                            bool magicTokenFound = randomForMagicToken < _program.magicTokens.Probability;
                             
-                            if (!multipleDayDig)
+                            if (coalFound)
                             {
-                                Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.coal.Quantity += newResourcesFound;
+                                _program.coal.TotalFound += newResourcesFound;
+                                newCoal += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                                }
                             }
-                        }
 
-                        else
-                        {
-                            // restore 15% chance of finding gold
-                            _program.gold.Probability = 15;
-                        }
-
-                        bool coalFound = randomForCoal < _program.coal.Probability;
-                        bool stoneFound = randomForStone < _program.stone.Probability;
-                        bool ironFound = randomForIron < _program.iron.Probability;
-                        bool goldFound = randomForGold < _program.gold.Probability;
-                        bool diamondFound = randomForDiamond < _program.diamond.Probability;
-                        bool ancientArtefactFound = randomForAncientArtefact < _program.ancientArtefact.Probability;
-                        bool marketMasterFound = randomForMarketMaster < _program.marketMaster.Probability;
-                        bool timeMachineFound = randomForTimeMachine < _program.timeMachine.Probability;
-                        bool magicTokenFound = randomForMagicToken < _program.magicTokens.Probability;
-                        
-                        if (coalFound)
-                        {
-                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            _program.coal.Quantity += newResourcesFound;
-                            _program.coal.TotalFound += newResourcesFound;
-                            newCoal += newResourcesFound;
-                            
-                            if (!multipleDayDig)
+                            if (stoneFound)
                             {
-                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.stone.Quantity += newResourcesFound;
+                                _program.stone.TotalFound += newResourcesFound;
+                                newStone += newResourcesFound;
+
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                                }
                             }
-                        }
 
-                        if (stoneFound)
-                        {
-                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            _program.stone.Quantity += newResourcesFound;
-                            _program.stone.TotalFound += newResourcesFound;
-                            newStone += newResourcesFound;
-
-                            if (!multipleDayDig)
+                            if (ironFound)
                             {
-                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.iron.Quantity += newResourcesFound;
+                                _program.iron.TotalFound += newResourcesFound;
+                                newIron += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                                }
                             }
-                        }
 
-                        if (ironFound)
-                        {
-                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            _program.iron.Quantity += newResourcesFound;
-                            _program.iron.TotalFound += newResourcesFound;
-                            newIron += newResourcesFound;
-                            
-                            if (!multipleDayDig)
+                            if (goldFound)
                             {
-                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.gold.Quantity += newResourcesFound;
+                                _program.gold.TotalFound += newResourcesFound;
+                                newGold += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
+                                }
                             }
-                        }
 
-                        if (goldFound)
-                        {
-                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            _program.gold.Quantity += newResourcesFound;
-                            _program.gold.TotalFound += newResourcesFound;
-                            newGold += newResourcesFound;
-                            
-                            if (!multipleDayDig)
+                            if (diamondFound)
                             {
-                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.diamond.Quantity += newResourcesFound;
+                                _program.diamond.TotalFound += newResourcesFound;
+                                newDiamond += newResourcesFound;
+
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                                }
                             }
-                        }
 
-                        if (diamondFound)
-                        {
-                            double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                            double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                            _program.diamond.Quantity += newResourcesFound;
-                            _program.diamond.TotalFound += newResourcesFound;
-                            newDiamond += newResourcesFound;
-
-                            if (!multipleDayDig)
+                            if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
+                                !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
                             {
-                                Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                                Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
                             }
-                        }
 
-                        if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
-                            !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
-                        {
-                            Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
-                        }
-
-                        if (ancientArtefactFound)
-                        {
-                            Console.WriteLine("__________________________________________________________");
-                            Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
-                            Console.WriteLine("\nChoose an option:");
-                            Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
-                            Console.WriteLine("2 - $200 instantly");
-                            Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
-                            int userInput = _program.GetValidInt(1, 2);
-
-                            switch (userInput)
-                            {
-                                case 1:
-                                    _program.UsePowerUp(1, 1);
-                                    break;
-                                case 2:
-                                    _program.UsePowerUp(1, 2);
-                                    break;
-                                case 3:
-                                    if (_program.ancientArtefact.Quantity < _program.ancientArtefact.MaxQuantity)
-                                    {
-                                        Console.WriteLine("You have chosen to save the Ancient Artefact for later");
-                                        _program.ancientArtefact.Quantity += 1;
-                                        break;
-                                    }
-
-                                    Console.WriteLine("You have reached the maximum quantity of Ancient Artefacts");
-                                    break;
-                            }
-                        }
-
-                        if (timeMachineFound)
-                        {
-                            Console.WriteLine("__________________________________________________________");
-                            Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
-                            Console.WriteLine("\nChoose an option:");
-                            Console.WriteLine(
-                                "1 - Use now --> Gain 5 days' worth of rewards without costing you anything");
-                            Console.WriteLine($"2 - Save for later (max {_program.timeMachine.MaxQuantity})");
-                            int userInput = _program.GetValidInt(1, 2);
-
-                            switch (userInput)
-                            {
-                                case 1:
-                                    _program.UsePowerUp(2, 1);
-                                    break;
-                                case 2:
-                                    if (_program.timeMachine.Quantity < _program.timeMachine.MaxQuantity)
-                                    {
-                                        Console.WriteLine("You have chosen to save the Time Machine for later");
-                                        _program.marketMaster.Quantity += 1;
-                                        break;
-                                    }
-
-                                    Console.WriteLine("You have reached the maximum quantity of Time Machines");
-                                    break;
-                            }
-                        }
-
-                        if (magicTokenFound && _program.magicTokens.Quantity < _program.magicTokens.MaxQuantity)
-                        {
-                            if (!multipleDayDig)
+                            if (ancientArtefactFound)
                             {
                                 Console.WriteLine("__________________________________________________________");
-                                _program.magicTokens.Quantity += 1;
-                                Console.WriteLine($"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
-                                Console.WriteLine($"Selling price increased by a total of {_program.magicTokens.Quantity * 20}%");
-                            }
-                            _program.coal.Price += _program.coal.InitialPrice * 0.2;
-                            _program.stone.Price += _program.stone.InitialPrice * 0.2;
-                            _program.iron.Price += _program.iron.InitialPrice * 0.2;
-                            _program.gold.Price += _program.gold.InitialPrice * 0.2;
-                            _program.diamond.Price += _program.diamond.InitialPrice * 0.2;
-                        }
+                                Console.Write("\ud83c\udffa You found the Ancient Artefact power-up \ud83c\udffa");
+                                Console.WriteLine("\nChoose an option:");
+                                Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
+                                Console.WriteLine("2 - $200 instantly");
+                                Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
+                                int userInput = _program.GetValidInt(1, 2);
 
-                        if (marketMasterFound)
-                        {
-                            Console.WriteLine("__________________________________________________________");
-                            Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
-                            Console.WriteLine("Choose an option:");
-                            Console.WriteLine("1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
-                            Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
-                            int userInput = _program.GetValidInt(1, 2);
-
-                            switch (userInput)
-                            {
-                                case 1:
-                                    _program.UsePowerUp(3, 1);
-                                    break;
-                                case 2:
-                                    if (_program.marketMaster.Quantity < _program.marketMaster.MaxQuantity)
-                                    {
-                                        Console.WriteLine("You have chosen to save the Market Master for later");
-                                        _program.marketMaster.Quantity += 1;
+                                switch (userInput)
+                                {
+                                    case 1:
+                                        _program.UsePowerUp(1, 1);
                                         break;
-                                    }
+                                    case 2:
+                                        _program.UsePowerUp(1, 2);
+                                        break;
+                                    case 3:
+                                        if (_program.ancientArtefact.Quantity < _program.ancientArtefact.MaxQuantity)
+                                        {
+                                            Console.WriteLine("You have chosen to save the Ancient Artefact for later");
+                                            _program.ancientArtefact.Quantity += 1;
+                                            break;
+                                        }
 
-                                    Console.WriteLine("You have reached the maximum quantity of Market Master");
-                                    break;
+                                        Console.WriteLine("You have reached the maximum quantity of Ancient Artefacts");
+                                        break;
+                                }
                             }
-                        }
-                    }
 
-                    // calendar/weather etc effects 
-                    if (!multipleDayDig)
-                    {
-                        Console.WriteLine("__________________________________________________________________________");
-                        Console.WriteLine("Here are the current active effects affecting your game:");
-
-                        if (_program._noWageDaysLeft != 0)
-                        {
-                            Console.WriteLine(
-                                $"You don't have to pay wages today, or for the next {_program._noWageDaysLeft} days");
-                            _program._noWageDaysLeft -= 1;
-                        }
-
-                        else
-                        {
-                            double totalWages = 0;
-                            foreach (Worker worker in _program.workersList)
+                            if (timeMachineFound)
                             {
-                                totalWages += worker.Wage;
+                                Console.WriteLine("__________________________________________________________");
+                                Console.Write("\u23f3 You found the Time Machine power-up \u23f3");
+                                Console.WriteLine("\nChoose an option:");
+                                Console.WriteLine(
+                                    "1 - Use now --> Gain 5 days' worth of rewards without costing you anything");
+                                Console.WriteLine($"2 - Save for later (max {_program.timeMachine.MaxQuantity})");
+                                int userInput = _program.GetValidInt(1, 2);
+
+                                switch (userInput)
+                                {
+                                    case 1:
+                                        _program.UsePowerUp(2, 1);
+                                        break;
+                                    case 2:
+                                        if (_program.timeMachine.Quantity < _program.timeMachine.MaxQuantity)
+                                        {
+                                            Console.WriteLine("You have chosen to save the Time Machine for later");
+                                            _program.marketMaster.Quantity += 1;
+                                            break;
+                                        }
+
+                                        Console.WriteLine("You have reached the maximum quantity of Time Machines");
+                                        break;
+                                }
                             }
 
-                            _program.dollars.Quantity -= totalWages;
+                            if (magicTokenFound && _program.magicTokens.Quantity < _program.magicTokens.MaxQuantity)
+                            {
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine("__________________________________________________________");
+                                    _program.magicTokens.Quantity += 1;
+                                    Console.WriteLine($"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
+                                    Console.WriteLine($"Selling price increased by a total of {_program.magicTokens.Quantity * 20}%");
+                                }
+                                _program.coal.Price += _program.coal.InitialPrice * 0.2;
+                                _program.stone.Price += _program.stone.InitialPrice * 0.2;
+                                _program.iron.Price += _program.iron.InitialPrice * 0.2;
+                                _program.gold.Price += _program.gold.InitialPrice * 0.2;
+                                _program.diamond.Price += _program.diamond.InitialPrice * 0.2;
+                            }
 
-                            Console.WriteLine(
-                                $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                            if (marketMasterFound)
+                            {
+                                Console.WriteLine("__________________________________________________________");
+                                Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
+                                Console.WriteLine("Choose an option:");
+                                Console.WriteLine("1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
+                                Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
+                                int userInput = _program.GetValidInt(1, 2);
+
+                                switch (userInput)
+                                {
+                                    case 1:
+                                        _program.UsePowerUp(3, 1);
+                                        break;
+                                    case 2:
+                                        if (_program.marketMaster.Quantity < _program.marketMaster.MaxQuantity)
+                                        {
+                                            Console.WriteLine("You have chosen to save the Market Master for later");
+                                            _program.marketMaster.Quantity += 1;
+                                            break;
+                                        }
+
+                                        Console.WriteLine("You have reached the maximum quantity of Market Master");
+                                        break;
+                                }
+                            }
                         }
+
+                        // calendar/weather etc effects 
+                        if (!multipleDayDig)
+                        {
+                            Console.WriteLine("__________________________________________________________________________");
+                            Console.WriteLine("Here are the current active effects affecting your game:");
+
+                            if (_program._noWageDaysLeft != 0)
+                            {
+                                Console.WriteLine(
+                                    $"You don't have to pay wages today, or for the next {_program._noWageDaysLeft} days");
+                                _program._noWageDaysLeft -= 1;
+                            }
+
+                            else
+                            {
+                                double totalWages = 0;
+                                foreach (Worker worker in _program.workersList)
+                                {
+                                    totalWages += worker.Wage;
+                                }
+
+                                _program.dollars.Quantity -= totalWages;
+
+                                Console.WriteLine(
+                                    $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                            }
+                            
+
+                            if (_program._marketMasterDaysLeft == 1)
+                            {
+                                _program._marketMasterDaysLeft = 0;
+                                Console.WriteLine("Your Market Master powerup is no longer active");
+                            }
+
+                            else if (_program._marketMasterDaysLeft > 1)
+                            {
+                                Console.WriteLine(
+                                    $"{_program._marketMasterDaysLeft} days left of the Market Master powerup");
+                                _program._marketMasterDaysLeft -= 1;
+                            }
                         
-
-                        if (_program._marketMasterDaysLeft == 1)
-                        {
-                            _program._marketMasterDaysLeft = 0;
-                            Console.WriteLine("Your Market Master powerup is no longer active");
                         }
 
-                        else if (_program._marketMasterDaysLeft > 1)
+                        if (multipleDayDig)
                         {
-                            Console.WriteLine(
-                                $"{_program._marketMasterDaysLeft} days left of the Market Master powerup");
-                            _program._marketMasterDaysLeft -= 1;
-                        }
-                    
-                    }
-
-                    if (multipleDayDig)
-                    {
-                        if (_program._noWageDaysLeft != 0)
-                        {
-                            _program._noWageDaysLeft -= 1;
-                        }
-
-                        else
-                        {
-                            double totalWages = 0;
-                            foreach (Worker worker in _program.workersList)
+                            if (_program._noWageDaysLeft != 0)
                             {
-                                totalWages += worker.Wage;
+                                _program._noWageDaysLeft -= 1;
                             }
 
-                            _program.dollars.Quantity -= totalWages;
+                            else
+                            {
+                                double totalWages = 0;
+                                foreach (Worker worker in _program.workersList)
+                                {
+                                    totalWages += worker.Wage;
+                                }
 
+                                _program.dollars.Quantity -= totalWages;
+
+                            }
+
+                            if (_program._marketMasterDaysLeft == 1)
+                            {
+                                _program._marketMasterDaysLeft = 0;
+                            }
+
+                            else if (_program._marketMasterDaysLeft > 1)
+                            {
+                                _program._marketMasterDaysLeft -= 1;
+                            }
                         }
 
-                        if (_program._marketMasterDaysLeft == 1)
-                        {
-                            _program._marketMasterDaysLeft = 0;
-                        }
-
-                        else if (_program._marketMasterDaysLeft > 1)
-                        {
-                            _program._marketMasterDaysLeft -= 1;
-                        }
+                        _program._currentDate = _program._currentDate.AddDays(1);
+                        
+                        _program._totalDaysDug += 1;
+                    
+                        // post-digging effects
+                        _DayToDayOperations.CalendarEffects(_program, multipleDayDig);
+                        _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
+                        _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
+                        _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
+                        _DayToDayOperations.CheckRealEstate(_program, multipleDayDig);
+                        _DayToDayOperations.MineEmptinessUpdate(_program, multipleDayDig);
                     }
-
-                    _program._currentDate = _program._currentDate.AddDays(1);
                 }
-
-                _program._totalDaysDug += 1;
-                
-                // post-digging effects
-                _DayToDayOperations.CalendarEffects(_program, multipleDayDig);
-                _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
-                _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
-                _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
-                _DayToDayOperations.CheckRealEstate(_program, multipleDayDig);
-                _DayToDayOperations.MineEmptinessUpdate(_program, multipleDayDig);
+                else
+                {
+                    _program.QuitGame();
+                }
             }
             
             if (multipleDayDig)
