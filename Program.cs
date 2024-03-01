@@ -13,7 +13,6 @@ namespace Gold_Diggerzz
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
      * fix the 'Nan' issue - not a number issue (when you have 0 workers?)
-     * 
      */
 
     /* to-do ideas
@@ -21,9 +20,6 @@ namespace Gold_Diggerzz
      * add in comma separations?
     * you are allowed to make multiple trades per day
       * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because i
-     *
-       Charged wage should be more visible
-       Trader options should use more horizontal space
        More like adventure capitalist; do more
         Eg. Mine space rocks
        You have negative power ups
@@ -683,7 +679,6 @@ namespace Gold_Diggerzz
                     DisplayStuff.DisplayResources(this);
                 }
             }
-
             return inDebt;
         }
 
@@ -1923,8 +1918,7 @@ namespace Gold_Diggerzz
 
                                 _program.dollars.Quantity -= totalWages;
 
-                                Console.WriteLine(
-                                    $"Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today.");
+                                Console.WriteLine($"\ud83d\udcb0 Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today \ud83d\udcb0");
                             }
                             
 
@@ -2010,7 +2004,6 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(_program);
 
             _program.skipDay.skipDayOrNot = false;
-            
         }
     }
 
