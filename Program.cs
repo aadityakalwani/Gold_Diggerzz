@@ -26,11 +26,10 @@ namespace Gold_Diggerzz
        Charged wage should be more visible
        More thread.sleep in bankruptcy 
        “You can’t afford this” more prominent
-       Nerf the power ups -> make it harder
        Shorter thread.sleep on dig animation but more movement
        Trader options should use more horizontal space
        More like adventure capitalist; do more
-       Eg. Mine space rocks
+        Eg. Mine space rocks
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
@@ -489,7 +488,7 @@ namespace Gold_Diggerzz
                                     break;
                                 }
                                 
-                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
+                                Console.WriteLine("\u274c You can't afford to do this brokie \u274c");
                                 break;
                             case 2:
                                 if (dollars.Quantity > bribe.Price)
@@ -503,7 +502,7 @@ namespace Gold_Diggerzz
                                     break;
                                 }
                                
-                                Console.WriteLine("\u274c You can't afford to do this broke \u274c");
+                                Console.WriteLine("\u274c You can't afford to do this brokie \u274c");
                                 break;
                         }
                         
@@ -624,46 +623,18 @@ namespace Gold_Diggerzz
                 bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
                                    gold.Quantity == 0 && diamond.Quantity == 0;
 
-
-                if (inDebt == "true")
+                if (noResources && workersList.Count < 2)
                 {
-                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
-                    Thread.Sleep(2000);
-                    Console.WriteLine("You are in debt, bossman is coming for you");
-                    Console.WriteLine(
-                        "The government will come and sell all your resources for 40% the current market rate...");
+                    Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have negative money, no resources, and one employee.\nYou have disappointed your father...");
+                    Thread.Sleep(2500);
+                    Console.WriteLine("..You have failed the game\ud83d\udca9\ud83d\udca9");
                     Thread.Sleep(1500);
-                    Console.WriteLine(
-                        $"Right now you have ${Math.Round(dollars.Quantity), 2}, {Math.Round(coal.Quantity), 2} coal, {Math.Round(stone.Quantity), 2} stone, {Math.Round(iron.Quantity), 2} iron, {Math.Round(gold.Quantity), 2} gold, and {Math.Round(diamond.Quantity), 2} diamond");
-                    Console.WriteLine("Unlucky bro...");
-                    Thread.Sleep(750);
-                    Console.WriteLine("After bossman stole your resources, you now have:");
-
-                    double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
-                                              iron.Quantity * iron.Price + gold.Quantity * gold.Price +
-                                              diamond.Quantity * diamond.Price) * 0.4;
-                    dollars.Quantity += changeInDollars;
-
-                    _totalDollarsEarned += changeInDollars;
-
-                    coal.Quantity = 0;
-                    stone.Quantity = 0;
-                    iron.Quantity = 0;
-                    gold.Quantity = 0;
-                    diamond.Quantity = 0;
-
-                    DisplayStuff.DisplayResources(this);
-                }
-
-                if (inDebt == "true" && noResources && workersList.Count < 2)
-                {
-                    Console.WriteLine("Bro you're literally bankrupt.You have failed the game.");
                     return "bankrupt";
                 }
-
-                if (inDebt == "true" && noResources && workersList.Count >= 2)
+                
+                if (noResources && workersList.Count >= 2)
                 {
-                    Console.WriteLine("You don't have resources to sell, so we're selling workers for $50 per guy \ud83d\udc77 \ud83d\udd2b");
+                    Console.WriteLine("\ud83d\udc77 \ud83d\udd2bYou don't have resources to sell, so we're selling all your workers for $50 each to pay off the debt \ud83d\udc77 \ud83d\udd2b");
                     dollars.Quantity += workersList.Count * 50;
                     _totalDollarsEarned += workersList.Count * 50;
 
@@ -671,6 +642,49 @@ namespace Gold_Diggerzz
                     {
                         workersList.RemoveAt(0);
                     }
+                }
+                
+                else if (!noResources)
+                {
+                    
+                    double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
+                                              iron.Quantity * iron.Price + gold.Quantity * gold.Price +
+                                              diamond.Quantity * diamond.Price) * 0.3;
+                    
+                    dollars.Quantity += changeInDollars;
+                    _totalDollarsEarned += changeInDollars;
+                    
+                    
+                    // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
+                    if (dollars.Quantity + changeInDollars > workersList.Count * _currentWageRate)
+                    {
+                        Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have negative money, no resources, and one employee.\nYou have disappointed your father...");
+                        Thread.Sleep(2500);
+                        Console.WriteLine("..You have failed the game\ud83d\udca9\ud83d\udca9");
+                        Thread.Sleep(1500);
+                        return "bankrupt";
+                    }
+                    
+                    
+                    // else, get the bossman on your case
+                    
+                    Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
+                    Thread.Sleep(2000);
+                    Console.WriteLine("You are in debt, bossman is coming for you \ud83d\ude22");
+                    Console.WriteLine("\ud83d\udcc9\ud83d\udcc9 The government will come and sell all your resources for 30% the current market rate... \ud83d\udcc9\ud83d\udcc9");
+                    Thread.Sleep(1750);
+                    Console.WriteLine($"Right now you have ${Math.Round(dollars.Quantity), 2}... it's not looking good for you");
+                    Console.WriteLine("Unlucky bro...");
+                    Thread.Sleep(1250);
+
+                    coal.Quantity = 0;
+                    stone.Quantity = 0;
+                    iron.Quantity = 0;
+                    gold.Quantity = 0;
+                    diamond.Quantity = 0;
+                
+                    Console.WriteLine("\u26a1 After bossman stole your resources, you now have:");
+                    DisplayStuff.DisplayResources(this);
                 }
             }
 
