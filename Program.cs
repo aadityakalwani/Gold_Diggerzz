@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Gold_Diggerzz
@@ -2910,9 +2909,12 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Your mine is almost empty, you need to find a new location to dig");
             }
             
-            _program.minePercentageFullness -= 1;
-            Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full");
+            if (!multipleDaysOrNot)
+            {
+                Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full");
+            }   
             
+            _program.minePercentageFullness -= 1;
         }
     }
     
