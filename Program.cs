@@ -20,13 +20,21 @@ namespace Gold_Diggerzz
      * convert to proper OOP via getters and setters
      * add in comma separations?
     * you are allowed to make multiple trades per day
-      * undo hard-coding within RealEstate.BuildRealEstate - yeah long day
+      * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because i
+     *
+     * If bankrupt, stop the multiple day dig instantly
+       Charged wage should be more visible
+       More thread.sleep in bankruptcy 
+       “You can’t afford this” more prominent
+       Nerf the power ups -> make it harder
+       Shorter thread.sleep on dig animation but more movement
+       Trader options should use more horizontal space
+       More like adventure capitalist; do more
+       Eg. Mine space rocks
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
-     * Fix trader logic because sister had -16iron after going to the trader.... long
-     * If weather became fine, no more effects that day
      * adding more incentive to keep playing
         * option to print all achievements and show if unlocked or not yet 
         * goals to reach
@@ -335,13 +343,7 @@ namespace Gold_Diggerzz
                         DisplayStuff.DisplayStats(this);
                         break;
                     case 7:
-                        for (int achievementNumber = 0;
-                             achievementNumber < achievementsList.Count;
-                             achievementNumber++)
-                        {
-                            Console.WriteLine($"Achievement {achievementNumber}: {achievementsList[achievementNumber]}");
-                        }
-
+                        DisplayStuff.DisplayAchievements(achievementsList,this);
                         break;
                     case 8:
                         RunTutorial();
@@ -1567,6 +1569,17 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity} dollars per week");
             }
             Console.WriteLine("__________________________________________________________________________");
+        }
+
+        public static void DisplayAchievements(List<string> achievements, Program program)
+        {
+            Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
+            Console.WriteLine("Here are your achievements:\n");
+            
+            for (int achievementNumber = 0; achievementNumber < achievements.Count; achievementNumber++)
+            {
+                Console.WriteLine($"Achievement {achievementNumber}: {achievements[achievementNumber]}");
+            }
         }
     }
 
