@@ -24,9 +24,6 @@ namespace Gold_Diggerzz
      *
      * If bankrupt, stop the multiple day dig instantly
        Charged wage should be more visible
-       More thread.sleep in bankruptcy 
-       “You can’t afford this” more prominent
-       Shorter thread.sleep on dig animation but more movement
        Trader options should use more horizontal space
        More like adventure capitalist; do more
         Eg. Mine space rocks
@@ -392,9 +389,8 @@ namespace Gold_Diggerzz
                         DisplayStuff.DisplayRealEstate(this);
                         break;
                     case 14:
-                        Console.WriteLine("This is a feature under development - pls don't use unless you want to break the game");
                         Console.WriteLine("Welcome to the real estate building place!");
-                        Console.WriteLine("Tip: to gain more of a specific resource, convert resources at the trader");
+                        Console.WriteLine("(Tip: to gain more of a specific resource, convert resources at the trader)\n");
                         Console.WriteLine("What real estate do you want to build?");
                         Console.WriteLine("0. Cancel");
                         Console.WriteLine("1. Apartment - $10,000, 5 days to build, $3,000 weekly rent");
@@ -545,8 +541,9 @@ namespace Gold_Diggerzz
             Thread.Sleep(1750);
             Console.WriteLine("However, as he ages, he begins to worry about the future of the company.");
             Console.WriteLine("He decides to teach you the ropes of the business - one day, you may have to take over the company.");
-            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.");
-            Console.WriteLine("\nHe offers you the chance to learn the business before you begin...");
+            Console.WriteLine("To see if you're worthy, he decides to give you a new company to run.\n\n[ENTER]");
+            Console.ReadLine();
+            Console.WriteLine("He offers you the chance to learn the business before you begin...");
             Console.WriteLine("Do you want to go through a tutorial? ('y' for 'yes', anything else for 'no'): ");
             
             string tutorialChoice = Console.ReadLine().ToLower();
@@ -579,7 +576,7 @@ namespace Gold_Diggerzz
             else
             {
                 Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
-                Thread.Sleep(2000);
+                Thread.Sleep(2500);
             }
         }
 
@@ -1378,18 +1375,13 @@ namespace Gold_Diggerzz
             Console.WriteLine("This is where you can convert between resources!");
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
-            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio, 2)} coal --> stone");
-            Console.WriteLine($"2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron");
-            Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold");
-            Console.WriteLine($"4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond");
-            Console.WriteLine($"5 - Convert {Math.Round(program.stoneToIron.Ratio, 2)} stone --> iron");
-            Console.WriteLine($"6 - Convert {Math.Round(program.stoneToGold.Ratio, 2)} stone --> gold");
-            Console.WriteLine($"7 - Convert {Math.Round(program.stoneToDiamond.Ratio, 2)} stone --> diamond");
-            Console.WriteLine($"8 - Convert {Math.Round(program.ironToGold.Ratio, 2)} iron --> gold");
-            Console.WriteLine($"9 - Convert {Math.Round(program.ironToDiamond.Ratio, 2)} iron --> diamond");
-            Console.WriteLine($"10 - Convert {Math.Round(program.goldToDiamond.Ratio, 2)} gold --> diamond");
-            Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!");
-            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine($"1 - Convert {Math.Round(program.coalToStone.Ratio, 2)} coal --> stone      |  2 - Convert {Math.Round(program.coalToIron.Ratio, 2)} coal --> iron");
+            Console.WriteLine($"3 - Convert {Math.Round(program.coalToGold.Ratio, 2)} coal --> gold        |  4 - Convert {Math.Round(program.coalToDiamond.Ratio, 2)} coal --> diamond");
+            Console.WriteLine($"5 - Convert {Math.Round(program.stoneToIron.Ratio, 2)} stone --> iron      |  6 - Convert {Math.Round(program.stoneToGold.Ratio, 2)} stone --> gold");
+            Console.WriteLine($"7 - Convert {Math.Round(program.stoneToDiamond.Ratio, 2)} stone --> diamond    |  8 - Convert {Math.Round(program.ironToGold.Ratio, 2)} iron --> gold");
+            Console.WriteLine($"9 - Convert {Math.Round(program.ironToDiamond.Ratio, 2)} iron --> diamond    |  10 - Convert {Math.Round(program.goldToDiamond.Ratio, 2)} gold --> diamond");
+            Console.WriteLine("Remember, you can only make one trade per day. Choose wisely!\n");
+            Console.WriteLine("Enter the number of the trade you want to make:");
 
             int userTrade = program.GetValidInt(0, 10);
 
@@ -1432,6 +1424,7 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(program);
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
+        
     } // you're allowed multiple trades per day ++ trade prices don't fluctuate
     
     class DisplayStuff
