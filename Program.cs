@@ -555,7 +555,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
                 Console.WriteLine("He gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
                 Thread.Sleep(2500);
-                Console.WriteLine("As you dig for resources, you can sell them at the market to earn money.");
+                Console.WriteLine("\nAs you dig for resources, you can sell them at the market to earn money.");
                 Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
                 Console.WriteLine("You can also build real estate to earn passive income, but that's for later.");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
@@ -615,7 +615,7 @@ namespace Gold_Diggerzz
                 bool noResources = coal.Quantity == 0 && stone.Quantity == 0 && iron.Quantity == 0 &&
                                    gold.Quantity == 0 && diamond.Quantity == 0;
 
-                if (noResources && workersList.Count < 2)
+                if (noResources && workersList.Count <= 1)
                 {
                     Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have negative money, no resources, and one employee.\nYou have disappointed your father...");
                     Thread.Sleep(2500);
@@ -2371,7 +2371,7 @@ namespace Gold_Diggerzz
                         }
                     }
 
-                    else
+                    else if (_program.workersList.Count < 5)
                     {
                         Console.WriteLine("Because you have less than 5 employees, you got lucky");
                         Console.WriteLine("None of your employees died, but they sure as hell had a fright! their morale has permanently halved");
@@ -3192,7 +3192,7 @@ namespace Gold_Diggerzz
                     break;
                 
                 case 1:
-                    if (_program.dollars.Quantity < 1000)
+                    if (_program.dollars.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough money to build an apartment");
                         break;
