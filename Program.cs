@@ -1416,168 +1416,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
         
-    } // you're allowed multiple trades per day ++ trade prices don't fluctuate
-    
-    class DisplayStuff
-    {
-        public static void DisplayGameMechanics(Program _program)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n   _____                                 __  __                 _                       _              \n  / ____|                               |  \\/  |               | |                     (_)             \n | |  __    __ _   _ __ ___     ___     | \\  / |   ___    ___  | |__     __ _   _ __    _    ___   ___ \n | | |_ |  / _` | | '_ ` _ \\   / _ \\    | |\\/| |  / _ \\  / __| | '_ \\   / _` | | '_ \\  | |  / __| / __|\n | |__| | | (_| | | | | | | | |  __/    | |  | | |  __/ | (__  | | | | | (_| | | | | | | | | (__  \\__ \\\n  \\_____|  \\__,_| |_| |_| |_|  \\___|    |_|  |_|  \\___|  \\___| |_| |_|  \\__,_| |_| |_| |_|  \\___| |___/\n");
-            Console.ResetColor();
-            
-            Console.WriteLine("__________________________________________________________");
-            Thread.Sleep(750);
-            Console.WriteLine("Current probabilities of finding resources:");
-            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: ${Math.Round(_program.stone.Probability, 2)}");
-            Console.WriteLine($"| Iron: {Math.Round(_program.iron.Probability, 2)}%                | Gold: {Math.Round(_program.gold.Probability, 2)}%");
-            Console.WriteLine($"| Diamond: {Math.Round(_program.diamond.Probability, 2)}%              | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
-            Console.WriteLine($"| Market Master: {Math.Round(_program.marketMaster.Probability, 2)}%        | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
-            Console.WriteLine($"| Time Machine: {Math.Round(_program.timeMachine.Probability, 2)}%");
-            Thread.Sleep(1000);
-            Console.WriteLine("__________________________________________________________");
-            Console.WriteLine("Current Prices:");
-            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg          | Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
-            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg         | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
-            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg     | Employees: {Math.Round(_program._currentEmployeePrice, 2)} per employee");
-            Console.WriteLine("__________________________________________________________");
-            Thread.Sleep(1750);
-
-            Console.WriteLine("\nResource prices fluctuate by upto ±10% per day");
-            Console.WriteLine("You can find powerups that have different effects");
-            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency * some random fluctuation of ±20%");
-            Console.WriteLine($"Baseline wage = ${_program._currentWageRate} per employee per day");
-            Console.WriteLine("There is a chance an employee is ill and doesn't come in to work");
-            Console.WriteLine("30% pay increase on weekends only");
-            Console.WriteLine("On the first of every month, employee wage increases by 10% permanently");
-            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
-            Console.WriteLine("One x date every month, there is a stock market crash where all prices halve (prime time to buy employees)");
-            Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 8%");
-            Console.WriteLine($"You can bribe the govt with ${_program.bribe.Price} and not pay any wages for the next 3 days");
-            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
-            Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
-            Console.WriteLine("__________________________________________________________________________");
-        }
-
-        public static void DisplayStats(Program program)
-        {
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                        YOUR STATS                          ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
-            Console.ResetColor();
-
-            Console.WriteLine($"Here are your stats as of {program._currentDate.Date: dddd, dd MMMM yyyy}:");
-            Console.WriteLine("__________________________________________________________");
-            Console.WriteLine($"Total coal found: {Math.Round(program.coal.TotalFound, 2)}kg");
-            Console.WriteLine($"Total stone found: {Math.Round(program.stone.TotalFound, 2)}kg");
-            Console.WriteLine($"Total iron found: {Math.Round(program.iron.TotalFound, 2)}kg");
-            Console.WriteLine($"Total gold found: {Math.Round(program.gold.TotalFound, 2)}kg");
-            Console.WriteLine($"Total diamond found: {Math.Round(program.diamond.TotalFound, 2)}kg");
-            Console.WriteLine($"Total powerups used: {program._totalPowerUpsUsed}");
-            Console.WriteLine($"Total employees hired: {program._totalEmployeesHired}");
-            Console.WriteLine($"Total bribes paid: {program._totalBribes}");
-            Console.WriteLine("__________________________________________________________");
-            Console.WriteLine($"\nTotal dollars earned: ${Math.Round(program._totalDollarsEarned, 2)}");
-            Console.WriteLine($"Total days dug: {program._totalDaysDug}");
-        }
-
-        public static void DisplayResources(Program program)
-        {
-            Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine($"                     You have ${Math.Round(program.dollars.Quantity, 2)}\n");
-            Console.WriteLine($"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
-            Console.WriteLine($"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
-            Console.WriteLine($"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
-            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' average efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
-            Console.WriteLine("__________________________________________________________________________");
-        }
-
-        public static void DisplayEmployees(Program program)
-        {
-            Console.WriteLine("\n  ______                       _                                     \n |  ____|                     | |                                    \n | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___ \n |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|\n | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\\n |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/\n                      | |                   __/ |                    \n                      |_|                  |___/                     \n");
-            Console.WriteLine("_____________________________________________________________________");
-            int i = 0;
-            
-            if (program.deadWorkersList.Count != 0)
-            {
-                Console.WriteLine("__________________________________________________________________________");
-                Thread.Sleep(2500);
-            }
-            
-            foreach (Worker worker in program.deadWorkersList)
-            {
-                i++;
-                Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
-            }
-            
-            if (program.retiredWorkersList.Count != 0)
-            {
-                Console.WriteLine("__________________________________________________________________________");
-                Thread.Sleep(2500);
-            }
-            
-            foreach (Worker worker in program.retiredWorkersList)
-            {
-                i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Day}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
-            }
-
-            if (program.retiredWorkersList.Count != 0)
-            {
-                Console.WriteLine("__________________________________________________________________________");
-                Thread.Sleep(2500);
-            }
-            
-            Console.WriteLine("Here are your current working employees:");
-            int j = 0;
-            double totalWages = 0;
-            foreach (Worker worker in program.workersList)
-            {
-                j++;
-                totalWages += worker.Wage;
-                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Morale {Math.Round(worker.Morale, 2)} Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
-            }
-
-            Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine($"Total wages: ${Math.Round(totalWages, 2)}");
-            Console.WriteLine($"Average employee morale: {Math.Round(program._averageEmployeeMorale, 2)}");
-            Console.WriteLine($"Average employee efficiency: {Math.Round(program._averageEmployeeEfficiency, 2)}");
-            Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine("\n\n[ENTER]");
-            Console.ReadLine();
-        }
-
-        public static void DisplayRealEstate(Program program)
-        {
-            if (program.activeRealEstate.Count == 0)
-            {
-                Console.WriteLine("You have no real estate properties active right now, level up brokie \ud83d\ude45\u200d\u2642\ufe0f ");
-                Console.WriteLine("__________________________________________________________________________");
-                return;
-            }
-            
-            Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
-            foreach (RealEstate realEstate in program.activeRealEstate)
-            {
-                Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity} dollars per week");
-            }
-            Console.WriteLine("__________________________________________________________________________");
-        }
-
-        public static void DisplayAchievements(List<string> achievements, Program program)
-        {
-            Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
-            Console.WriteLine("Here are your achievements:\n");
-            
-            for (int achievementNumber = 0; achievementNumber < achievements.Count; achievementNumber++)
-            {
-                Console.WriteLine($"Achievement {achievementNumber}: {achievements[achievementNumber]}");
-            }
-        }
-    }
+    } // you're allowed multiple trades per day
 
     class MiningOperation
     {
@@ -2932,6 +2771,25 @@ namespace Gold_Diggerzz
             if (!multipleDaysOrNot)
             {
                 Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full");
+                
+                /*
+                 progress bar for the mine emptiness
+                 
+                 Console.WriteLine("\nProgress:");
+                   for (int j = 0; j < 15; j++)
+                   {
+                       if (j < _program.minePercentageFullness)
+                       {
+                           Console.Write("##");
+                       }
+                       else
+                       {
+                           Console.Write(" ");
+                       }
+                   }
+
+                   Console.WriteLine("| \ud83e\ude93\ud83e\ude93");
+                 */
             }   
             
             _program.minePercentageFullness -= 1;
@@ -3316,6 +3174,167 @@ namespace Gold_Diggerzz
             }
         }
     } // balance updates needed
+    
+    class DisplayStuff
+    {
+        public static void DisplayGameMechanics(Program _program)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n   _____                                 __  __                 _                       _              \n  / ____|                               |  \\/  |               | |                     (_)             \n | |  __    __ _   _ __ ___     ___     | \\  / |   ___    ___  | |__     __ _   _ __    _    ___   ___ \n | | |_ |  / _` | | '_ ` _ \\   / _ \\    | |\\/| |  / _ \\  / __| | '_ \\   / _` | | '_ \\  | |  / __| / __|\n | |__| | | (_| | | | | | | | |  __/    | |  | | |  __/ | (__  | | | | | (_| | | | | | | | | (__  \\__ \\\n  \\_____|  \\__,_| |_| |_| |_|  \\___|    |_|  |_|  \\___|  \\___| |_| |_|  \\__,_| |_| |_| |_|  \\___| |___/\n");
+            Console.ResetColor();
+            
+            Console.WriteLine("__________________________________________________________");
+            Thread.Sleep(750);
+            Console.WriteLine("Current probabilities of finding resources:");
+            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: ${Math.Round(_program.stone.Probability, 2)}");
+            Console.WriteLine($"| Iron: {Math.Round(_program.iron.Probability, 2)}%                | Gold: {Math.Round(_program.gold.Probability, 2)}%");
+            Console.WriteLine($"| Diamond: {Math.Round(_program.diamond.Probability, 2)}%              | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
+            Console.WriteLine($"| Market Master: {Math.Round(_program.marketMaster.Probability, 2)}%        | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
+            Console.WriteLine($"| Time Machine: {Math.Round(_program.timeMachine.Probability, 2)}%");
+            Thread.Sleep(1000);
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine("Current Prices:");
+            Console.WriteLine($"| Coal: ${Math.Round(_program.coal.Price, 2)} per kg          | Stone: ${Math.Round(_program.stone.Price, 2)} per kg");
+            Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg         | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
+            Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg     | Employees: {Math.Round(_program._currentEmployeePrice, 2)} per employee");
+            Console.WriteLine("__________________________________________________________");
+            Thread.Sleep(1750);
+
+            Console.WriteLine("\nResource prices fluctuate by upto ±10% per day");
+            Console.WriteLine("You can find powerups that have different effects");
+            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency * some random fluctuation of ±20%");
+            Console.WriteLine($"Baseline wage = ${_program._currentWageRate} per employee per day");
+            Console.WriteLine("There is a chance an employee is ill and doesn't come in to work");
+            Console.WriteLine("30% pay increase on weekends only");
+            Console.WriteLine("On the first of every month, employee wage increases by 10% permanently");
+            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
+            Console.WriteLine("One x date every month, there is a stock market crash where all prices halve (prime time to buy employees)");
+            Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 8%");
+            Console.WriteLine($"You can bribe the govt with ${_program.bribe.Price} and not pay any wages for the next 3 days");
+            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
+            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
+            Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
+            Console.WriteLine("__________________________________________________________________________");
+        }
+
+        public static void DisplayStats(Program program)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                        YOUR STATS                          ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            Console.WriteLine($"Here are your stats as of {program._currentDate.Date: dddd, dd MMMM yyyy}:");
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine($"Total coal found: {Math.Round(program.coal.TotalFound, 2)}kg");
+            Console.WriteLine($"Total stone found: {Math.Round(program.stone.TotalFound, 2)}kg");
+            Console.WriteLine($"Total iron found: {Math.Round(program.iron.TotalFound, 2)}kg");
+            Console.WriteLine($"Total gold found: {Math.Round(program.gold.TotalFound, 2)}kg");
+            Console.WriteLine($"Total diamond found: {Math.Round(program.diamond.TotalFound, 2)}kg");
+            Console.WriteLine($"Total powerups used: {program._totalPowerUpsUsed}");
+            Console.WriteLine($"Total employees hired: {program._totalEmployeesHired}");
+            Console.WriteLine($"Total bribes paid: {program._totalBribes}");
+            Console.WriteLine("__________________________________________________________");
+            Console.WriteLine($"\nTotal dollars earned: ${Math.Round(program._totalDollarsEarned, 2)}");
+            Console.WriteLine($"Total days dug: {program._totalDaysDug}");
+        }
+
+        public static void DisplayResources(Program program)
+        {
+            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine($"                     You have ${Math.Round(program.dollars.Quantity, 2)}\n");
+            Console.WriteLine($"| You have {Math.Round(program.coal.Quantity, 2)}kg of coal         | You have {Math.Round(program.stone.Quantity, 2)}kg of stone");
+            Console.WriteLine($"| You have {Math.Round(program.iron.Quantity, 2)}kg of iron         | You have {Math.Round(program.gold.Quantity, 2)}kg of gold");
+            Console.WriteLine($"| You have {Math.Round(program.diamond.Quantity, 2)}kg of diamond      | You have {Math.Round(program.magicTokens.Quantity, 2)} magic tokens");
+            Console.WriteLine($"| You have {program.workersList.Count} employees         | Your employees' average efficiency is {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine("__________________________________________________________________________");
+        }
+
+        public static void DisplayEmployees(Program program)
+        {
+            Console.WriteLine("\n  ______                       _                                     \n |  ____|                     | |                                    \n | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___ \n |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|\n | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\\n |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/\n                      | |                   __/ |                    \n                      |_|                  |___/                     \n");
+            Console.WriteLine("_____________________________________________________________________");
+            int i = 0;
+            
+            if (program.deadWorkersList.Count != 0)
+            {
+                Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
+            }
+            
+            foreach (Worker worker in program.deadWorkersList)
+            {
+                i++;
+                Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
+            
+            if (program.retiredWorkersList.Count != 0)
+            {
+                Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
+            }
+            
+            foreach (Worker worker in program.retiredWorkersList)
+            {
+                i++;
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Day}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
+
+            if (program.retiredWorkersList.Count != 0)
+            {
+                Console.WriteLine("__________________________________________________________________________");
+                Thread.Sleep(2500);
+            }
+            
+            Console.WriteLine("Here are your current working employees:");
+            int j = 0;
+            double totalWages = 0;
+            foreach (Worker worker in program.workersList)
+            {
+                j++;
+                totalWages += worker.Wage;
+                Console.WriteLine($"Employee Number {j} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Morale {Math.Round(worker.Morale, 2)} Current wage {Math.Round(worker.Wage, 2)}, Retiring in {worker.DaysUntilRetirement} days \ud83e\uddcd\u200d\u2642\ufe0f");
+            }
+
+            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine($"Total wages: ${Math.Round(totalWages, 2)}");
+            Console.WriteLine($"Average employee morale: {Math.Round(program._averageEmployeeMorale, 2)}");
+            Console.WriteLine($"Average employee efficiency: {Math.Round(program._averageEmployeeEfficiency, 2)}");
+            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine("\n\n[ENTER]");
+            Console.ReadLine();
+        }
+
+        public static void DisplayRealEstate(Program program)
+        {
+            if (program.activeRealEstate.Count == 0)
+            {
+                Console.WriteLine("You have no real estate properties active right now, level up brokie \ud83d\ude45\u200d\u2642\ufe0f ");
+                Console.WriteLine("__________________________________________________________________________");
+                return;
+            }
+            
+            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
+            foreach (RealEstate realEstate in program.activeRealEstate)
+            {
+                Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity} dollars per week");
+            }
+            Console.WriteLine("__________________________________________________________________________");
+        }
+
+        public static void DisplayAchievements(List<string> achievements, Program program)
+        {
+            Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
+            Console.WriteLine("Here are your achievements:\n");
+            
+            for (int achievementNumber = 0; achievementNumber < achievements.Count; achievementNumber++)
+            {
+                Console.WriteLine($"Achievement {achievementNumber}: {achievements[achievementNumber]}");
+            }
+        }
+    }
     
     // classes that can be in their own files:
     class WeatherEffectsClass
