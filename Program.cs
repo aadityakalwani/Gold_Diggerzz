@@ -12,46 +12,46 @@ namespace Gold_Diggerzz
     /* current issues
      * LOAD GAME STATE
         * you can not load a game state because of either casting issues or enumeration operation errors
+        * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
+            * because then i'm just updating the values rather than..shit yeah that works? 
      * fix the 'Nan' issue - not a number issue (when you have 0 workers?)
      */
 
     /* to-do ideas
-     * convert to proper OOP via getters and setters
-     * add in comma separations?
+    * convert all print statements to dollars.Quantity.ToString("N") to have comma separations ? 
+    * convert to proper OOP via getters and setters
+    * add in comma separations?
     * you are allowed to make multiple trades per day
-      * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because i
-       More like adventure capitalist; do more
-        Eg. Mine space rocks
-       You have negative power ups
-     * Sell/fire employees
-     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
-     * adding more incentive to keep playing
-        * option to print all achievements and show if unlocked or not yet 
-        * goals to reach
-        * if you reach _______ income you can find ______
-     * a list of all possible trades, for each trade, if the player has enough of the fromResource, display the trade option?
-     * create reputation (do i need to? ++ how will this work with morale?)
-     * create some functionality such that employee morale actually does something
-     * a morale-boosting powerup
-     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
-     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
-     * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
-        * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-        * as the mine gets emptier, chance of finding resources decreases
-     * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
-     * Trader's prices fluctuate (one of the factors can be reputation/morale)
-     * achievements are OOP-ed? idk about this one - give it some thought
-     * otherwise option to print all achievements as an incentive to work towards them/keep playing
-     * earthquakes code to loosen soil and make shit easier to find (+ cool animations possible) ++ kill some employees ++ morale lost
-     * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
-     * loans - you can take a loan from the bank and pay it back with interest
-     * stock market feature (kinda done?)
-         * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
-     * managers that do shit
-        * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
-        * or a 'diamond' manager to double chance of finding gold for 10 days
-     * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
-     */
+    * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because cba to do it properly
+    * More like adventure capitalist; do more
+        * Eg. Mine space rocks
+    * You have negative power ups
+    * Sell/fire employees
+    * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
+    * adding more incentive to keep playing
+       * option to print all achievements and show if unlocked or not yet 
+       * goals to reach
+       * if you reach _______ income you can find ______
+    * create reputation (do i need to? ++ how will this work with morale?)
+    * make the employee morale actually do something
+    * a morale-boosting powerup
+    * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
+    * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
+    * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
+       * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
+       * as the mine gets emptier, chance of finding resources decreases
+    * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
+    * achievements are OOP-ed? idk about this one - give it some thought
+    * otherwise option to print all achievements as an incentive to work towards them/keep playing
+    * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
+    * loans - you can take a loan from the bank and pay it back with interest
+    * stock market feature (kinda done?)
+        * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
+    * managers that do shit
+       * eg a temporary 'gold' manager that improves chance of finding gold but is hired for a week
+       * or a 'diamond' manager to double chance of finding gold for 10 days
+    * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
+    */
 
     class Program
     {
@@ -102,22 +102,16 @@ namespace Gold_Diggerzz
         public List<Worker> deadWorkersList = new();
         public List<Worker> trainingWorkersList = new();
         public List<Worker> toSendToTrainingList = new();
-        
         public List<Trade> tradeList = new();
-        
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
-
-        public List<Worker> workersList = new()
-            { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
-        
+        public List<Worker> workersList = new() { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
         public List<RealEstate> buildingRealEstateList = new();
         public List<RealEstate> activeRealEstate = new();
-
+        
         MiningOperation miningOperation = new();
         MarketOperation marketOperation = new();
         DayToDayOperations dayToDayOperations = new();
 
-        // Declare your variables at the class level
         public Resource coal;
         public Resource stone;
         public Resource iron;
@@ -2560,14 +2554,19 @@ namespace Gold_Diggerzz
         public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
             // retirements, returning workers, unwell workers, morale, etc.
+            Random random = new Random();
+            
+            // morale has a semi-half effect on the employee efficiency
+            foreach (Worker worker in _program.workersList)
+            {
+                worker.efficiency -= (50-worker.Morale)/200;
+            }
             
             // reduce morale by 2% for every day worked
             foreach (Worker worker in _program.workersList)
             {
                 worker.Morale *= 0.98;
             }
-            
-            Random random = new Random();
 
             // recalculate the average efficiency of the employees
             double totalEfficiency = 0;
@@ -2610,7 +2609,6 @@ namespace Gold_Diggerzz
             }
 
             // workers that return (due to training course)
-
             List<Worker> tempList = new();
             foreach (Worker worker in _program.trainingWorkersList)
             {
@@ -2632,7 +2630,6 @@ namespace Gold_Diggerzz
                 _program.workersList.Add(worker);
             }
             
-
             // unwell workers
             if (_program.workersList.Count > 1)
             {
@@ -2855,6 +2852,7 @@ namespace Gold_Diggerzz
             }
             
             // fluctuate trader price ratio
+            // one of the factors can be reputation/morale later on tk
             double randomFluctuationOfTraderRatio = random.Next(0, 10) / 100.0 + 1;
             
             foreach (Trade trader in _program.tradeList)
@@ -3175,7 +3173,6 @@ namespace Gold_Diggerzz
         public string WeeklyRentResource;
         
         public RealEstate(string type, int daysLeftToBuild, double weeklyRentQuantity, string weeklyRentResource)
-
         {
             Type = type;
             DaysLeftToBuild = daysLeftToBuild;
