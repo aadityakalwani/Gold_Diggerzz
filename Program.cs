@@ -25,7 +25,6 @@ namespace Gold_Diggerzz
        You have negative power ups
      * Sell/fire employees
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
-     * update ascii art for menu options: achievements, tutorial, use powerups, game state saved, game mechanics
      * adding more incentive to keep playing
         * option to print all achievements and show if unlocked or not yet 
         * goals to reach
@@ -767,6 +766,9 @@ namespace Gold_Diggerzz
 
         public void UsePowerUp(int powerUpChoice, int subChoice)
         {
+            
+            Console.WriteLine("\n  _    _                      _____                                                         \n | |  | |                    |  __ \\                                                        \n | |  | |  ___    ___        | |__) |   ___   __      __   ___   _ __   _   _   _ __    ___ \n | |  | | / __|  / _ \\       |  ___/   / _ \\  \\ \\ /\\ / /  / _ \\ | '__| | | | | | '_ \\  / __|\n | |__| | \\__ \\ |  __/       | |      | (_) |  \\ V  V /  |  __/ | |    | |_| | | |_) | \\__ \\\n  \\____/  |___/  \\___|       |_|       \\___/    \\_/\\_/    \\___| |_|     \\__,_| | .__/  |___/\n                                                                               | |          \n                                                                               |_         ");
+            
             switch (powerUpChoice)
             {
                 case 1:
@@ -1427,9 +1429,7 @@ namespace Gold_Diggerzz
         public static void DisplayGameMechanics(Program _program)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                    GAME MECHANICS                      ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════╝");
+            Console.WriteLine("\n   _____                                 __  __                 _                       _              \n  / ____|                               |  \\/  |               | |                     (_)             \n | |  __    __ _   _ __ ___     ___     | \\  / |   ___    ___  | |__     __ _   _ __    _    ___   ___ \n | | |_ |  / _` | | '_ ` _ \\   / _ \\    | |\\/| |  / _ \\  / __| | '_ \\   / _` | | '_ \\  | |  / __| / __|\n | |__| | | (_| | | | | | | | |  __/    | |  | | |  __/ | (__  | | | | | (_| | | | | | | | | (__  \\__ \\\n  \\_____|  \\__,_| |_| |_| |_|  \\___|    |_|  |_|  \\___|  \\___| |_| |_|  \\__,_| |_| |_| |_|  \\___| |___/\n");
             Console.ResetColor();
             
             Console.WriteLine("__________________________________________________________");
