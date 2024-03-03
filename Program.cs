@@ -1227,17 +1227,14 @@ namespace Gold_Diggerzz
                     if (type == "bad")
                     {
                         employeePrice = 50;
-                        baseMorale = 0.75;
                     }
                     if (type == "mid")
                     {
                         employeePrice = 100;
-                        baseMorale = 1;
                     }
                     if (type == "good")
                     {
                         employeePrice = 200;
-                        baseMorale = 1.25;
                     }
                     
                     Worker newWorker = new Worker(type, _program._possibleNames[randomName], _program._currentWageRate, employeePrice, _program._currentEmployeeIllProbability, efficiency, baseMorale);
@@ -1439,7 +1436,7 @@ namespace Gold_Diggerzz
                 if (_program.workersList.Count == 0)
                 {
                     Console.WriteLine("__________________________________________________________________________");
-                    Console.WriteLine("\u2b55 You have no employees to dig for you\u2b55\n. Hire some employees first");
+                    Console.WriteLine("\u2b55 You have no employees to dig for you \u2b55\nHire some employees first");
                     return;
                 }
 
@@ -2370,16 +2367,39 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("__________________________________________________________________________");
                 Console.WriteLine("\ud83d\udcc6 Profit sharing time! \ud83d\udcc6");
-
+                Console.WriteLine("As the manager, you get to choose to share profits or not");
+                Console.WriteLine("Choose wisely as keeping profits will decrease morale, and may hurt you in the long run!");
+                Console.WriteLine($"Here's how the profit sharing will work for {_program._currentDate:dddd, d MMMM, yyyy}");
+                
                 if (_program.workersList.Count < 7)
                 {
-                    Console.WriteLine("Each employee gets 10% of your current $$$ stash");
-                    Console.WriteLine(
-                        $"Your {_program.workersList.Count} employees get ${Math.Round(_program.dollars.Quantity * 0.1, 2)} each");
+                    Console.WriteLine("Each employee will 10% of your current $$$ stash, meaning:");
+                    Console.WriteLine($"Your {_program.workersList.Count} employees get ${Math.Round(_program.dollars.Quantity * 0.1, 2)} each");
+                    Console.WriteLine("1 - Share profits with employees (+20% morale \ud83d\udcc8)\n2 - Keep profits for yourself (-20% morale \ud83d\udcc9)\nEnter your choice:");
+                    int profitSharingChoice = _program.GetValidInt(1, 2);
+                    
                     double dollarsToLose = _program.dollars.Quantity * 0.1 * _program.workersList.Count;
-                    _program.dollars.Quantity -= dollarsToLose;
-                    Console.WriteLine(
-                        $"Your employees have been paid, you have lost $ {Math.Round(dollarsToLose, 2)} in the process");
+
+                    if (profitSharingChoice == 1)
+                    {
+                        _program.dollars.Quantity -= dollarsToLose;
+                        Console.WriteLine($"Your employees have been paid\nYou have lost $ {Math.Round(dollarsToLose, 2)} in the process\nEmployees are happy; morale increased by 20%!");
+                        
+                        foreach (Worker worker in _program.workersList)
+                        {
+                            worker.Morale *= 1.2;
+                        }
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($"By saving the profits for yourself, you saved {dollarsToLose}, but your employees are not happy; morale decreased by 20%");
+                        foreach (Worker worker in _program.workersList)
+                        {
+                            worker.Morale /= 1.2;
+                        }
+                    }
+                    
                 }
 
                 else
@@ -2527,6 +2547,10 @@ namespace Gold_Diggerzz
                     _program.workersList.Add(worker);
                 }
 
+            }
+            else
+            {
+                Console.WriteLine("You have 0 active employees so i didnt do anything in the hopes of solving an error");
             }
 
         }
@@ -3286,7 +3310,7 @@ namespace Gold_Diggerzz
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
-                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate.Day}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
+                Console.WriteLine($"Retiree Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Retired on {worker.RetirementDate:dddd, d MMMM, yyyy}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
 
             if (program.retiredWorkersList.Count != 0)
