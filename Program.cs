@@ -18,15 +18,15 @@ namespace Gold_Diggerzz
      */
 
     /* to-do ideas
-    * better understand what to do with morale 
-    * convert all print statements to dollars.Quantity.ToString("N") to have comma separations ? 
+    * better understand what to do with morale
+     * use powerup runGame case 16 might need prettifying and fixing
+    * convert all print statements to dollars.Quantity.ToString("N") to have comma separations? 
     * convert to proper OOP via getters and setters
-    * add in comma separations?
     * you are allowed to make multiple trades per day
     * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because cba to do it properly
     * More like adventure capitalist; do more
         * Eg. Mine space rocks
-    * You have negative power ups
+    * You can have negative power ups
     * Sell/fire employees
     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
     * adding more incentive to keep playing
@@ -270,8 +270,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
-            Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
-            Console.WriteLine("(idk how but somehow you can now all of a sudden find negative resource... i am trying to fix this)");
+            Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe game file to get the latest version of the game)");
             Thread.Sleep(1500);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
@@ -329,6 +328,11 @@ namespace Gold_Diggerzz
                         Worker.EmployeeHiringScreen(this);
                         break;
                     case 7:
+                        Console.WriteLine("This feature doesnt do anything yet because I dont care enough about selling employees");
+                        Console.WriteLine("It's just here to make the menu look more full lol");
+                        Console.WriteLine("If you want me to make this work properly, message me and I'll get working on it");
+                        break;
+                    case 8:
                         Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
                         Console.WriteLine(
                             $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
@@ -359,26 +363,26 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 8:
+                    case 9:
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
                         Worker.EmployeeMoraleBoostingScreen(this);
                         break;
-                    case 9:
+                    case 10:
                         DisplayStuff.DisplayGameMechanics(this);
                         break;
-                    case 10:
+                    case 11:
                         DisplayStuff.DisplayStats(this);
                         break;
-                    case 11:
+                    case 12:
                         DisplayStuff.DisplayAchievements(achievementsList,this);
                         break;
-                    case 12:
+                    case 13:
                         RunTutorial();
                         break;
-                    case 13:
+                    case 14:
                         DisplayStuff.DisplayRealEstate(this);
                         break;
-                    case 14:
+                    case 15:
                         Console.WriteLine("Welcome to the real estate building place!");
                         Console.WriteLine("(Tip: to gain more of a specific resource, convert resources at the trader)\n");
                         Console.WriteLine("What real estate do you want to build?");
@@ -393,7 +397,7 @@ namespace Gold_Diggerzz
                         RealEstate.BuildRealEstate(choice, this);
                         Thread.Sleep(2000);
                         break;
-                    case 15:
+                    case 16:
 
                         if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 &&
                             marketMaster.Quantity == 0)
@@ -457,7 +461,7 @@ namespace Gold_Diggerzz
                         }
 
                         break;
-                    case 16:
+                    case 17:
                         Console.WriteLine("0 - no im scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
@@ -494,15 +498,15 @@ namespace Gold_Diggerzz
                         
 
                         break;
-                    case 17:
+                    case 18:
                         SaveGameState(1);
                         break;
-                    case 18:
+                    case 19:
                         Console.WriteLine(
                             "This feature does not fully work yet. I'll let it run just cuz, but whenever its done its thing it'll take you back to the main menu screen");
                         SaveGameState(2);
                         break;
-                    case 19:
+                    case 20:
                         Console.WriteLine("Skipping one day");
                         Console.WriteLine(
                             $"You have been charged ${skipDay.Price} for the costs of skipping a day");
@@ -511,11 +515,12 @@ namespace Gold_Diggerzz
                         miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         DisplayStuff.DisplayResources(this);
                         break;
-                    case 20:
+                    case 21:
                         Console.WriteLine("You have chosen to move to a new mine");
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
                         MoveToNewMine();
                         break;
+                    
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -581,14 +586,14 @@ namespace Gold_Diggerzz
                 Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
                 Console.WriteLine("Main Features:              Employee Options:                    Display Features:                Real Estate Features:          Other Features:                      |");
                 Console.WriteLine("                                                                                                                                                                      |");
-                Console.WriteLine("0 - Quit game           |   5 - Display employees            |   9 - Display game mechanics   |   13 - Display real estate   |   15 - Use a powerup                   |");
-                Console.WriteLine("1 - Dig one day         |   6 - Hire more employees          |   10 - Display stats           |   14 - Build real estate     |   16 - Commit a crime (more inside)    |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Send employees for training  |   11 - Display achievements    |                              |   17 - Save current progress           |");
-                Console.WriteLine("3 - Go to market        |   8 - Boost employee morale        |   12 - Display tutorial        |   20 - Move to a new mine    |   18 - Load game state                 |");
-                Console.WriteLine("4 - Go to Trader        |                                    |                                |                              |   19 - Skip one day                    |");
+                Console.WriteLine("0 - Quit game           |   5 - Display employees            |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
+                Console.WriteLine("1 - Dig one day         |   6 - Hire employees               |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees               |   12 - Display achievements    |                              |   18 - Save current progress           |");
+                Console.WriteLine("3 - Go to market        |   8 - Send employees for training  |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
+                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale        |                                |                              |   20 - Skip one day                    |");
                 Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 20);
+                int userOption = GetValidInt(0, 21);
                 Console.Clear();
                 return userOption;
             }
