@@ -11,13 +11,14 @@ namespace Gold_Diggerzz
 
     /* current issues
      * LOAD GAME STATE
-        * you can not load a game state because of either casting issues or enumeration operation errors
-        * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
-            * because then i'm just updating the values rather than..shit yeah that works? 
+    * you can not load a game state because of either casting issues or enumeration operation errors
+    * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
+        * because then i'm just updating the values rather than..shit yeah that works?
      * fix the 'Nan' issue - not a number issue (when you have 0 workers?)
      */
 
     /* to-do ideas
+    * better understand what to do with morale 
     * convert all print statements to dollars.Quantity.ToString("N") to have comma separations ? 
     * convert to proper OOP via getters and setters
     * add in comma separations?
@@ -270,13 +271,14 @@ namespace Gold_Diggerzz
             Console.ResetColor();
 
             Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe file to get the latest version of the game)");
+            Console.WriteLine("(idk how but somehow you can now all of a sudden find negative resource... i am trying to fix this)");
             Thread.Sleep(1500);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...\n\n[ENTER]");
             Console.ReadLine();
             Console.Clear();
-
+            
             program.RunGame();
         }
 
@@ -1220,7 +1222,7 @@ namespace Gold_Diggerzz
                     }
 
                     double employeePrice = 0;
-                    double baseMorale = 0;
+                    double baseMorale = 1;
 
                     if (type == "bad")
                     {
@@ -2392,133 +2394,139 @@ namespace Gold_Diggerzz
 
         public void DealWithEmployees(Program _program, bool multipleDaysOrNot)
         {
-            // retirements, returning workers, unwell workers, morale, etc.
-            Random random = new Random();
-            
-            // morale has a semi-half effect on the employee efficiency
-            foreach (Worker worker in _program.workersList)
+            // to fix the Nan issue for now, i'll only update the worker properties if you have more than 0 active
+            if (_program.workersList.Count > 0)
             {
-                worker.efficiency -= (50-worker.Morale)/200;
-            }
-            
-            // reduce morale by 2% for every day worked
-            foreach (Worker worker in _program.workersList)
-            {
-                worker.Morale *= 0.98;
-            }
-
-            // recalculate the average efficiency of the employees
-            double totalEfficiency = 0;
-            foreach (Worker worker in _program.workersList)
-            {
-                totalEfficiency += worker.efficiency;
-            }
-            _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
-
-            // recalculate the average morale of the employees
-            double totalMorale = 0;
-            foreach (Worker worker in _program.workersList)
-            {
-                totalMorale += worker.Morale;
-            }
-            _program._averageEmployeeMorale = totalMorale / _program.workersList.Count;
-            
-            // retiring workers
-            for (int i = _program.workersList.Count - 1; i >= 0; i--)
-            {
-                Worker worker = _program.workersList[i];
-                if (worker.DaysUntilRetirement != 0)
-                {
-                    worker.DaysUntilRetirement -= 1;
-                    worker.DaysWorked += 1;
-                }
-
-                if (worker.DaysUntilRetirement == 0)
-                {
-                    _program.UsedNames.Remove(worker.Name);
-                    worker.RetirementDate = _program._currentDate.Date;
-                    _program.retiredWorkersList.Add(worker);
-                    _program.workersList.Remove(worker);
-                    if (!multipleDaysOrNot)
-                    {
-                        Console.WriteLine($"Employee {worker.Name} has retired. Goodbye! \ud83d\udc4b");
-                        Console.WriteLine($"You now have {_program.workersList.Count} employees");
-                    }
-                }
-            }
-
-            // workers that return (due to training course)
-            List<Worker> tempList = new();
-            foreach (Worker worker in _program.trainingWorkersList)
-            {
-                if (worker.ReturnToWorkDate == _program._currentDate.Date)
-                {
-                    if (!multipleDaysOrNot)
-                    {
-                        Console.WriteLine(
-                            $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
-                    }
-                    
-                    tempList.Add(worker);
-                }
-            }
-
-            foreach (Worker worker in tempList)
-            {
-                _program.trainingWorkersList.Remove(worker);
-                _program.workersList.Add(worker);
-            }
-            
-            // unwell workers
-            if (_program.workersList.Count > 1)
-            {
-                List<Worker> newlyIllWorkers = new List<Worker>();
-
+                // retirements, returning workers, unwell workers, morale, etc.
+                Random random = new Random();
+                
+                // tk i dont truly get morale's effect on efficiency because right now its the exact same as increasing or decreasing efficiency
+                // kinda long but i'll just leave it for now
                 foreach (Worker worker in _program.workersList)
                 {
-                    if (random.Next(0, 100) < worker.EmployeeIllProbability)
+                    worker.efficiency *= worker.Morale;
+                }
+                
+                // reduce morale by 2% for every day worked
+                foreach (Worker worker in _program.workersList)
+                {
+                    worker.Morale *= 0.98;
+                }
+
+                // recalculate the average efficiency of the employees
+                double totalEfficiency = 0;
+                foreach (Worker worker in _program.workersList)
+                {
+                    totalEfficiency += worker.efficiency;
+                }
+                _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
+
+                // recalculate the average morale of the employees
+                double totalMorale = 0;
+                foreach (Worker worker in _program.workersList)
+                {
+                    totalMorale += worker.Morale;
+                }
+                _program._averageEmployeeMorale = totalMorale / _program.workersList.Count;
+                
+                // retiring workers
+                for (int i = _program.workersList.Count - 1; i >= 0; i--)
+                {
+                    Worker worker = _program.workersList[i];
+                    if (worker.DaysUntilRetirement != 0)
+                    {
+                        worker.DaysUntilRetirement -= 1;
+                        worker.DaysWorked += 1;
+                    }
+
+                    if (worker.DaysUntilRetirement == 0)
+                    {
+                        _program.UsedNames.Remove(worker.Name);
+                        worker.RetirementDate = _program._currentDate.Date;
+                        _program.retiredWorkersList.Add(worker);
+                        _program.workersList.Remove(worker);
+                        if (!multipleDaysOrNot)
+                        {
+                            Console.WriteLine($"Employee {worker.Name} has retired. Goodbye! \ud83d\udc4b");
+                            Console.WriteLine($"You now have {_program.workersList.Count} employees");
+                        }
+                    }
+                }
+
+                // workers that return (due to training course)
+                List<Worker> tempList = new();
+                foreach (Worker worker in _program.trainingWorkersList)
+                {
+                    if (worker.ReturnToWorkDate == _program._currentDate.Date)
                     {
                         if (!multipleDaysOrNot)
                         {
                             Console.WriteLine(
-                                $"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                                $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
                         }
                         
-                        newlyIllWorkers.Add(worker);
+                        tempList.Add(worker);
                     }
                 }
 
-                foreach (Worker worker in newlyIllWorkers)
+                foreach (Worker worker in tempList)
                 {
-                    worker.IsIll = true;
-                    worker.ReturnToWorkDate = _program._currentDate.AddDays(3);
-                    _program.workersList.Remove(worker);
-                    _program.illWorkersList.Add(worker);
+                    _program.trainingWorkersList.Remove(worker);
+                    _program.workersList.Add(worker);
                 }
-            }
-
-            // to undo the effects of unwell workers
-            List<Worker> noLongerIllWorkersList = new List<Worker>();
-
-            foreach (Worker worker in _program.illWorkersList)
-            {
-                if (worker.IsIll && worker.ReturnToWorkDate.Date == _program._currentDate.Date)
+                
+                // unwell workers
+                if (_program.workersList.Count > 1)
                 {
-                    if (!multipleDaysOrNot)
+                    List<Worker> newlyIllWorkers = new List<Worker>();
+
+                    foreach (Worker worker in _program.workersList)
                     {
-                        Console.WriteLine(
-                            $"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                        if (random.Next(0, 100) < worker.EmployeeIllProbability)
+                        {
+                            if (!multipleDaysOrNot)
+                            {
+                                Console.WriteLine(
+                                    $"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
+                            }
+                            
+                            newlyIllWorkers.Add(worker);
+                        }
                     }
-                    
-                    noLongerIllWorkersList.Add(worker);
-                }
-            }
 
-            foreach (Worker worker in noLongerIllWorkersList)
-            {
-                worker.IsIll = false;
-                _program.illWorkersList.Remove(worker);
-                _program.workersList.Add(worker);
+                    foreach (Worker worker in newlyIllWorkers)
+                    {
+                        worker.IsIll = true;
+                        worker.ReturnToWorkDate = _program._currentDate.AddDays(3);
+                        _program.workersList.Remove(worker);
+                        _program.illWorkersList.Add(worker);
+                    }
+                }
+
+                // to undo the effects of unwell workers
+                List<Worker> noLongerIllWorkersList = new List<Worker>();
+
+                foreach (Worker worker in _program.illWorkersList)
+                {
+                    if (worker.IsIll && worker.ReturnToWorkDate.Date == _program._currentDate.Date)
+                    {
+                        if (!multipleDaysOrNot)
+                        {
+                            Console.WriteLine(
+                                $"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
+                        }
+                        
+                        noLongerIllWorkersList.Add(worker);
+                    }
+                }
+
+                foreach (Worker worker in noLongerIllWorkersList)
+                {
+                    worker.IsIll = false;
+                    _program.illWorkersList.Remove(worker);
+                    _program.workersList.Add(worker);
+                }
+
             }
 
         }
