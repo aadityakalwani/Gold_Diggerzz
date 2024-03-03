@@ -6,7 +6,5 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
--r RID
--p:PublishSingleFile=true
 
 </Project>
