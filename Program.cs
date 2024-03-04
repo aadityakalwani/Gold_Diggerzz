@@ -8,6 +8,7 @@ namespace Gold_Diggerzz
 
     /* current issues
      * LOAD GAME STATE
+     * you can hire multiple of the same manager at the same time
     * you can not load a game state because of either casting issues or enumeration operation errors
     * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
         * because then i'm just updating the values rather than..shit yeah that'll work?
@@ -1330,14 +1331,13 @@ namespace Gold_Diggerzz
         public double Cost;
         public double TotalDaysWorked;
         
-        public Manager(int daysLeft, int totalDaysWorked, double probabilityMultiplier, string resourceName, double cost)
+        public Manager(int daysLeft, double probabilityMultiplier, string resourceName, double cost)
 
         {
             DaysLeft = daysLeft;
             ProbabilityMultiplier = probabilityMultiplier;
             ResourceName = resourceName;
             Cost = cost;
-            TotalDaysWorked = 0;
         }
 
         public static void ManagerHiringScreen(Program _program)
@@ -1353,47 +1353,82 @@ namespace Gold_Diggerzz
             Console.WriteLine("5 - Hire a diamond manager");
             
             int managerChoice = _program.GetValidInt(0, 5);
-            Manager tempManager;
+            Manager coalManager = new Manager(15, 2, "coal", 1000);
+            Manager stoneManager = new Manager(15, 2, "stone", 1000);
+            Manager ironManager = new Manager(15, 2, "iron", 1000);
+            Manager goldManager = new Manager(15, 2, "gold", 1000);
+            Manager diamondManager = new Manager(15, 2, "diamond", 1000);
 
             switch (managerChoice)
             {
                 case 0:
-                    Console.WriteLine("Returning");
+                    Console.WriteLine("Returning to main menu screen");
                     break;
                 case 1:
-                    tempManager = new Manager(15, 0, 1.5, "coal", 1000);
-                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
-                    _program.dollars.Quantity -= tempManager.Cost;
-                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
-                    _program.managersList.Add(tempManager);
+                    if (_program.managersList.Contains(coalManager))
+                    {
+                        Console.WriteLine("You already have a coal manager");
+                        break;
+                    }
+                    
+                    _program.dollars.Quantity -= coalManager.Cost;
+                    _program.coal.Probability *= coalManager.ProbabilityMultiplier;
+                    _program.managersList.Add(coalManager);
+                    
+                    Console.WriteLine("You have hired a coal manager");
                     break;
                 case 2:
-                    tempManager = new Manager(15, 0, 1.5, "stone", 1000);
-                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
-                    _program.dollars.Quantity -= tempManager.Cost;
-                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
-                    _program.managersList.Add(tempManager);
+                    _program.dollars.Quantity -= stoneManager.Cost;
+                    _program.stone.Probability *= stoneManager.ProbabilityMultiplier;
+                    if (!_program.managersList.Contains(stoneManager))
+                    {
+                        _program.managersList.Add(stoneManager);
+                        Console.WriteLine("You have hired a stone manager");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You already have a stone manager");
+                    }
+
                     break;
                 case 3:
-                    tempManager = new Manager(15, 0, 1.5, "iron", 1000);
-                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
-                    _program.dollars.Quantity -= tempManager.Cost;
-                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
-                    _program.managersList.Add(tempManager);
+                    _program.dollars.Quantity -= ironManager.Cost;
+                    _program.iron.Probability *= ironManager.ProbabilityMultiplier;
+                    if (!_program.managersList.Contains(ironManager))
+                    {
+                        _program.managersList.Add(ironManager);
+                        Console.WriteLine("You have hired an iron manager");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You already have an iron manager");
+                    }
                     break;
                 case 4:
-                    tempManager = new Manager(15, 0, 1.5, "gold", 1000);
-                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
-                    _program.dollars.Quantity -= tempManager.Cost;
-                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
-                    _program.managersList.Add(tempManager);
+                    _program.dollars.Quantity -= goldManager.Cost;
+                    _program.gold.Probability *= goldManager.ProbabilityMultiplier;
+                    if (!_program.managersList.Contains(goldManager))
+                    {
+                        _program.managersList.Add(goldManager);
+                        Console.WriteLine("You have hired a gold manager");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You already have a gold manager");
+                    }
                     break;
                 case 5:
-                    tempManager = new Manager(15, 0, 1.5, "diamond", 1000);
-                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
-                    _program.dollars.Quantity -= tempManager.Cost;
-                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
-                    _program.managersList.Add(tempManager);
+                    _program.dollars.Quantity -= diamondManager.Cost;
+                    _program.diamond.Probability *= diamondManager.ProbabilityMultiplier;
+                    if (!_program.managersList.Contains(diamondManager))
+                    {
+                        _program.managersList.Add(diamondManager);
+                        Console.WriteLine("You have hired a diamond manager");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You already have a diamond manager");
+                    }
                     break;
             }
         }
@@ -3375,7 +3410,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("__________________________________________________________");
             Thread.Sleep(750);
             Console.WriteLine("Current probabilities of finding resources:");
-            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: ${Math.Round(_program.stone.Probability, 2)}");
+            Console.WriteLine($"| Coal: {Math.Round(_program.coal.Probability, 2)}%                | Stone: {Math.Round(_program.stone.Probability, 2)}");
             Console.WriteLine($"| Iron: {Math.Round(_program.iron.Probability, 2)}%                | Gold: {Math.Round(_program.gold.Probability, 2)}%");
             Console.WriteLine($"| Diamond: {Math.Round(_program.diamond.Probability, 2)}%              | Ancient Artefact: {Math.Round(_program.ancientArtefact.Probability, 2)}%");
             Console.WriteLine($"| Market Master: {Math.Round(_program.marketMaster.Probability, 2)}%        | Magic Token: {Math.Round(_program.magicTokens.Probability, 2)}%");
