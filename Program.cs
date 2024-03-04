@@ -34,11 +34,9 @@ namespace Gold_Diggerzz
     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
     * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-    * as the mine gets emptier, chance of finding resources decreases
     * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
     * achievements are OOP-ed? idk about this one - give it some thought
-    * otherwise option to print all achievements as an incentive to work towards them/keep playing
-    * a "mine collapse" event could temporarily reduce the player's digging efficiency ++ kill some employees ++ morale lost
+    * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
     * loans - you can take a loan from the bank and pay it back with interest
     * stock market feature (kinda done?)
         * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
@@ -264,11 +262,12 @@ namespace Gold_Diggerzz
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
 
+            Thread.Sleep(1000);
             Console.WriteLine("Note that this is a work in progress and I'm constantly updating it");
             Console.WriteLine("Periodically re-download the game file to get the latest version of the game");
             Console.WriteLine("If you have any suggestions or feedback, please let me know");
-            Console.WriteLine("\n____________________________________________________________________________________________");
-            Thread.Sleep(1500);
+            Console.WriteLine("\n____________________________________________________________________________________________\n");
+            Thread.Sleep(1000);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...\n\n[ENTER]");
@@ -568,7 +567,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway.");
                 Console.WriteLine("You'll have to learn on the job and prove you're a worthy successor. Good luck!");
-                Thread.Sleep(2500);
+                Thread.Sleep(3000);
             }
         }
 
@@ -1457,7 +1456,12 @@ namespace Gold_Diggerzz
                                     "  \\________/",
                                     "       ||",
                                     "       ||",
-                                    "       ||"
+                                    "       ||",
+                                    "       ||",
+                                    "       ||",
+                                    "      ----",
+                                    "      |   |",
+                                    "       | |"
                                 };
                                 
                                 
