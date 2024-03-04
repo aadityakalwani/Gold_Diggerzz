@@ -1,0 +1,10 @@
+Instructions to share game post
+
+Within rider -> terminal
+Copy pasta all three raycast pinned clipboard items
+Go into the GoldDiggerzz folder
+
+Compress the 'Open Me ' file and rename it to 'Download Me ' via the text replacement !d
+
+Move the 'Download Me ' .zip file to the 'GoldDiggerzz Game Executables (Public)' folder
+Replace it with the current 'Download Me .zip' file in there
