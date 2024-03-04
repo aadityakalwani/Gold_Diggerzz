@@ -269,7 +269,6 @@ namespace Gold_Diggerzz
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("   _____           _       _        _____    _                                            \n  / ____|         | |     | |      |  __ \\  (_)                                           \n | |  __    ___   | |   __| |      | |  | |  _    __ _    __ _    ___   _ __   ____  ____ \n | | |_ |  / _ \\  | |  / _` |      | |  | | | |  / _` |  / _` |  / _ \\ | '__| |_  / |_  / \n | |__| | | (_) | | | | (_| |      | |__| | | | | (_| | | (_| | |  __/ | |     / /   / /  \n  \\_____|  \\___/  |_|  \\__,_|      |_____/  |_|  \\__, |  \\__, |  \\___| |_|    /___| /___| \n                                                  __/ |   __/ |                           \n                                                 |___/   |___/                            \n");
             Console.ResetColor();
-            Console.WriteLine("BLABLABLA");
 
             Console.WriteLine("(Note that this is a work in progress. Periodically re-download the .exe game file to get the latest version of the game)");
             Thread.Sleep(1500);
