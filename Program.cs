@@ -1342,94 +1342,101 @@ namespace Gold_Diggerzz
 
         public static void ManagerHiringScreen(Program _program)
         {
-            Console.WriteLine("You've called the manager hiring screen");
-            Console.WriteLine("Each manager doubles the probability of finding a resource for 15 days and costs $1000");
-            Console.WriteLine("Choose an option:");
-            Console.WriteLine("0 - Cancel and return to the menu");
-            Console.WriteLine("1 - Hire a coal manager");
-            Console.WriteLine("2 - Hire a stone manager");
-            Console.WriteLine("3 - Hire an iron manager");
-            Console.WriteLine("4 - Hire a gold manager");
-            Console.WriteLine("5 - Hire a diamond manager");
-            
-            int managerChoice = _program.GetValidInt(0, 5);
-            Manager coalManager = new Manager(15, 2, "coal", 1000);
-            Manager stoneManager = new Manager(15, 2, "stone", 1000);
-            Manager ironManager = new Manager(15, 2, "iron", 1000);
-            Manager goldManager = new Manager(15, 2, "gold", 1000);
-            Manager diamondManager = new Manager(15, 2, "diamond", 1000);
-
-            switch (managerChoice)
+            if (_program.dollars.Quantity < 1000)
             {
-                case 0:
-                    Console.WriteLine("Returning to main menu screen");
-                    break;
-                case 1:
-                    if (_program.managersList.Contains(coalManager))
-                    {
-                        Console.WriteLine("You already have a coal manager");
-                        break;
-                    }
-                    
-                    _program.dollars.Quantity -= coalManager.Cost;
-                    _program.coal.Probability *= coalManager.ProbabilityMultiplier;
-                    _program.managersList.Add(coalManager);
-                    
-                    Console.WriteLine("You have hired a coal manager");
-                    break;
-                case 2:
-                    _program.dollars.Quantity -= stoneManager.Cost;
-                    _program.stone.Probability *= stoneManager.ProbabilityMultiplier;
-                    if (!_program.managersList.Contains(stoneManager))
-                    {
-                        _program.managersList.Add(stoneManager);
-                        Console.WriteLine("You have hired a stone manager");
-                    }
-                    else
-                    {
-                        Console.WriteLine("You already have a stone manager");
-                    }
+                Console.WriteLine("You don't have enough dollars to hire a manager");
+            }
+            else
+            {
+                Console.WriteLine("You've called the manager hiring screen");
+                Console.WriteLine("Each manager doubles the probability of finding a resource for 15 days and costs $1000");
+                Console.WriteLine("Choose an option:");
+                Console.WriteLine("0 - Cancel and return to the menu");
+                Console.WriteLine("1 - Hire a coal manager");
+                Console.WriteLine("2 - Hire a stone manager");
+                Console.WriteLine("3 - Hire an iron manager");
+                Console.WriteLine("4 - Hire a gold manager");
+                Console.WriteLine("5 - Hire a diamond manager");
+                
+                int managerChoice = _program.GetValidInt(0, 5);
+                Manager coalManager = new Manager(15, 2, "coal", 1000);
+                Manager stoneManager = new Manager(15, 2, "stone", 1000);
+                Manager ironManager = new Manager(15, 2, "iron", 1000);
+                Manager goldManager = new Manager(15, 2, "gold", 1000);
+                Manager diamondManager = new Manager(15, 2, "diamond", 1000);
 
-                    break;
-                case 3:
-                    _program.dollars.Quantity -= ironManager.Cost;
-                    _program.iron.Probability *= ironManager.ProbabilityMultiplier;
-                    if (!_program.managersList.Contains(ironManager))
-                    {
-                        _program.managersList.Add(ironManager);
-                        Console.WriteLine("You have hired an iron manager");
-                    }
-                    else
-                    {
-                        Console.WriteLine("You already have an iron manager");
-                    }
-                    break;
-                case 4:
-                    _program.dollars.Quantity -= goldManager.Cost;
-                    _program.gold.Probability *= goldManager.ProbabilityMultiplier;
-                    if (!_program.managersList.Contains(goldManager))
-                    {
-                        _program.managersList.Add(goldManager);
-                        Console.WriteLine("You have hired a gold manager");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"You already have a gold manager");
-                    }
-                    break;
-                case 5:
-                    _program.dollars.Quantity -= diamondManager.Cost;
-                    _program.diamond.Probability *= diamondManager.ProbabilityMultiplier;
-                    if (!_program.managersList.Contains(diamondManager))
-                    {
-                        _program.managersList.Add(diamondManager);
-                        Console.WriteLine("You have hired a diamond manager");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"You already have a diamond manager");
-                    }
-                    break;
+                switch (managerChoice)
+                {
+                    case 0:
+                        Console.WriteLine("Returning to main menu screen");
+                        break;
+                    case 1:
+                        if (_program.managersList.Contains(coalManager))
+                        {
+                            Console.WriteLine("You already have a coal manager");
+                            break;
+                        }
+                        
+                        _program.dollars.Quantity -= coalManager.Cost;
+                        _program.coal.Probability *= coalManager.ProbabilityMultiplier;
+                        _program.managersList.Add(coalManager);
+                        
+                        Console.WriteLine("You have hired a coal manager");
+                        break;
+                    case 2:
+                        _program.dollars.Quantity -= stoneManager.Cost;
+                        _program.stone.Probability *= stoneManager.ProbabilityMultiplier;
+                        if (!_program.managersList.Contains(stoneManager))
+                        {
+                            _program.managersList.Add(stoneManager);
+                            Console.WriteLine("You have hired a stone manager");
+                        }
+                        else
+                        {
+                            Console.WriteLine("You already have a stone manager");
+                        }
+
+                        break;
+                    case 3:
+                        _program.dollars.Quantity -= ironManager.Cost;
+                        _program.iron.Probability *= ironManager.ProbabilityMultiplier;
+                        if (!_program.managersList.Contains(ironManager))
+                        {
+                            _program.managersList.Add(ironManager);
+                            Console.WriteLine("You have hired an iron manager");
+                        }
+                        else
+                        {
+                            Console.WriteLine("You already have an iron manager");
+                        }
+                        break;
+                    case 4:
+                        _program.dollars.Quantity -= goldManager.Cost;
+                        _program.gold.Probability *= goldManager.ProbabilityMultiplier;
+                        if (!_program.managersList.Contains(goldManager))
+                        {
+                            _program.managersList.Add(goldManager);
+                            Console.WriteLine("You have hired a gold manager");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You already have a gold manager");
+                        }
+                        break;
+                    case 5:
+                        _program.dollars.Quantity -= diamondManager.Cost;
+                        _program.diamond.Probability *= diamondManager.ProbabilityMultiplier;
+                        if (!_program.managersList.Contains(diamondManager))
+                        {
+                            _program.managersList.Add(diamondManager);
+                            Console.WriteLine("You have hired a diamond manager");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You already have a diamond manager");
+                        }
+                        break;
+                }
             }
         }
     }
@@ -1579,8 +1586,7 @@ namespace Gold_Diggerzz
                                     "       ||",
                                     "       ||",
                                     "      ----",
-                                    "      |   |",
-                                    "       | |"
+                                    
                                 };
                                 
                                 
