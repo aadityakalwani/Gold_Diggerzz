@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Threading;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Gold_Diggerzz
 {
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
+    // now probably closer to 45, will recalculate soon
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
 
     /* current issues
      * LOAD GAME STATE
     * you can not load a game state because of either casting issues or enumeration operation errors
     * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
-        * because then i'm just updating the values rather than..shit yeah that works?
-     * fix the 'Nan' issue - not a number issue (when you have 0 workers?)
+        * because then i'm just updating the values rather than..shit yeah that'll work?
      */
 
     /* to-do ideas
-    * better understand what to do with morale
-     * use powerup runGame case 16 might need prettifying and fixing
+    * better understand what to do with morale - right now its just a multiplier for efficiency
+    * use powerup runGame case 16 might need prettifying and fixing
     * convert all print statements to dollars.Quantity.ToString("N") to have comma separations? 
     * convert to proper OOP via getters and setters
     * you are allowed to make multiple trades per day
@@ -34,13 +30,11 @@ namespace Gold_Diggerzz
        * goals to reach
        * if you reach _______ income you can find ______
     * create reputation (do i need to? ++ how will this work with morale?)
-    * make the employee morale actually do something
     * a morale-boosting powerup
     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
-    * a 'mine emptiness', where the player has to move to a new mine and start again (acting as prestige)
-       * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-       * as the mine gets emptier, chance of finding resources decreases
+    * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
+    * as the mine gets emptier, chance of finding resources decreases
     * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
     * achievements are OOP-ed? idk about this one - give it some thought
     * otherwise option to print all achievements as an incentive to work towards them/keep playing
@@ -93,7 +87,7 @@ namespace Gold_Diggerzz
         public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
-        public double _currentEmployeePrice = 100;
+        public double _currentEmployeePrice = 200;
         public DateTime _currentDate = new DateTime(2024, 1, 1);
         private static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
@@ -272,7 +266,8 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("Note that this is a work in progress and I'm constantly updating it");
             Console.WriteLine("Periodically re-download the game file to get the latest version of the game");
-            Console.WriteLine("If you have any suggestions or feedback, please let me know.\nHave Fun\n");
+            Console.WriteLine("If you have any suggestions or feedback, please let me know");
+            Console.WriteLine("\n____________________________________________________________________________________________");
             Thread.Sleep(1500);
             
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
@@ -401,10 +396,11 @@ namespace Gold_Diggerzz
                         break;
                     case 16:
 
-                        if (ancientArtefact.Quantity == 0 && timeMachine.Quantity == 0 &&
-                            marketMaster.Quantity == 0)
+                        if (ancientArtefact.Quantity <= 0 && timeMachine.Quantity <= 0 &&
+                            marketMaster.Quantity <= 0)
                         {
                             Console.WriteLine("\u274c You don't have any powerups to use \u274c");
+                            Console.WriteLine("(also idk how but it might say you have negative powerups, ignore that for now... i'll fix it later)");
                             break;
                         }
 
@@ -421,10 +417,8 @@ namespace Gold_Diggerzz
                             case 1:
                                 if (ancientArtefact.Quantity >= 0)
                                 {
-                                    Console.WriteLine(
-                                        "You have chosen to use an Ancient Artefact. Choose an option:");
-                                    Console.WriteLine(
-                                        "1 - Increase the probability of finding gold to 50% for 3 days");
+                                    Console.WriteLine("You have chosen to use an Ancient Artefact. Choose an option:");
+                                    Console.WriteLine("1 - Increase the probability of finding gold to 50% for 3 days");
                                     Console.WriteLine("2 - $200 instantly");
                                     int ancientArtefactChoice = GetValidInt(1, 2);
                                     UsePowerUp(powerUpChoice, ancientArtefactChoice);
@@ -558,7 +552,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("He gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
                 Thread.Sleep(2500);
                 Console.WriteLine("\nAs you dig for resources, you can sell them at the market to earn money.");
-                Console.WriteLine("As you gain money and look to expand, you can hire more employees (either from the market, or from the menu).");
+                Console.WriteLine("As you gain money and look to expand, you can hire more employees.");
                 Console.WriteLine("You can also build real estate to earn passive income, but that's for later.");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
                 Thread.Sleep(2000);
@@ -572,7 +566,8 @@ namespace Gold_Diggerzz
 
             else
             {
-                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway. You'll have to learn on the job and prove you're a worthy successor. Good luck!");
+                Console.WriteLine("He frowns upon your arrogance, but decides to give you the company anyway.");
+                Console.WriteLine("You'll have to learn on the job and prove you're a worthy successor. Good luck!");
                 Thread.Sleep(2500);
             }
         }
@@ -648,20 +643,17 @@ namespace Gold_Diggerzz
                     dollars.Quantity += changeInDollars;
                     _totalDollarsEarned += changeInDollars;
                     
-                    
                     // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
                     if (dollars.Quantity + changeInDollars > workersList.Count * _currentWageRate)
                     {
-                        Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have negative money, no resources, and one employee.\nYou have disappointed your father...");
+                        Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have no resources, and you can't afford to pay your workers for another day.\nYou have disappointed your father...");
                         Thread.Sleep(2500);
                         Console.WriteLine("..You have failed the game\ud83d\udca9\ud83d\udca9");
                         Thread.Sleep(1500);
                         return "bankrupt";
                     }
                     
-                    
                     // else, get the bossman on your case
-                    
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Thread.Sleep(2000);
                     Console.WriteLine("You are in debt, bossman is coming for you \ud83d\ude22");
@@ -2215,6 +2207,14 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Because you have less than 5 employees, you got lucky");
                         Console.WriteLine("None of your employees died, but they sure as hell had a fright! their morale has permanently halved");
                     }
+
+                    else
+                    {
+                        Console.WriteLine("You have no employees, so the earthquake had no effect on your workers");
+                        Console.WriteLine("Either that or somehow you've managed to make this bit of code run");
+                        Console.WriteLine("This bit of code should only run if you do not have more than 5 workers and if you do not have less than 5 workers");
+                        Console.WriteLine("Pls tell me if you see this because this should never occur");
+                    }
                     
                     foreach (Worker worker in _program.workersList)
                     {
@@ -2778,7 +2778,7 @@ namespace Gold_Diggerzz
                     _program.dollars.Quantity += realEstate.WeeklyRentQuantity;
                     if (!multipleDaysOrNot)
                     {
-                        Console.WriteLine($"You have received ${realEstate.WeeklyRentQuantity} in rent from your {realEstate.Type} \ud83c\udfd8\ufe0f \ud83e\udd11");
+                        Console.WriteLine($"You have received {realEstate.WeeklyRentQuantity} {realEstate.WeeklyRentResource} in rent from your {realEstate.Type} \ud83c\udfd8\ufe0f \ud83e\udd11");
                     }
                 }
             }
@@ -2832,6 +2832,12 @@ namespace Gold_Diggerzz
             }   
             
             _program.minePercentageFullness -= 1;
+            _program.coal.Probability *= 0.99;
+            _program.stone.Probability *= 0.99;
+            _program.iron.Probability *= 0.99;
+            _program.gold.Probability *= 0.99;
+            _program.diamond.Probability *= 0.99;
+            
         }
     }
     
@@ -2880,7 +2886,7 @@ namespace Gold_Diggerzz
             program.stone = new Resource("Stone", 65, 5, 0, 0);
             program.iron = new Resource("Iron", 50, 12, 0, 0);
             program.gold = new Resource("Gold", 17, 60, 0, 0);
-            program.diamond = new Resource("Diamond", 8, 90, 0, 0);
+            program.diamond = new Resource("Diamond", 10, 90, 0, 0);
             program.dollars = new Resource("Dollars", 0, 0, 100, 0);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
