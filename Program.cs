@@ -90,6 +90,8 @@ namespace Gold_Diggerzz
         private static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
 
+        public List<Manager> managersList = new();
+
         public List<Worker> illWorkersList = new();
         public List<Worker> retiredWorkersList = new();
         public List<Worker> deadWorkersList = new();
@@ -512,10 +514,14 @@ namespace Gold_Diggerzz
                         break;
                     case 21:
                         Console.WriteLine("You have chosen to move to a new mine");
-                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined");
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
                         MoveToNewMine();
                         break;
-                    
+                    case 22:
+                        Console.WriteLine("You have chosen to hire a manager");
+                        Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
+                        Manager.ManagerHiringScreen(this);
+                        break;                    
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -587,9 +593,10 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees               |   12 - Display achievements    |                              |   18 - Save current progress           |");
                 Console.WriteLine("3 - Go to market        |   8 - Send employees for training  |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
                 Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale        |                                |                              |   20 - Skip one day                    |");
+                Console.WriteLine("                        |   22 - Hire manager");
                 Console.WriteLine("\nEnter your choice:");
 
-                int userOption = GetValidInt(0, 21);
+                int userOption = GetValidInt(0, 22);
                 Console.Clear();
                 return userOption;
             }
@@ -1314,6 +1321,83 @@ namespace Gold_Diggerzz
             }
         }
     }
+
+    class Manager
+    {
+        public int DaysLeft;
+        public double ProbabilityMultiplier;
+        public string ResourceName;
+        public double Cost;
+        public double TotalDaysWorked;
+        
+        public Manager(int daysLeft, int totalDaysWorked, double probabilityMultiplier, string resourceName, double cost)
+
+        {
+            DaysLeft = daysLeft;
+            ProbabilityMultiplier = probabilityMultiplier;
+            ResourceName = resourceName;
+            Cost = cost;
+            TotalDaysWorked = 0;
+        }
+
+        public static void ManagerHiringScreen(Program _program)
+        {
+            Console.WriteLine("You've called the manager hiring screen");
+            Console.WriteLine("Each manager doubles the probability of finding a resource for 15 days and costs $1000");
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("0 - Cancel and return to the menu");
+            Console.WriteLine("1 - Hire a coal manager");
+            Console.WriteLine("2 - Hire a stone manager");
+            Console.WriteLine("3 - Hire an iron manager");
+            Console.WriteLine("4 - Hire a gold manager");
+            Console.WriteLine("5 - Hire a diamond manager");
+            
+            int managerChoice = _program.GetValidInt(0, 5);
+            Manager tempManager;
+
+            switch (managerChoice)
+            {
+                case 0:
+                    Console.WriteLine("Returning");
+                    break;
+                case 1:
+                    tempManager = new Manager(15, 0, 1.5, "coal", 1000);
+                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
+                    _program.dollars.Quantity -= tempManager.Cost;
+                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
+                    _program.managersList.Add(tempManager);
+                    break;
+                case 2:
+                    tempManager = new Manager(15, 0, 1.5, "stone", 1000);
+                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
+                    _program.dollars.Quantity -= tempManager.Cost;
+                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
+                    _program.managersList.Add(tempManager);
+                    break;
+                case 3:
+                    tempManager = new Manager(15, 0, 1.5, "iron", 1000);
+                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
+                    _program.dollars.Quantity -= tempManager.Cost;
+                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
+                    _program.managersList.Add(tempManager);
+                    break;
+                case 4:
+                    tempManager = new Manager(15, 0, 1.5, "gold", 1000);
+                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
+                    _program.dollars.Quantity -= tempManager.Cost;
+                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
+                    _program.managersList.Add(tempManager);
+                    break;
+                case 5:
+                    tempManager = new Manager(15, 0, 1.5, "diamond", 1000);
+                    Console.WriteLine($"You have hired a {tempManager.ResourceName} manager");
+                    _program.dollars.Quantity -= tempManager.Cost;
+                    _program.coal.Probability *= tempManager.ProbabilityMultiplier;
+                    _program.managersList.Add(tempManager);
+                    break;
+            }
+        }
+    }
     
     class Trade
     {
@@ -1810,6 +1894,7 @@ namespace Gold_Diggerzz
                         _DayToDayOperations.CalendarEffects(_program, multipleDayDig);
                         _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
                         _DayToDayOperations.DealWithEmployees(_program, multipleDayDig);
+                        _DayToDayOperations.DealWithManagers(_program, multipleDayDig);
                         _DayToDayOperations.FluctuatePrices(_program, multipleDayDig);
                         _DayToDayOperations.CheckRealEstate(_program, multipleDayDig);
                         _DayToDayOperations.MineEmptinessUpdate(_program, multipleDayDig);
@@ -2564,6 +2649,61 @@ namespace Gold_Diggerzz
                 Console.WriteLine("You have 0 active employees so i didnt do anything in the hopes of solving an error");
             }
 
+        }
+
+        public void DealWithManagers(Program _program, bool multipleDaysOrNot)
+        {
+            List<Manager> leftManagersList = new List<Manager>();
+            
+            foreach (Manager manager in _program.managersList)
+            {
+                if (manager.DaysLeft == 1)
+                {
+                    manager.DaysLeft = 0;
+                    manager.TotalDaysWorked += 1;
+                    Console.WriteLine($"Your {manager.ResourceName} manager has left. You can re-hire them from the menu. Goodbye to them! \ud83d\udc4b");
+                    leftManagersList.Add(manager);
+                    if (manager.ResourceName == "coal")
+                    {
+                        _program.coal.Probability /= manager.ProbabilityMultiplier;
+                    }
+                    else if (manager.ResourceName == "stone")
+                    {
+                        _program.stone.Probability /= manager.ProbabilityMultiplier;
+                    }
+                    else if (manager.ResourceName == "iron")
+                    {
+                        _program.iron.Probability /= manager.ProbabilityMultiplier;
+                    }
+                    else if (manager.ResourceName == "gold")
+                    {
+                        _program.gold.Probability /= manager.ProbabilityMultiplier;
+                    }
+                    else if (manager.ResourceName == "diamond")
+                    {
+                        _program.diamond.Probability /= manager.ProbabilityMultiplier;
+                    }
+
+                }
+                
+                else if (manager.DaysLeft != 0)
+                {
+                    manager.DaysLeft -= 1;
+                    manager.TotalDaysWorked += 1;
+                }
+
+                if (!multipleDaysOrNot)
+                {
+                    Console.WriteLine($"Your {manager.ResourceName} manager has {manager.DaysLeft} days left of work");
+                }
+                
+            }
+            
+            foreach (Manager manager in leftManagersList)
+            {
+                _program.managersList.Remove(manager);
+            }
+            
         }
 
         public void CheckAchievements(List<string> achievements, Program _program)
