@@ -8,3 +8,5 @@ Compress the 'Open Me ' file and rename it to 'Download Me ' via the text replac
 
 Move the 'Download Me ' .zip file to the 'GoldDiggerzz Game Executables (Public)' folder
 Replace it with the current 'Download Me .zip' file in there
+
+Profit
