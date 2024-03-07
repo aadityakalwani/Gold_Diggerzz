@@ -18,6 +18,7 @@ namespace Gold_Diggerzz
     * better understand what to do with morale - right now its just a multiplier for efficiency
     * convert to proper traditional OOP via getters and setters
     * you are allowed to make multiple trades per day
+    * warn the player about running out of inventory space 
     * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because cba to do it properly
     * also you have a ‘max inventory’ eg. you can store a max of 100kg of total resources and you can upgrade the capacity
     * you gotta upgrade you're shovel to unlock more materials 
@@ -49,7 +50,7 @@ namespace Gold_Diggerzz
         # region global variables
 
         public bool _animation = true;
-        public double _upgradeInventoryCost;
+        public double _upgradeInventoryCost = 1000;
         public int _increasedGoldChanceDays;
         public int _marketMasterDaysLeft;
         public int _noWageDaysLeft;
@@ -385,12 +386,12 @@ namespace Gold_Diggerzz
                         Console.WriteLine("(Tip: to gain more of a specific resource, convert resources at the trader)\n");
                         Console.WriteLine("What real estate do you want to build?");
                         Console.WriteLine("0. Cancel");
-                        Console.WriteLine("1. Apartment - $10,000, 5 days to build, $3,000 weekly rent");
-                        Console.WriteLine("2. House - 100kg coal, 10 days to build, 30kg coal weekly rent");
-                        Console.WriteLine("3. Office - 100kg stone, 15 days to build, 30kg stone weekly rent");
-                        Console.WriteLine("4. Mansion - 100kg iron, 20 days to build, 30kg iron weekly rent");
-                        Console.WriteLine("5. Castle - 100kg gold, 25 days to build, 30kg gold weekly rent");
-                        Console.WriteLine("6. Palace - 100kg diamond, 30 days to build, 30kg diamond weekly rent");
+                        Console.WriteLine("1. Apartment - Cost: $10,000, $3,000 weekly rent");
+                        Console.WriteLine("2. House - Cost: 100kg coal, 30kg coal weekly rent");
+                        Console.WriteLine("3. Office - Cost: 100kg stone, 30kg stone weekly rent");
+                        Console.WriteLine("4. Mansion - Cost: 100kg iron, 30kg iron weekly rent");
+                        Console.WriteLine("5. Castle - Cost: 100kg gold, 30kg gold weekly rent");
+                        Console.WriteLine("6. Palace - Cost: 100kg diamond, 30kg diamond weekly rent");
                         int choice = GetValidInt(0, 6);
                         RealEstate.BuildRealEstate(choice, this);
                         Thread.Sleep(2000);
@@ -533,12 +534,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine("\nAs you dig for resources, you can sell them at the market to earn money.");
                 Console.WriteLine("As you gain money and look to expand, you can hire more employees.");
                 Console.WriteLine("You can also build real estate to earn passive income, but that's for later.");
+                Console.WriteLine("\n________________________________________________________________________________________________________________________________________");
+                Thread.Sleep(2000);
+                Console.WriteLine("To begin, enter '1' in the main menu to dig for resources                                                                              |");
+                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins   |");
+                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options                                     |");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
-                Thread.Sleep(2000);
-                Console.WriteLine("To begin, enter '1' in the main menu to dig for resources.");
-                Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins.");
-                Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options.");
-                Thread.Sleep(2000);
+                Thread.Sleep(3500);
                 Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
                 Console.ReadLine();
             }
@@ -1564,7 +1566,7 @@ namespace Gold_Diggerzz
                                 
                                 for (int i = 0; i < 15; i++)
                                 {
-                                    Thread.Sleep(80);
+                                    Thread.Sleep(100);
                                     Console.Clear();
                                     for (int j = 0; j < shovel.Length; j++)
                                     {
@@ -2000,8 +2002,8 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     _program.coal.Quantity -= coalToSell;
-                                    _program.dollars.Quantity += _program.coal.Quantity * _program.coal.Price;
-                                    _program._totalDollarsEarned += _program.coal.Quantity * _program.coal.Price;
+                                    _program.dollars.Quantity += coalToSell * _program.coal.Price;
+                                    _program._totalDollarsEarned += coalToSell * _program.coal.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2019,8 +2021,8 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     _program.stone.Quantity -= stoneToSell;
-                                    _program.dollars.Quantity += _program.stone.Quantity * _program.stone.Price;
-                                    _program._totalDollarsEarned += _program.stone.Quantity * _program.stone.Price;
+                                    _program.dollars.Quantity += stoneToSell * _program.stone.Price;
+                                    _program._totalDollarsEarned += stoneToSell * _program.stone.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2037,8 +2039,8 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     _program.iron.Quantity -= ironToSell;
-                                    _program.dollars.Quantity += _program.iron.Quantity * _program.iron.Price;
-                                    _program._totalDollarsEarned += _program.iron.Quantity * _program.iron.Price;
+                                    _program.dollars.Quantity += ironToSell * _program.iron.Price;
+                                    _program._totalDollarsEarned += ironToSell * _program.iron.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2055,8 +2057,8 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     _program.gold.Quantity -= goldToSell;
-                                    _program.dollars.Quantity += _program.gold.Quantity * _program.gold.Price;
-                                    _program._totalDollarsEarned += _program.gold.Quantity * _program.gold.Price;
+                                    _program.dollars.Quantity += goldToSell * _program.gold.Price;
+                                    _program._totalDollarsEarned += goldToSell * _program.gold.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2074,9 +2076,8 @@ namespace Gold_Diggerzz
                                 else
                                 {
                                     _program.diamond.Quantity -= diamondToSell;
-                                    _program.dollars.Quantity += _program.diamond.Quantity * _program.diamond.Price;
-                                    _program._totalDollarsEarned +=
-                                        _program.diamond.Quantity * _program.diamond.Price;
+                                    _program.dollars.Quantity += diamondToSell * _program.diamond.Price;
+                                    _program._totalDollarsEarned += diamondToSell * _program.diamond.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2695,7 +2696,6 @@ namespace Gold_Diggerzz
                     {
                         _program.diamond.Probability /= manager.ProbabilityMultiplier;
                     }
-
                 }
                 
                 else if (manager.DaysLeft != 0)
@@ -3260,13 +3260,15 @@ namespace Gold_Diggerzz
         public int DaysLeftToBuild;
         public double WeeklyRentQuantity;
         public string WeeklyRentResource;
+        public double Cost;
         
-        public RealEstate(string type, int daysLeftToBuild, double weeklyRentQuantity, string weeklyRentResource)
+        public RealEstate(string type, int daysLeftToBuild, double weeklyRentQuantity, string weeklyRentResource, double cost)
         {
             Type = type;
             DaysLeftToBuild = daysLeftToBuild;
             WeeklyRentQuantity = weeklyRentQuantity;
             WeeklyRentResource = weeklyRentResource;
+            Cost = cost;
         }
 
         public static void BuildRealEstate(int choice, Program _program)
@@ -3278,128 +3280,124 @@ namespace Gold_Diggerzz
                     break;
                 
                 case 1:
-                    if (_program.dollars.Quantity < 10000)
+                    
+                    RealEstate apartment = new RealEstate("apartment", 5, 300, "dollars", 1000);
+                    if (_program.dollars.Quantity < apartment.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build an apartment");
                         break;
                     }
-                    
-                    RealEstate apartment = new RealEstate("apartment", 5, 300, "dollars");
                     if (_program.activeRealEstate.Contains(apartment))
                     {
                         Console.WriteLine("You already have an apartment");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new apartment");
-                    Console.WriteLine("Your apartment will be ready in 5 days");
-                    Console.WriteLine("You will earn $3,000 every Monday from this apartment");
-                    Console.WriteLine("You have been charged $10,000 for the construction of this apartment");
-                    _program.dollars.Quantity -= 10000;
+                    Console.WriteLine($"Your apartment will be ready in {apartment.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn ${apartment.WeeklyRentQuantity} every Monday from this apartment");
+                    Console.WriteLine($"You have been charged ${apartment.Cost} for the construction of this apartment");
+                    _program.dollars.Quantity -= apartment.Cost;
                     _program.buildingRealEstateList.Add(apartment);
                     break;
                 
                 case 2:
-                    if (_program.coal.Quantity < 100)
+                    RealEstate house = new RealEstate("house", 5, 300, "coal", 100);
+                    if (_program.coal.Quantity < house.Cost)
                     {
                         Console.WriteLine("You don't have enough coal to build a house");
                         break;
                     }
-                    
-                    RealEstate house = new RealEstate("house", 10, 30, "coal");
                     if (_program.activeRealEstate.Contains(house))
                     {
-                        Console.WriteLine("You already have a house");
+                        Console.WriteLine("You already have an house");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new house");
-                    Console.WriteLine("Your house will be ready in 10 days");
-                    Console.WriteLine($"You will earn 30kg coal every Monday from this house");
-                    Console.WriteLine("You have been charged 100kg of coal for the construction of this house");
-                    _program.coal.Quantity -= 100;
+                    Console.WriteLine($"Your house will be ready in {house.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn {house.WeeklyRentQuantity}kg {house.WeeklyRentResource} every Monday from this house");
+                    Console.WriteLine($"You have been charged {house.Cost}kg of {house.WeeklyRentResource} for the construction of this house");
+                    
+                    _program.coal.Quantity -= house.Cost;
                     _program.buildingRealEstateList.Add(house);
                     break;
                 
                 case 3:
-                    if (_program.stone.Quantity < 100)
+                    RealEstate office = new RealEstate("office", 5, 300, "stone", 100);
+                    if (_program.stone.Quantity < 10000)
                     {
-                        Console.WriteLine("You don't have enough stone to build an office");
+                        Console.WriteLine("You don't have enough money to build an office");
                         break;
                     }
-                    
-                    RealEstate office = new RealEstate("office", 15, 30, "stone");
                     if (_program.activeRealEstate.Contains(office))
                     {
                         Console.WriteLine("You already have an office");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new office");
-                    Console.WriteLine("Your office will be ready in 15 days");
-                    Console.WriteLine("You will earn 30kg stone every Monday from this office");
-                    Console.WriteLine("You have been charged 100kg of stone for the construction of this office");
-                    _program.stone.Quantity -= 100;
+                    Console.WriteLine($"Your office will be ready in {office.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn {office.WeeklyRentQuantity}kg {office.WeeklyRentResource} every Monday from this office");
+                    Console.WriteLine($"You have been charged {office.Cost}kg of {office.WeeklyRentResource} for the construction of this office");
+                    _program.stone.Quantity -= office.Cost;
                     _program.buildingRealEstateList.Add(office);
                     break;
                 
                 case 4:
-                    if (_program.iron.Quantity < 100)
+                    RealEstate mansion = new RealEstate("mansion", 5, 300, "iron", 100);
+                    if (_program.iron.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough iron to build a mansion");
                         break;
                     }
-                    
-                    RealEstate mansion = new RealEstate("mansion", 20, 30, "iron");
                     if (_program.activeRealEstate.Contains(mansion))
                     {
                         Console.WriteLine("You already have a mansion");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new mansion");
-                    Console.WriteLine("Your mansion will be ready in 20 days");
-                    Console.WriteLine("You will earn 30kg iron every Monday from this mansion");
-                    Console.WriteLine("You have been charged 100kg of iron for the construction of this mansion");
-                    _program.iron.Quantity -= 100;
+                    Console.WriteLine($"Your mansion will be ready in {mansion.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn {mansion.WeeklyRentQuantity}kg {mansion.WeeklyRentResource} every Monday from this mansion");
+                    Console.WriteLine($"You have been charged {mansion.Cost}kg of {mansion.WeeklyRentResource} for the construction of this mansion");
+                    _program.iron.Quantity -= mansion.Cost;
                     _program.buildingRealEstateList.Add(mansion);
                     break;
                 
                 case 5:
-                    if (_program.gold.Quantity < 100)
+                    RealEstate castle = new RealEstate("castle", 5, 300, "gold", 100);
+                    if (_program.gold.Quantity < 10000)
                     {
-                        Console.WriteLine("You don't have enough gold to build a castle");
+                        Console.WriteLine("You don't have enough money to build a castle");
                         break;
                     }
-                    
-                    RealEstate castle = new RealEstate("castle", 25, 30, "gold");
                     if (_program.activeRealEstate.Contains(castle))
                     {
                         Console.WriteLine("You already have a castle");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new castle");
-                    Console.WriteLine("Your castle will be ready in 25 days");
-                    Console.WriteLine("You will earn 30kg iron every Monday from this castle");
-                    Console.WriteLine("You have been charged 100kg of gold for the construction of this castle");
-                    _program.gold.Quantity -= 100;
+                    Console.WriteLine($"Your castle will be ready in {castle.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn {castle.WeeklyRentQuantity}kg {castle.WeeklyRentResource} every Monday from this castle");
+                    Console.WriteLine($"You have been charged {castle.Cost}kg of {castle.WeeklyRentResource} for the construction of this castle");
+                    _program.gold.Quantity -= castle.Cost;
                     _program.buildingRealEstateList.Add(castle);
                     break;
                 
                 case 6:
-                    if (_program.diamond.Quantity < 100)
+                    RealEstate palace = new RealEstate("palace", 5, 300, "diamond", 100);
+                    if (_program.diamond.Quantity < 10000)
                     {
-                        Console.WriteLine("You don't have enough diamonds to build a palace");
+                        Console.WriteLine("You don't have enough money to build a palace");
                         break;
                     }
-                    
-                    RealEstate palace = new RealEstate("palace", 30, 30, "diamond");
                     if (_program.activeRealEstate.Contains(palace))
                     {
                         Console.WriteLine("You already have a palace");
                         break;
                     }
                     Console.WriteLine("You have chosen to build a new palace");
-                    Console.WriteLine("Your palace will be ready in 30 days");
-                    Console.WriteLine("You will earn 30kg diamond every Monday from this palace");
-                    Console.WriteLine("You have been charged 100kg of diamonds for the construction of this palace");
-                    _program.diamond.Quantity -= 100;
+                    Console.WriteLine($"Your palace will be ready in {palace.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn {palace.WeeklyRentQuantity}kg {palace.WeeklyRentResource} every Monday from this palace");
+                    Console.WriteLine($"You have been charged {palace.Cost}kg of {palace.WeeklyRentResource} for the construction of this palace");
+                    _program.diamond.Quantity -= palace.Cost;
                     _program.buildingRealEstateList.Add(palace);
                     break;
             }
