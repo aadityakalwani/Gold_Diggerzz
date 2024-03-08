@@ -1,0 +1,6 @@
+Because you're on a Windows device, things are easy
+
+Once you've downloaded the 'Download This File.zip' file,
+simply open the Windows folder and then double click to run the .exe file
+
+Done, simple

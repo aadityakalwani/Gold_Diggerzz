@@ -1,0 +1,20 @@
+Because you're on a Mac, we have to bypass the fact that MacOS doesn't like you running an executable file that isn't from an identified developer.
+
+(You only have to do this once each time you download the game)
+
+Download the 'Download This File.zip'
+Depending on what Mac you have, either open the Intel game or the Apple Silicon game
+Double click the file that has a black icon (NOT the .pbd file)
+
+It will scream at you, telling you "youre not allowed to do this"
+Click "OK"
+
+Open settings
+Go to security & privacy
+Scroll down a bit
+
+Just below where it says 'allow apps from identified developers only', it should say "GoldDiggerzz was restricted from opening"
+Click "Open Anyway"
+Wait a second, the game should load up for you.
+
+From next time you want to play, simply double click the black icon file and then it should just run with no error from there onwards
