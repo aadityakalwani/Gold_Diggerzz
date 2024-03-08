@@ -8,6 +8,7 @@ namespace Gold_Diggerzz
 
     /* current issues
      * LOAD GAME STATE
+     * morale drops too quickly
      * you can hire multiple of the same manager at the same time
      * you can not load a game state because of either casting issues or enumeration operation errors
      * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
@@ -19,7 +20,7 @@ namespace Gold_Diggerzz
     * convert to proper traditional OOP via getters and setters
     * you are allowed to make multiple trades per day
     * You can have negative power ups
-    * Sell/fire employees code - initial menu option and subrotuine created within the Worker class
+    * Sell/fire employees code - initial menu option and subroutine created within the Worker class
     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
     * adding more incentive to keep playing
        * option to print all achievements and show if unlocked or not yet 
@@ -33,7 +34,6 @@ namespace Gold_Diggerzz
     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
     * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-    
     * achievements are OOP-ed? idk about this one - give it some thought
     * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
     * loans - you can take a loan from the bank and pay it back with interest
@@ -554,7 +554,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
                 Console.WriteLine("Main Features:              Employee Options:               Display Features:                Real Estate Features:          Other Features:                      |");
-                Console.WriteLine("                                                                                                                                                                      |");
+                Console.WriteLine("                                                                                                                                                                 |");
                 Console.WriteLine("0 - Quit game           |   5 - Display employees       |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
                 Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
                 Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Display achievements    |                              |   18 - Save current progress           |");
@@ -617,6 +617,8 @@ namespace Gold_Diggerzz
                     _totalDollarsEarned += changeInDollars;
                     
                     // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
+                    // - disabled for now
+                    /*
                     if (dollars.Quantity + changeInDollars > workersList.Count * _currentWageRate)
                     {
                         Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have no resources, and you can't afford to pay your workers for another day.\nYou have disappointed your father...");
@@ -625,6 +627,7 @@ namespace Gold_Diggerzz
                         Thread.Sleep(1500);
                         return "bankrupt";
                     }
+                    */
                     
                     // else, get the bossman on your case
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
@@ -906,6 +909,7 @@ namespace Gold_Diggerzz
         public bool IsIll;
         public DateTime ReturnToWorkDate;
         public double Morale;
+        public double BaseMorale;
 
         public Worker(string type, string name, double wage, double price, double employeeIllProbability, double Efficiency, double baseMorale)
         {
@@ -922,6 +926,7 @@ namespace Gold_Diggerzz
                 HireDate = DateTime.Today;
                 ReturnToWorkDate = DateTime.Today;
                 Morale = baseMorale;
+                BaseMorale = baseMorale;
             }
             
             else if (type == "mid")
@@ -1243,7 +1248,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("Choose an option to improve employee morale:");
             Console.WriteLine("0 - Cancel and return to the menu");
             Console.WriteLine("1 - Increase wage by 20% --> 20% morale increase");
-            Console.WriteLine($"2 - Give a bonus of {_program.bonus.Price} to each employee --> 10% morale increase");
+            Console.WriteLine($"2 - Give a bonus of ${_program.bonus.Price} to each employee --> 30% morale increase");
             Console.WriteLine($"3 - Offer a retirement package for {_program.retirementPackage} for all employees when they retire --> 25% morale increase");
             
             int userInput = _program.GetValidInt(0, 3);
@@ -1256,11 +1261,12 @@ namespace Gold_Diggerzz
                 
                 case 1:
                     Console.WriteLine("You have chosen to increase the wage of all employees by 20%");
+                    Console.WriteLine("Their morales will increase by 50% as a result \ud83d\ude0a");
                     _program._currentWageRate *= 1.2;
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.Wage *= 1.2;
-                        worker.Morale *= 1.2;
+                        worker.Morale +=  1.5;
                     }
                     break;
                 
@@ -1564,7 +1570,7 @@ namespace Gold_Diggerzz
                                 
                                 for (int i = 0; i < 15; i++)
                                 {
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(80);
                                     Console.Clear();
                                     for (int j = 0; j < shovel.Length; j++)
                                     {
@@ -2166,13 +2172,13 @@ namespace Gold_Diggerzz
                     {
                         Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
-                        Console.WriteLine("They also lose 45% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
+                        Console.WriteLine("They also lose 20% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
                     }
                     
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Hurricane.EfficiencyMultiplier;
-                        worker.Morale /= 1.45;
+                        worker.Morale /= 1.2;
                     }
                     Hurricane.DaysLeft = 4;
                     _program.ActiveWeatherEffectsList.Add(Hurricane);
@@ -2207,13 +2213,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine(
                             "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
-                        Console.WriteLine("They also lose 15% of their morale because nobody likes working when its raining \ud83d\ude2d");
+                        Console.WriteLine("They also lose 5% of their morale because nobody likes working when its raining \ud83d\ude2d");
                     }
                     
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Rain.EfficiencyMultiplier;
-                        worker.Morale /= 1.15;
+                        worker.Morale /= 1.05;
                     }
 
                     Rain.DaysLeft = 3;
@@ -2482,7 +2488,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("Each employee will 10% of your current $$$ stash, meaning:");
                     Console.WriteLine($"Your {_program.workersList.Count} employees get ${Math.Round(_program.dollars.Quantity * 0.1, 2)} each");
-                    Console.WriteLine("1 - Share profits with employees (+20% morale \ud83d\udcc8)\n2 - Keep profits for yourself (-20% morale \ud83d\udcc9)\nEnter your choice:");
+                    Console.WriteLine("1 - Share profits with employees (+50% morale \ud83d\udcc8)\n2 - Keep profits for yourself (-10% morale \ud83d\udcc9)\nEnter your choice:");
                     int profitSharingChoice = _program.GetValidInt(1, 2);
                     
                     double dollarsToLose = _program.dollars.Quantity * 0.1 * _program.workersList.Count;
@@ -2490,20 +2496,20 @@ namespace Gold_Diggerzz
                     if (profitSharingChoice == 1)
                     {
                         _program.dollars.Quantity -= dollarsToLose;
-                        Console.WriteLine($"Your employees have been paid\nYou have lost $ {Math.Round(dollarsToLose, 2)} in the process\nEmployees are happy; morale increased by 20%!");
+                        Console.WriteLine($"Your employees have been paid\nYou have lost $ {Math.Round(dollarsToLose, 2)} in the process\nEmployees are happy; morale increased by 50%!");
                         
                         foreach (Worker worker in _program.workersList)
                         {
-                            worker.Morale *= 1.2;
+                            worker.Morale *= 1.5;
                         }
                     }
 
                     else
                     {
-                        Console.WriteLine($"By saving the profits for yourself, you saved {dollarsToLose}, but your employees are not happy; morale decreased by 20%");
+                        Console.WriteLine($"By saving the profits for yourself, you saved {dollarsToLose}, but your employees are not happy; morale decreased by 10%");
                         foreach (Worker worker in _program.workersList)
                         {
-                            worker.Morale /= 1.2;
+                            worker.Morale /= 1.1;
                         }
                     }
                     
@@ -2527,17 +2533,19 @@ namespace Gold_Diggerzz
                 // retirements, returning workers, unwell workers, morale, etc.
                 Random random = new Random();
                 
-                // tk i dont truly get morale's effect on efficiency because right now its the exact same as increasing or decreasing efficiency
-                // kinda long but i'll just leave it for now
-                foreach (Worker worker in _program.workersList)
+                // every 10th day the morale's effect on efficiency is applied
+                if (_program._currentDate.DayOfYear % 10 == 0)
                 {
-                    worker.efficiency *= worker.Morale;
+                    foreach (Worker worker in _program.workersList)
+                    {
+                        worker.efficiency *= worker.Morale;
+                    }
                 }
                 
-                // reduce morale by 2% for every day worked
+                // reduce morale by 0.5% for every day worked
                 foreach (Worker worker in _program.workersList)
                 {
-                    worker.Morale *= 0.98;
+                    worker.Morale *= 0.995;
                 }
 
                 // recalculate the average efficiency of the employees
@@ -3087,7 +3095,7 @@ namespace Gold_Diggerzz
             program.skipDay = new PayForStuff(50, 1);
             program.bribe = new PayForStuff(200, 1);
             program.trainingCourse = new PayForStuff(400, 1);
-            program.bonus = new PayForStuff(100 + program._totalDaysDug * 3, 1.1);
+            program.bonus = new PayForStuff(100 + program._totalDaysDug * 2, 1.3);
             program.retirementPackage = new PayForStuff(100 + program._totalDaysDug * 10, 1.25);
             # endregion
             
@@ -3441,7 +3449,6 @@ namespace Gold_Diggerzz
             Console.WriteLine("There is a chance an employee is ill and doesn't come in to work");
             Console.WriteLine("30% pay increase on weekends only");
             Console.WriteLine("On the first of every month, employee wage increases by 10% permanently");
-            Console.WriteLine("On the 15th of each month, each employee gets 10% of your current $$$ stash (profit sharing)");
             Console.WriteLine("One x date every month, there is a stock market crash where all prices halve (prime time to buy employees)");
             Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 8%");
             Console.WriteLine($"You can bribe the govt with ${_program.bribe.Price} and not pay any wages for the next 3 days");
