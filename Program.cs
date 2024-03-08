@@ -18,22 +18,22 @@ namespace Gold_Diggerzz
     * better understand what to do with morale - right now its just a multiplier for efficiency
     * convert to proper traditional OOP via getters and setters
     * you are allowed to make multiple trades per day
-    * you gotta upgrade you're shovel to unlock more materials 
-    * More like adventure capitalist; do more
-        * Eg. Mine space rocks
     * You can have negative power ups
-    * Sell/fire employees code - initial menu option etc. created
+    * Sell/fire employees code - initial menu option and subrotuine created within the Worker class
     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
     * adding more incentive to keep playing
        * option to print all achievements and show if unlocked or not yet 
        * goals to reach
        * if you reach _______ income you can find ______
+       * option to upgrade your shovel to unlock more materials 
+       * Eg. Mine space rocks, T-rex bones
+       * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
     * create reputation (do i need to? ++ how will this work with morale?)
     * a morale-boosting powerup
     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
     * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-    * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
+    
     * achievements are OOP-ed? idk about this one - give it some thought
     * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
     * loans - you can take a loan from the bank and pay it back with interest
@@ -349,8 +349,7 @@ namespace Gold_Diggerzz
                         }
                         else
                         {
-                            Console.WriteLine(
-                                $"You don't have enough money to send {employeesToSend} employees on a training course");
+                            Console.WriteLine($"You don't have enough money to send {employeesToSend} employees on a training course");
                         }
 
                         break;
