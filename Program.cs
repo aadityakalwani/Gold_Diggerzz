@@ -18,9 +18,6 @@ namespace Gold_Diggerzz
     * better understand what to do with morale - right now its just a multiplier for efficiency
     * convert to proper traditional OOP via getters and setters
     * you are allowed to make multiple trades per day
-    * warn the player about running out of inventory space 
-    * undo hard-coding within RealEstate.BuildRealEstate - yeah long day because cba to do it properly
-    * also you have a ‘max inventory’ eg. you can store a max of 100kg of total resources and you can upgrade the capacity
     * you gotta upgrade you're shovel to unlock more materials 
     * More like adventure capitalist; do more
         * Eg. Mine space rocks
@@ -327,9 +324,7 @@ namespace Gold_Diggerzz
                         Worker.EmployeeHiringScreen(this);
                         break;
                     case 7:
-                        Console.WriteLine("This feature doesnt do anything yet because I dont care enough about selling employees");
-                        Console.WriteLine("It's just here to make the menu look more full lol");
-                        Console.WriteLine("If you want me to make this work properly, message me and I'll get working on it");
+                        Worker.EmployeeFiringScreen(this);
                         break;
                     case 8:
                         Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
@@ -1049,6 +1044,13 @@ namespace Gold_Diggerzz
                     break;
                 }
             }
+        }
+
+        public static void EmployeeFiringScreen(Program _program)
+        {
+            Console.WriteLine("This feature doesnt do anything yet because I dont care enough about selling employees");
+            Console.WriteLine("It's just here to make the menu look more full lol");
+            Console.WriteLine("If you want me to make this work properly, message me and I'll get working on it");
         }
         
         public static void HireNewWorker(int numberOfWorkers, string type, Program _program)
@@ -3005,17 +3007,24 @@ namespace Gold_Diggerzz
             
             foreach (Resource resource in _program.resourcesList)
             {
-                if (resource.Quantity >= resource.MaxQuantity)
+                if (resource.Quantity >= resource.MaxQuantity && !multipleDaysOrNot)
                 {
                     if (!multipleDaysOrNot)
                     {
                         Console.WriteLine("______________________________________________________________________________________");
-                        Console.WriteLine($"Your inventory is full, you can't earn more {resource.ResourceName} until you sell some");
+                        Console.WriteLine($"\ud83d\ude1f Your {resource.ResourceName} inventory is full, you can't earn more {resource.ResourceName} until you sell some \ud83d\ude1f ");
                         Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}");
                         Console.WriteLine("You can upgrade this within the market");
                     }
                     
                     resource.Quantity = resource.MaxQuantity;
+                }
+                
+                else if (resource.Quantity >= 0.8 * resource.MaxQuantity && !multipleDaysOrNot)
+                {
+                    Console.WriteLine("______________________________________________________________________________________");
+                    Console.WriteLine($"Your {resource.ResourceName} inventory is more than 80% full, soon you wont be able to earn more {resource.ResourceName} until you sell some");
+                    Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}. You can upgrade the inventory size within the market");
                 }
             }
         }
