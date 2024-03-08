@@ -328,27 +328,24 @@ namespace Gold_Diggerzz
                         break;
                     case 8:
                         Console.WriteLine("\n   _____                      _       ______                      _______                  _           _                 \n  / ____|                    | |     |  ____|                    |__   __|                (_)         (_)                \n | (___     ___   _ __     __| |     | |__      ___    _ __         | |     _ __    __ _   _   _ __    _   _ __     __ _ \n  \\___ \\   / _ \\ | '_ \\   / _` |     |  __|    / _ \\  | '__|        | |    | '__|  / _` | | | | '_ \\  | | | '_ \\   / _` |\n  ____) | |  __/ | | | | | (_| |     | |      | (_) | | |           | |    | |    | (_| | | | | | | | | | | | | | | (_| |\n |_____/   \\___| |_| |_|  \\__,_|     |_|       \\___/  |_|           |_|    |_|     \\__,_| |_| |_| |_| |_| |_| |_|  \\__, |\n                                                                                                                    __/ |\n                                                                                                                   |___/ \n");
-                        Console.WriteLine(
-                            $"Enter number of employees to send on training\nEnter -1 to send all employees\nYou have {workersList.Count} employees");
-                        int employeesToSend = GetValidInt(-1, workersList.Count);
-                        if (employeesToSend == -1)
-                        {
-                            employeesToSend = workersList.Count;
-                        }
+                        Console.WriteLine($"Enter number of employees to send on training\nYou have {workersList.Count} employees");
+                        int employeesToSend = GetValidInt(0, workersList.Count);
 
-                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count != 0)
+                        // if you can afford it and it'll result in at least 1 employee being left
+                        if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count - employeesToSend >= 1)
                         {
-                            Console.WriteLine(
-                                $"You have chosen to send {employeesToSend} employees on a training course");
+                            Console.WriteLine($"You have chosen to send {employeesToSend} employees on a training course");
                             Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
                             Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
                             EmployeeTrainingCourse(employeesToSend);
                         }
-                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend &&
-                                 workersList.Count == 0)
+                        
+                        // if you can afford it but it'll result in 0 employees being left to dig
+                        else if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count - employeesToSend >= 1)
                         {
-                            Console.WriteLine("You don't have any employees to send on a training course");
-                            Console.WriteLine("This could be because of employee illness - try again later");
+                            Console.WriteLine("You can't send that many employees to send on a training course");
+                            Console.WriteLine("This could be because of employee illness or because it'll result in you having less than 1 employee left to dig");
+                            Console.WriteLine("Hire more employees & try again later");
                         }
                         else
                         {
@@ -557,13 +554,13 @@ namespace Gold_Diggerzz
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Employee Options:                    Display Features:                Real Estate Features:          Other Features:                      |");
+                Console.WriteLine("Main Features:              Employee Options:               Display Features:                Real Estate Features:          Other Features:                      |");
                 Console.WriteLine("                                                                                                                                                                      |");
-                Console.WriteLine("0 - Quit game           |   5 - Display employees            |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
-                Console.WriteLine("1 - Dig one day         |   6 - Hire employees               |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees               |   12 - Display achievements    |                              |   18 - Save current progress           |");
-                Console.WriteLine("3 - Go to market        |   8 - Send employees for training  |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
-                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale        |                                |                              |   20 - Skip one day                    |");
+                Console.WriteLine("0 - Quit game           |   5 - Display employees       |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
+                Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Display achievements    |                              |   18 - Save current progress           |");
+                Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
+                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |                                |                              |   20 - Skip one day                    |");
                 Console.WriteLine("                        |   22 - Hire manager");
                 Console.WriteLine("\nEnter your choice:");
 
