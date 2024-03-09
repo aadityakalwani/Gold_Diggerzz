@@ -1539,6 +1539,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine("\u2b55 You have no employees to dig for you \u2b55\nHire some employees first");
+                    Thread.Sleep(2000);
                     return;
                 }
 
@@ -2977,9 +2978,9 @@ namespace Gold_Diggerzz
                 // progress bar for the mine emptiness
                 
                 string emptinessString = "";
-                double numHashtags = _program.minePercentageFullness / 5;
+                double numberOfHashtags = _program.minePercentageFullness / 3;
                 
-                for (int j = 0; j < numHashtags; j++)
+                for (int j = 0; j < numberOfHashtags; j++)
                 {
                     emptinessString += "##";
                 }
@@ -3004,19 +3005,14 @@ namespace Gold_Diggerzz
         {
             // if the inventory is full, the player can't earn more resources
             
+            List<Resource> fullResources = new();
+            List<Resource> noLongerFullResources = new();
+            
             foreach (Resource resource in _program.resourcesList)
             {
-                if (resource.Quantity >= resource.MaxQuantity && !multipleDaysOrNot)
+                if (resource.Quantity >= resource.MaxQuantity)
                 {
-                    if (!multipleDaysOrNot)
-                    {
-                        Console.WriteLine("______________________________________________________________________________________");
-                        Console.WriteLine($"\ud83d\ude1f Your {resource.ResourceName} inventory is full, you can't earn more {resource.ResourceName} until you sell some \ud83d\ude1f ");
-                        Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}");
-                        Console.WriteLine("You can upgrade this within the market");
-                    }
-                    
-                    resource.Quantity = resource.MaxQuantity;
+                    fullResources.Add(resource);
                 }
                 
                 else if (resource.Quantity >= 0.8 * resource.MaxQuantity && !multipleDaysOrNot)
@@ -3025,6 +3021,27 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"Your {resource.ResourceName} inventory is more than 80% full, soon you wont be able to earn more {resource.ResourceName} until you sell some");
                     Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}. You can upgrade the inventory size within the market");
                 }
+            }
+
+            if (fullResources.Count > 0)
+            {
+                Console.WriteLine("______________________________________________________________________________________");
+                Console.WriteLine("\ud83d\ude1f Your inventory is full for the following resources:");
+                foreach (Resource resource in fullResources)
+                {
+                    Console.WriteLine($"{resource.ResourceName}");
+                    resource.Quantity = resource.MaxQuantity;
+                    noLongerFullResources.Add(resource);
+                }
+
+                foreach (Resource resource in noLongerFullResources)
+                {
+                    fullResources.Remove(resource);
+                }
+            
+                Console.WriteLine("You can't earn more until you sell some \ud83d\ude1f ");
+                Console.WriteLine($"Currently you can store a maximum of {_program.coal.MaxQuantity}kg of each resource");
+                Console.WriteLine("You can upgrade this within the market");
             }
         }
     }
