@@ -86,7 +86,7 @@ namespace Gold_Diggerzz
         private static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
 
-        public List<Manager> managersList = new();
+        public List<Specialist> managersList = new();
 
         public List<Worker> illWorkersList = new();
         public List<Worker> retiredWorkersList = new();
@@ -485,7 +485,7 @@ namespace Gold_Diggerzz
                     case 22:
                         Console.WriteLine("You have chosen to hire a manager");
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
-                        Manager.ManagerHiringScreen(this);
+                        Specialist.SpecialistHiringScreen(this);
                         break;                    
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -551,7 +551,7 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
-                Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("_________________________________________________________________________________________________________________________________________________________________");
                 Console.WriteLine("Main Features:              Employee Options:               Display Features:                Real Estate Features:          Other Features:                      |");
                 Console.WriteLine("                                                                                                                                                                 |");
                 Console.WriteLine("0 - Quit game           |   5 - Display employees       |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
@@ -559,7 +559,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Display achievements    |                              |   18 - Save current progress           |");
                 Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
                 Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |                                |                              |   20 - Skip one day                    |");
-                Console.WriteLine("                        |   22 - Hire manager");
+                Console.WriteLine("                        |   22 - Hire specialist");
                 Console.WriteLine("\nEnter your choice:");
 
                 int userOption = GetValidInt(0, 22);
@@ -616,9 +616,8 @@ namespace Gold_Diggerzz
                     _totalDollarsEarned += changeInDollars;
                     
                     // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
-                    // - disabled for now
-                    /*
-                    if (dollars.Quantity + changeInDollars > workersList.Count * _currentWageRate)
+                    
+                    if (dollars.Quantity > workersList.Count * _currentWageRate * 0.6)
                     {
                         Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have no resources, and you can't afford to pay your workers for another day.\nYou have disappointed your father...");
                         Thread.Sleep(2500);
@@ -626,7 +625,6 @@ namespace Gold_Diggerzz
                         Thread.Sleep(1500);
                         return "bankrupt";
                     }
-                    */
                     
                     // else, get the bossman on your case
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
@@ -1301,7 +1299,7 @@ namespace Gold_Diggerzz
         }
     }
 
-    class Manager
+    class Specialist
     {
         public int DaysLeft;
         public double ProbabilityMultiplier;
@@ -1309,7 +1307,7 @@ namespace Gold_Diggerzz
         public double Cost;
         public double TotalDaysWorked;
         
-        public Manager(int daysLeft, double probabilityMultiplier, string resourceName, double cost)
+        public Specialist(int daysLeft, double probabilityMultiplier, string resourceName, double cost)
 
         {
             DaysLeft = daysLeft;
@@ -1318,30 +1316,30 @@ namespace Gold_Diggerzz
             Cost = cost;
         }
 
-        public static void ManagerHiringScreen(Program _program)
+        public static void SpecialistHiringScreen(Program _program)
         {
             if (_program.dollars.Quantity < 1000)
             {
-                Console.WriteLine("You don't have enough dollars to hire a manager");
+                Console.WriteLine("You don't have enough dollars to hire a specialist");
             }
             else
             {
-                Console.WriteLine("You've called the manager hiring screen");
-                Console.WriteLine("Each manager doubles the probability of finding a resource for 15 days and costs $1000");
+                Console.WriteLine("You've called the specialist hiring screen");
+                Console.WriteLine("Each specialist doubles the probability of finding a resource for 15 days and costs $1000");
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("0 - Cancel and return to the menu");
-                Console.WriteLine("1 - Hire a coal manager");
-                Console.WriteLine("2 - Hire a stone manager");
-                Console.WriteLine("3 - Hire an iron manager");
-                Console.WriteLine("4 - Hire a gold manager");
-                Console.WriteLine("5 - Hire a diamond manager");
+                Console.WriteLine("1 - Hire a coal specialist");
+                Console.WriteLine("2 - Hire a stone specialist");
+                Console.WriteLine("3 - Hire an iron specialist");
+                Console.WriteLine("4 - Hire a gold specialist");
+                Console.WriteLine("5 - Hire a diamond specialist");
                 
                 int managerChoice = _program.GetValidInt(0, 5);
-                Manager coalManager = new Manager(15, 2, "coal", 1000);
-                Manager stoneManager = new Manager(15, 2, "stone", 1000);
-                Manager ironManager = new Manager(15, 2, "iron", 1000);
-                Manager goldManager = new Manager(15, 2, "gold", 1000);
-                Manager diamondManager = new Manager(15, 2, "diamond", 1000);
+                Specialist coalManager = new Specialist(15, 2, "coal", 1000);
+                Specialist stoneManager = new Specialist(15, 2, "stone", 1000);
+                Specialist ironManager = new Specialist(15, 2, "iron", 1000);
+                Specialist goldManager = new Specialist(15, 2, "gold", 1000);
+                Specialist diamondManager = new Specialist(15, 2, "diamond", 1000);
 
                 switch (managerChoice)
                 {
@@ -2673,15 +2671,15 @@ namespace Gold_Diggerzz
 
         public void DealWithManagers(Program _program, bool multipleDaysOrNot)
         {
-            List<Manager> leftManagersList = new List<Manager>();
+            List<Specialist> leftManagersList = new();
             
-            foreach (Manager manager in _program.managersList)
+            foreach (Specialist manager in _program.managersList)
             {
                 if (manager.DaysLeft == 1)
                 {
                     manager.DaysLeft = 0;
                     manager.TotalDaysWorked += 1;
-                    Console.WriteLine($"Your {manager.ResourceName} manager has left. You can re-hire them from the menu. Goodbye to them! \ud83d\udc4b");
+                    Console.WriteLine($"Your {manager.ResourceName} specialist has left. You can re-hire them from the menu. Goodbye to them! \ud83d\udc4b");
                     leftManagersList.Add(manager);
                     if (manager.ResourceName == "coal")
                     {
@@ -2718,7 +2716,7 @@ namespace Gold_Diggerzz
                 
             }
             
-            foreach (Manager manager in leftManagersList)
+            foreach (Specialist manager in leftManagersList)
             {
                 _program.managersList.Remove(manager);
             }
