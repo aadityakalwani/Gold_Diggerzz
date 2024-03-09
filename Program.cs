@@ -8,38 +8,37 @@ namespace Gold_Diggerzz
 
     /* current issues
      * LOAD GAME STATE
-     * you can hire multiple of the same manager at the same time
      * you are allowed to make multiple trades per day
      * You can have negative power ups
      * you can not load a game state because of either casting issues or enumeration operation errors
      * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
-        * because then i'm just updating the values rather than..shit yeah that'll work?
+     * because then i'm just updating the values rather than..shit yeah that'll work?
      */
 
     /* to-do ideas
-    * better understand what to do with morale - right now its just a multiplier for efficiency
-    * convert to proper traditional OOP via getters and setters
-    * Sell/fire employees code - initial menu option and subroutine created within the Worker class
-    * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
-    * adding more incentive to keep playing
-       * option to print all achievements and show if unlocked or not yet 
-       * goals to reach
-       * if you reach _______ income you can find ______
-       * option to upgrade your shovel to unlock more materials 
-       * Eg. Mine space rocks, T-rex bones
-       * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
-    * create reputation (do i need to? ++ how will this work with morale?)
-    * a morale-boosting powerup
-    * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
-    * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
-    * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
-    * achievements are OOP-ed? idk about this one - give it some thought
-    * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
-    * loans - you can take a loan from the bank and pay it back with interest
-    * stock market feature (kinda done?)
-        * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
-    * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
-    */
+     * better understand what to do with morale - right now its just a multiplier for efficiency
+     * convert to proper traditional OOP via getters and setters
+     * Sell/fire employees code - initial menu option and subroutine created within the Worker class
+     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
+     * adding more incentive to keep playing
+     * option to print all achievements and show if unlocked or not yet
+     * goals to reach
+     * if you reach _______ income you can find ______
+     * option to upgrade your shovel to unlock more materials
+     * Eg. Mine space rocks, T-rex bones
+     * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
+     * create reputation (do i need to? ++ how will this work with morale?)
+     * a morale-boosting powerup
+     * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
+     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
+     * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
+     * achievements are OOP-ed? idk about this one - give it some thought
+     * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
+     * loans - you can take a loan from the bank and pay it back with interest
+     * stock market feature (kinda done?)
+     * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
+     * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
+     */
 
     class Program
     {
@@ -99,7 +98,7 @@ namespace Gold_Diggerzz
         public List<RealEstate> buildingRealEstateList = new();
         public List<RealEstate> activeRealEstate = new();
         public List<Resource> resourcesList = new();
-        
+
         MiningOperation miningOperation = new();
         MarketOperation marketOperation = new();
         DayToDayOperations dayToDayOperations = new();
@@ -251,9 +250,9 @@ namespace Gold_Diggerzz
         public static void Main()
         {
             Console.Clear();
-            
+
             Program program = new Program();
-            
+
             GameState.CreateNewGameState(program);
 
             Console.Clear();
@@ -267,12 +266,12 @@ namespace Gold_Diggerzz
             Console.WriteLine("If you have any suggestions or feedback, please let me know");
             Console.WriteLine("\n____________________________________________________________________________________________\n");
             Thread.Sleep(1000);
-            
+
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...\n\n[ENTER]");
             Console.ReadLine();
             Console.Clear();
-            
+
             program.RunGame();
         }
 
@@ -280,9 +279,9 @@ namespace Gold_Diggerzz
         {
             RunTutorial();
             Console.Clear();
-            
+
             DisplayStuff.DisplayResources(this);
-            
+
             int menuOption;
             do
             {
@@ -338,7 +337,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
                             EmployeeTrainingCourse(employeesToSend);
                         }
-                        
+
                         // if you can afford it but it'll result in 0 employees being left to dig
                         else if (dollars.Quantity > trainingCourse.Price * employeesToSend && workersList.Count - employeesToSend >= 1)
                         {
@@ -363,7 +362,7 @@ namespace Gold_Diggerzz
                         DisplayStuff.DisplayStats(this);
                         break;
                     case 12:
-                        DisplayStuff.DisplayAchievements(achievementsList,this);
+                        DisplayStuff.DisplayAchievements(achievementsList, this);
                         break;
                     case 13:
                         RunTutorial();
@@ -402,7 +401,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("2 - Time Machine --> Gain 5 days' worth of rewards without costing you anything");
                         Console.WriteLine("3 - Market Master --> 50% increase in the selling price of all resources for 3 days");
                         int powerUpChoice = GetValidInt(0, 3);
-                        
+
                         Thread.Sleep(1000);
                         Console.Clear();
 
@@ -422,6 +421,7 @@ namespace Gold_Diggerzz
                                 UsePowerUp(powerUpChoice, 0);
                                 break;
                         }
+
                         break;
                     case 17:
                         Console.WriteLine("0 - no im scared of committing crimes");
@@ -439,7 +439,7 @@ namespace Gold_Diggerzz
                                     Console.WriteLine($"Expect a stock market crash on the {_crashDate}th of every month");
                                     break;
                                 }
-                                
+
                                 Console.WriteLine("\u274c You can't afford to do this brokie \u274c");
                                 break;
                             case 2:
@@ -453,11 +453,11 @@ namespace Gold_Diggerzz
                                     _totalBribes += 1;
                                     break;
                                 }
-                               
+
                                 Console.WriteLine("\u274c You can't afford to do this brokie \u274c");
                                 break;
                         }
-                        
+
 
                         break;
                     case 18:
@@ -486,7 +486,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You have chosen to hire a manager");
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
                         Specialist.SpecialistHiringScreen(this);
-                        break;                    
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -506,9 +506,9 @@ namespace Gold_Diggerzz
             Console.ReadLine();
             Console.WriteLine("He offers you the chance to learn the business before you begin...");
             Console.WriteLine("Do you want to go through a tutorial? ('y' for 'yes', anything else for 'no'): ");
-            
+
             string tutorialChoice = Console.ReadLine().ToLower();
-            
+
             if (tutorialChoice == "y")
             {
                 Console.WriteLine("He smiles and says 'Good choice, my child'.");
@@ -592,7 +592,7 @@ namespace Gold_Diggerzz
                     Thread.Sleep(2000);
                     return "bankrupt";
                 }
-                
+
                 if (noResources && workersList.Count >= 2)
                 {
                     Console.WriteLine("\ud83d\udc77 \ud83d\udd2bYou don't have resources to sell, so we're selling all your workers for $50 each to pay off the debt \ud83d\udc77 \ud83d\udd2b");
@@ -604,19 +604,19 @@ namespace Gold_Diggerzz
                         workersList.RemoveAt(0);
                     }
                 }
-                
+
                 else if (!noResources)
                 {
-                    
+
                     double changeInDollars = (coal.Quantity * coal.Price + stone.Quantity * stone.Price +
                                               iron.Quantity * iron.Price + gold.Quantity * gold.Price +
                                               diamond.Quantity * diamond.Price) * 0.3;
-                    
+
                     dollars.Quantity += changeInDollars;
                     _totalDollarsEarned += changeInDollars;
-                    
+
                     // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
-                    
+
                     if (dollars.Quantity > workersList.Count * _currentWageRate * 0.6)
                     {
                         Console.WriteLine("\ud83d\udca9\ud83d\udca9 Bro you're literally bankrupt; you have no resources, and you can't afford to pay your workers for another day.\nYou have disappointed your father...");
@@ -625,14 +625,14 @@ namespace Gold_Diggerzz
                         Thread.Sleep(1500);
                         return "bankrupt";
                     }
-                    
+
                     // else, get the bossman on your case
                     Console.WriteLine("\n\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31\ud83d\ude31");
                     Thread.Sleep(2000);
                     Console.WriteLine("You are in debt, bossman is coming for you \ud83d\ude22");
                     Console.WriteLine("\ud83d\udcc9\ud83d\udcc9 The government will come and sell all your resources for 30% the current market rate... \ud83d\udcc9\ud83d\udcc9");
                     Thread.Sleep(1750);
-                    Console.WriteLine($"Right now you have ${Math.Round(dollars.Quantity), 2}... it's not looking good for you");
+                    Console.WriteLine($"Right now you have ${Math.Round(dollars.Quantity),2}... it's not looking good for you");
                     Console.WriteLine("Unlucky bro...");
                     Thread.Sleep(1250);
 
@@ -641,11 +641,12 @@ namespace Gold_Diggerzz
                     iron.Quantity = 0;
                     gold.Quantity = 0;
                     diamond.Quantity = 0;
-                
+
                     Console.WriteLine("\u26a1 After bossman stole your resources, you now have:");
                     DisplayStuff.DisplayResources(this);
                 }
             }
+
             return inDebt;
         }
 
@@ -734,13 +735,13 @@ namespace Gold_Diggerzz
 
         public void UsePowerUp(int powerUpChoice, int subChoice)
         {
-            
+
             Console.WriteLine("\n  _    _                      _____                                                         \n | |  | |                    |  __ \\                                                        \n | |  | |  ___    ___        | |__) |   ___   __      __   ___   _ __   _   _   _ __    ___ \n | |  | | / __|  / _ \\       |  ___/   / _ \\  \\ \\ /\\ / /  / _ \\ | '__| | | | | | '_ \\  / __|\n | |__| | \\__ \\ |  __/       | |      | (_) |  \\ V  V /  |  __/ | |    | |_| | | |_) | \\__ \\\n  \\____/  |___/  \\___|       |_|       \\___/    \\_/\\_/    \\___| |_|     \\__,_| | .__/  |___/\n                                                                               | |          \n                                                                               |_         ");
-            
+
             switch (powerUpChoice)
             {
                 case 1:
-                
+
                     if (subChoice == 1)
                     {
                         Console.WriteLine("You have chosen the 50% chance of finding gold for the next five days");
@@ -757,7 +758,7 @@ namespace Gold_Diggerzz
                     break;
 
                 case 2:
-                
+
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
                     _noWageDaysLeft = 10;
                     _animation = false;
@@ -831,7 +832,7 @@ namespace Gold_Diggerzz
             Thread.Sleep(1750);
             QuitGame();
         }
-        
+
         public void EmployeeTrainingCourse(int numberOfEmployees)
         {
             // to boost the productivity of employees
@@ -855,7 +856,7 @@ namespace Gold_Diggerzz
 
             Thread.Sleep(1250);
         } // move to the appropriate own class
-        
+
         public int GetValidInt(int min, int max)
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
@@ -890,7 +891,7 @@ namespace Gold_Diggerzz
             return GetValidDouble(min, max);
         }
     }
-    
+
     class Worker
     {
         public string Type;
@@ -925,7 +926,7 @@ namespace Gold_Diggerzz
                 Morale = baseMorale;
                 BaseMorale = baseMorale;
             }
-            
+
             else if (type == "mid")
             {
                 Type = "mid";
@@ -971,75 +972,76 @@ namespace Gold_Diggerzz
                 $"2 - Hire a mid employee: Price = ${_program._currentEmployeePrice}, Wage = ${_program._currentWageRate}, Efficiency = 1x, Retires in 45 days");
             Console.WriteLine(
                 $"3 - Hire a good employee: Price = ${_program._currentEmployeePrice * 2}, Wage = ${_program._currentWageRate * 2}, Efficiency = 2x, Retires in 30 days");
-            
-            
+
+
             int employeeType = _program.GetValidInt(0, 3);
-            
+
             if (employeeType != 0)
             {
                 Console.WriteLine($"Enter how many employees you want to hire?\nYou have {Math.Round(_program.dollars.Quantity, 2)} dollars");
-                
+
                 int employeesToHire = _program.GetValidInt(0, 350);
                 switch (employeeType)
                 {
-                case 1:
-                    if (employeesToHire * _program._currentEmployeePrice * 0.5 >
-                        _program.dollars.Quantity)
-                    {
-                        Console.WriteLine(
-                            "You don't have enough dollars to hire that many bad employees");
-                    }
-                    else
-                    {
-                        Console.WriteLine(
-                            $"You have hired {employeesToHire} more bad employees.\nSay hello to:");
+                    case 1:
+                        if (employeesToHire * _program._currentEmployeePrice * 0.5 >
+                            _program.dollars.Quantity)
+                        {
+                            Console.WriteLine(
+                                "You don't have enough dollars to hire that many bad employees");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"You have hired {employeesToHire} more bad employees.\nSay hello to:");
 
-                        HireNewWorker(employeesToHire, "bad", _program);
+                            HireNewWorker(employeesToHire, "bad", _program);
 
-                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 0.5;
-                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                        _program._totalEmployeesHired += employeesToHire;
-                    }
+                            _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 0.5;
+                            Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                            _program._totalEmployeesHired += employeesToHire;
+                        }
 
-                    break;
-                case 2:
-                    if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
-                    {
-                        Console.WriteLine(
-                            "You don't have enough dollars to hire that many mid employees");
-                    }
-                    else
-                    {
-                        Console.WriteLine(
-                            $"You have hired {employeesToHire} more mid employees.\nSay hello to:");
+                        break;
+                    case 2:
+                        if (employeesToHire * _program._currentEmployeePrice > _program.dollars.Quantity)
+                        {
+                            Console.WriteLine(
+                                "You don't have enough dollars to hire that many mid employees");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"You have hired {employeesToHire} more mid employees.\nSay hello to:");
 
-                        HireNewWorker(employeesToHire, "mid", _program);
+                            HireNewWorker(employeesToHire, "mid", _program);
 
-                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
-                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                        _program._totalEmployeesHired += employeesToHire;
-                    }
+                            _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice;
+                            Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                            _program._totalEmployeesHired += employeesToHire;
+                        }
 
-                    break;
-                case 3:
-                    if (employeesToHire * _program._currentEmployeePrice * 2 >
-                        _program.dollars.Quantity)
-                    {
-                        Console.WriteLine(
-                            "You don't have enough dollars to hire that many good employees");
-                    }
-                    else
-                    {
-                        Console.WriteLine(
-                            $"You have hired {employeesToHire} more good employees.\nSay hello to:");
+                        break;
+                    case 3:
+                        if (employeesToHire * _program._currentEmployeePrice * 2 >
+                            _program.dollars.Quantity)
+                        {
+                            Console.WriteLine(
+                                "You don't have enough dollars to hire that many good employees");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"You have hired {employeesToHire} more good employees.\nSay hello to:");
 
-                        HireNewWorker(employeesToHire, "good", _program);
+                            HireNewWorker(employeesToHire, "good", _program);
 
-                        _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 2;
-                        Console.WriteLine($"You now have {_program.workersList.Count} total employees");
-                        _program._totalEmployeesHired += employeesToHire;
-                    }
-                    break;
+                            _program.dollars.Quantity -= employeesToHire * _program._currentEmployeePrice * 2;
+                            Console.WriteLine($"You now have {_program.workersList.Count} total employees");
+                            _program._totalEmployeesHired += employeesToHire;
+                        }
+
+                        break;
                 }
             }
         }
@@ -1049,13 +1051,20 @@ namespace Gold_Diggerzz
             Console.WriteLine("This feature doesnt do anything yet because I dont care enough about selling employees");
             Console.WriteLine("It's just here to make the menu look more full lol");
             Console.WriteLine("If you want me to make this work properly, message me and I'll get working on it");
+            Console.WriteLine("For now, here's the way it works:");
+            Console.WriteLine("You can fire employees, but you don't gain anything from it");
+            DisplayStuff.DisplayActiveEmployees(_program);
+            Console.WriteLine("Enter the number of the employee you want to fire:");
+            int employeeToFire = _program.GetValidInt(1, _program.workersList.Count);
+            Console.WriteLine($"You have fired {_program.workersList[employeeToFire - 1].Name}");
+            _program.workersList.RemoveAt(employeeToFire - 1);
         }
-        
+
         public static void HireNewWorker(int numberOfWorkers, string type, Program _program)
         {
-            
+
             Random _random = new Random();
-            
+
             for (int i = 0; i < numberOfWorkers; i++)
             {
                 double efficiency = 15;
@@ -1209,15 +1218,17 @@ namespace Gold_Diggerzz
                     {
                         employeePrice = 50;
                     }
+
                     if (type == "mid")
                     {
                         employeePrice = 100;
                     }
+
                     if (type == "good")
                     {
                         employeePrice = 200;
                     }
-                    
+
                     Worker newWorker = new Worker(type, _program._possibleNames[randomName], _program._currentWageRate, employeePrice, _program._currentEmployeeIllProbability, efficiency, baseMorale);
                     _program.workersList.Add(newWorker);
                     _program.UsedNames.Add(newWorker.Name);
@@ -1227,7 +1238,7 @@ namespace Gold_Diggerzz
                     // updating bribe price
                     _program.bribe.Price = _program._currentWageRate * _program.workersList.Count * 2;
                 }
-                
+
                 else
                 {
                     Console.WriteLine("You've hired all 307/307 available employees and so you've run out of names to give to your employees \ud83d\ude2d");
@@ -1235,7 +1246,7 @@ namespace Gold_Diggerzz
                     break;
                 }
             }
-            
+
         }
 
         public static void EmployeeMoraleBoostingScreen(Program _program)
@@ -1247,7 +1258,7 @@ namespace Gold_Diggerzz
             Console.WriteLine("1 - Increase wage by 20% --> 20% morale increase");
             Console.WriteLine($"2 - Give a bonus of ${_program.bonus.Price} to each employee --> 30% morale increase");
             Console.WriteLine($"3 - Offer a retirement package for {_program.retirementPackage} for all employees when they retire --> 25% morale increase");
-            
+
             int userInput = _program.GetValidInt(0, 3);
             switch (userInput)
             {
@@ -1255,7 +1266,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("Returning to the menu...");
                     Thread.Sleep(500);
                     break;
-                
+
                 case 1:
                     Console.WriteLine("You have chosen to increase the wage of all employees by 20%");
                     Console.WriteLine("Their morales will increase by 50% as a result \ud83d\ude0a");
@@ -1263,10 +1274,11 @@ namespace Gold_Diggerzz
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.Wage *= 1.2;
-                        worker.Morale +=  1.5;
+                        worker.Morale += 1.5;
                     }
+
                     break;
-                
+
                 case 2:
                     if (_program.dollars.Quantity > _program.workersList.Count * _program.bonus.Price)
                     {
@@ -1275,12 +1287,14 @@ namespace Gold_Diggerzz
                         {
                             worker.Morale *= _program.retirementPackage.MoraleMultiplier;
                         }
+
                         _program.dollars.Quantity -= _program.workersList.Count * _program.bonus.Price;
                         break;
                     }
+
                     Console.WriteLine($"You can't afford to pay for a bonus of ${_program.bonus.Price} per employee \ud83d\ude45\u200d\u2642\ufe0f");
                     break;
-                
+
                 case 3:
                     if (_program.dollars.Quantity > _program.retirementPackage.Price)
                     {
@@ -1293,6 +1307,7 @@ namespace Gold_Diggerzz
                         _program.dollars.Quantity -= _program.retirementPackage.Price;
                         break;
                     }
+
                     Console.WriteLine($"You can't afford to pay for a retirement package of ${_program.retirementPackage.Price} \ud83d\ude45\u200d\u2642\ufe0f");
                     break;
             }
@@ -1306,7 +1321,7 @@ namespace Gold_Diggerzz
         public string ResourceName;
         public double Cost;
         public double TotalDaysWorked;
-        
+
         public Specialist(int daysLeft, double probabilityMultiplier, string resourceName, double cost)
 
         {
@@ -1318,7 +1333,7 @@ namespace Gold_Diggerzz
 
         public static void SpecialistHiringScreen(Program _program)
         {
-            
+
             if (_program.dollars.Quantity < 1000)
             {
                 Console.WriteLine("You don't have enough dollars to hire a specialist");
@@ -1334,14 +1349,14 @@ namespace Gold_Diggerzz
                 Console.WriteLine("3 - Hire an iron specialist");
                 Console.WriteLine("4 - Hire a gold specialist");
                 Console.WriteLine("5 - Hire a diamond specialist");
-                
+
                 int managerChoice = _program.GetValidInt(0, 5);
                 Specialist coalManager = new Specialist(15, 2, "coal", 1000);
                 Specialist stoneManager = new Specialist(15, 2, "stone", 1000);
                 Specialist ironManager = new Specialist(15, 2, "iron", 1000);
                 Specialist goldManager = new Specialist(15, 2, "gold", 1000);
                 Specialist diamondManager = new Specialist(15, 2, "diamond", 1000);
-                
+
                 bool hire = true;
 
                 switch (managerChoice)
@@ -1366,6 +1381,7 @@ namespace Gold_Diggerzz
                             _program.managersList.Add(coalManager);
                             Console.WriteLine("You have hired a coal specialist");
                         }
+
                         break;
                     case 2:
                         foreach (Specialist specialist in _program.managersList)
@@ -1403,7 +1419,7 @@ namespace Gold_Diggerzz
                             _program.managersList.Add(ironManager);
                             Console.WriteLine("You have hired an iron specialist");
                         }
-                        
+
                         break;
                     case 4:
                         foreach (Specialist specialist in _program.managersList)
@@ -1422,7 +1438,7 @@ namespace Gold_Diggerzz
                             _program.managersList.Add(goldManager);
                             Console.WriteLine("You have hired a gold specialist");
                         }
-                        
+
                         break;
                     case 5:
                         foreach (Specialist specialist in _program.managersList)
@@ -1441,13 +1457,13 @@ namespace Gold_Diggerzz
                             _program.managersList.Add(diamondManager);
                             Console.WriteLine("You have hired a diamond specialist");
                         }
-                        
+
                         break;
                 }
             }
         }
     }
-    
+
     class Trade
     {
         public static List<DateTime> datesOfTradesMade = new();
@@ -1483,16 +1499,16 @@ namespace Gold_Diggerzz
 
             Console.WriteLine("You've already made a trade today, try again later \ud83d\udc4b ");
         }
-        
+
         public static void GoToTrader(Program program)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(
                 "             _______                      _               \n            |__   __|                    | |              \n               | |     _ __    __ _    __| |   ___   _ __ \n               | |    | '__|  / _` |  / _` |  / _ \\ | '__|\n               | |    | |    | (_| | | (_| | |  __/ | |   \n               |_|    |_|     \\__,_|  \\__,_|  \\___| |_|");
             Console.ResetColor();
-            
+
             DisplayStuff.DisplayResources(program);
-             
+
             Console.WriteLine("This is where you can convert between resources!");
             Console.WriteLine("Here are the options for today:\n");
             Console.WriteLine("0 - Cancel and return");
@@ -1545,23 +1561,23 @@ namespace Gold_Diggerzz
             DisplayStuff.DisplayResources(program);
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
-        
+
     } // you're allowed multiple trades per day
 
     class MiningOperation
     {
         public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
         {
-            
+
             bool multipleDayDig = daysToDig > 1;
-        
+
             // for multiple day dig outputs in one go
             double newCoal = 0;
             double newStone = 0;
             double newIron = 0;
             double newGold = 0;
             double newDiamond = 0;
-            
+
             for (int days = 0; days < daysToDig; days++)
             {
                 if (_program.workersList.Count == 0)
@@ -1594,9 +1610,9 @@ namespace Gold_Diggerzz
                                     "       ||",
                                     "       ||",
                                     "      ----",
-                                    
+
                                 };
-                                
+
                                 for (int i = 0; i < 15; i++)
                                 {
                                     Thread.Sleep(80);
@@ -1610,7 +1626,7 @@ namespace Gold_Diggerzz
                                         else
                                         {
                                             string spaces = "";
-                                            for (int k = 0; k < i/2; k++)
+                                            for (int k = 0; k < i / 2; k++)
                                             {
                                                 spaces += " ";
                                             }
@@ -1653,14 +1669,14 @@ namespace Gold_Diggerzz
                             int randomForMarketMaster = random.Next(0, 100);
                             int randomForTimeMachine = random.Next(0, 100);
                             int randomForMagicToken = random.Next(0, 100);
-                            
-                            
+
+
                             // if there is a changed chance of finding gold due to the Ancient Artefact powerup
                             if (_program._increasedGoldChanceDays != 0)
                             {
                                 _program.gold.Probability = 50;
                                 _program._increasedGoldChanceDays -= 1;
-                                
+
                                 if (!multipleDayDig)
                                 {
                                     Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
@@ -1682,7 +1698,7 @@ namespace Gold_Diggerzz
                             bool marketMasterFound = randomForMarketMaster < _program.marketMaster.Probability;
                             bool timeMachineFound = randomForTimeMachine < _program.timeMachine.Probability;
                             bool magicTokenFound = randomForMagicToken < _program.magicTokens.Probability;
-                            
+
                             if (ancientArtefactFound)
                             {
                                 Console.WriteLine("__________________________________________________________");
@@ -1751,6 +1767,7 @@ namespace Gold_Diggerzz
                                     Console.WriteLine($"You've acquired another magic token. You have {_program.magicTokens.Quantity} magic tokens now");
                                     Console.WriteLine($"Selling price increased by a total of {_program.magicTokens.Quantity * 20}%");
                                 }
+
                                 _program.coal.Price += _program.coal.InitialPrice * 0.2;
                                 _program.stone.Price += _program.stone.InitialPrice * 0.2;
                                 _program.iron.Price += _program.iron.InitialPrice * 0.2;
@@ -1784,7 +1801,7 @@ namespace Gold_Diggerzz
                                         break;
                                 }
                             }
-                            
+
                             if (coalFound)
                             {
                                 double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
@@ -1792,7 +1809,7 @@ namespace Gold_Diggerzz
                                 _program.coal.Quantity += newResourcesFound;
                                 _program.coal.TotalFound += newResourcesFound;
                                 newCoal += newResourcesFound;
-                                
+
                                 if (!multipleDayDig)
                                 {
                                     Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
@@ -1820,7 +1837,7 @@ namespace Gold_Diggerzz
                                 _program.iron.Quantity += newResourcesFound;
                                 _program.iron.TotalFound += newResourcesFound;
                                 newIron += newResourcesFound;
-                                
+
                                 if (!multipleDayDig)
                                 {
                                     Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
@@ -1834,7 +1851,7 @@ namespace Gold_Diggerzz
                                 _program.gold.Quantity += newResourcesFound;
                                 _program.gold.TotalFound += newResourcesFound;
                                 newGold += newResourcesFound;
-                                
+
                                 if (!multipleDayDig)
                                 {
                                     Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
@@ -1860,7 +1877,7 @@ namespace Gold_Diggerzz
                             {
                                 Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
                             }
-                            
+
                         }
 
                         // calendar/weather etc effects 
@@ -1888,7 +1905,7 @@ namespace Gold_Diggerzz
 
                                 Console.WriteLine($"\ud83d\udcb0 Your {_program.workersList.Count} employees charged a wage of ${Math.Round(totalWages, 2)} today \ud83d\udcb0");
                             }
-                            
+
 
                             if (_program._marketMasterDaysLeft == 1)
                             {
@@ -1902,7 +1919,7 @@ namespace Gold_Diggerzz
                                     $"{_program._marketMasterDaysLeft} days left of the Market Master powerup");
                                 _program._marketMasterDaysLeft -= 1;
                             }
-                        
+
                         }
 
                         if (multipleDayDig)
@@ -1936,9 +1953,9 @@ namespace Gold_Diggerzz
                         }
 
                         _program._currentDate = _program._currentDate.AddDays(1);
-                        
+
                         _program._totalDaysDug += 1;
-                    
+
                         // post-digging effects
                         _DayToDayOperations.CalendarEffects(_program, multipleDayDig);
                         _DayToDayOperations.WeatherEffects(_program, multipleDayDig);
@@ -1955,7 +1972,7 @@ namespace Gold_Diggerzz
                     _program.QuitGame();
                 }
             }
-            
+
             if (multipleDayDig)
             {
                 Console.WriteLine("__________________________________________________________________________");
@@ -1985,7 +2002,7 @@ namespace Gold_Diggerzz
             Console.Write(
                 "\n __       __                      __                   __     \n|  \\     /  \\                    |  \\                 |  \\    \n| $$\\   /  $$  ______    ______  | $$   __   ______  _| $$_   \n| $$$\\ /  $$$ |      \\  /      \\ | $$  /  \\ /      \\|   $$ \\  \n| $$$$\\  $$$$  \\$$$$$$\\|  $$$$$$\\| $$_/  $$|  $$$$$$\\\\$$$$$$  \n| $$\\$$ $$ $$ /      $$| $$   \\$$| $$   $$ | $$    $$ | $$ __ \n| $$ \\$$$| $$|  $$$$$$$| $$      | $$$$$$\\ | $$$$$$$$ | $$|  \\\n| $$  \\$ | $$ \\$$    $$| $$      | $$  \\$$\\ \\$$     \\  \\$$  $$\n \\$$      \\$$  \\$$$$$$$ \\$$       \\$$   \\$$  \\$$$$$$$   \\$$$$ \n\n");
             Console.ResetColor();
-            
+
             DisplayStuff.DisplayResources(_program);
 
             Console.WriteLine($"Here are the rates for {_program._currentDate:dddd dd MMMM, yyyy}:");
@@ -2014,7 +2031,7 @@ namespace Gold_Diggerzz
                     case 0:
                         Console.WriteLine("Thanks for coming to the market!");
                         break;
-                    
+
                     case 1:
                         Console.WriteLine(
                             "You've chosen to sell a specific resource.\nWhich resource do you want to sell?");
@@ -2152,18 +2169,19 @@ namespace Gold_Diggerzz
                     case 3:
                         Worker.EmployeeHiringScreen(_program);
                         break;
-                    
+
                     case 4:
-                        
+
                         Console.WriteLine($"You have been charged ${_program._upgradeInventoryCost} for doubling the inventory size");
                         Console.WriteLine("You have doubled the inventory size of all resources");
-                        
+
                         _program._upgradeInventoryCost *= 2;
-                        
+
                         foreach (Resource resource in _program.resourcesList)
                         {
                             resource.MaxQuantity *= 2;
                         }
+
                         break;
                 }
             } while (marketOption != 0);
@@ -2183,18 +2201,18 @@ namespace Gold_Diggerzz
                     Console.WriteLine($"{weatherEffect.DaysLeft} days left of {weatherEffect.Name}");
                 }
             }
-            
+
             WeatherEffectsClass Rain = new WeatherEffectsClass("rain", 0, 30, 0.7, 3);
             WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 6, 0.4, 5);
             WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("beautiful sky", 0, 30, 1.2, 3);
             WeatherEffectsClass Earthquake = new WeatherEffectsClass("earthquake", 0, 5, 1.5, 3);
-            
+
             Random random = new Random();
 
             // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
 
             if (_program.ActiveWeatherEffectsList.Count == 0)
-            { 
+            {
                 // 5% chance a hurricane that reduces the probability of finding resources by 50% for the next 5 days
                 if (random.Next(0, 100) < Hurricane.Probability)
                 {
@@ -2204,12 +2222,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
                         Console.WriteLine("They also lose 20% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
                     }
-                    
+
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Hurricane.EfficiencyMultiplier;
                         worker.Morale /= 1.2;
                     }
+
                     Hurricane.DaysLeft = 4;
                     _program.ActiveWeatherEffectsList.Add(Hurricane);
                 }
@@ -2224,7 +2243,7 @@ namespace Gold_Diggerzz
                             "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
                         Console.WriteLine("Their morale also increased by 10% because everybody likes working when its sunny \ud83d\ude04");
                     }
-                    
+
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= BeautifulSky.EfficiencyMultiplier;
@@ -2234,7 +2253,7 @@ namespace Gold_Diggerzz
                     BeautifulSky.DaysLeft = 3;
                     _program.ActiveWeatherEffectsList.Add(BeautifulSky);
                 }
-                
+
                 // rain reducing efficiency
                 else if (random.Next(0, 100) < Rain.Probability)
                 {
@@ -2245,7 +2264,7 @@ namespace Gold_Diggerzz
                             "\ud83c\udf27\ufe0f Due to torrential rain, your employees are 30% less efficient for the next three days \ud83c\udf27\ufe0f");
                         Console.WriteLine("They also lose 5% of their morale because nobody likes working when its raining \ud83d\ude2d");
                     }
-                    
+
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.efficiency *= Rain.EfficiencyMultiplier;
@@ -2255,7 +2274,7 @@ namespace Gold_Diggerzz
                     Rain.DaysLeft = 3;
                     _program.ActiveWeatherEffectsList.Add(Rain);
                 }
-                
+
                 // earthquake increasing efficiency but killing workers and reducing morale
                 else if (random.Next(0, 100) < Earthquake.Probability)
                 {
@@ -2271,7 +2290,7 @@ namespace Gold_Diggerzz
                         "                                          | |                              ",
                         "                                          |_|                              "
                     };
-                    
+
                     for (int i = 0; i < 60; i++)
                     {
                         Thread.Sleep(125);
@@ -2283,7 +2302,7 @@ namespace Gold_Diggerzz
 
                             // Create a string of spaces based on the random number
                             string spaces = "";
-                            
+
                             for (int k = 0; k < Math.Abs(move); k++)
                             {
                                 spaces += " ";
@@ -2304,7 +2323,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(line);
                         }
                     }
-                    
+
                     // print the original earthquake array
                     for (int i = 0; i < 9; i++)
                     {
@@ -2351,32 +2370,32 @@ namespace Gold_Diggerzz
                         Console.WriteLine("This bit of code should only run if you do not have more than 5 workers and if you do not have less than 5 workers");
                         Console.WriteLine("Pls tell me if you see this because this should never occur");
                     }
-                    
+
                     foreach (Worker worker in _program.workersList)
                     {
                         worker.Morale *= 0.5;
                     }
-                    
+
                     Thread.Sleep(1000);
                     Console.WriteLine("\nGlancing over the deaths, the soil has been loosened... This means it is easier to find resources.");
                     Console.WriteLine("The probability of finding each resource has increased by 20%, permanently!");
-                    
+
                     _program.coal.Probability *= 1.2;
                     _program.stone.Probability *= 1.2;
                     _program.iron.Probability *= 1.2;
                     _program.gold.Probability *= 1.2;
                     _program.diamond.Probability *= 1.2;
-                    
+
                     Earthquake.DaysLeft = 3;
                     _program.ActiveWeatherEffectsList.Add(Earthquake);
-                    
+
                     Thread.Sleep(3000);
                 }
             }
-            
+
             // undo weather effects
             List<WeatherEffectsClass> toRemoveWeatherEffectsList = new();
-            
+
             foreach (WeatherEffectsClass weatherEffect in _program.ActiveWeatherEffectsList)
             {
                 if (weatherEffect.DaysLeft == 0)
@@ -2384,20 +2403,21 @@ namespace Gold_Diggerzz
                     toRemoveWeatherEffectsList.Add(weatherEffect);
                 }
             }
-            
+
             foreach (WeatherEffectsClass finishedWeatherEffect in toRemoveWeatherEffectsList)
             {
                 foreach (Worker worker in _program.workersList)
                 {
                     worker.efficiency /= finishedWeatherEffect.EfficiencyMultiplier;
                 }
+
                 foreach (Worker worker in _program.illWorkersList)
                 {
                     worker.efficiency /= finishedWeatherEffect.EfficiencyMultiplier;
                 }
-                
+
                 _program.ActiveWeatherEffectsList.Remove(finishedWeatherEffect);
-                
+
                 if (!multipleDaysOrNot)
                 {
                     Console.WriteLine($"\ud83c\udf21\ufe0f The {finishedWeatherEffect.Name} has ended \ud83c\udf21\ufe0f - employees are back to their normal efficiency.");
@@ -2459,7 +2479,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine("\ud83d\udcc8 The stock market has recovered \ud83d\udcc8 ");
                 }
-                
+
                 _program.coal.Price *= 2;
                 _program.stone.Price *= 2;
                 _program.iron.Price *= 2;
@@ -2497,7 +2517,7 @@ namespace Gold_Diggerzz
                     Console.WriteLine(
                         "\ud83e\udd11 It's the first of the month, your employees get a 10% raise for the rest of time \ud83e\udd11");
                 }
-                
+
                 _program._currentWageRate *= 1.1;
                 foreach (Worker workers in _program.workersList)
                 {
@@ -2513,21 +2533,21 @@ namespace Gold_Diggerzz
                 Console.WriteLine("As the manager, you get to choose to share profits or not");
                 Console.WriteLine("Choose wisely as keeping profits will decrease morale, and may hurt you in the long run!");
                 Console.WriteLine($"Here's how the profit sharing will work for {_program._currentDate:dddd, d MMMM, yyyy}");
-                
+
                 if (_program.workersList.Count < 7)
                 {
                     Console.WriteLine("Each employee will 10% of your current $$$ stash, meaning:");
                     Console.WriteLine($"Your {_program.workersList.Count} employees get ${Math.Round(_program.dollars.Quantity * 0.1, 2)} each");
                     Console.WriteLine("1 - Share profits with employees (+50% morale \ud83d\udcc8)\n2 - Keep profits for yourself (-10% morale \ud83d\udcc9)\nEnter your choice:");
                     int profitSharingChoice = _program.GetValidInt(1, 2);
-                    
+
                     double dollarsToLose = _program.dollars.Quantity * 0.1 * _program.workersList.Count;
 
                     if (profitSharingChoice == 1)
                     {
                         _program.dollars.Quantity -= dollarsToLose;
                         Console.WriteLine($"Your employees have been paid\nYou have lost $ {Math.Round(dollarsToLose, 2)} in the process\nEmployees are happy; morale increased by 50%!");
-                        
+
                         foreach (Worker worker in _program.workersList)
                         {
                             worker.Morale *= 1.5;
@@ -2542,7 +2562,7 @@ namespace Gold_Diggerzz
                             worker.Morale /= 1.1;
                         }
                     }
-                    
+
                 }
 
                 else
@@ -2562,7 +2582,7 @@ namespace Gold_Diggerzz
             {
                 // retirements, returning workers, unwell workers, morale, etc.
                 Random random = new Random();
-                
+
                 // every 10th day the morale's effect on efficiency is applied
                 if (_program._currentDate.DayOfYear % 10 == 0)
                 {
@@ -2571,7 +2591,7 @@ namespace Gold_Diggerzz
                         worker.efficiency *= worker.Morale;
                     }
                 }
-                
+
                 // reduce morale by 0.5% for every day worked
                 foreach (Worker worker in _program.workersList)
                 {
@@ -2584,6 +2604,7 @@ namespace Gold_Diggerzz
                 {
                     totalEfficiency += worker.efficiency;
                 }
+
                 _program._averageEmployeeEfficiency = totalEfficiency / _program.workersList.Count;
 
                 // recalculate the average morale of the employees
@@ -2592,8 +2613,9 @@ namespace Gold_Diggerzz
                 {
                     totalMorale += worker.Morale;
                 }
+
                 _program._averageEmployeeMorale = totalMorale / _program.workersList.Count;
-                
+
                 // retiring workers
                 for (int i = _program.workersList.Count - 1; i >= 0; i--)
                 {
@@ -2629,7 +2651,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(
                                 $"Employee {worker.Name} has returned from their training course \ud83d\udcaa ");
                         }
-                        
+
                         tempList.Add(worker);
                     }
                 }
@@ -2639,7 +2661,7 @@ namespace Gold_Diggerzz
                     _program.trainingWorkersList.Remove(worker);
                     _program.workersList.Add(worker);
                 }
-                
+
                 // unwell workers
                 if (_program.workersList.Count > 1)
                 {
@@ -2654,7 +2676,7 @@ namespace Gold_Diggerzz
                                 Console.WriteLine(
                                     $"\ud83e\udd27 Employee {worker.Name} is unwell and doesn't come in today. They'll be back in three days. \ud83e\udd27");
                             }
-                            
+
                             newlyIllWorkers.Add(worker);
                         }
                     }
@@ -2680,7 +2702,7 @@ namespace Gold_Diggerzz
                             Console.WriteLine(
                                 $"Employee {worker.Name} is no longer ill and has returned to work \ud83d\udc4c");
                         }
-                        
+
                         noLongerIllWorkersList.Add(worker);
                     }
                 }
@@ -2703,7 +2725,7 @@ namespace Gold_Diggerzz
         public void DealWithManagers(Program _program, bool multipleDaysOrNot)
         {
             List<Specialist> leftManagersList = new();
-            
+
             foreach (Specialist manager in _program.managersList)
             {
                 if (manager.DaysLeft == 1)
@@ -2733,7 +2755,7 @@ namespace Gold_Diggerzz
                         _program.diamond.Probability /= manager.ProbabilityMultiplier;
                     }
                 }
-                
+
                 else if (manager.DaysLeft != 0)
                 {
                     manager.DaysLeft -= 1;
@@ -2744,14 +2766,14 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine($"Your {manager.ResourceName} manager has {manager.DaysLeft} days left of work");
                 }
-                
+
             }
-            
+
             foreach (Specialist manager in leftManagersList)
             {
                 _program.managersList.Remove(manager);
             }
-            
+
         }
 
         public void CheckAchievements(List<string> achievements, Program _program)
@@ -2762,7 +2784,7 @@ namespace Gold_Diggerzz
                 Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
                 _program._achievement1 = true;
                 achievements.Add("100kg of coal found");
-                
+
                 Console.WriteLine("Because of this milestone, you've unlocked the ability to find diamond!");
                 _program.diamond.Probability = 8;
 
@@ -2915,19 +2937,19 @@ namespace Gold_Diggerzz
             _program.diamond.Price *= randomChange;
 
             if (!multipleDaysOrNot && randomChange > 1)
-            { 
+            {
                 Console.WriteLine($"Prices have risen by {Math.Round(randomChange * 100 - 100, 2)}% from what they were yesterday");
             }
-            
+
             else if (!multipleDaysOrNot && randomChange < 1)
-            { 
+            {
                 Console.WriteLine($"Prices have fallen by {Math.Round(Math.Abs(randomChange * 100 - 100), 2)}% from what they were yesterday");
             }
-            
+
             // fluctuate trader price ratio
             // one of the factors can be reputation/morale later on tk
             double randomFluctuationOfTraderRatio = random.Next(0, 10) / 100.0 + 1;
-            
+
             foreach (Trade trader in _program.tradeList)
             {
                 trader.Ratio *= randomFluctuationOfTraderRatio;
@@ -2949,7 +2971,7 @@ namespace Gold_Diggerzz
                         Console.WriteLine($"Your {realEstate.Type} has been built");
                     }
                 }
-                
+
                 else
                 {
                     realEstate.DaysLeftToBuild -= 1;
@@ -2959,12 +2981,12 @@ namespace Gold_Diggerzz
                     }
                 }
             }
-            
+
             foreach (RealEstate realEstate in toRemoveRealEstateList)
             {
                 _program.buildingRealEstateList.Remove(realEstate);
             }
-            
+
             // give rent to the player
             if (_program._currentDate.DayOfWeek is DayOfWeek.Sunday)
             {
@@ -2988,7 +3010,7 @@ namespace Gold_Diggerzz
                 {
                     Console.WriteLine("__________________________________________________________________________");
                     Console.WriteLine("Your mine is empty, you need to find a new location to dig");
-                    
+
                     _program.coal.Probability = 0;
                     _program.stone.Probability = 0;
                     _program.iron.Probability = 0;
@@ -3001,49 +3023,49 @@ namespace Gold_Diggerzz
             {
                 Console.WriteLine("Your mine is almost empty, you need to find a new location to dig");
             }
-            
+
             if (!multipleDaysOrNot)
             {
                 // progress bar for the mine emptiness
-                
+
                 string emptinessString = "";
                 double numberOfHashtags = _program.minePercentageFullness / 3;
-                
+
                 for (int j = 0; j < numberOfHashtags; j++)
                 {
                     emptinessString += "##";
                 }
-                
+
                 emptinessString += "|\n";
-                
+
                 Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full:\n{emptinessString}");
-                
-                
-            }   
-            
+
+
+            }
+
             _program.minePercentageFullness -= 1;
             _program.coal.Probability *= 0.99;
             _program.stone.Probability *= 0.99;
             _program.iron.Probability *= 0.99;
             _program.gold.Probability *= 0.99;
             _program.diamond.Probability *= 0.99;
-            
+
         }
-        
+
         public void CheckInventorySize(Program _program, bool multipleDaysOrNot)
         {
             // if the inventory is full, the player can't earn more resources
-            
+
             List<Resource> fullResources = new();
             List<Resource> noLongerFullResources = new();
-            
+
             foreach (Resource resource in _program.resourcesList)
             {
                 if (resource.Quantity >= resource.MaxQuantity)
                 {
                     fullResources.Add(resource);
                 }
-                
+
                 else if (resource.Quantity >= 0.8 * resource.MaxQuantity && !multipleDaysOrNot)
                 {
                     Console.WriteLine("______________________________________________________________________________________");
@@ -3067,14 +3089,14 @@ namespace Gold_Diggerzz
                 {
                     fullResources.Remove(resource);
                 }
-            
+
                 Console.WriteLine("You can't earn more until you sell some \ud83d\ude1f ");
                 Console.WriteLine($"Currently you can store a maximum of {_program.coal.MaxQuantity}kg of each resource");
                 Console.WriteLine("You can upgrade this within the market");
             }
         }
     }
-    
+
     class GameState
     {
         public Dictionary<string, object> gameStateDictionary;
@@ -3115,18 +3137,18 @@ namespace Gold_Diggerzz
         public static void CreateNewGameState(Program program)
         {
             # region initialisation of all resource and other objects
-            
+
             program.coal = new Resource("Coal", 75, 2, 0, 0, 10);
             program.stone = new Resource("Stone", 65, 5, 0, 0, 10);
             program.iron = new Resource("Iron", 50, 12, 0, 0, 10);
             program.gold = new Resource("Gold", 17, 60, 0, 0, 10);
             program.diamond = new Resource("Diamond", 0, 90, 0, 0, 10);
-            
+
             program.resourcesList = new List<Resource>
             {
                 program.coal, program.stone, program.iron, program.gold, program.diamond
             };
-            
+
             program.dollars = new Resource("Dollars", 0, 0, 100, 0, 10);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
@@ -3138,10 +3160,11 @@ namespace Gold_Diggerzz
             program.trainingCourse = new PayForStuff(400, 1);
             program.bonus = new PayForStuff(100 + program._totalDaysDug * 2, 1.3);
             program.retirementPackage = new PayForStuff(100 + program._totalDaysDug * 10, 1.25);
+
             # endregion
-            
+
             # region initialisation of all trade objects
-            
+
             program.coalToStone = new Trade(program.stone.Price / program.coal.Price, program.coal, program.stone);
             program.coalToIron = new Trade(program.iron.Price / program.coal.Price, program.coal, program.iron);
             program.coalToGold = new Trade(program.gold.Price / program.coal.Price, program.coal, program.gold);
@@ -3212,7 +3235,7 @@ namespace Gold_Diggerzz
         public void UpdateGameState(Program _program, Dictionary<string, object> tempDictionary)
         {
             // updating the properties of the program
-            
+
 
             // option 1 - causes enumeration operation error
             foreach (KeyValuePair<string, object> entry in tempDictionary)
@@ -3315,7 +3338,7 @@ namespace Gold_Diggerzz
         public double WeeklyRentQuantity;
         public string WeeklyRentResource;
         public double Cost;
-        
+
         public RealEstate(string type, int daysLeftToBuild, double weeklyRentQuantity, string weeklyRentResource, double cost)
         {
             Type = type;
@@ -3332,20 +3355,22 @@ namespace Gold_Diggerzz
                 case 0:
                     Console.WriteLine("Cancelled");
                     break;
-                
+
                 case 1:
-                    
+
                     RealEstate apartment = new RealEstate("apartment", 5, 300, "dollars", 1000);
                     if (_program.dollars.Quantity < apartment.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build an apartment");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(apartment))
                     {
                         Console.WriteLine("You already have an apartment");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new apartment");
                     Console.WriteLine($"Your apartment will be ready in {apartment.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn ${apartment.WeeklyRentQuantity} every Monday from this apartment");
@@ -3353,7 +3378,7 @@ namespace Gold_Diggerzz
                     _program.dollars.Quantity -= apartment.Cost;
                     _program.buildingRealEstateList.Add(apartment);
                     break;
-                
+
                 case 2:
                     RealEstate house = new RealEstate("house", 5, 300, "coal", 100);
                     if (_program.coal.Quantity < house.Cost)
@@ -3361,20 +3386,22 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have enough coal to build a house");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(house))
                     {
                         Console.WriteLine("You already have an house");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new house");
                     Console.WriteLine($"Your house will be ready in {house.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn {house.WeeklyRentQuantity}kg {house.WeeklyRentResource} every Monday from this house");
                     Console.WriteLine($"You have been charged {house.Cost}kg of {house.WeeklyRentResource} for the construction of this house");
-                    
+
                     _program.coal.Quantity -= house.Cost;
                     _program.buildingRealEstateList.Add(house);
                     break;
-                
+
                 case 3:
                     RealEstate office = new RealEstate("office", 5, 300, "stone", 100);
                     if (_program.stone.Quantity < 10000)
@@ -3382,11 +3409,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have enough money to build an office");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(office))
                     {
                         Console.WriteLine("You already have an office");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new office");
                     Console.WriteLine($"Your office will be ready in {office.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn {office.WeeklyRentQuantity}kg {office.WeeklyRentResource} every Monday from this office");
@@ -3394,7 +3423,7 @@ namespace Gold_Diggerzz
                     _program.stone.Quantity -= office.Cost;
                     _program.buildingRealEstateList.Add(office);
                     break;
-                
+
                 case 4:
                     RealEstate mansion = new RealEstate("mansion", 5, 300, "iron", 100);
                     if (_program.iron.Quantity < 10000)
@@ -3402,11 +3431,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have enough iron to build a mansion");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(mansion))
                     {
                         Console.WriteLine("You already have a mansion");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new mansion");
                     Console.WriteLine($"Your mansion will be ready in {mansion.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn {mansion.WeeklyRentQuantity}kg {mansion.WeeklyRentResource} every Monday from this mansion");
@@ -3414,7 +3445,7 @@ namespace Gold_Diggerzz
                     _program.iron.Quantity -= mansion.Cost;
                     _program.buildingRealEstateList.Add(mansion);
                     break;
-                
+
                 case 5:
                     RealEstate castle = new RealEstate("castle", 5, 300, "gold", 100);
                     if (_program.gold.Quantity < 10000)
@@ -3422,11 +3453,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have enough money to build a castle");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(castle))
                     {
                         Console.WriteLine("You already have a castle");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new castle");
                     Console.WriteLine($"Your castle will be ready in {castle.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn {castle.WeeklyRentQuantity}kg {castle.WeeklyRentResource} every Monday from this castle");
@@ -3434,7 +3467,7 @@ namespace Gold_Diggerzz
                     _program.gold.Quantity -= castle.Cost;
                     _program.buildingRealEstateList.Add(castle);
                     break;
-                
+
                 case 6:
                     RealEstate palace = new RealEstate("palace", 5, 300, "diamond", 100);
                     if (_program.diamond.Quantity < 10000)
@@ -3442,11 +3475,13 @@ namespace Gold_Diggerzz
                         Console.WriteLine("You don't have enough money to build a palace");
                         break;
                     }
+
                     if (_program.activeRealEstate.Contains(palace))
                     {
                         Console.WriteLine("You already have a palace");
                         break;
                     }
+
                     Console.WriteLine("You have chosen to build a new palace");
                     Console.WriteLine($"Your palace will be ready in {palace.DaysLeftToBuild} days");
                     Console.WriteLine($"You will earn {palace.WeeklyRentQuantity}kg {palace.WeeklyRentResource} every Monday from this palace");
@@ -3457,7 +3492,7 @@ namespace Gold_Diggerzz
             }
         }
     } // balance updates needed
-    
+
     class DisplayStuff
     {
         public static void DisplayGameMechanics(Program _program)
@@ -3465,7 +3500,7 @@ namespace Gold_Diggerzz
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n   _____                                 __  __                 _                       _              \n  / ____|                               |  \\/  |               | |                     (_)             \n | |  __    __ _   _ __ ___     ___     | \\  / |   ___    ___  | |__     __ _   _ __    _    ___   ___ \n | | |_ |  / _` | | '_ ` _ \\   / _ \\    | |\\/| |  / _ \\  / __| | '_ \\   / _` | | '_ \\  | |  / __| / __|\n | |__| | | (_| | | | | | | | |  __/    | |  | | |  __/ | (__  | | | | | (_| | | | | | | | | (__  \\__ \\\n  \\_____|  \\__,_| |_| |_| |_|  \\___|    |_|  |_|  \\___|  \\___| |_| |_|  \\__,_| |_| |_| |_|  \\___| |___/\n");
             Console.ResetColor();
-            
+
             Console.WriteLine("__________________________________________________________");
             Thread.Sleep(750);
             Console.WriteLine("Current probabilities of finding resources:");
@@ -3538,25 +3573,25 @@ namespace Gold_Diggerzz
             Console.WriteLine("\n  ______                       _                                     \n |  ____|                     | |                                    \n | |__     _ __ ___    _ __   | |   ___    _   _    ___    ___   ___ \n |  __|   | '_ ` _ \\  | '_ \\  | |  / _ \\  | | | |  / _ \\  / _ \\ / __|\n | |____  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/ \\__ \\\n |______| |_| |_| |_| | .__/  |_|  \\___/   \\__, |  \\___|  \\___| |___/\n                      | |                   __/ |                    \n                      |_|                  |___/                     \n");
             Console.WriteLine("_____________________________________________________________________");
             int i = 0;
-            
+
             if (program.deadWorkersList.Count != 0)
             {
                 Console.WriteLine("__________________________________________________________________________");
                 Thread.Sleep(2500);
             }
-            
+
             foreach (Worker worker in program.deadWorkersList)
             {
                 i++;
                 Console.WriteLine($"Dead Employee Number {i} - {worker.Name}, Efficiency {Math.Round(worker.efficiency, 2)}, Died on {worker.RetirementDate.Date}, Worked for {worker.DaysWorked} days \ud83e\uddcd\u200d\u2642\ufe0f");
             }
-            
+
             if (program.retiredWorkersList.Count != 0)
             {
                 Console.WriteLine("__________________________________________________________________________");
                 Thread.Sleep(2500);
             }
-            
+
             foreach (Worker worker in program.retiredWorkersList)
             {
                 i++;
@@ -3568,7 +3603,12 @@ namespace Gold_Diggerzz
                 Console.WriteLine("__________________________________________________________________________");
                 Thread.Sleep(2500);
             }
-            
+
+            DisplayActiveEmployees(program);
+        }
+
+        public static void DisplayActiveEmployees(Program program)
+        {
             Console.WriteLine("Here are your current working employees:");
             int j = 0;
             double totalWages = 0;
@@ -3596,13 +3636,14 @@ namespace Gold_Diggerzz
                 Console.WriteLine("__________________________________________________________________________");
                 return;
             }
-            
+
             Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
             foreach (RealEstate realEstate in program.activeRealEstate)
             {
                 Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity} dollars per week");
             }
+
             Console.WriteLine("__________________________________________________________________________");
         }
 
@@ -3610,14 +3651,14 @@ namespace Gold_Diggerzz
         {
             Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
             Console.WriteLine("Here are your achievements:\n");
-            
+
             for (int achievementNumber = 0; achievementNumber < achievements.Count; achievementNumber++)
             {
                 Console.WriteLine($"Achievement {achievementNumber}: {achievements[achievementNumber]}");
             }
         }
     }
-    
+
     // classes that can be in their own files:
     class WeatherEffectsClass
     {
@@ -3626,7 +3667,7 @@ namespace Gold_Diggerzz
         public double Probability;
         public double EfficiencyMultiplier;
         public int Duration;
-        
+
         public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, int duration)
         {
             Name = name;
@@ -3636,7 +3677,7 @@ namespace Gold_Diggerzz
             Duration = duration;
         }
     }
-    
+
     class PayForStuff
     {
         public double Price;
@@ -3650,7 +3691,7 @@ namespace Gold_Diggerzz
             MoraleMultiplier = moraleMultiplier;
         }
     }
-    
+
     class PowerUp
     {
         public double Quantity;
@@ -3664,7 +3705,7 @@ namespace Gold_Diggerzz
             MaxQuantity = maxQuantity;
         }
     }
-    
+
     class Resource
     {
         public string ResourceName;
@@ -3690,3 +3731,4 @@ namespace Gold_Diggerzz
         }
     }
 }
+
