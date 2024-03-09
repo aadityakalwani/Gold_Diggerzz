@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Gold_Diggerzz
+﻿namespace Gold_Diggerzz
 {
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // now probably closer to 45, will recalculate soon
@@ -10,6 +8,7 @@ namespace Gold_Diggerzz
      * LOAD GAME STATE
      * you are allowed to make multiple trades per day
      * You can have negative power ups
+        * when you use a powerup straight away, it shouldn't reduce the amount by one but it does 
      * you can not load a game state because of either casting issues or enumeration operation errors
      * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
      * because then i'm just updating the values rather than..shit yeah that'll work?
@@ -134,9 +133,10 @@ namespace Gold_Diggerzz
 
         // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
-        [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public List<string> _possibleNames = new()
         {
+            // ReSharper disable StringLiteralTypo
+            
             "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
             "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
             "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein",
@@ -754,7 +754,11 @@ namespace Gold_Diggerzz
                         _totalDollarsEarned += 200;
                     }
 
-                    ancientArtefact.Quantity -= 1;
+                    if (ancientArtefact.Quantity > 0)
+                    {
+                        ancientArtefact.Quantity -= 1;
+                    }
+                    
                     break;
 
                 case 2:
@@ -763,7 +767,11 @@ namespace Gold_Diggerzz
                     _noWageDaysLeft = 10;
                     _animation = false;
                     miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
-                    timeMachine.Quantity -= 1;
+                    if (timeMachine.Quantity > 0)
+                    {
+                        timeMachine.Quantity -= 1;
+                    }
+                    
                     break;
 
                 case 3:
@@ -778,12 +786,16 @@ namespace Gold_Diggerzz
                     gold.Price *= 1.5;
                     diamond.Price *= 1.5;
 
-                    marketMaster.Quantity -= 1;
+                    if (marketMaster.Quantity > 0)
+                    {
+                        marketMaster.Quantity -= 1;
+                    }
+
                     break;
             }
 
             _totalPowerUpsUsed += 1;
-        } // you can have negative powerups
+        }
 
         public void SaveGameState(int saveOrLoad)
         {
@@ -1726,6 +1738,7 @@ namespace Gold_Diggerzz
                                         }
 
                                         Console.WriteLine("You have reached the maximum quantity of Ancient Artefacts");
+                                        Console.WriteLine("Due to your greed, you have lost this Ancient Artefact powerup");
                                         break;
                                 }
                             }
@@ -3212,7 +3225,6 @@ namespace Gold_Diggerzz
                     string line = reader.ReadLine();
                     if (line != "end")
                     {
-                        // ReSharper disable once PossibleNullReferenceException
                         string[] parts = line.Split(':');
                         string key = parts[0];
                         object value = parts[1];
@@ -3632,6 +3644,7 @@ namespace Gold_Diggerzz
         {
             if (program.activeRealEstate.Count == 0)
             {
+                Console.WriteLine("__________________________________________________________________________");
                 Console.WriteLine("You have no real estate properties active right now, level up brokie \ud83d\ude45\u200d\u2642\ufe0f ");
                 Console.WriteLine("__________________________________________________________________________");
                 return;
@@ -3641,7 +3654,15 @@ namespace Gold_Diggerzz
             Console.WriteLine($"You have {program.activeRealEstate.Count} real estate properties active right now:");
             foreach (RealEstate realEstate in program.activeRealEstate)
             {
-                Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity} dollars per week");
+                if (realEstate.WeeklyRentResource == "dollars")
+                {
+                    Console.WriteLine($"Your {realEstate.Type} is giving you ${realEstate.WeeklyRentQuantity} per week");
+                }
+
+                else
+                {
+                    Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity}kg of {realEstate.WeeklyRentResource} per week");
+                }
             }
 
             Console.WriteLine("__________________________________________________________________________");
