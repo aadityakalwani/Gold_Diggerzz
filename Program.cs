@@ -1318,6 +1318,7 @@ namespace Gold_Diggerzz
 
         public static void SpecialistHiringScreen(Program _program)
         {
+            
             if (_program.dollars.Quantity < 1000)
             {
                 Console.WriteLine("You don't have enough dollars to hire a specialist");
@@ -1340,6 +1341,8 @@ namespace Gold_Diggerzz
                 Specialist ironManager = new Specialist(15, 2, "iron", 1000);
                 Specialist goldManager = new Specialist(15, 2, "gold", 1000);
                 Specialist diamondManager = new Specialist(15, 2, "diamond", 1000);
+                
+                bool hire = true;
 
                 switch (managerChoice)
                 {
@@ -1347,70 +1350,98 @@ namespace Gold_Diggerzz
                         Console.WriteLine("Returning to main menu screen");
                         break;
                     case 1:
-                        if (_program.managersList.Contains(coalManager))
+                        foreach (Specialist specialist in _program.managersList)
                         {
-                            Console.WriteLine("You already have a coal manager");
-                            break;
+                            if (specialist.ResourceName == "coal")
+                            {
+                                Console.WriteLine("You already have a coal specialist");
+                                hire = false;
+                            }
                         }
-                        
-                        _program.dollars.Quantity -= coalManager.Cost;
-                        _program.coal.Probability *= coalManager.ProbabilityMultiplier;
-                        _program.managersList.Add(coalManager);
-                        
-                        Console.WriteLine("You have hired a coal manager");
+
+                        if (hire)
+                        {
+                            _program.dollars.Quantity -= coalManager.Cost;
+                            _program.coal.Probability *= coalManager.ProbabilityMultiplier;
+                            _program.managersList.Add(coalManager);
+                            Console.WriteLine("You have hired a coal specialist");
+                        }
                         break;
                     case 2:
-                        _program.dollars.Quantity -= stoneManager.Cost;
-                        _program.stone.Probability *= stoneManager.ProbabilityMultiplier;
-                        if (!_program.managersList.Contains(stoneManager))
+                        foreach (Specialist specialist in _program.managersList)
                         {
-                            _program.managersList.Add(stoneManager);
-                            Console.WriteLine("You have hired a stone manager");
+                            if (specialist.ResourceName == "stone")
+                            {
+                                Console.WriteLine("You already have a stone specialist");
+                                hire = false;
+                            }
                         }
-                        else
+
+                        if (hire)
                         {
-                            Console.WriteLine("You already have a stone manager");
+                            _program.dollars.Quantity -= stoneManager.Cost;
+                            _program.stone.Probability *= stoneManager.ProbabilityMultiplier;
+                            _program.managersList.Add(stoneManager);
+                            Console.WriteLine("You have hired a stone specialist");
                         }
 
                         break;
                     case 3:
-                        _program.dollars.Quantity -= ironManager.Cost;
-                        _program.iron.Probability *= ironManager.ProbabilityMultiplier;
-                        if (!_program.managersList.Contains(ironManager))
+                        foreach (Specialist specialist in _program.managersList)
                         {
+                            if (specialist.ResourceName == "iron")
+                            {
+                                Console.WriteLine("You already have an iron specialist");
+                                hire = false;
+                            }
+                        }
+
+                        if (hire)
+                        {
+                            _program.dollars.Quantity -= ironManager.Cost;
+                            _program.iron.Probability *= ironManager.ProbabilityMultiplier;
                             _program.managersList.Add(ironManager);
-                            Console.WriteLine("You have hired an iron manager");
+                            Console.WriteLine("You have hired an iron specialist");
                         }
-                        else
-                        {
-                            Console.WriteLine("You already have an iron manager");
-                        }
+                        
                         break;
                     case 4:
-                        _program.dollars.Quantity -= goldManager.Cost;
-                        _program.gold.Probability *= goldManager.ProbabilityMultiplier;
-                        if (!_program.managersList.Contains(goldManager))
+                        foreach (Specialist specialist in _program.managersList)
                         {
+                            if (specialist.ResourceName == "gold")
+                            {
+                                Console.WriteLine("You already have a gold specialist");
+                                hire = false;
+                            }
+                        }
+
+                        if (hire)
+                        {
+                            _program.dollars.Quantity -= goldManager.Cost;
+                            _program.gold.Probability *= goldManager.ProbabilityMultiplier;
                             _program.managersList.Add(goldManager);
-                            Console.WriteLine("You have hired a gold manager");
+                            Console.WriteLine("You have hired a gold specialist");
                         }
-                        else
-                        {
-                            Console.WriteLine($"You already have a gold manager");
-                        }
+                        
                         break;
                     case 5:
-                        _program.dollars.Quantity -= diamondManager.Cost;
-                        _program.diamond.Probability *= diamondManager.ProbabilityMultiplier;
-                        if (!_program.managersList.Contains(diamondManager))
+                        foreach (Specialist specialist in _program.managersList)
                         {
+                            if (specialist.ResourceName == "diamond")
+                            {
+                                Console.WriteLine("You already have a diamond specialist");
+                                hire = false;
+                            }
+                        }
+
+                        if (hire)
+                        {
+                            _program.dollars.Quantity -= diamondManager.Cost;
+                            _program.diamond.Probability *= diamondManager.ProbabilityMultiplier;
                             _program.managersList.Add(diamondManager);
-                            Console.WriteLine("You have hired a diamond manager");
+                            Console.WriteLine("You have hired a diamond specialist");
                         }
-                        else
-                        {
-                            Console.WriteLine($"You already have a diamond manager");
-                        }
+                        
                         break;
                 }
             }
