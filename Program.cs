@@ -8,8 +8,9 @@ namespace Gold_Diggerzz
 
     /* current issues
      * LOAD GAME STATE
-     * morale drops too quickly
      * you can hire multiple of the same manager at the same time
+     * you are allowed to make multiple trades per day
+     * You can have negative power ups
      * you can not load a game state because of either casting issues or enumeration operation errors
      * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
         * because then i'm just updating the values rather than..shit yeah that'll work?
@@ -18,8 +19,6 @@ namespace Gold_Diggerzz
     /* to-do ideas
     * better understand what to do with morale - right now its just a multiplier for efficiency
     * convert to proper traditional OOP via getters and setters
-    * you are allowed to make multiple trades per day
-    * You can have negative power ups
     * Sell/fire employees code - initial menu option and subroutine created within the Worker class
     * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
     * adding more incentive to keep playing
@@ -1654,82 +1653,6 @@ namespace Gold_Diggerzz
                             bool timeMachineFound = randomForTimeMachine < _program.timeMachine.Probability;
                             bool magicTokenFound = randomForMagicToken < _program.magicTokens.Probability;
                             
-                            if (coalFound)
-                            {
-                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                                _program.coal.Quantity += newResourcesFound;
-                                _program.coal.TotalFound += newResourcesFound;
-                                newCoal += newResourcesFound;
-                                
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
-                                }
-                            }
-
-                            if (stoneFound)
-                            {
-                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                                _program.stone.Quantity += newResourcesFound;
-                                _program.stone.TotalFound += newResourcesFound;
-                                newStone += newResourcesFound;
-
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
-                                }
-                            }
-
-                            if (ironFound)
-                            {
-                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                                _program.iron.Quantity += newResourcesFound;
-                                _program.iron.TotalFound += newResourcesFound;
-                                newIron += newResourcesFound;
-                                
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
-                                }
-                            }
-
-                            if (goldFound)
-                            {
-                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                                _program.gold.Quantity += newResourcesFound;
-                                _program.gold.TotalFound += newResourcesFound;
-                                newGold += newResourcesFound;
-                                
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
-                                }
-                            }
-
-                            if (diamondFound)
-                            {
-                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
-                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
-                                _program.diamond.Quantity += newResourcesFound;
-                                _program.diamond.TotalFound += newResourcesFound;
-                                newDiamond += newResourcesFound;
-
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
-                                }
-                            }
-
-                            if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
-                                !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
-                            {
-                                Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
-                            }
-
                             if (ancientArtefactFound)
                             {
                                 Console.WriteLine("__________________________________________________________");
@@ -1831,6 +1754,83 @@ namespace Gold_Diggerzz
                                         break;
                                 }
                             }
+                            
+                            if (coalFound)
+                            {
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.coal.Quantity += newResourcesFound;
+                                _program.coal.TotalFound += newResourcesFound;
+                                newCoal += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                                }
+                            }
+
+                            if (stoneFound)
+                            {
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.stone.Quantity += newResourcesFound;
+                                _program.stone.TotalFound += newResourcesFound;
+                                newStone += newResourcesFound;
+
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                                }
+                            }
+
+                            if (ironFound)
+                            {
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.iron.Quantity += newResourcesFound;
+                                _program.iron.TotalFound += newResourcesFound;
+                                newIron += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                                }
+                            }
+
+                            if (goldFound)
+                            {
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.gold.Quantity += newResourcesFound;
+                                _program.gold.TotalFound += newResourcesFound;
+                                newGold += newResourcesFound;
+                                
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
+                                }
+                            }
+
+                            if (diamondFound)
+                            {
+                                double randomResourceQuantityFluctuation = random.Next(80, 120) / 100.0;
+                                double newResourcesFound = _program.workersList.Count * _program._averageEmployeeEfficiency * randomResourceQuantityFluctuation;
+                                _program.diamond.Quantity += newResourcesFound;
+                                _program.diamond.TotalFound += newResourcesFound;
+                                newDiamond += newResourcesFound;
+
+                                if (!multipleDayDig)
+                                {
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                                }
+                            }
+
+                            if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
+                                !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
+                            {
+                                Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
+                            }
+                            
                         }
 
                         // calendar/weather etc effects 
@@ -2974,26 +2974,21 @@ namespace Gold_Diggerzz
             
             if (!multipleDaysOrNot)
             {
-                Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full");
+                // progress bar for the mine emptiness
                 
-                /*
-                 progress bar for the mine emptiness
-                 
-                 Console.WriteLine("\nProgress:");
-                   for (int j = 0; j < 15; j++)
-                   {
-                       if (j < _program.minePercentageFullness)
-                       {
-                           Console.Write("##");
-                       }
-                       else
-                       {
-                           Console.Write(" ");
-                       }
-                   }
-
-                   Console.WriteLine("| \ud83e\ude93\ud83e\ude93");
-                 */
+                string emptinessString = "";
+                double numHashtags = _program.minePercentageFullness / 5;
+                
+                for (int j = 0; j < numHashtags; j++)
+                {
+                    emptinessString += "##";
+                }
+                
+                emptinessString += "|\n";
+                
+                Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full:\n{emptinessString}");
+                
+                
             }   
             
             _program.minePercentageFullness -= 1;
