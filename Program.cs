@@ -2,7 +2,7 @@
 {
     // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
     // now probably closer to 45, will recalculate soon
-    // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator#main.py
+    // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator-1#main.py
 
     /* current issues
      * LOAD GAME STATE
@@ -10,8 +10,8 @@
      * You can have negative power ups
         * when you use a powerup straight away, it shouldn't reduce the amount by one but it does 
      * you can not load a game state because of either casting issues or enumeration operation errors
-     * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
-     * because then i'm just updating the values rather than..shit yeah that'll work?
+        * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
+            * because then i'm just updating the values rather than..shit yeah that'll work?
      */
 
     /* to-do ideas
@@ -19,23 +19,21 @@
      * convert to proper traditional OOP via getters and setters
      * Sell/fire employees code - initial menu option and subroutine created within the Worker class
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
-     * adding more incentive to keep playing
-     * option to print all achievements and show if unlocked or not yet
-     * goals to reach
-     * if you reach _______ income you can find ______
+     * Game Progression
+        * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
+        * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
+        * goals to reach
+            * if you reach _______ income you can find ______
+        * option to print all achievements and show if unlocked or not
      * option to upgrade your shovel to unlock more materials
-     * Eg. Mine space rocks, T-rex bones
+     * mine more shit Eg. Mine space rocks, T-rex bones
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
      * create reputation (do i need to? ++ how will this work with morale?)
      * a morale-boosting powerup
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
-     * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
-     * new mine also means new resources??? like a dinosaur mine that has dinosaur bones as well as stone, gold, etc. a space mine that has space rocks, etc
      * achievements are OOP-ed? idk about this one - give it some thought
      * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
      * loans - you can take a loan from the bank and pay it back with interest
-     * stock market feature (kinda done?)
-     * ++ idea that every 5 gold sold, increase gold price and for every 5 gold mined/gained, decrease price? Incentivising selling fast and not holding resources for ages
      * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
      */
 
@@ -56,26 +54,37 @@
         public double _totalDollarsEarned;
         public double _averageEmployeeEfficiency = 1;
         public double _averageEmployeeMorale = 1;
-        public bool _achievement1;
-        public bool _achievement2;
-        public bool _achievement3;
-        public bool _achievement4;
-        public bool _achievement5;
-        public bool _achievement6;
-        public bool _achievement7;
-        public bool _achievement8;
-        public bool _achievement9;
-        public bool _achievement10;
-        public bool _achievement11;
-        public bool _achievement12;
-        public bool _achievement13;
-        public bool _achievement14;
-        public bool _achievement15;
-        public bool _achievement16;
-        public bool _achievement17;
-        public bool _achievement18;
-        public bool _achievement19;
-        public bool _achievement20;
+
+
+        public static Achievements achievement1 = new Achievements(0, "100kg of coal mined");
+        public static Achievements achievement2 = new Achievements(1, "1000kg of coal found");
+        public static Achievements achievement3 = new Achievements(2, "10000kg of coal found");
+        public static Achievements achievement4 = new Achievements(3, "100kg of stone found");
+        public static Achievements achievement5 = new Achievements(4, "1000kg of stone found");
+        public static Achievements achievement6 = new Achievements(5, "10000kg of stone found");
+        public static Achievements achievement7 = new Achievements(6, "75kg of iron found");
+        public static Achievements achievement8 = new Achievements(7, "750kg of iron found");
+        public static Achievements achievement9 = new Achievements(8, "7500kg of iron found");
+        public static Achievements achievement10 = new Achievements(9, "30kg of gold found");
+        public static Achievements achievement11 = new Achievements(10, "300kg of gold found");
+        public static Achievements achievement12 = new Achievements(11, "3000kg of gold found");
+        public static Achievements achievement13 = new Achievements(12, "10kg of diamond found");
+        public static Achievements achievement14 = new Achievements(13, "100kg of diamond found");
+        public static Achievements achievement15 = new Achievements(14, "1000kg of diamond found");
+        public static Achievements achievement16 = new Achievements(15, "$300 total earned");
+        public static Achievements achievement17 = new Achievements(16, "$1000 total earned");
+        public static Achievements achievement18 = new Achievements(17, "$10000 total earned");
+        public static Achievements achievement19 = new Achievements(18, "10 employees hired");
+        public static Achievements achievement20 = new Achievements(19, "100 employees hired");
+
+        public List<Achievements> achievementsList = new()
+        {
+            achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9, achievement10,
+            achievement11, achievement12, achievement13, achievement14, achievement15, achievement16, achievement17, achievement18, achievement19, achievement20
+        };
+        
+        
+        
         public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
@@ -129,7 +138,6 @@
         public Trade ironToDiamond;
         public Trade goldToDiamond;
 
-        public List<string> achievementsList = new();
 
         // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
@@ -1576,9 +1584,24 @@
 
     } // you're allowed multiple trades per day
 
+    class Achievements
+    {
+        
+        public int AchievementNumber;
+        public bool AchievementUnlocked = false;
+        public string AchievementDescription;
+
+        public Achievements(int achievementNumber, string achievementDescription)
+        {
+            AchievementNumber = achievementNumber;
+            AchievementUnlocked = false;
+            AchievementDescription = achievementDescription;
+        }
+    }
+
     class MiningOperation
     {
-        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<string> achievements)
+        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<Achievements> achievements)
         {
 
             bool multipleDayDig = daysToDig > 1;
@@ -2789,151 +2812,127 @@
 
         }
 
-        public void CheckAchievements(List<string> achievements, Program _program)
+        public void CheckAchievements(List<Achievements> achievements, Program _program)
         {
-
-            if (_program.coal.TotalFound >= 100 && !_program._achievement1)
+            
+            if (_program.coal.TotalFound >= 100 && !achievements[0].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of coal found milestone");
-                _program._achievement1 = true;
-                achievements.Add("100kg of coal found");
-
-                Console.WriteLine("Because of this milestone, you've unlocked the ability to find diamond!");
-                _program.diamond.Probability = 8;
-
+                achievements[0].AchievementUnlocked = true;
             }
 
-            if (_program.coal.TotalFound >= 1000 && !_program._achievement2)
+            if (_program.coal.TotalFound >= 1000 && !achievements[1].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of coal found milestone");
-                _program._achievement2 = true;
-                achievements.Add("1000kg of coal found");
+                achievements[1].AchievementUnlocked = true;
             }
 
-            if (_program.coal.TotalFound >= 10000 && !_program._achievement3)
+            if (_program.coal.TotalFound >= 10000 && !achievements[2].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of coal found milestone");
-                _program._achievement3 = true;
-                achievements.Add("10000kg of coal found");
+                achievements[2].AchievementUnlocked = true;
             }
 
-            if (_program.stone.TotalFound >= 100 && !_program._achievement4)
+            if (_program.stone.TotalFound >= 100 && !achievements[3].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of stone found milestone");
-                _program._achievement4 = true;
-                achievements.Add("100kg of stone found");
+                achievements[3].AchievementUnlocked = true;
             }
 
-            if (_program.stone.TotalFound >= 1000 && !_program._achievement5)
+            if (_program.stone.TotalFound >= 1000 && !achievements[4].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of stone found milestone");
-                _program._achievement5 = true;
-                achievements.Add("1000kg of stone found");
+                achievements[4].AchievementUnlocked = true;
             }
 
-            if (_program.stone.TotalFound >= 10000 && !_program._achievement6)
+            if (_program.stone.TotalFound >= 10000 && !achievements[5].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 10000kg of stone found milestone");
-                _program._achievement6 = true;
-                achievements.Add("10000kg of stone found");
+                achievements[5].AchievementUnlocked = true;
             }
 
-            if (_program.iron.TotalFound >= 75 && !_program._achievement7)
+            if (_program.iron.TotalFound >= 75 && !achievements[6].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 75kg of iron found milestone");
-                _program._achievement7 = true;
-                achievements.Add("75kg of iron found");
+                achievements[6].AchievementUnlocked = true;
             }
 
-            if (_program.iron.TotalFound >= 750 && !_program._achievement8)
+            if (_program.iron.TotalFound >= 750 && !achievements[7].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 750kg of iron found milestone");
-                _program._achievement8 = true;
-                achievements.Add("750kg of iron found");
+                achievements[7].AchievementUnlocked = true;
             }
 
-            if (_program.iron.TotalFound >= 7500 && !_program._achievement9)
+            if (_program.iron.TotalFound >= 7500 && !achievements[8].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 7500kg of iron found milestone");
-                _program._achievement9 = true;
-                achievements.Add("7500kg of iron found");
+                achievements[8].AchievementUnlocked = true;
             }
 
-            if (_program.gold.TotalFound >= 30 && !_program._achievement10)
+            if (_program.gold.TotalFound >= 30 && !achievements[9].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 30kg of gold found milestone");
-                _program._achievement10 = true;
-                achievements.Add("30kg of gold found");
+                achievements[9].AchievementUnlocked = true;
             }
 
-            if (_program.gold.TotalFound >= 300 && !_program._achievement11)
+            if (_program.gold.TotalFound >= 300 && !achievements[10].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 300kg of gold found milestone");
-                _program._achievement11 = true;
-                achievements.Add("300kg of gold found");
+                achievements[10].AchievementUnlocked = true;
             }
 
-            if (_program.gold.TotalFound >= 3000 && !_program._achievement12)
+            if (_program.gold.TotalFound >= 3000 && !achievements[11].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 3000kg of gold found milestone");
-                _program._achievement12 = true;
-                achievements.Add("3000kg of gold found");
+                achievements[11].AchievementUnlocked = true;
             }
 
-            if (_program.diamond.TotalFound >= 10 && !_program._achievement13)
+            if (_program.diamond.TotalFound >= 10 && !achievements[12].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 10kg of diamond found milestone");
-                _program._achievement13 = true;
-                achievements.Add("10kg of diamond found");
+                achievements[12].AchievementUnlocked = true;
             }
 
-            if (_program.diamond.TotalFound >= 100 && !_program._achievement14)
+            if (_program.diamond.TotalFound >= 100 && !achievements[13].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 100kg of diamond found milestone");
-                _program._achievement14 = true;
-                achievements.Add("100kg of diamond found");
+                achievements[13].AchievementUnlocked = true;
             }
 
-            if (_program.diamond.TotalFound >= 1000 && !_program._achievement15)
+            if (_program.diamond.TotalFound >= 1000 && !achievements[14].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 1000kg of diamond found milestone");
-                _program._achievement15 = true;
-                achievements.Add("1000kg of diamond found");
+                achievements[14].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 300 && !_program._achievement16)
+            if (_program._totalDollarsEarned >= 300 && !achievements[15].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
-                _program._achievement16 = true;
-                achievements.Add("$300 earned");
+                achievements[15].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 1000 && !_program._achievement17)
+            if (_program._totalDollarsEarned >= 1000 && !achievements[16].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
-                _program._achievement17 = true;
-                achievements.Add("$1000 earned");
+                achievements[16].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 10000 && !_program._achievement18)
+            if (_program._totalDollarsEarned >= 10000 && !achievements[17].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
-                _program._achievement18 = true;
-                achievements.Add("$10000 earned");
+                achievements[17].AchievementUnlocked = true;
             }
 
-            if (_program._totalEmployeesHired >= 10 && !_program._achievement19)
+            if (_program._totalEmployeesHired >= 10 && !achievements[18].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 10 employees hired milestone");
-                _program._achievement19 = true;
-                achievements.Add("10 employees hired");
+                achievements[18].AchievementUnlocked = true;
             }
 
-            if (_program._totalEmployeesHired >= 100 && !_program._achievement20)
+            if (_program._totalEmployeesHired >= 100 && !achievements[19].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: 100 employees hired milestone");
-                _program._achievement20 = true;
-                achievements.Add("100 employees hired");
+                achievements[19].AchievementUnlocked = true;
             }
         }
 
@@ -3327,7 +3326,7 @@
                         _program.marketMaster = (PowerUp)entry.Value;
                         break;
                     case "achievementsList":
-                        _program.achievementsList = (List<string>)entry.Value;
+                        _program.achievementsList = (List<Achievements>)entry.Value;
                         break;
                     case "currentWageRate":
                         _program._currentWageRate = (double)entry.Value;
@@ -3668,7 +3667,7 @@
             Console.WriteLine("__________________________________________________________________________");
         }
 
-        public static void DisplayAchievements(List<string> achievements, Program program)
+        public static void DisplayAchievements(List<Achievements> achievements, Program program)
         {
             Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
             Console.WriteLine("Here are your achievements:\n");

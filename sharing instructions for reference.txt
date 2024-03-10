@@ -1,7 +1,13 @@
 Instructions to share game post
 
 Within rider -> terminal
-Copy pasta all three raycast pinned clipboard items
+Copy pasta all three raycast pinned clipboard items:
+
+dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -o ./OpenMe/AppleSiliconMacs
+dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -o ./OpenMe/IntelMacs
+dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -o ./OpenMe/WindowsDevices
+
+
 Go into the GoldDiggerzz folder
 
 Compress the 'Open Me ' file and rename it to 'Download Me ' via the text replacement !d
