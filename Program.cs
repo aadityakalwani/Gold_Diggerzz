@@ -83,8 +83,6 @@
             achievement11, achievement12, achievement13, achievement14, achievement15, achievement16, achievement17, achievement18, achievement19, achievement20
         };
         
-        
-        
         public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
@@ -370,7 +368,7 @@
                         DisplayStuff.DisplayStats(this);
                         break;
                     case 12:
-                        DisplayStuff.DisplayAchievements(achievementsList, this);
+                        DisplayStuff.DisplayAchievements(achievementsList, 1);
                         break;
                     case 13:
                         RunTutorial();
@@ -495,6 +493,9 @@
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
                         Specialist.SpecialistHiringScreen(this);
                         break;
+                    case 23:
+                        DisplayStuff.DisplayAchievements(achievementsList, 2);
+                        break;
                     default:
                         Console.WriteLine("Please enter a valid option");
                         break;
@@ -564,9 +565,9 @@
                 Console.WriteLine("                                                                                                                                                                 |");
                 Console.WriteLine("0 - Quit game           |   5 - Display employees       |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
                 Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Display achievements    |                              |   18 - Save current progress           |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Completed achievements  |                              |   18 - Save current progress           |");
                 Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
-                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |                                |                              |   20 - Skip one day                    |");
+                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Incomplete achievements |                              |   20 - Skip one day                    |");
                 Console.WriteLine("                        |   22 - Hire specialist");
                 Console.WriteLine("\nEnter your choice:");
 
@@ -3667,15 +3668,35 @@
             Console.WriteLine("__________________________________________________________________________");
         }
 
-        public static void DisplayAchievements(List<Achievements> achievements, Program program)
+        public static void DisplayAchievements(List<Achievements> achievements, int subChoice)
         {
             Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
-            Console.WriteLine("Here are your achievements:\n");
-
-            for (int achievementNumber = 0; achievementNumber < achievements.Count; achievementNumber++)
+            if (subChoice == 1)
             {
-                Console.WriteLine($"Achievement {achievementNumber}: {achievements[achievementNumber]}");
+                Console.WriteLine("Here are your completed achievements:\n");
+
+                foreach (Achievements achievement in achievements)
+                {
+                    if (achievement.AchievementUnlocked)
+                    {
+                        Console.WriteLine($"Achievement {achievement.AchievementNumber} - {achievement.AchievementDescription}");
+                    }
+                }
             }
+            
+            else if (subChoice == 2)
+            {
+                Console.WriteLine("Here are your not-yet-completed achievements:\n");
+
+                foreach (Achievements achievement in achievements)
+                {
+                    if (!achievement.AchievementUnlocked)
+                    {
+                        Console.WriteLine($"Locked achievement {achievement.AchievementNumber} - {achievement.AchievementDescription}");
+                    }
+                }
+            }
+            
         }
     }
 
