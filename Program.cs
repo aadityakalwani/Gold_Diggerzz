@@ -370,7 +370,7 @@
                     case 12:
                         DisplayStuff.DisplayAchievements(achievementsList, 1);
                         break;
-                    case 13:
+                    case 23:
                         RunTutorial();
                         break;
                     case 14:
@@ -493,7 +493,7 @@
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
                         Specialist.SpecialistHiringScreen(this);
                         break;
-                    case 23:
+                    case 13:
                         DisplayStuff.DisplayAchievements(achievementsList, 2);
                         break;
                     default:
@@ -561,14 +561,14 @@
                 Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("_________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Employee Options:               Display Features:                Real Estate Features:          Other Features:                      |");
+                Console.WriteLine("Main Features:              Employee Options:               Display Features:                 Real Estate Features:          Other Features:                     |");
                 Console.WriteLine("                                                                                                                                                                 |");
-                Console.WriteLine("0 - Quit game           |   5 - Display employees       |   10 - Display game mechanics  |   14 - Display real estate   |   16 - Use a powerup                   |");
-                Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats           |   15 - Build real estate     |   17 - Commit a crime (more inside)    |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Completed achievements  |                              |   18 - Save current progress           |");
-                Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Display tutorial        |   21 - Move to a new mine    |   19 - Load game state                 |");
-                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Incomplete achievements |                              |   20 - Skip one day                    |");
-                Console.WriteLine("                        |   22 - Hire specialist");
+                Console.WriteLine("0 - Quit game           |   5 - Show employees          |   10 - Display game mechanics   |   14 - Display real estate   |   16 - Use a powerup                  |");
+                Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats            |   15 - Build real estate     |   17 - Commit a crime (more inside)   |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Completed achievements   |                              |   18 - Save current progress          |");
+                Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Incomplete achievements  |                              |   19 - Load game state                |");
+                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Display tutorial         |   21 - Move to a new mine    |   20 - Skip one day                   |");
+                Console.WriteLine("                        |   22 - Hire specialist        |                                 |                              |                                       |");
                 Console.WriteLine("\nEnter your choice:");
 
                 int userOption = GetValidInt(0, 22);
