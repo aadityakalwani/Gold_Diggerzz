@@ -51,10 +51,8 @@
         public int _totalPowerUpsUsed;
         public double _totalDaysDug;
         public double _totalEmployeesHired;
-        public double _totalDollarsEarned;
         public double _averageEmployeeEfficiency = 1;
         public double _averageEmployeeMorale = 1;
-
 
         public static Achievements achievement1 = new Achievements(0, "100kg of coal mined");
         public static Achievements achievement2 = new Achievements(1, "1000kg of coal found");
@@ -606,7 +604,7 @@
                 {
                     Console.WriteLine("\ud83d\udc77 \ud83d\udd2bYou don't have resources to sell, so we're selling all your workers for $50 each to pay off the debt \ud83d\udc77 \ud83d\udd2b");
                     dollars.Quantity += workersList.Count * 50;
-                    _totalDollarsEarned += workersList.Count * 50;
+                    dollars.TotalFound += workersList.Count * 50;
 
                     while (workersList.Count > 1)
                     {
@@ -622,7 +620,7 @@
                                               diamond.Quantity * diamond.Price) * 0.3;
 
                     dollars.Quantity += changeInDollars;
-                    _totalDollarsEarned += changeInDollars;
+                    dollars.TotalFound += changeInDollars;
 
                     // if they wont be able to pay wages after gaining the extra dollars, declare bankruptcy to avoid infinite loop
 
@@ -760,7 +758,7 @@
                     {
                         Console.WriteLine("You have chosen the $200 instantly");
                         dollars.Quantity += 200;
-                        _totalDollarsEarned += 200;
+                        dollars.TotalFound += 200;
                     }
 
                     if (ancientArtefact.Quantity > 0)
@@ -1075,11 +1073,14 @@
             Console.WriteLine("For now, here's the way it works:");
             Console.WriteLine("You can fire employees, and you gain 1/2 as much as what you paid for them");
             DisplayStuff.DisplayActiveEmployees(_program);
+            
             Console.WriteLine("Enter the number of the employee you want to fire:");
+            
             int employeeToFire = _program.GetValidInt(1, _program.workersList.Count) -1;
             Console.WriteLine($"You have fired {_program.workersList[employeeToFire].Name}");
             _program.dollars.Quantity += 0.5 * _program.workersList[employeeToFire].Price;
             _program.dollars.TotalFound += 0.5 * _program.workersList[employeeToFire].Price;
+            
             _program.workersList.RemoveAt(employeeToFire);
         }
 
@@ -2093,7 +2094,7 @@
                                 {
                                     _program.coal.Quantity -= coalToSell;
                                     _program.dollars.Quantity += coalToSell * _program.coal.Price;
-                                    _program._totalDollarsEarned += coalToSell * _program.coal.Price;
+                                    _program.dollars.TotalFound += coalToSell * _program.coal.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2112,7 +2113,7 @@
                                 {
                                     _program.stone.Quantity -= stoneToSell;
                                     _program.dollars.Quantity += stoneToSell * _program.stone.Price;
-                                    _program._totalDollarsEarned += stoneToSell * _program.stone.Price;
+                                    _program.dollars.TotalFound += stoneToSell * _program.stone.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2130,7 +2131,7 @@
                                 {
                                     _program.iron.Quantity -= ironToSell;
                                     _program.dollars.Quantity += ironToSell * _program.iron.Price;
-                                    _program._totalDollarsEarned += ironToSell * _program.iron.Price;
+                                    _program.dollars.TotalFound += ironToSell * _program.iron.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2148,7 +2149,7 @@
                                 {
                                     _program.gold.Quantity -= goldToSell;
                                     _program.dollars.Quantity += goldToSell * _program.gold.Price;
-                                    _program._totalDollarsEarned += goldToSell * _program.gold.Price;
+                                    _program.dollars.TotalFound += goldToSell * _program.gold.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2167,7 +2168,7 @@
                                 {
                                     _program.diamond.Quantity -= diamondToSell;
                                     _program.dollars.Quantity += diamondToSell * _program.diamond.Price;
-                                    _program._totalDollarsEarned += diamondToSell * _program.diamond.Price;
+                                    _program.dollars.TotalFound += diamondToSell * _program.diamond.Price;
                                 }
 
                                 Console.WriteLine("Here are your updated resources:");
@@ -2187,7 +2188,7 @@
                             _program.gold.Quantity * _program.gold.Price +
                             _program.diamond.Quantity * _program.diamond.Price;
 
-                        _program._totalDollarsEarned +=
+                        _program.dollars.TotalFound +=
                             _program.coal.Quantity * _program.coal.Price +
                             _program.stone.Quantity * _program.stone.Price +
                             _program.iron.Quantity * _program.iron.Price +
@@ -2907,19 +2908,19 @@
                 achievements[14].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 300 && !achievements[15].AchievementUnlocked)
+            if (_program.dollars.TotalFound >= 300 && !achievements[15].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $300 earned milestone");
                 achievements[15].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 1000 && !achievements[16].AchievementUnlocked)
+            if (_program.dollars.TotalFound >= 1000 && !achievements[16].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $1000 earned milestone");
                 achievements[16].AchievementUnlocked = true;
             }
 
-            if (_program._totalDollarsEarned >= 10000 && !achievements[17].AchievementUnlocked)
+            if (_program.dollars.TotalFound >= 10000 && !achievements[17].AchievementUnlocked)
             {
                 Console.WriteLine("You've unlocked an achievement: $10000 earned milestone");
                 achievements[17].AchievementUnlocked = true;
@@ -3128,7 +3129,7 @@
                 { "totalPowerUpsUsed", _program._totalPowerUpsUsed },
                 { "totalDaysDug", _program._totalDaysDug },
                 { "totalEmployeesHired", _program._totalEmployeesHired },
-                { "totalDollarsEarned", _program._totalDollarsEarned },
+                { "totalDollarsEarned", _program.dollars.TotalFound },
                 { "employeesList", _program.workersList },
                 { "retiredEmployeesList", _program.retiredWorkersList },
                 { "coal", _program.coal },
@@ -3289,7 +3290,7 @@
                         _program._totalEmployeesHired = (double)entry.Value;
                         break;
                     case "totalDollarsEarned":
-                        _program._totalDollarsEarned = (double)entry.Value;
+                        _program.dollars.TotalFound = (double)entry.Value;
                         break;
                     case "employeesList":
                         _program.workersList = (List<Worker>)entry.Value;
@@ -3566,7 +3567,7 @@
             Console.WriteLine($"Total employees hired: {program._totalEmployeesHired}");
             Console.WriteLine($"Total bribes paid: {program._totalBribes}");
             Console.WriteLine("__________________________________________________________");
-            Console.WriteLine($"\nTotal dollars earned: ${Math.Round(program._totalDollarsEarned, 2)}");
+            Console.WriteLine($"\nTotal dollars earned: ${Math.Round(program.dollars.TotalFound, 2)}");
             Console.WriteLine($"Total days dug: {program._totalDaysDug}");
         }
 
