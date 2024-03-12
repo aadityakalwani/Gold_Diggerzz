@@ -1073,12 +1073,14 @@
             Console.WriteLine("It's just here to make the menu look more full lol");
             Console.WriteLine("If you want me to make this work properly, message me and I'll get working on it");
             Console.WriteLine("For now, here's the way it works:");
-            Console.WriteLine("You can fire employees, but you don't gain anything from it");
+            Console.WriteLine("You can fire employees, and you gain 1/2 as much as what you paid for them");
             DisplayStuff.DisplayActiveEmployees(_program);
             Console.WriteLine("Enter the number of the employee you want to fire:");
-            int employeeToFire = _program.GetValidInt(1, _program.workersList.Count);
-            Console.WriteLine($"You have fired {_program.workersList[employeeToFire - 1].Name}");
-            _program.workersList.RemoveAt(employeeToFire - 1);
+            int employeeToFire = _program.GetValidInt(1, _program.workersList.Count) -1;
+            Console.WriteLine($"You have fired {_program.workersList[employeeToFire].Name}");
+            _program.dollars.Quantity += 0.5 * _program.workersList[employeeToFire].Price;
+            _program.dollars.TotalFound += 0.5 * _program.workersList[employeeToFire].Price;
+            _program.workersList.RemoveAt(employeeToFire);
         }
 
         public static void HireNewWorker(int numberOfWorkers, string type, Program _program)
