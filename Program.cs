@@ -17,7 +17,7 @@
     /* to-do ideas
      * better understand what to do with morale - right now its just a multiplier for efficiency
      * convert to proper traditional OOP via getters and setters
-     * Sell/fire employees code - initial menu option and subroutine created within the Worker class
+     * prettify firing workers
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * Game Progression
         * Resource Discovery: Add a feature where players can discover new resources as they dig deeper. These new resources could be more valuable but also more difficult to extract. also based on achievements unlocked
@@ -525,22 +525,22 @@
                 Console.Clear();
                 Console.WriteLine("\n  _______           _                    _           _ \n |__   __|         | |                  (_)         | |\n    | |     _   _  | |_    ___    _ __   _    __ _  | |\n    | |    | | | | | __|  / _ \\  | '__| | |  / _` | | |\n    | |    | |_| | | |_  | (_) | | |    | | | (_| | | |\n    |_|     \\__,_|  \\__|  \\___/  |_|    |_|  \\__,_| |_|\n");
                 Console.WriteLine("Welcome to the tutorial!");
-                Thread.Sleep(2000);
+                Thread.Sleep(3000);
                 Console.WriteLine("You are now the manager of a new gold digging business.");
                 Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
                 Console.WriteLine("He gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
-                Thread.Sleep(2500);
+                Thread.Sleep(3500);
                 Console.WriteLine("\nAs you dig for resources, you can sell them at the market to earn money.");
-                Console.WriteLine("As you gain money and look to expand, you can hire more employees.");
-                Console.WriteLine("You can also build real estate to earn passive income, but that's for later.");
+                Console.WriteLine("As you gain money and look to expand, you can hire more employees to dig for more resources.");
+                Console.WriteLine("You can also do some cool things like building gold palaces and bribing the government, but thats for later.");
                 Console.WriteLine("\n________________________________________________________________________________________________________________________________________");
-                Thread.Sleep(2000);
+                Thread.Sleep(3000);
                 Console.WriteLine("To begin, enter '1' in the main menu to dig for resources                                                                              |");
                 Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins   |");
                 Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options                                     |");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
                 Thread.Sleep(3500);
-                Console.WriteLine("\n(THIS TUTORIAL IS AWFUL, I'M SORRY; I'M WORKING ON IT)\n[ENTER] ");
+                Console.WriteLine("\n[ENTER] ");
                 Console.ReadLine();
             }
 
@@ -2176,8 +2176,7 @@
                         break;
 
                     case 2:
-                        Console.WriteLine(
-                            "\ud83e\udd11 Selling all your resources for dollars \ud83e\udd11 ");
+                        Console.WriteLine("\ud83e\udd11 Selling all your resources for dollars \ud83e\udd11 ");
 
                         _program.dollars.Quantity +=
                             _program.coal.Quantity * _program.coal.Price +
@@ -3022,7 +3021,7 @@
                 if (!multipleDaysOrNot)
                 {
                     Console.WriteLine("__________________________________________________________________________");
-                    Console.WriteLine("Your mine is empty, you need to find a new location to dig");
+                    Console.WriteLine("Your mine is empty, there are no more resources to find.\nYou need to go to a new location to dig");
 
                     _program.coal.Probability = 0;
                     _program.stone.Probability = 0;
@@ -3034,7 +3033,7 @@
 
             if (_program.minePercentageFullness <= 10)
             {
-                Console.WriteLine("Your mine is almost empty, you need to find a new location to dig");
+                Console.WriteLine("Your mine is almost empty, you will need to find a new location to dig");
             }
 
             if (!multipleDaysOrNot)
@@ -3057,11 +3056,11 @@
             }
 
             _program.minePercentageFullness -= 1;
-            _program.coal.Probability *= 0.99;
-            _program.stone.Probability *= 0.99;
-            _program.iron.Probability *= 0.99;
-            _program.gold.Probability *= 0.99;
-            _program.diamond.Probability *= 0.99;
+            _program.coal.Probability -= 1;
+            _program.stone.Probability -= 1;
+            _program.iron.Probability -= 1;
+            _program.gold.Probability -= 1;
+            _program.diamond.Probability -= 1;
 
         }
 
@@ -3155,7 +3154,7 @@
             program.stone = new Resource("Stone", 65, 5, 0, 0, 10);
             program.iron = new Resource("Iron", 50, 12, 0, 0, 10);
             program.gold = new Resource("Gold", 17, 60, 0, 0, 10);
-            program.diamond = new Resource("Diamond", 0, 90, 0, 0, 10);
+            program.diamond = new Resource("Diamond", 8, 90, 0, 0, 10);
 
             program.resourcesList = new List<Resource>
             {
@@ -3692,7 +3691,7 @@
                 {
                     if (!achievement.AchievementUnlocked)
                     {
-                        Console.WriteLine($"Locked achievement {achievement.AchievementNumber} - {achievement.AchievementDescription}");
+                        Console.WriteLine($"Incomplete achievement {achievement.AchievementNumber + 1} - {achievement.AchievementDescription}");
                     }
                 }
             }
@@ -3772,4 +3771,3 @@
         }
     }
 }
-
