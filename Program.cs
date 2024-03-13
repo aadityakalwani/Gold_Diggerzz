@@ -3750,7 +3750,7 @@
     }
 
     class Resource
-    {
+    { 
         public string ResourceName;
         public double InitialPrice;
         public double Probability;
