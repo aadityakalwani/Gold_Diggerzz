@@ -3,9 +3,9 @@ Instructions to share game post
 Within rider -> terminal
 Copy pasta all three raycast pinned clipboard items:
 
-dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -o ./OpenMe/AppleSiliconMacs
-dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -o ./OpenMe/IntelMacs
-dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -o ./OpenMe/WindowsDevices
+dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -o ./OpenMe/AppleSiliconMacs /p:DebugType=None
+dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -o ./OpenMe/IntelMacs /p:DebugType=None
+dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -o ./OpenMe/WindowsDevices /p:DebugType=None
 
 
 Go into the GoldDiggerzz folder
