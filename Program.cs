@@ -428,7 +428,7 @@
 
                         break;
                     case 17:
-                        Console.WriteLine("0 - no im scared of committing crimes");
+                        Console.WriteLine("0 - No I'm scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
                         int crimeChoice = GetValidInt(0, 2);
@@ -661,9 +661,9 @@
         {
             Console.WriteLine("You will lose all your current resources and real estate, but keep your employees");
             Console.WriteLine("Enter what mine you want to move to:");
-            Console.WriteLine("1. bad mine - $100");
-            Console.WriteLine("2. mid mine - $500");
-            Console.WriteLine("3. good mine - $1000");
+            Console.WriteLine("1. bad mine - $100 --> probability of finding resources reset to original values");
+            Console.WriteLine("2. mid mine - $500 --> probability of finding resources increases by 50%");
+            Console.WriteLine("3. good mine - $1000 --> probability of finding resources doubles");
             int mineChoice = GetValidInt(1, 3);
             switch (mineChoice)
             {
@@ -672,6 +672,7 @@
                     {
 
                         Console.WriteLine("You have moved to the bad mine");
+                        Console.WriteLine("All probabilities of finding resources have reset to their original values");
                         minePercentageFullness = 100;
                         coal.Probability = coal.OriginalProbability;
                         stone.Probability = stone.OriginalProbability;
@@ -695,12 +696,13 @@
                     {
 
                         Console.WriteLine("You have moved to the mid mine");
+                        Console.WriteLine("All probabilities of finding resources have increased by 50%");
                         minePercentageFullness = 100;
-                        coal.Probability = coal.OriginalProbability;
-                        stone.Probability = stone.OriginalProbability;
-                        iron.Probability = iron.OriginalProbability;
-                        gold.Probability = gold.OriginalProbability;
-                        diamond.Probability = diamond.OriginalProbability;
+                        coal.Probability = coal.OriginalProbability * 1.5;
+                        stone.Probability = stone.OriginalProbability * 1.5;
+                        iron.Probability = iron.OriginalProbability * 1.5;
+                        gold.Probability = gold.OriginalProbability * 1.5;
+                        diamond.Probability = diamond.OriginalProbability * 1.5;
 
                         dollars.Quantity -= 500;
                         coal.Quantity = 0;
@@ -718,12 +720,13 @@
                     {
 
                         Console.WriteLine("You have moved to the good mine");
+                        Console.WriteLine("All probabilities of finding resources have doubled!");
                         minePercentageFullness = 100;
-                        coal.Probability = coal.OriginalProbability;
-                        stone.Probability = stone.OriginalProbability;
-                        iron.Probability = iron.OriginalProbability;
-                        gold.Probability = gold.OriginalProbability;
-                        diamond.Probability = diamond.OriginalProbability;
+                        coal.Probability = coal.OriginalProbability * 2;
+                        stone.Probability = stone.OriginalProbability * 2;
+                        iron.Probability = iron.OriginalProbability * 2;
+                        gold.Probability = gold.OriginalProbability * 2;
+                        diamond.Probability = diamond.OriginalProbability * 2;
 
                         dollars.Quantity -= 1000;
                         coal.Quantity = 0;
@@ -737,6 +740,15 @@
                     Console.WriteLine("You don't have enough money to move to the good mine");
                     break;
             }
+            
+            foreach (Resource resource in resourcesList)
+            {
+               if (resource.Probability > 100)
+               {
+                   resource.Probability = 100;
+               }
+            }
+
 
         }
 
@@ -2399,7 +2411,7 @@
                     else if (_program.workersList.Count < 5)
                     {
                         Console.WriteLine("Because you have less than 5 employees, you got lucky");
-                        Console.WriteLine("None of your employees died, but they sure as hell had a fright! their morale has permanently halved");
+                        Console.WriteLine("None of your employees died, but they sure as hell had a fright! Their morale has permanently halved");
                     }
 
                     else
@@ -2416,8 +2428,8 @@
                     }
 
                     Thread.Sleep(1000);
-                    Console.WriteLine("\nGlancing over the deaths, the soil has been loosened... This means it is easier to find resources.");
-                    Console.WriteLine("The probability of finding each resource has increased by 20%, permanently!");
+                    Console.WriteLine("\nGlancing over the deaths, the soil has been loosened...");
+                    Console.WriteLine("This means it is easier to find resources. The probability of finding each resource has increased by 20%, permanently!");
 
                     _program.coal.Probability *= 1.2;
                     _program.stone.Probability *= 1.2;
@@ -3530,22 +3542,11 @@
             Console.WriteLine($"| Iron: ${Math.Round(_program.iron.Price, 2)} per kg         | Gold: ${Math.Round(_program.gold.Price, 2)} per kg");
             Console.WriteLine($"| Diamond: ${Math.Round(_program.diamond.Price, 2)} per kg     | Employees: {Math.Round(_program._currentEmployeePrice, 2)} per employee");
             Console.WriteLine("__________________________________________________________");
-            Thread.Sleep(1750);
+            Thread.Sleep(1500);
 
-            Console.WriteLine("\nResource prices fluctuate by upto ±10% per day");
-            Console.WriteLine("You can find powerups that have different effects");
-            Console.WriteLine("The resources you gain are equal to the number of employees you have times their efficiency * some random fluctuation of ±20%");
-            Console.WriteLine($"Baseline wage = ${_program._currentWageRate} per employee per day");
-            Console.WriteLine("There is a chance an employee is ill and doesn't come in to work");
-            Console.WriteLine("30% pay increase on weekends only");
-            Console.WriteLine("On the first of every month, employee wage increases by 10% permanently");
-            Console.WriteLine("One x date every month, there is a stock market crash where all prices halve (prime time to buy employees)");
-            Console.WriteLine("every 10 days, the probabilities of finding resources is reduced by 8%");
-            Console.WriteLine($"You can bribe the govt with ${_program.bribe.Price} and not pay any wages for the next 3 days");
-            Console.WriteLine("At any time if your $$$ balance goes negative, the govt sells all of your resources for 50% the current market rate");
-            Console.WriteLine("If you have no resources to sell, they sell your employees for $100 each until you have 1 employee left");
-            Console.WriteLine("If your $$$ balance is negative and you have no resource, you fail the game");
-            Console.WriteLine("__________________________________________________________________________");
+            Console.WriteLine("IDK what else to do with the game mechanics; before they printed out the different features of the game but that's just a wall of text so i scrapped that. lmk what you want in here");
+
+
         }
 
         public static void DisplayStats(Program program)
