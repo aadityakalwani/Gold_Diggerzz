@@ -2024,7 +2024,7 @@
 
             _program.skipDay.skipDayOrNot = false;
         }
-    } // 430 lines
+    } // 430 lines 
 
     class MarketOperation
     {
