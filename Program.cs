@@ -108,12 +108,13 @@
         DayToDayOperations dayToDayOperations = new();
 
         public Dollars dollars = new Dollars("Dollars", 100);
-
-        public Resource coal;
-        public Resource stone;
-        public Resource iron;
-        public Resource gold;
-        public Resource diamond;
+        
+        public MinedResources coal = new MinedResources("Coal", 75, 2, 0, 0, 10);
+        public MinedResources stone = new MinedResources("Stone", 65, 5, 0, 0, 10);
+        public MinedResources iron = new MinedResources("Iron", 50, 12, 0, 0, 10);
+        public MinedResources gold = new MinedResources("Gold", 17, 60, 0, 0, 10);
+        public MinedResources diamond = new MinedResources("Diamond", 8, 90, 0, 0, 10);
+        
         public PowerUp magicTokens;
         public PowerUp timeMachine;
         public PowerUp ancientArtefact;
@@ -879,7 +880,7 @@
             Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
             return GetValidDouble(min, max);
         }
-    } // 442 lines
+    }
 
     class Worker
     {
@@ -1330,7 +1331,7 @@
 
             Thread.Sleep(1250);
         }
-    } // 450 lines
+    }
 
     class Specialist
     {
@@ -1480,7 +1481,7 @@
                 }
             }
         }
-    } // 149 lines
+    }
 
     class Trade
     {
@@ -1580,7 +1581,7 @@
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
 
-    } // 99 lines - you're allowed multiple trades per day
+    } // you're allowed multiple trades per day
 
     class Achievements
     {
@@ -1594,7 +1595,7 @@
             AchievementUnlocked = false;
             AchievementDescription = achievementDescription;
         }
-    } // 13 lines
+    }
 
     class MiningOperation
     {
@@ -2025,7 +2026,7 @@
 
             _program.skipDay.skipDayOrNot = false;
         }
-    } // 430 lines 
+    }
 
     class MarketOperation
     {
@@ -2218,7 +2219,7 @@
                 }
             } while (marketOption != 0);
         }
-    } // 192 lines
+    }
 
     class DayToDayOperations
     {
@@ -3103,7 +3104,7 @@
                 Console.WriteLine("You can upgrade this within the market");
             }
         }
-    } // 884 lines
+    }
 
     class GameState
     {
@@ -3145,13 +3146,7 @@
         public static void CreateNewGameState(Program program)
         {
             # region initialisation of all resource and other objects
-
-            program.coal = new Resource("Coal", 75, 2, 0, 0, 10);
-            program.stone = new Resource("Stone", 65, 5, 0, 0, 10);
-            program.iron = new Resource("Iron", 50, 12, 0, 0, 10);
-            program.gold = new Resource("Gold", 17, 60, 0, 0, 10);
-            program.diamond = new Resource("Diamond", 8, 90, 0, 0, 10);
-
+            
             program.resourcesList = new List<Resource>
             {
                 program.coal, program.stone, program.iron, program.gold, program.diamond
@@ -3290,6 +3285,7 @@
                     case "retiredEmployeesList":
                         _program.retiredWorkersList = (List<Worker>)entry.Value;
                         break;
+                    /*
                     case "coal":
                         _program.coal = (Resource)entry.Value;
                         break;
@@ -3305,7 +3301,6 @@
                     case "diamond":
                         _program.diamond = (Resource)entry.Value;
                         break;
-                   /*
                     *  case "dollars":
                         _program.dollars = (Resource)entry.Value;
                         break;
@@ -3337,7 +3332,7 @@
                 }
             }
         }
-    } // 232 lines - applying a loaded game state
+    } // applying a loaded game state
 
     class RealEstate
     {
@@ -3499,7 +3494,7 @@
                     break;
             }
         }
-    } // 261 lines - balance updates needed
+    } // balance updates needed
 
     class DisplayStuff
     {
@@ -3704,7 +3699,7 @@
             QuitGame(_program);
         }
         
-    } // 204 lines
+    }
 
     // classes that can be in their own files (because they don't use Program _program)
     class WeatherEffectsClass
@@ -3723,7 +3718,7 @@
             EfficiencyMultiplier = efficiencyMultiplier;
             Duration = duration;
         }
-    } // 17 lines
+    }
 
     class PayForStuff
     {
@@ -3737,7 +3732,7 @@
             skipDayOrNot = false;
             MoraleMultiplier = moraleMultiplier;
         }
-    } // 13 lines
+    }
 
     class PowerUp
     {
@@ -3751,7 +3746,7 @@
             Probability = initialProbability;
             MaxQuantity = maxQuantity;
         }
-    } // 13 lines
+    }
 
     class Resource
     { 
@@ -3780,7 +3775,6 @@
             MaxQuantity = maxQuantity;
         }
         
-        // this is for dollars rn, upgrading later
         protected Resource(string resourceName, double initialQuantity)
         {
             ResourceName = resourceName;
@@ -3791,19 +3785,15 @@
         {
             return Quantity;
         }
-
         protected string GetName()
         {
             return ResourceName;
         }
-
         protected double GetTotalAcquired()
         {
             return TotalAcquired;
         }
-        
-        
-    } //  24 lines
+    }
     
     class Dollars : Resource
     {
@@ -3825,5 +3815,36 @@
             Quantity -= amount;
             Console.WriteLine($"You have lost {amount} {GetName()} and now have {GetQuantity()} {GetName()}");
         }
+    }
+    
+    class MinedResources : Resource
+    {
+        public double Probability;
+        public double Price;
+        public double MaxQuantity;
+
+        public MinedResources(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
+            double totalFound, double maxQuantity) : base( resourceName, initialProbability, initialPrice, initialQuantity, totalFound, maxQuantity)
+        {
+            Probability = initialProbability;
+            Price = initialPrice;
+            MaxQuantity = maxQuantity;
+        }
+    
+        public double GetProbability()
+        {
+            return Probability;
+        }
+    
+        public double GetPrice()
+        {
+            return Price;
+        }
+    
+        public double GetMaxQuantity()
+        {
+            return MaxQuantity;
+        }
+    
     }
 }
