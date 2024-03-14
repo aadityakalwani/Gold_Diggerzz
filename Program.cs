@@ -297,10 +297,10 @@
                         Console.WriteLine("You were in debt, bossman have paid that off so we good now");
                         break;
                     case -1:
-                        GameFailed();
+                        DisplayStuff.GameFailed(this);
                         break;
                     case 0:
-                        QuitGame();
+                        DisplayStuff.QuitGame(this);
                         break;
                     case 1:
                         _animation = true;
@@ -501,6 +501,38 @@
             } while (menuOption != 0 && menuOption != -1);
 
         }
+        
+        public int UserMenuOption()
+        {
+            string takeUserInput = CheckIfInDebt();
+
+            if (takeUserInput == "false")
+            {
+                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
+                Console.WriteLine("Choose an option:");
+                Console.WriteLine("_________________________________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("Main Features:              Employee Options:               Display Features:                 Real Estate Features:          Other Features:                     |");
+                Console.WriteLine("                                                                                                                                                                 |");
+                Console.WriteLine("0 - Quit game           |   5 - Show employees          |   10 - Display game mechanics   |   14 - Display real estate   |   16 - Use a powerup                  |");
+                Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats            |   15 - Build real estate     |   17 - Commit a crime (more inside)   |");
+                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Completed achievements   |                              |   18 - Save current progress          |");
+                Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Incomplete achievements  |                              |   19 - Load game state                |");
+                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Display tutorial         |   21 - Move to a new mine    |   20 - Skip one day                   |");
+                Console.WriteLine("                        |   22 - Hire specialist        |                                 |                              |                                       |");
+                Console.WriteLine("\nEnter your choice:");
+
+                int userOption = GetValidInt(0, 22);
+                Console.Clear();
+                return userOption;
+            }
+
+            if (takeUserInput == "bankrupt")
+            {
+                return -1;
+            }
+
+            return -2;
+        }
 
         public void RunTutorial()
         {
@@ -548,38 +580,6 @@
                 Console.WriteLine("You'll have to learn on the job and prove you're a worthy successor. Good luck!");
                 Thread.Sleep(3000);
             }
-        }
-
-        public int UserMenuOption()
-        {
-            string takeUserInput = CheckIfInDebt();
-
-            if (takeUserInput == "false")
-            {
-                Console.WriteLine($"Today is {_currentDate:dddd, d MMMM, yyyy}, and you have ${Math.Round(dollars.Quantity, 2)}");
-                Console.WriteLine("Choose an option:");
-                Console.WriteLine("_________________________________________________________________________________________________________________________________________________________________");
-                Console.WriteLine("Main Features:              Employee Options:               Display Features:                 Real Estate Features:          Other Features:                     |");
-                Console.WriteLine("                                                                                                                                                                 |");
-                Console.WriteLine("0 - Quit game           |   5 - Show employees          |   10 - Display game mechanics   |   14 - Display real estate   |   16 - Use a powerup                  |");
-                Console.WriteLine("1 - Dig one day         |   6 - Hire employees          |   11 - Display stats            |   15 - Build real estate     |   17 - Commit a crime (more inside)   |");
-                Console.WriteLine("2 - Dig multiple days   |   7 - Fire employees          |   12 - Completed achievements   |                              |   18 - Save current progress          |");
-                Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Incomplete achievements  |                              |   19 - Load game state                |");
-                Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Display tutorial         |   21 - Move to a new mine    |   20 - Skip one day                   |");
-                Console.WriteLine("                        |   22 - Hire specialist        |                                 |                              |                                       |");
-                Console.WriteLine("\nEnter your choice:");
-
-                int userOption = GetValidInt(0, 22);
-                Console.Clear();
-                return userOption;
-            }
-
-            if (takeUserInput == "bankrupt")
-            {
-                return -1;
-            }
-
-            return -2;
         }
 
         public string CheckIfInDebt()
@@ -844,25 +844,6 @@
             Console.WriteLine("For now, you'll be sent back to the main menu in 5 seconds");
             Thread.Sleep(5000);
         } // applying a loaded game state
-
-        public void QuitGame()
-        {
-            DisplayStuff.DisplayStats(this);
-            Console.WriteLine($"You lasted until {_currentDate.Date:dddd, d MMMM, yyyy}");
-            Console.WriteLine("\nGoodbye!");
-        }
-
-        public void GameFailed()
-        {
-            Thread.Sleep(1750);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                         YOU FAILED                         ║");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
-            Console.ResetColor();
-            Thread.Sleep(1750);
-            QuitGame();
-        }
 
         public void EmployeeTrainingCourse(int numberOfEmployees)
         {
@@ -2021,7 +2002,7 @@
                 }
                 else
                 {
-                    _program.QuitGame();
+                    DisplayStuff.QuitGame(_program);
                 }
             }
 
@@ -3701,6 +3682,27 @@
             }
             
         }
+        
+        public static void QuitGame(Program _program)
+
+        {
+            DisplayStuff.DisplayStats(_program);
+            Console.WriteLine($"You lasted until {_program._currentDate.Date:dddd, d MMMM, yyyy}");
+            Console.WriteLine("\nGoodbye!");
+        }
+
+        public static void GameFailed(Program _program)
+        {
+            Thread.Sleep(1750);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                         YOU FAILED                         ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            Thread.Sleep(1750);
+            QuitGame(_program);
+        }
+        
     }
 
     // classes that can be in their own files:
