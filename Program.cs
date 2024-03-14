@@ -6,10 +6,10 @@
 
     /* current issues
      * LOAD GAME STATE
+        * you can not load a game state because of either casting issues or enumeration operation errors
+            * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
+                * because then i'm just updating the values rather than..shit yeah that'll work?
      * you are allowed to make multiple trades per day
-     * you can not load a game state because of either casting issues or enumeration operation errors
-        * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
-            * because then i'm just updating the values rather than..shit yeah that'll work?
      */
 
     /* to-do ideas
@@ -1584,7 +1584,7 @@
     class Achievements
     {
         public int AchievementNumber;
-        public bool AchievementUnlocked = false;
+        public bool AchievementUnlocked;
         public string AchievementDescription;
 
         public Achievements(int achievementNumber, string achievementDescription)
@@ -2360,9 +2360,9 @@
                     {
                         Thread.Sleep(125);
                         Console.Clear();
-                        for (int j = 0; j < earthquake.Length; j++)
+                        foreach (string line in earthquake)
                         {
-                            Console.WriteLine(earthquake[j]);
+                            Console.WriteLine(line);
                         }
                     }
 
@@ -3685,7 +3685,7 @@
         public static void QuitGame(Program _program)
 
         {
-            DisplayStuff.DisplayStats(_program);
+            DisplayStats(_program);
             Console.WriteLine($"You lasted until {_program._currentDate.Date:dddd, d MMMM, yyyy}");
             Console.WriteLine("\nGoodbye!");
         }
@@ -3774,5 +3774,5 @@
             OriginalProbability = initialProbability;
             MaxQuantity = maxQuantity;
         }
-    } // 
+    } //  24 lines
 }
