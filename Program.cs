@@ -339,7 +339,7 @@
                             Console.WriteLine($"You have chosen to send {employeesToSend} employees on a training course");
                             Console.WriteLine($"You have been charged {trainingCourse.Price} per employee");
                             Console.WriteLine($"Your {employeesToSend} employees will be back in 7 days");
-                            EmployeeTrainingCourse(employeesToSend);
+                            Worker.EmployeeTrainingCourse(employeesToSend, this);
                         }
 
                         // if you can afford it but it'll result in 0 employees being left to dig
@@ -845,30 +845,6 @@
             Thread.Sleep(5000);
         } // applying a loaded game state
 
-        public void EmployeeTrainingCourse(int numberOfEmployees)
-        {
-            // to boost the productivity of employees
-            Console.WriteLine($"Training {numberOfEmployees} employees...");
-            Console.WriteLine($"This course charged you {trainingCourse.Price * numberOfEmployees} in fees");
-            dollars.Quantity -= trainingCourse.Price * numberOfEmployees;
-            for (int i = 0; i < numberOfEmployees; i++)
-            {
-                Console.WriteLine(
-                    $"Employee {workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
-                workersList[i].ReturnToWorkDate = _currentDate.AddDays(7);
-                workersList[i].efficiency *= 1.3;
-                toSendToTrainingList.Add(workersList[i]);
-            }
-
-            foreach (Worker worker in toSendToTrainingList)
-            {
-                workersList.Remove(worker);
-                trainingWorkersList.Add(worker);
-            }
-
-            Thread.Sleep(1250);
-        } // move to the appropriate own class
-
         public int GetValidInt(int min, int max)
         {
             if (int.TryParse(Console.ReadLine(), out int validInt))
@@ -1329,6 +1305,31 @@
                     break;
             }
         }
+        
+        public static void EmployeeTrainingCourse(int numberOfEmployees, Program program)
+        {
+            // to boost the productivity of employees
+            Console.WriteLine($"Training {numberOfEmployees} employees...");
+            Console.WriteLine($"This course charged you {program.trainingCourse.Price * numberOfEmployees} in fees");
+            program.dollars.Quantity -= program.trainingCourse.Price * numberOfEmployees;
+            for (int i = 0; i < numberOfEmployees; i++)
+            {
+                Console.WriteLine(
+                    $"Employee {program.workersList[i].Name} has begun the training course, they'll be back in a week \ud83d\udcaa");
+                program.workersList[i].ReturnToWorkDate = program._currentDate.AddDays(7);
+                program.workersList[i].efficiency *= 1.3;
+                program.toSendToTrainingList.Add(program.workersList[i]);
+            }
+
+            foreach (Worker worker in program.toSendToTrainingList)
+            {
+                program.workersList.Remove(worker);
+                program.trainingWorkersList.Add(worker);
+            }
+
+            Thread.Sleep(1250);
+        } // move to the appropriate own class
+        
     }
 
     class Specialist
