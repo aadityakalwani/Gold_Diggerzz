@@ -107,12 +107,13 @@
         MarketOperation marketOperation = new();
         DayToDayOperations dayToDayOperations = new();
 
+        public Dollars dollars = new Dollars("Dollars", 100);
+
         public Resource coal;
         public Resource stone;
         public Resource iron;
         public Resource gold;
         public Resource diamond;
-        public Resource dollars;
         public PowerUp magicTokens;
         public PowerUp timeMachine;
         public PowerUp ancientArtefact;
@@ -3156,7 +3157,6 @@
                 program.coal, program.stone, program.iron, program.gold, program.diamond
             };
 
-            program.dollars = new Resource("Dollars", 0, 0, 100, 0, 10);
             program.magicTokens = new PowerUp(0, 6, 3);
             program.timeMachine = new PowerUp(0, 3, 3);
             program.ancientArtefact = new PowerUp(0, 5, 3);
@@ -3305,9 +3305,11 @@
                     case "diamond":
                         _program.diamond = (Resource)entry.Value;
                         break;
-                    case "dollars":
+                   /*
+                    *  case "dollars":
                         _program.dollars = (Resource)entry.Value;
                         break;
+                    */
                     case "magicTokens":
                         _program.magicTokens = (PowerUp)entry.Value;
                         break;
@@ -3761,6 +3763,9 @@
         public double TotalFound;
         public double OriginalProbability;
         public double MaxQuantity;
+        
+        protected double TotalAcquired;
+        protected double TotalSold;
 
         public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
             double totalFound, double maxQuantity)
@@ -3774,5 +3779,51 @@
             OriginalProbability = initialProbability;
             MaxQuantity = maxQuantity;
         }
+        
+        // this is for dollars rn, upgrading later
+        protected Resource(string resourceName, double initialQuantity)
+        {
+            ResourceName = resourceName;
+            Quantity = initialQuantity;
+        }
+        
+        protected double GetQuantity()
+        {
+            return Quantity;
+        }
+
+        protected string GetName()
+        {
+            return ResourceName;
+        }
+
+        protected double GetTotalAcquired()
+        {
+            return TotalAcquired;
+        }
+        
+        
     } //  24 lines
+    
+    class Dollars : Resource
+    {
+        public Dollars(string resourceName, double initialQuantity) : base(resourceName, initialQuantity)
+        {
+            ResourceName = resourceName;
+        }
+    
+        public void IncreaseQuantity(double amount)
+        {
+            Quantity += amount;
+            TotalAcquired += amount;
+            Console.WriteLine($"You have gained {amount} {GetName()} and now have {GetQuantity} {GetName()}");
+            Console.WriteLine($"You have acquired a total of {GetTotalAcquired()} {GetName()}");
+        }
+    
+        public void DecreaseQuantity(double amount)
+        {
+            Quantity -= amount;
+            Console.WriteLine($"You have lost {amount} {GetName()} and now have {GetQuantity()} {GetName()}");
+        }
+    }
 }
