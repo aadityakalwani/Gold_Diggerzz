@@ -7,8 +7,6 @@
     /* current issues
      * LOAD GAME STATE
      * you are allowed to make multiple trades per day
-     * You can have negative power ups
-        * when you use a powerup straight away, it shouldn't reduce the amount by one but it does 
      * you can not load a game state because of either casting issues or enumeration operation errors
         * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
             * because then i'm just updating the values rather than..shit yeah that'll work?
@@ -35,6 +33,8 @@
      * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
      * loans - you can take a loan from the bank and pay it back with interest
      * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
+     * Avoid Magic Numbers: There are several numbers in your code (like 1000, 30, etc.) that could be replaced with named constants to make the code more readable and maintainable.
+     * In C#, the convention is to use PascalCase for class names and method names, and camelCase for local variables and parameters.
      */
 
     class Program
@@ -274,7 +274,7 @@
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
             Console.WriteLine("The game is about to start, good luck...\n\n[ENTER]");
             Console.ReadLine();
-            Console.Clear();
+            Console.Clear(); 
 
             program.RunGame();
         }
