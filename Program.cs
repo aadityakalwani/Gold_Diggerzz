@@ -878,7 +878,7 @@
             Console.WriteLine($"Please enter a valid decimal number between {min} and {max}");
             return GetValidDouble(min, max);
         }
-    }
+    } // 442 lines
 
     class Worker
     {
@@ -1328,9 +1328,8 @@
             }
 
             Thread.Sleep(1250);
-        } // move to the appropriate own class
-        
-    }
+        }
+    } // 450 lines
 
     class Specialist
     {
@@ -1480,7 +1479,7 @@
                 }
             }
         }
-    }
+    } // 149 lines
 
     class Trade
     {
@@ -1580,11 +1579,10 @@
             Console.WriteLine("Thanks for coming to the trader!\nCome later for updated rates!");
         }
 
-    } // you're allowed multiple trades per day
+    } // 99 lines - you're allowed multiple trades per day
 
     class Achievements
     {
-        
         public int AchievementNumber;
         public bool AchievementUnlocked = false;
         public string AchievementDescription;
@@ -1595,7 +1593,7 @@
             AchievementUnlocked = false;
             AchievementDescription = achievementDescription;
         }
-    }
+    } // 13 lines
 
     class MiningOperation
     {
@@ -2026,7 +2024,7 @@
 
             _program.skipDay.skipDayOrNot = false;
         }
-    }
+    } // 430 lines
 
     class MarketOperation
     {
@@ -2219,7 +2217,7 @@
                 }
             } while (marketOption != 0);
         }
-    }
+    } // 192 lines
 
     class DayToDayOperations
     {
@@ -3104,7 +3102,7 @@
                 Console.WriteLine("You can upgrade this within the market");
             }
         }
-    }
+    } // 884 lines
 
     class GameState
     {
@@ -3337,7 +3335,7 @@
                 }
             }
         }
-    } // applying a loaded game state
+    } // 232 lines - applying a loaded game state
 
     class RealEstate
     {
@@ -3499,7 +3497,7 @@
                     break;
             }
         }
-    } // balance updates needed
+    } // 261 lines - balance updates needed
 
     class DisplayStuff
     {
@@ -3704,9 +3702,9 @@
             QuitGame(_program);
         }
         
-    }
+    } // 204 lines
 
-    // classes that can be in their own files:
+    // classes that can be in their own files (because they don't use Program _program)
     class WeatherEffectsClass
     {
         public string Name;
@@ -3723,7 +3721,7 @@
             EfficiencyMultiplier = efficiencyMultiplier;
             Duration = duration;
         }
-    }
+    } // 17 lines
 
     class PayForStuff
     {
@@ -3737,7 +3735,7 @@
             skipDayOrNot = false;
             MoraleMultiplier = moraleMultiplier;
         }
-    }
+    } // 13 lines
 
     class PowerUp
     {
@@ -3751,7 +3749,7 @@
             Probability = initialProbability;
             MaxQuantity = maxQuantity;
         }
-    }
+    } // 13 lines
 
     class Resource
     { 
@@ -3776,5 +3774,5 @@
             OriginalProbability = initialProbability;
             MaxQuantity = maxQuantity;
         }
-    }
+    } // 
 }
