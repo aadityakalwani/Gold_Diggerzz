@@ -3828,7 +3828,7 @@
         {
             Probability = initialProbability;
             Price = initialPrice;
-            MaxQuantity = maxQuantity;
+            MaxQuantity = maxQuantity; 
         }
     
         public double GetProbability()
