@@ -2236,7 +2236,7 @@
             }
 
             WeatherEffectsClass Rain = new WeatherEffectsClass("rain", 0, 30, 0.7, 3);
-            WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 6, 0.4, 5);
+            WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 600, 0.4, 5);
             WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("beautiful sky", 0, 30, 1.2, 3);
             WeatherEffectsClass Earthquake = new WeatherEffectsClass("earthquake", 0, 5, 1.5, 3);
 
@@ -2251,6 +2251,59 @@
                 {
                     if (!multipleDaysOrNot)
                     {
+                        
+                        // hurricane animation
+                        string[] hurricane = new[]
+                        {
+                            "      /   ",
+                            "     /    ",
+                            "    /     ",
+                            "   /      ",
+                            "  /     ",
+                            " /      ",
+                            "_________ ",
+                            "        /   ",
+                            "       /    ",
+                            "      /     ",
+                            "     /      ",
+                            "    /       ",
+                            "   /        ",
+                        };
+
+                        for (int i = 0; i < 60; i++)
+                        {
+                            Thread.Sleep(100);
+                            Console.Clear();
+                            for (int j = 0; j < hurricane.Length; j++)
+                            {
+                                // Generate a random number between -4 and 4
+                                int move = random.Next(-3, 4);
+
+                                // Create a string of spaces based on the random number
+                                string spaces = "";
+
+                                for (int k = 0; k < Math.Abs(move); k++)
+                                {
+                                    spaces += " ";
+                                }
+
+                                // Depending on the sign of the random number, add the spaces to the left or right of the line
+                                string line;
+
+                                if (move < 0)
+                                {
+                                    line = spaces + hurricane[j];
+                                }
+                                else
+                                {
+                                    line = hurricane[j] + spaces;
+                                }
+
+                                Console.WriteLine(line);
+                            }
+                        }
+                        Console.WriteLine(hurricane);
+                        
                         Console.WriteLine("__________________________________________________________________________");
                         Console.WriteLine("\ud83c\udf00 A hurricane is coming, efficiency is now 60% less the next four days \ud83c\udf00");
                         Console.WriteLine("They also lose 20% of their morale because nobody likes working when its a hurricane \ud83d\ude2d");
@@ -2272,8 +2325,7 @@
                     if (!multipleDaysOrNot)
                     {
                         Console.WriteLine("__________________________________________________________________________");
-                        Console.WriteLine(
-                            "\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
+                        Console.WriteLine("\ud83c\udfd6\ufe0f The weather is beautiful today; your employees are 20% more efficient for three days \ud83c\udfd6\ufe0f");
                         Console.WriteLine("Their morale also increased by 10% because everybody likes working when its sunny \ud83d\ude04");
                     }
 
