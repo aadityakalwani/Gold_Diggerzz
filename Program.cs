@@ -41,7 +41,6 @@
     {
         # region global variables
 
-        public bool _animation = true;
         public double _upgradeInventoryCost = 1000;
         public int _increasedGoldChanceDays;
         public int _marketMasterDaysLeft;
@@ -54,26 +53,26 @@
         public double _averageEmployeeEfficiency = 1;
         public double _averageEmployeeMorale = 1;
 
-        public static Achievements achievement1 = new Achievements(0, "100kg of coal mined");
-        public static Achievements achievement2 = new Achievements(1, "1000kg of coal found");
-        public static Achievements achievement3 = new Achievements(2, "10000kg of coal found");
-        public static Achievements achievement4 = new Achievements(3, "100kg of stone found");
-        public static Achievements achievement5 = new Achievements(4, "1000kg of stone found");
-        public static Achievements achievement6 = new Achievements(5, "10000kg of stone found");
-        public static Achievements achievement7 = new Achievements(6, "75kg of iron found");
-        public static Achievements achievement8 = new Achievements(7, "750kg of iron found");
-        public static Achievements achievement9 = new Achievements(8, "7500kg of iron found");
-        public static Achievements achievement10 = new Achievements(9, "30kg of gold found");
-        public static Achievements achievement11 = new Achievements(10, "300kg of gold found");
-        public static Achievements achievement12 = new Achievements(11, "3000kg of gold found");
-        public static Achievements achievement13 = new Achievements(12, "10kg of diamond found");
-        public static Achievements achievement14 = new Achievements(13, "100kg of diamond found");
-        public static Achievements achievement15 = new Achievements(14, "1000kg of diamond found");
-        public static Achievements achievement16 = new Achievements(15, "$300 total earned");
-        public static Achievements achievement17 = new Achievements(16, "$1000 total earned");
-        public static Achievements achievement18 = new Achievements(17, "$10000 total earned");
-        public static Achievements achievement19 = new Achievements(18, "10 employees hired");
-        public static Achievements achievement20 = new Achievements(19, "100 employees hired");
+        public static Achievements achievement1 = new(0, "100kg of coal mined");
+        public static Achievements achievement2 = new(1, "1000kg of coal found");
+        public static Achievements achievement3 = new(2, "10000kg of coal found");
+        public static Achievements achievement4 = new(3, "100kg of stone found");
+        public static Achievements achievement5 = new(4, "1000kg of stone found");
+        public static Achievements achievement6 = new(5, "10000kg of stone found");
+        public static Achievements achievement7 = new(6, "75kg of iron found");
+        public static Achievements achievement8 = new(7, "750kg of iron found");
+        public static Achievements achievement9 = new(8, "7500kg of iron found");
+        public static Achievements achievement10 = new(9, "30kg of gold found");
+        public static Achievements achievement11 = new(10, "300kg of gold found");
+        public static Achievements achievement12 = new(11, "3000kg of gold found");
+        public static Achievements achievement13 = new(12, "10kg of diamond found");
+        public static Achievements achievement14 = new(13, "100kg of diamond found");
+        public static Achievements achievement15 = new(14, "1000kg of diamond found");
+        public static Achievements achievement16 = new(15, "$300 total earned");
+        public static Achievements achievement17 = new(16, "$1000 total earned");
+        public static Achievements achievement18 = new(17, "$10000 total earned");
+        public static Achievements achievement19 = new(18, "10 employees hired");
+        public static Achievements achievement20 = new(19, "100 employees hired");
 
         public List<Achievements> achievementsList = new()
         {
@@ -85,7 +84,7 @@
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
         public double _currentEmployeePrice = 200;
-        public DateTime _currentDate = new DateTime(2024, 1, 1);
+        public DateTime _currentDate = new(2024, 1, 1);
         private static Random _random = new();
         public int _crashDate = _random.Next(0, 28);
 
@@ -98,7 +97,7 @@
         public List<Worker> toSendToTrainingList = new();
         public List<Trade> tradeList = new();
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
-        public List<Worker> workersList = new() { new Worker("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
+        public List<Worker> workersList = new() { new("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
         public List<RealEstate> buildingRealEstateList = new();
         public List<RealEstate> activeRealEstate = new();
         public List<Resource> resourcesList = new();
@@ -107,13 +106,13 @@
         MarketOperation marketOperation = new();
         DayToDayOperations dayToDayOperations = new();
 
-        public Dollars dollars = new Dollars("Dollars", 100);
+        public Dollars dollars = new("Dollars", 100);
         
-        public MinedResources coal = new MinedResources("Coal", 75, 2, 0, 0, 10);
-        public MinedResources stone = new MinedResources("Stone", 65, 5, 0, 0, 10);
-        public MinedResources iron = new MinedResources("Iron", 50, 12, 0, 0, 10);
-        public MinedResources gold = new MinedResources("Gold", 17, 60, 0, 0, 10);
-        public MinedResources diamond = new MinedResources("Diamond", 8, 90, 0, 0, 10);
+        public MinedResources coal = new("Coal", 75, 2, 0, 0, 10);
+        public MinedResources stone = new("Stone", 65, 5, 0, 0, 10);
+        public MinedResources iron = new("Iron", 50, 12, 0, 0, 10);
+        public MinedResources gold = new("Gold", 17, 60, 0, 0, 10);
+        public MinedResources diamond = new("Diamond", 8, 90, 0, 0, 10);
         
         public PowerUp magicTokens;
         public PowerUp timeMachine;
@@ -246,7 +245,7 @@
             "Serena Smash Williams", "Lionel Fast Messi", "Roger Slam-derer",
             "Dale Earn-heart Junior", "Usain Streak Bolt", "Steph Curry-flavored",
             "Alex Rodriguez-n-roll", "Shaquille O'Peel", "Michael Phelps-water",
-            "Ronda Rousey-n-feathers"
+            "Ronda Roused-feathers"
         };
 
         public List<string> UsedNames = new();
@@ -257,7 +256,7 @@
         {
             Console.Clear();
 
-            Program program = new Program();
+            Program program = new();
 
             GameState.CreateNewGameState(program);
 
@@ -305,11 +304,9 @@
                         DisplayStuff.QuitGame(this);
                         break;
                     case 1:
-                        _animation = true;
                         miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
                         break;
                     case 2:
-                        _animation = false;
                         Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(0, 30);
@@ -786,7 +783,6 @@
 
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
                     _noWageDaysLeft = 10;
-                    _animation = false;
                     miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
                     if (timeMachine.Quantity > 0)
                     {
@@ -823,7 +819,7 @@
             Console.WriteLine("Saving/load game state...");
             // Thread.Sleep(1750);
 
-            GameState gameState = new GameState(this);
+            GameState gameState = new(this);
             if (saveOrLoad == 1)
             {
                 Console.WriteLine("Game state saved to a dictionary");
@@ -1058,7 +1054,7 @@
         public static void HireNewWorker(int numberOfWorkers, string type, Program _program)
         {
 
-            Random _random = new Random();
+            Random _random = new();
 
             for (int i = 0; i < numberOfWorkers; i++)
             {
@@ -1224,7 +1220,7 @@
                         employeePrice = 200;
                     }
 
-                    Worker newWorker = new Worker(type, _program._possibleNames[randomName], _program._currentWageRate, employeePrice, _program._currentEmployeeIllProbability, efficiency, baseMorale);
+                    Worker newWorker = new(type, _program._possibleNames[randomName], _program._currentWageRate, employeePrice, _program._currentEmployeeIllProbability, efficiency, baseMorale);
                     _program.workersList.Add(newWorker);
                     _program.UsedNames.Add(newWorker.Name);
                     _program._possibleNames.Remove(newWorker.Name);
@@ -1370,11 +1366,11 @@
                 Console.WriteLine("5 - Hire a diamond specialist");
 
                 int managerChoice = _program.GetValidInt(0, 5);
-                Specialist coalManager = new Specialist(15, 2, "coal", 1000);
-                Specialist stoneManager = new Specialist(15, 2, "stone", 1000);
-                Specialist ironManager = new Specialist(15, 2, "iron", 1000);
-                Specialist goldManager = new Specialist(15, 2, "gold", 1000);
-                Specialist diamondManager = new Specialist(15, 2, "diamond", 1000);
+                Specialist coalManager = new (15, 2, "coal", 1000);
+                Specialist stoneManager = new (15, 2, "stone", 1000);
+                Specialist ironManager = new(15, 2, "iron", 1000);
+                Specialist goldManager = new(15, 2, "gold", 1000);
+                Specialist diamondManager = new(15, 2, "diamond", 1000);
 
                 bool hire = true;
 
@@ -1692,7 +1688,7 @@
                             }
 
                             // creating randoms for the chance of finding all the stuff
-                            Random random = new Random();
+                            Random random = new();
                             int randomForCoal = random.Next(0, 90);
                             int randomForStone = random.Next(0, 100);
                             int randomForIron = random.Next(0, 100);
@@ -2235,12 +2231,12 @@
                 }
             }
 
-            WeatherEffectsClass Rain = new WeatherEffectsClass("rain", 0, 30, 0.7, 3);
-            WeatherEffectsClass Hurricane = new WeatherEffectsClass("hurricane", 0, 600, 0.4, 5);
-            WeatherEffectsClass BeautifulSky = new WeatherEffectsClass("beautiful sky", 0, 30, 1.2, 3);
-            WeatherEffectsClass Earthquake = new WeatherEffectsClass("earthquake", 0, 5, 1.5, 3);
+            WeatherEffectsClass Rain = new("rain", 0, 30, 0.7);
+            WeatherEffectsClass Hurricane = new("hurricane", 0, 6, 0.4);
+            WeatherEffectsClass BeautifulSky = new("beautiful sky", 0, 30, 1.2);
+            WeatherEffectsClass Earthquake = new("earthquake", 0, 5, 1.5);
 
-            Random random = new Random();
+            Random random = new();
 
             // rain or hurricane reducing efficiency, beautifulSky increasing efficiency
 
@@ -2666,7 +2662,7 @@
             if (_program.workersList.Count > 0)
             {
                 // retirements, returning workers, unwell workers, morale, etc.
-                Random random = new Random();
+                Random random = new();
 
                 // every 10th day the morale's effect on efficiency is applied
                 if (_program._currentDate.DayOfYear % 10 == 0)
@@ -2750,7 +2746,7 @@
                 // unwell workers
                 if (_program.workersList.Count > 1)
                 {
-                    List<Worker> newlyIllWorkers = new List<Worker>();
+                    List<Worker> newlyIllWorkers = new();
 
                     foreach (Worker worker in _program.workersList)
                     {
@@ -2776,7 +2772,7 @@
                 }
 
                 // to undo the effects of unwell workers
-                List<Worker> noLongerIllWorkersList = new List<Worker>();
+                List<Worker> noLongerIllWorkersList = new();
 
                 foreach (Worker worker in _program.illWorkersList)
                 {
@@ -2988,7 +2984,7 @@
         public void FluctuatePrices(Program _program, bool multipleDaysOrNot)
         {
             // upto a 20% fluctuation in prices based on random probability
-            Random random = new Random();
+            Random random = new();
             double randomChange = random.Next(-10, 10) / 100.0 + 1;
 
             _program.coal.Price *= randomChange;
@@ -3165,7 +3161,7 @@
 
         public GameState(Program _program)
         {
-            gameStateDictionary = new Dictionary<string, object>
+            gameStateDictionary = new()
             {
                 { "increasedGoldChanceDays", _program._increasedGoldChanceDays },
                 { "marketMasterDaysLeft", _program._marketMasterDaysLeft },
@@ -3199,37 +3195,37 @@
         {
             # region initialisation of all resource and other objects
             
-            program.resourcesList = new List<Resource>
+            program.resourcesList = new()
             {
                 program.coal, program.stone, program.iron, program.gold, program.diamond
             };
 
-            program.magicTokens = new PowerUp(0, 6, 3);
-            program.timeMachine = new PowerUp(0, 3, 3);
-            program.ancientArtefact = new PowerUp(0, 5, 3);
-            program.marketMaster = new PowerUp(0, 4, 3);
-            program.stockMarketCrash = new PayForStuff(100, 1);
-            program.skipDay = new PayForStuff(50, 1);
-            program.bribe = new PayForStuff(200, 1);
-            program.trainingCourse = new PayForStuff(400, 1);
-            program.bonus = new PayForStuff(100 + program._totalDaysDug * 2, 1.3);
-            program.retirementPackage = new PayForStuff(100 + program._totalDaysDug * 10, 1.25);
+            program.magicTokens = new(0, 6, 3);
+            program.timeMachine = new(0, 3, 3);
+            program.ancientArtefact = new(0, 5, 3);
+            program.marketMaster = new(0, 4, 3);
+            program.stockMarketCrash = new(100, 1);
+            program.skipDay = new(50, 1);
+            program.bribe = new(200, 1);
+            program.trainingCourse = new(400, 1);
+            program.bonus = new(100 + program._totalDaysDug * 2, 1.3);
+            program.retirementPackage = new(100 + program._totalDaysDug * 10, 1.25);
 
             # endregion
 
             # region initialisation of all trade objects
 
-            program.coalToStone = new Trade(program.stone.Price / program.coal.Price, program.coal, program.stone);
-            program.coalToIron = new Trade(program.iron.Price / program.coal.Price, program.coal, program.iron);
-            program.coalToGold = new Trade(program.gold.Price / program.coal.Price, program.coal, program.gold);
-            program.coalToDiamond = new Trade(program.diamond.Price / program.coal.Price, program.coal, program.diamond);
-            program.stoneToIron = new Trade(program.iron.Price / program.stone.Price, program.stone, program.iron);
-            program.stoneToGold = new Trade(program.gold.Price / program.stone.Price, program.stone, program.gold);
-            program.stoneToDiamond = new Trade(program.diamond.Price / program.stone.Price, program.stone, program.diamond);
-            program.ironToGold = new Trade(program.gold.Price / program.iron.Price, program.iron, program.gold);
-            program.ironToDiamond = new Trade(program.diamond.Price / program.iron.Price, program.iron, program.diamond);
-            program.goldToDiamond = new Trade(program.diamond.Price / program.gold.Price, program.gold, program.diamond);
-            program.tradeList = new List<Trade>
+            program.coalToStone = new(program.stone.Price / program.coal.Price, program.coal, program.stone);
+            program.coalToIron = new(program.iron.Price / program.coal.Price, program.coal, program.iron);
+            program.coalToGold = new(program.gold.Price / program.coal.Price, program.coal, program.gold);
+            program.coalToDiamond = new(program.diamond.Price / program.coal.Price, program.coal, program.diamond);
+            program.stoneToIron = new(program.iron.Price / program.stone.Price, program.stone, program.iron);
+            program.stoneToGold = new(program.gold.Price / program.stone.Price, program.stone, program.gold);
+            program.stoneToDiamond = new(program.diamond.Price / program.stone.Price, program.stone, program.diamond);
+            program.ironToGold = new(program.gold.Price / program.iron.Price, program.iron, program.gold);
+            program.ironToDiamond = new(program.diamond.Price / program.iron.Price, program.iron, program.diamond);
+            program.goldToDiamond = new(program.diamond.Price / program.gold.Price, program.gold, program.diamond);
+            program.tradeList = new()
             {
                 program.coalToStone, program.coalToIron, program.coalToGold, program.coalToDiamond,
                 program.stoneToIron, program.stoneToGold, program.stoneToDiamond,
@@ -3242,7 +3238,7 @@
 
         public void SaveGameState(Program _program)
         {
-            using StreamWriter writer = new StreamWriter(filename);
+            using StreamWriter writer = new(filename);
             {
                 foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
@@ -3257,9 +3253,9 @@
         public void LoadGameState(Program _program)
         {
             Console.WriteLine("Loading game state...");
-            using StreamReader reader = new StreamReader(filename);
+            using StreamReader reader = new(filename);
             {
-                Dictionary<string, object> tempDictionary = new Dictionary<string, object>(gameStateDictionary);
+                Dictionary<string, object> tempDictionary = new(gameStateDictionary);
                 foreach (KeyValuePair<string, object> entry in gameStateDictionary)
                 {
                     Console.WriteLine($"Reading the next line: {entry}");
@@ -3413,7 +3409,7 @@
 
                 case 1:
 
-                    RealEstate apartment = new RealEstate("apartment", 5, 300, "dollars", 1000);
+                    RealEstate apartment = new("apartment", 5, 300, "dollars", 1000);
                     if (_program.dollars.Quantity < apartment.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build an apartment");
@@ -3435,7 +3431,7 @@
                     break;
 
                 case 2:
-                    RealEstate house = new RealEstate("house", 5, 300, "coal", 100);
+                    RealEstate house = new("house", 5, 300, "coal", 100);
                     if (_program.coal.Quantity < house.Cost)
                     {
                         Console.WriteLine("You don't have enough coal to build a house");
@@ -3458,7 +3454,7 @@
                     break;
 
                 case 3:
-                    RealEstate office = new RealEstate("office", 5, 300, "stone", 100);
+                    RealEstate office = new("office", 5, 300, "stone", 100);
                     if (_program.stone.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough money to build an office");
@@ -3480,7 +3476,7 @@
                     break;
 
                 case 4:
-                    RealEstate mansion = new RealEstate("mansion", 5, 300, "iron", 100);
+                    RealEstate mansion = new("mansion", 5, 300, "iron", 100);
                     if (_program.iron.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough iron to build a mansion");
@@ -3502,7 +3498,7 @@
                     break;
 
                 case 5:
-                    RealEstate castle = new RealEstate("castle", 5, 300, "gold", 100);
+                    RealEstate castle = new("castle", 5, 300, "gold", 100);
                     if (_program.gold.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough money to build a castle");
@@ -3524,7 +3520,7 @@
                     break;
 
                 case 6:
-                    RealEstate palace = new RealEstate("palace", 5, 300, "diamond", 100);
+                    RealEstate palace = new("palace", 5, 300, "diamond", 100);
                     if (_program.diamond.Quantity < 10000)
                     {
                         Console.WriteLine("You don't have enough money to build a palace");
@@ -3760,15 +3756,13 @@
         public int DaysLeft;
         public double Probability;
         public double EfficiencyMultiplier;
-        public int Duration;
 
-        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier, int duration)
+        public WeatherEffectsClass(string name, int daysLeft, double probability, double efficiencyMultiplier)
         {
             Name = name;
             DaysLeft = daysLeft;
             Probability = probability;
             EfficiencyMultiplier = efficiencyMultiplier;
-            Duration = duration;
         }
     }
 
@@ -3812,7 +3806,6 @@
         public double MaxQuantity;
         
         protected double TotalAcquired;
-        protected double TotalSold;
 
         public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
             double totalFound, double maxQuantity)
@@ -3897,6 +3890,5 @@
         {
             return MaxQuantity;
         }
-    
     }
 }
