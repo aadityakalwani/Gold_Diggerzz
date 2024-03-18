@@ -10,9 +10,19 @@
             * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
                 * because then i'm just updating the values rather than..shit yeah that'll work?
      * you are allowed to make multiple trades per day
+     * mine emptiness ### don't work
+     * inventory upgrades don't cost anything
+     * * fix market master grammar
+     * negative probabilities of finding resources
+     * change resource probability reduction to be *= 0.95 or something so it doesn't go below 0
      */
 
     /* to-do ideas
+     * more powerups / increased probability
+     * more 'crime' options
+     * pipe | at the end of 'you found stone'
+     * option to deny employees weekend pay for reduced morale
+     * more clear 'its the weekend, your employees want extra pay'
      * better understand what to do with morale - right now its just a multiplier for efficiency
      * convert to proper traditional OOP via getters and setters
      * prettify firing workers
@@ -1705,11 +1715,6 @@
                             {
                                 _program.gold.Probability = 50;
                                 _program._increasedGoldChanceDays -= 1;
-
-                                if (!multipleDayDig)
-                                {
-                                    Console.WriteLine($"You have the Ancient Artefact powerup, you have a 50% chance of finding gold for the next {_program._increasedGoldChanceDays} days");
-                                }
                             }
 
                             else
