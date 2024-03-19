@@ -10,17 +10,11 @@
             * why not, at the beginning of the game, load in a game state that has 100 dollars, 0 resources, 1 worker, 0 powerups, 0 real estate, 0 achievements, etc
                 * because then i'm just updating the values rather than..shit yeah that'll work?
      * you are allowed to make multiple trades per day
-     * mine emptiness ### don't work
-     * inventory upgrades don't cost anything
-     * * fix market master grammar
-     * negative probabilities of finding resources
-     * change resource probability reduction to be *= 0.95 or something so it doesn't go below 0
      */
 
     /* to-do ideas
-     * more powerups / increased probability
+     * add pearl
      * more 'crime' options
-     * pipe | at the end of 'you found stone'
      * option to deny employees weekend pay for reduced morale
      * more clear 'its the weekend, your employees want extra pay'
      * better understand what to do with morale - right now its just a multiplier for efficiency
@@ -1815,7 +1809,7 @@
                                 Console.WriteLine("__________________________________________________________");
                                 Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
                                 Console.WriteLine("Choose an option:");
-                                Console.WriteLine("1 - Use now --> Increase the selling price of all resources has increased by 50% for the next 5 days");
+                                Console.WriteLine("1 - Use now --> Increase the selling price of all resources by 50% for the next 5 days");
                                 Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
                                 int userInput = _program.GetValidInt(1, 2);
 
@@ -1847,7 +1841,7 @@
 
                                 if (!multipleDayDig)
                                 {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8");
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of coal \ud83e\udea8  |");
                                 }
                             }
 
@@ -1861,7 +1855,7 @@
 
                                 if (!multipleDayDig)
                                 {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8");
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of stone \ud83e\udea8  |");
                                 }
                             }
 
@@ -1875,7 +1869,7 @@
 
                                 if (!multipleDayDig)
                                 {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe ");
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of iron \ud83e\uddbe  |");
                                 }
                             }
 
@@ -1889,7 +1883,7 @@
 
                                 if (!multipleDayDig)
                                 {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51");
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of gold \ud83d\udc51  |");
                                 }
                             }
 
@@ -1903,14 +1897,14 @@
 
                                 if (!multipleDayDig)
                                 {
-                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e");
+                                    Console.WriteLine($"You found {Math.Round(newResourcesFound, 2)}kg of diamond \ud83d\udc8e  |");
                                 }
                             }
 
                             if (!coalFound && !stoneFound && !ironFound && !goldFound && !diamondFound &&
                                 !ancientArtefactFound && !timeMachineFound && !magicTokenFound && !marketMasterFound && !multipleDayDig)
                             {
-                                Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab");
+                                Console.WriteLine("\ud83d\udeab You found nothing today \ud83d\udeab  |");
                             }
 
                         }
@@ -2209,6 +2203,7 @@
                         Console.WriteLine($"You have been charged ${_program._upgradeInventoryCost} for doubling the inventory size");
                         Console.WriteLine("You have doubled the inventory size of all resources");
 
+                        _program.dollars.Quantity -= _program._upgradeInventoryCost;
                         _program._upgradeInventoryCost *= 2;
 
                         foreach (Resource resource in _program.resourcesList)
@@ -3065,7 +3060,6 @@
 
         public void MineEmptinessUpdate(Program _program, bool multipleDaysOrNot)
         {
-            // reduce the mine emptiness by 1% for every day dug
             if (_program.minePercentageFullness == 0)
             {
                 if (!multipleDaysOrNot)
@@ -3097,21 +3091,24 @@
                 {
                     emptinessString += "##";
                 }
-
+                
+                for (int j = 0; j < 33 - numberOfHashtags; j++)
+                {
+                    emptinessString += "  ";
+                }
+                
                 emptinessString += "|\n";
 
                 Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full:\n{emptinessString}");
-
-
             }
 
-            _program.minePercentageFullness -= 1;
-            _program.coal.Probability -= 1;
-            _program.stone.Probability -= 1;
-            _program.iron.Probability -= 1;
-            _program.gold.Probability -= 1;
-            _program.diamond.Probability -= 1;
-
+            // reduce the mine emptiness by 1% for every day dug
+            _program.minePercentageFullness *= 0.99;
+            _program.coal.Probability *= 0.99;
+            _program.stone.Probability *= 0.99;
+            _program.iron.Probability *= 0.99;
+            _program.gold.Probability *= 0.991;
+            _program.diamond.Probability *= 0.99;
         }
 
         public void CheckInventorySize(Program _program, bool multipleDaysOrNot)
@@ -3132,14 +3129,14 @@
                 {
                     Console.WriteLine("______________________________________________________________________________________");
                     Console.WriteLine($"Your {resource.ResourceName} inventory is more than 80% full, soon you wont be able to earn more {resource.ResourceName} until you sell some");
-                    Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}. You can upgrade the inventory size within the market");
+                    Console.WriteLine($"Currently you can store a maximum of {resource.MaxQuantity}kg of {resource.ResourceName}.\nYou can upgrade the inventory size within the market");
                 }
             }
 
             if (fullResources.Count > 0)
             {
                 Console.WriteLine("______________________________________________________________________________________");
-                Console.WriteLine("\ud83d\ude1f Your inventory is full for the following resources:");
+                Console.WriteLine("\ud83d\ude1f Your inventory is full for the following resources: \ud83d\ude1f");
                 foreach (Resource resource in fullResources)
                 {
                     Console.WriteLine($"{resource.ResourceName}");
@@ -3152,9 +3149,9 @@
                     fullResources.Remove(resource);
                 }
 
-                Console.WriteLine("You can't earn more until you sell some \ud83d\ude1f ");
+                Console.WriteLine("\ud83d\ude1f You can't earn more until you sell some \ud83d\ude1f ");
                 Console.WriteLine($"Currently you can store a maximum of {_program.coal.MaxQuantity}kg of each resource");
-                Console.WriteLine("You can upgrade this within the market");
+                Console.WriteLine("You can upgrade this within the market.");
             }
         }
     }
@@ -3206,9 +3203,9 @@
             };
 
             program.magicTokens = new(0, 6, 3);
-            program.timeMachine = new(0, 3, 3);
-            program.ancientArtefact = new(0, 5, 3);
-            program.marketMaster = new(0, 4, 3);
+            program.timeMachine = new(0, 7, 3);
+            program.ancientArtefact = new(0, 9, 3);
+            program.marketMaster = new(0, 9, 3);
             program.stockMarketCrash = new(100, 1);
             program.skipDay = new(50, 1);
             program.bribe = new(200, 1);
