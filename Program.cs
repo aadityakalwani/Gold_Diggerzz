@@ -2524,25 +2524,44 @@
                 _program.gold.Probability *= 0.92;
                 _program.diamond.Probability *= 0.92;
             }
-
+            
             // +30% pay on weekends - wage is increased on saturday, then reduced again on monday
+
+            bool payIncreased = false;
+            
             if (_program._currentDate.DayOfWeek is DayOfWeek.Saturday)
             {
-                if (!MultipleDaysOrNot)
+                
+                Console.WriteLine("__________________________________________________________________________");
+                Console.WriteLine("\ud83e\udef0 It's the weekend, your employees want 30% more pay today and tomorrow \ud83e\udef0");
+                Console.WriteLine("As the manager, do you choose to pay the extra or not?");
+                Console.WriteLine("1 - Pay the extra 30% (+20% morale \ud83d\udcc8)\n2 - Deny the extra pay (-20% morale \ud83d\udcc9)\nEnter your choice: ");
+                int weekendPayChoice = _program.GetValidInt(1, 2);
+
+                if (weekendPayChoice == 1)
                 {
-                    Console.WriteLine("__________________________________________________________________________");
-                    Console.WriteLine("It's the weekend, your employees want 30% more pay today and tomorrow");
+                    payIncreased = true;
+                    _program._currentWageRate *= 1.3;
+                    foreach (Worker workers in _program.workersList)
+                    {
+                        workers.Wage *= 1.3;
+                        workers.Morale *= 1.2;
+                    }
                 }
 
-                _program._currentWageRate *= 1.3;
-                foreach (Worker workers in _program.workersList)
+                else if (weekendPayChoice == 2)
                 {
-                    workers.Wage *= 1.3;
+                    payIncreased = false;
+                    foreach (Worker workers in _program.workersList)
+                    {
+                        workers.Morale /= 1.2;
+                    }
                 }
+                
             }
 
             // to undo the effect of weekend pay
-            else if (_program._currentDate.DayOfWeek is DayOfWeek.Monday)
+            else if (_program._currentDate.DayOfWeek is DayOfWeek.Monday && payIncreased)
             {
                 _program._currentWageRate /= 1.3;
                 foreach (Worker workers in _program.workersList)
