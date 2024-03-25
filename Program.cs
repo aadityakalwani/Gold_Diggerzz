@@ -15,9 +15,8 @@
     /* to-do ideas
      * add pearl
      * more 'crime' options
-     * option to deny employees weekend pay for reduced morale
-     * more clear 'its the weekend, your employees want extra pay'
-     * better understand what to do with morale - right now its just a multiplier for efficiency
+        * a black market trade that doubles selling prices but has a 50% chance of getting caught and your resources sold for $0  
+     * better understand what to do with morale - right now its just a multiplier for efficiency that is recalculated every 10 days
      * convert to proper traditional OOP via getters and setters
      * prettify firing workers
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
