@@ -433,7 +433,10 @@
                         Console.WriteLine("0 - No I'm scared of committing crimes");
                         Console.WriteLine($"1 - Pay ${stockMarketCrash.Price} for information on the next stock market crash");
                         Console.WriteLine($"2 - Bribe the government for ${bribe.Price} to not pay wages for the next 3 days");
-                        int crimeChoice = GetValidInt(0, 2);
+                        Console.WriteLine("3 - Trade on the black market to double selling price, but with a 30% risk getting caught and losing all resources");
+                        Console.WriteLine("(More options coming soon...)");
+                        Console.WriteLine("Enter your choice:");
+                        int crimeChoice = GetValidInt(0, 3);
                         switch (crimeChoice)
                         {
                             case 1:
@@ -462,8 +465,35 @@
 
                                 Console.WriteLine("\u274c You can't afford to do this brokie \u274c");
                                 break;
-                        }
+                            case 3:
+                                Console.WriteLine("You have chosen to trade on the black market");
 
+                                if (_random.Next(0, 100) > 30)
+                                {
+                                    Console.WriteLine("You have been caught!!!! RED HANDED\nYou have lost all your resources");
+                                    foreach (Resource resource in resourcesList)
+                                    {
+                                        resource.Quantity = 0;
+                                    }
+
+                                    break;
+                                }
+                                
+                                Console.WriteLine("You have successfully traded on the black market and you have not got caught so well done");
+                                foreach (Resource resource in resourcesList)
+                                {
+                                    resource.Price *= 2;
+                                }
+                                marketOperation.GoToMarket(this);
+                                foreach (Resource resource in resourcesList)
+                                {
+                                    resource.Price /= 2;
+                                }
+                                
+                                Console.WriteLine("Exited the market woohoo well done amigo etc etc.");
+                                
+                                break;
+                        }
 
                         break;
                     case 18:
@@ -3827,7 +3857,7 @@
         
         protected double TotalAcquired;
 
-        public Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
+        protected Resource(string resourceName, double initialProbability, double initialPrice, double initialQuantity,
             double totalFound, double maxQuantity)
         {
             ResourceName = resourceName;
