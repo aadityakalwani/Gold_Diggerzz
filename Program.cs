@@ -91,6 +91,7 @@
         public List<Worker> deadWorkersList = new();
         public List<Worker> trainingWorkersList = new();
         public List<Worker> toSendToTrainingList = new();
+        
         public List<Trade> tradeList = new();
         public List<WeatherEffectsClass> ActiveWeatherEffectsList = new();
         public List<Worker> workersList = new() { new("mid", "Bob Smith The OG Worker", 10, 100, 10, 1, 1) };
@@ -134,10 +135,9 @@
 
         // 307 possible names for the workers
         // to stop screaming at me for names it doesn't recognise/think are typos
+        // ReSharper disable StringLiteralTypo
         public List<string> _possibleNames = new()
         {
-            // ReSharper disable StringLiteralTypo
-            
             "Elon Tusk", "Taylor Shift", "Jeff Bezosaurus",
             "Barack O, Banana", "Lady GooGoo", "Michael Jackhammer",
             "Tom Crouton", "Beyoncé Know-all", "Albert Eggstein",
@@ -3487,7 +3487,7 @@
                     break;
 
                 case 2:
-                    RealEstate house = new("house", 5, 300, "coal", 100);
+                    RealEstate house = new("house", 5, 150, "coal", 50);
                     if (_program.coal.Quantity < house.Cost)
                     {
                         Console.WriteLine("You don't have enough coal to build a house");
@@ -3510,8 +3510,8 @@
                     break;
 
                 case 3:
-                    RealEstate office = new("office", 5, 300, "stone", 100);
-                    if (_program.stone.Quantity < 10000)
+                    RealEstate office = new("office", 5, 150, "stone", 50);
+                    if (_program.stone.Quantity < office.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build an office");
                         break;
@@ -3532,8 +3532,8 @@
                     break;
 
                 case 4:
-                    RealEstate mansion = new("mansion", 5, 300, "iron", 100);
-                    if (_program.iron.Quantity < 10000)
+                    RealEstate mansion = new("mansion", 5, 150, "iron", 50);
+                    if (_program.iron.Quantity < mansion.Cost)
                     {
                         Console.WriteLine("You don't have enough iron to build a mansion");
                         break;
@@ -3554,8 +3554,8 @@
                     break;
 
                 case 5:
-                    RealEstate castle = new("castle", 5, 300, "gold", 100);
-                    if (_program.gold.Quantity < 10000)
+                    RealEstate castle = new("castle", 5, 150, "gold", 50);
+                    if (_program.gold.Quantity < castle.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build a castle");
                         break;
@@ -3576,8 +3576,8 @@
                     break;
 
                 case 6:
-                    RealEstate palace = new("palace", 5, 300, "diamond", 100);
-                    if (_program.diamond.Quantity < 10000)
+                    RealEstate palace = new("palace", 5, 150, "diamond", 50);
+                    if (_program.diamond.Quantity < palace.Cost)
                     {
                         Console.WriteLine("You don't have enough money to build a palace");
                         break;
@@ -3598,7 +3598,7 @@
                     break;
             }
         }
-    } // balance updates needed
+    }
 
     class DisplayStuff
     {
