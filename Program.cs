@@ -77,6 +77,13 @@
         public static Achievements achievement19 = new(18, "10 employees hired");
         public static Achievements achievement20 = new(19, "100 employees hired");
         
+        RealEstate apartment = new("apartment", 5, 300, "dollars", 1000);
+        RealEstate house = new("house", 5, 25, "coal", 0);
+        RealEstate office = new("office", 5, 25, "stone", 0);
+        RealEstate mansion = new("mansion", 5, 25, "iron", 0);
+        RealEstate castle = new("castle", 5, 25, "gold", 50);
+        RealEstate palace = new("palace", 5, 25, "diamond", 50);
+        
         public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
         public double _currentEmployeeIllProbability = 5;
@@ -3109,10 +3116,28 @@
             {
                 foreach (RealEstate realEstate in activeRealEstate)
                 {
-                    _program.dollars.Quantity += realEstate.WeeklyRentQuantity;
-                    if (!multipleDaysOrNot)
+                    if (realEstate.IsBuilt)
                     {
-                        Console.WriteLine($"You have received {realEstate.WeeklyRentQuantity} {realEstate.WeeklyRentResource} in rent from your {realEstate.Type} \ud83c\udfd8\ufe0f \ud83e\udd11");
+                        if (realEstate.WeeklyRentResource == "dollars")
+                        {
+                            _program.dollars.Quantity += realEstate.WeeklyRentQuantity;
+                        }
+                        
+                        else
+                        {
+                            foreach (Resource resource in _program.resourcesList)
+                            {
+                                if (resource.ResourceName == realEstate.WeeklyRentResource)
+                                {
+                                    resource.Quantity += realEstate.WeeklyRentQuantity;
+                                }
+                            }
+                        }
+                        
+                        if (!multipleDaysOrNot)
+                        {
+                            Console.WriteLine($"You have received {realEstate.WeeklyRentQuantity}kg of {realEstate.WeeklyRentResource} as rent from your {realEstate.Type} \ud83c\udfd8\ufe0f \ud83e\udd11");
+                        }
                     }
                 }
             }
@@ -3455,6 +3480,7 @@
         
         private static List<RealEstate> buildingRealEstateList = new();
         private static List<RealEstate> activeRealEstate = new();
+        
 
         public RealEstate(string type, int daysLeftToBuild, double weeklyRentQuantity, string weeklyRentResource, double cost)
         {
@@ -3464,8 +3490,9 @@
             WeeklyRentResource = weeklyRentResource;
             Cost = cost;
             IsBuilt = false;
+            activeRealEstate.Add(this);
         }
-
+        
         public static void BuildRealEstate(Program _program)
         {
             
@@ -3480,152 +3507,178 @@
             Console.WriteLine("5. Castle - Cost: 50kg gold, 25kg gold weekly rent");
             Console.WriteLine("6. Palace - Cost: 50kg diamond, 25kg diamond weekly rent");
             int choice = _program.GetValidInt(0, 6);
+
+            RealEstate realEstateToBuild = activeRealEstate[choice - 1];
             
-            switch (choice)
+            if (realEstateToBuild.IsBuilt)
             {
-                case 0:
-                    Console.WriteLine("Cancelled");
-                    break;
-
-                case 1:
-
-                    RealEstate apartment = new("apartment", 5, 300, "dollars", 1000);
-                    if (_program.dollars.Quantity < apartment.Cost)
-                    {
-                        Console.WriteLine("You don't have enough money to build an apartment");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(apartment))
-                    {
-                        Console.WriteLine("You already have an apartment");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new apartment");
-                    Console.WriteLine($"Your apartment will be ready in {apartment.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn ${apartment.WeeklyRentQuantity} every Monday from this apartment");
-                    Console.WriteLine($"You have been charged ${apartment.Cost} for the construction of this apartment");
-                    _program.dollars.Quantity -= apartment.Cost;
-                    buildingRealEstateList.Add(apartment);
-                    break;
-
-                case 2:
-                    RealEstate house = new("house", 5, 25, "coal", 50);
-                    if (_program.coal.Quantity < house.Cost)
-                    {
-                        Console.WriteLine("You don't have enough coal to build a house");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(house))
-                    {
-                        Console.WriteLine("You already have an house");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new house");
-                    Console.WriteLine($"Your house will be ready in {house.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn {house.WeeklyRentQuantity}kg {house.WeeklyRentResource} every Monday from this house");
-                    Console.WriteLine($"You have been charged {house.Cost}kg of {house.WeeklyRentResource} for the construction of this house");
-
-                    _program.coal.Quantity -= house.Cost;
-                    buildingRealEstateList.Add(house);
-                    break;
-
-                case 3:
-                    RealEstate office = new("office", 5, 25, "stone", 50);
-                    if (_program.stone.Quantity < office.Cost)
-                    {
-                        Console.WriteLine("You don't have enough money to build an office");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(office))
-                    {
-                        Console.WriteLine("You already have an office");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new office");
-                    Console.WriteLine($"Your office will be ready in {office.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn {office.WeeklyRentQuantity}kg {office.WeeklyRentResource} every Monday from this office");
-                    Console.WriteLine($"You have been charged {office.Cost}kg of {office.WeeklyRentResource} for the construction of this office");
-                    _program.stone.Quantity -= office.Cost;
-                    buildingRealEstateList.Add(office);
-                    break;
-
-                case 4:
-                    RealEstate mansion = new("mansion", 5, 25, "iron", 50);
-                    if (_program.iron.Quantity < mansion.Cost)
-                    {
-                        Console.WriteLine("You don't have enough iron to build a mansion");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(mansion))
-                    {
-                        Console.WriteLine("You already have a mansion");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new mansion");
-                    Console.WriteLine($"Your mansion will be ready in {mansion.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn {mansion.WeeklyRentQuantity}kg {mansion.WeeklyRentResource} every Monday from this mansion");
-                    Console.WriteLine($"You have been charged {mansion.Cost}kg of {mansion.WeeklyRentResource} for the construction of this mansion");
-                    _program.iron.Quantity -= mansion.Cost;
-                    buildingRealEstateList.Add(mansion);
-                    break;
-
-                case 5:
-                    RealEstate castle = new("castle", 5, 25, "gold", 50);
-                    if (_program.gold.Quantity < castle.Cost)
-                    {
-                        Console.WriteLine("You don't have enough money to build a castle");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(castle))
-                    {
-                        Console.WriteLine("You already have a castle");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new castle");
-                    Console.WriteLine($"Your castle will be ready in {castle.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn {castle.WeeklyRentQuantity}kg {castle.WeeklyRentResource} every Monday from this castle");
-                    Console.WriteLine($"You have been charged {castle.Cost}kg of {castle.WeeklyRentResource} for the construction of this castle");
-                    _program.gold.Quantity -= castle.Cost;
-                    buildingRealEstateList.Add(castle);
-                    break;
-
-                case 6:
-                    RealEstate palace = new("palace", 5, 25, "diamond", 50);
-                    if (_program.diamond.Quantity < palace.Cost)
-                    {
-                        Console.WriteLine("You don't have enough money to build a palace");
-                        break;
-                    }
-
-                    if (activeRealEstate.Contains(palace))
-                    {
-                        Console.WriteLine("You already have a palace");
-                        break;
-                    }
-
-                    Console.WriteLine("You have chosen to build a new palace");
-                    Console.WriteLine($"Your palace will be ready in {palace.DaysLeftToBuild} days");
-                    Console.WriteLine($"You will earn {palace.WeeklyRentQuantity}kg {palace.WeeklyRentResource} every Monday from this palace");
-                    Console.WriteLine($"You have been charged {palace.Cost}kg of {palace.WeeklyRentResource} for the construction of this palace");
-                    _program.diamond.Quantity -= palace.Cost;
-                    buildingRealEstateList.Add(palace);
-                    break;
+                Console.WriteLine($"You already have a {realEstateToBuild.Type}");
             }
+
+            else
+            {
+                if (_program.dollars.Quantity < realEstateToBuild.Cost)
+                {
+                    Console.WriteLine($"You don't have enough money to build the {realEstateToBuild.Type}");
+                }
+                
+
+                Console.WriteLine($"You have chosen to build a new {realEstateToBuild.Type}");
+                Console.WriteLine($"Your apartment will be ready in {realEstateToBuild.DaysLeftToBuild} days");
+                Console.WriteLine($"You will earn ${realEstateToBuild.WeeklyRentQuantity} every Monday from this apartment");
+                Console.WriteLine($"You have been charged ${realEstateToBuild.Cost} for the construction of this apartment");
+                _program.dollars.Quantity -= realEstateToBuild.Cost;
+                buildingRealEstateList.Add(realEstateToBuild);
+            }
+            
+            /*
+             * switch (choice)
+               {
+                   case 0:
+                       Console.WriteLine("Cancelled");
+                       break;
+
+                   case 1:
+
+                       RealEstate apartment = new("apartment", 5, 300, "dollars", 1000);
+                       if (_program.dollars.Quantity < apartment.Cost)
+                       {
+                           Console.WriteLine("You don't have enough money to build an apartment");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(apartment))
+                       {
+                           Console.WriteLine("You already have an apartment");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new apartment");
+                       Console.WriteLine($"Your apartment will be ready in {apartment.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn ${apartment.WeeklyRentQuantity} every Monday from this apartment");
+                       Console.WriteLine($"You have been charged ${apartment.Cost} for the construction of this apartment");
+                       _program.dollars.Quantity -= apartment.Cost;
+                       buildingRealEstateList.Add(apartment);
+                       break;
+
+                   case 2:
+                       RealEstate house = new("house", 5, 25, "coal", 50);
+                       if (_program.coal.Quantity < house.Cost)
+                       {
+                           Console.WriteLine("You don't have enough coal to build a house");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(house))
+                       {
+                           Console.WriteLine("You already have an house");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new house");
+                       Console.WriteLine($"Your house will be ready in {house.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn {house.WeeklyRentQuantity}kg {house.WeeklyRentResource} every Monday from this house");
+                       Console.WriteLine($"You have been charged {house.Cost}kg of {house.WeeklyRentResource} for the construction of this house");
+
+                       _program.coal.Quantity -= house.Cost;
+                       buildingRealEstateList.Add(house);
+                       break;
+
+                   case 3:
+                       RealEstate office = new("office", 5, 25, "stone", 50);
+                       if (_program.stone.Quantity < office.Cost)
+                       {
+                           Console.WriteLine("You don't have enough money to build an office");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(office))
+                       {
+                           Console.WriteLine("You already have an office");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new office");
+                       Console.WriteLine($"Your office will be ready in {office.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn {office.WeeklyRentQuantity}kg {office.WeeklyRentResource} every Monday from this office");
+                       Console.WriteLine($"You have been charged {office.Cost}kg of {office.WeeklyRentResource} for the construction of this office");
+                       _program.stone.Quantity -= office.Cost;
+                       buildingRealEstateList.Add(office);
+                       break;
+
+                   case 4:
+                       RealEstate mansion = new("mansion", 5, 25, "iron", 50);
+                       if (_program.iron.Quantity < mansion.Cost)
+                       {
+                           Console.WriteLine("You don't have enough iron to build a mansion");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(mansion))
+                       {
+                           Console.WriteLine("You already have a mansion");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new mansion");
+                       Console.WriteLine($"Your mansion will be ready in {mansion.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn {mansion.WeeklyRentQuantity}kg {mansion.WeeklyRentResource} every Monday from this mansion");
+                       Console.WriteLine($"You have been charged {mansion.Cost}kg of {mansion.WeeklyRentResource} for the construction of this mansion");
+                       _program.iron.Quantity -= mansion.Cost;
+                       buildingRealEstateList.Add(mansion);
+                       break;
+
+                   case 5:
+                       RealEstate castle = new("castle", 5, 25, "gold", 50);
+                       if (_program.gold.Quantity < castle.Cost)
+                       {
+                           Console.WriteLine("You don't have enough money to build a castle");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(castle))
+                       {
+                           Console.WriteLine("You already have a castle");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new castle");
+                       Console.WriteLine($"Your castle will be ready in {castle.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn {castle.WeeklyRentQuantity}kg {castle.WeeklyRentResource} every Monday from this castle");
+                       Console.WriteLine($"You have been charged {castle.Cost}kg of {castle.WeeklyRentResource} for the construction of this castle");
+                       _program.gold.Quantity -= castle.Cost;
+                       buildingRealEstateList.Add(castle);
+                       break;
+
+                   case 6:
+                       RealEstate palace = new("palace", 5, 25, "diamond", 50);
+                       if (_program.diamond.Quantity < palace.Cost)
+                       {
+                           Console.WriteLine("You don't have enough money to build a palace");
+                           break;
+                       }
+
+                       if (activeRealEstate.Contains(palace))
+                       {
+                           Console.WriteLine("You already have a palace");
+                           break;
+                       }
+
+                       Console.WriteLine("You have chosen to build a new palace");
+                       Console.WriteLine($"Your palace will be ready in {palace.DaysLeftToBuild} days");
+                       Console.WriteLine($"You will earn {palace.WeeklyRentQuantity}kg {palace.WeeklyRentResource} every Monday from this palace");
+                       Console.WriteLine($"You have been charged {palace.Cost}kg of {palace.WeeklyRentResource} for the construction of this palace");
+                       _program.diamond.Quantity -= palace.Cost;
+                       buildingRealEstateList.Add(palace);
+                       break;
+               }
+             */
         }
         
         public static void BuildRealEstateComplete(RealEstate realEstate)
         {
             realEstate.IsBuilt = true;
+            
         }
         
         public static List<RealEstate> GetBuildingRealEstateList()
@@ -3781,14 +3834,22 @@
             Console.WriteLine($"You have {activeRealEstate.Count} real estate properties active right now:");
             foreach (RealEstate realEstate in activeRealEstate)
             {
-                if (realEstate.WeeklyRentResource == "dollars")
+                if (realEstate.IsBuilt)
                 {
-                    Console.WriteLine($"Your {realEstate.Type} is giving you ${realEstate.WeeklyRentQuantity} per week");
+                    if (realEstate.WeeklyRentResource == "dollars")
+                    {
+                        Console.WriteLine($"Your {realEstate.Type} is giving you ${realEstate.WeeklyRentQuantity} per week");
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity}kg of {realEstate.WeeklyRentResource} per week");
+                    }
                 }
 
                 else
                 {
-                    Console.WriteLine($"Your {realEstate.Type} is giving you {realEstate.WeeklyRentQuantity}kg of {realEstate.WeeklyRentResource} per week");
+                    Console.WriteLine($"You have not yet built a {realEstate.Type}");
                 }
             }
 
