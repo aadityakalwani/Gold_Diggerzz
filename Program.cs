@@ -3077,7 +3077,7 @@
 
         public void CheckRealEstate(Program _program, bool multipleDaysOrNot)
         {
-            // reduce the days left to build by 1 and move the real estate to the active list if it's been built
+            // reduce the days left to build by 1 for every real estate within the building list. If built, remove from building and add to active list
 
             List<RealEstate> buildingRealEstateList = RealEstate.GetBuildingRealEstateList();
             List<RealEstate> activeRealEstate = RealEstate.GetActiveRealEstateList();
@@ -3089,6 +3089,7 @@
                 if (realEstate.DaysLeftToBuild == 1)
                 {
                     RealEstate.BuildRealEstateComplete(realEstate);
+                    realEstate.IsBuilt = true;
                     toRemoveRealEstateList.Add(realEstate);
                     if (!multipleDaysOrNot)
                     {
@@ -3096,7 +3097,7 @@
                     }
                 }
                 
-                else
+                else if (realEstate.DaysLeftToBuild > 1)
                 {
                     realEstate.DaysLeftToBuild -= 1;
                     if (!multipleDaysOrNot)
@@ -3500,14 +3501,22 @@
             Console.WriteLine("(Tip: to gain more of a specific resource, convert resources at the trader)\n");
             Console.WriteLine("What real estate do you want to build?");
             Console.WriteLine("0. Cancel");
-            Console.WriteLine("1. Apartment - Cost: $10,000, $3,000 weekly rent");
-            Console.WriteLine("2. House - Cost: 50kg coal, 25kg coal weekly rent");
-            Console.WriteLine("3. Office - Cost: 50kg stone, 25kg stone weekly rent");
-            Console.WriteLine("4. Mansion - Cost: 50kg iron, 25kg iron weekly rent");
-            Console.WriteLine("5. Castle - Cost: 50kg gold, 25kg gold weekly rent");
-            Console.WriteLine("6. Palace - Cost: 50kg diamond, 25kg diamond weekly rent");
+           
+           for (int i = 0; i < activeRealEstate.Count; i++)
+           {
+               RealEstate item = activeRealEstate[i];
+               if (i == 0)
+               {
+                   Console.WriteLine($"{i+1} - {item.Type} --> Cost: ${item.Cost}, ${item.WeeklyRentQuantity} weekly rent");
+               }
+               else
+               {
+                   Console.WriteLine($"{i+1} - {item.Type} --> Cost: {item.Cost}kg {item.WeeklyRentResource}, {item.WeeklyRentQuantity}kg of {item.WeeklyRentResource} weekly ren");
+               }
+           }
+           
             int choice = _program.GetValidInt(0, 6);
-
+            
             RealEstate realEstateToBuild = activeRealEstate[choice - 1];
             
             if (realEstateToBuild.IsBuilt)
@@ -3521,14 +3530,16 @@
                 {
                     Console.WriteLine($"You don't have enough money to build the {realEstateToBuild.Type}");
                 }
-                
 
-                Console.WriteLine($"You have chosen to build a new {realEstateToBuild.Type}");
-                Console.WriteLine($"Your apartment will be ready in {realEstateToBuild.DaysLeftToBuild} days");
-                Console.WriteLine($"You will earn ${realEstateToBuild.WeeklyRentQuantity} every Monday from this apartment");
-                Console.WriteLine($"You have been charged ${realEstateToBuild.Cost} for the construction of this apartment");
-                _program.dollars.Quantity -= realEstateToBuild.Cost;
-                buildingRealEstateList.Add(realEstateToBuild);
+                else
+                {
+                    Console.WriteLine($"You have chosen to build a new {realEstateToBuild.Type}");
+                    Console.WriteLine($"Your apartment will be ready in {realEstateToBuild.DaysLeftToBuild} days");
+                    Console.WriteLine($"You will earn ${realEstateToBuild.WeeklyRentQuantity} every Monday from this {realEstateToBuild.Type}");
+                    Console.WriteLine($"You have been charged ${realEstateToBuild.Cost} for the construction of this {realEstateToBuild.Type}");
+                    _program.dollars.Quantity -= realEstateToBuild.Cost;
+                    buildingRealEstateList.Add(realEstateToBuild);
+                }
             }
             
             /*
@@ -3831,7 +3842,18 @@
             }
 
             Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine($"You have {activeRealEstate.Count} real estate properties active right now:");
+
+            int activeRealEstateCount = 0;
+            
+            foreach (RealEstate realEstate in activeRealEstate)
+            {
+                if (realEstate.IsBuilt)
+                {
+                    activeRealEstateCount += 1;
+                }
+            }
+            
+            Console.WriteLine($"You have {activeRealEstateCount} real estate properties active right now:");
             foreach (RealEstate realEstate in activeRealEstate)
             {
                 if (realEstate.IsBuilt)
