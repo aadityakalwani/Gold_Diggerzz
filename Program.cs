@@ -13,11 +13,9 @@
      */
 
     /* to-do ideas
-     * add pearl
      * more 'crime' options
      * un-globalise various workers' lists
      * better understand what to do with morale - right now its just a multiplier for efficiency that is recalculated every 10 days
-     * convert to proper traditional OOP via getters and setters
      * prettify firing workers
      * move UsePowerUp to PowerUp class? and other such offloading of tasks from the main class - this causes major static non-static etc issues
      * Game Progression
@@ -29,15 +27,11 @@
      * option to upgrade your shovel to unlock more materials
      * mine more shit Eg. Mine space rocks, T-rex bones
      * Exploration: Allow the player to explore new areas or mines. This could involve a risk/reward system where exploring new areas could lead to finding more valuable resources but also has the potential for more dangerous events.
-     * create reputation (do i need to? ++ how will this work with morale?)
      * a morale-boosting powerup
      * Allow employees to specialize in certain areas, making them more efficient at gathering certain resources. This could add another layer of strategy to the game as players decide how to best allocate their workforce.
-     * achievements are OOP-ed? idk about this one - give it some thought
-     * hence, or otherwise, an option to print all achievements as an incentive to work towards them/keep playing
      * loans - you can take a loan from the bank and pay it back with interest
      * competition / fake in some other mining companies (or your dad's company) and you're also trying to beat (give them a quadratic rate of growth?)
      * Avoid Magic Numbers: There are several numbers in your code (like 1000, 30, etc.) that could be replaced with named constants to make the code more readable and maintainable.
-     * In C#, the convention is to use PascalCase for class names and method names, and camelCase for local variables and parameters.
      */
 
     class Program
