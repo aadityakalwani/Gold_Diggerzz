@@ -15,6 +15,7 @@
     /* to-do ideas
      * add pearl
      * more 'crime' options
+     * un-globalise various workers' lists
      * better understand what to do with morale - right now its just a multiplier for efficiency that is recalculated every 10 days
      * convert to proper traditional OOP via getters and setters
      * prettify firing workers
@@ -85,7 +86,7 @@
         public int _crashDate = _random.Next(0, 28);
 
         public List<Specialist> managersList = new();
-
+        
         public List<Worker> illWorkersList = new();
         public List<Worker> retiredWorkersList = new();
         public List<Worker> deadWorkersList = new();
@@ -364,8 +365,8 @@
                     case 12:
                         DisplayStuff.DisplayAchievements(1);
                         break;
-                    case 23:
-                        RunTutorial();
+                    case 13:
+                        DisplayStuff.DisplayAchievements(2);
                         break;
                     case 14:
                         DisplayStuff.DisplayRealEstate(this);
@@ -506,8 +507,8 @@
                         Console.WriteLine("This feature is under development - expect it to be a bit bad and not refined, or just have basically no effect on the game at all lol");
                         Specialist.SpecialistHiringScreen(this);
                         break;
-                    case 13:
-                        DisplayStuff.DisplayAchievements(2);
+                    case 23:
+                        RunTutorial();
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -3102,7 +3103,6 @@
             {
                 buildingRealEstateList.Remove(realEstate);
             }
-            
 
             // give rent to the player
             if (_program._currentDate.DayOfWeek is DayOfWeek.Sunday)
@@ -3464,7 +3464,6 @@
             WeeklyRentResource = weeklyRentResource;
             Cost = cost;
             IsBuilt = false;
-            
         }
 
         public static void BuildRealEstate(Program _program)
@@ -3481,7 +3480,6 @@
             Console.WriteLine("5. Castle - Cost: 50kg gold, 25kg gold weekly rent");
             Console.WriteLine("6. Palace - Cost: 50kg diamond, 25kg diamond weekly rent");
             int choice = _program.GetValidInt(0, 6);
-            
             
             switch (choice)
             {
@@ -3769,7 +3767,6 @@
         public static void DisplayRealEstate(Program program)
         {
 
-            List<RealEstate> buildingRealEstate = RealEstate.GetBuildingRealEstateList();
             List<RealEstate> activeRealEstate = RealEstate.GetActiveRealEstateList();
 
             if (activeRealEstate.Count == 0)
@@ -3834,7 +3831,6 @@
         }
         
         public static void QuitGame(Program _program)
-
         {
             DisplayStats(_program);
             Console.WriteLine($"You lasted until {_program._currentDate.Date:dddd, d MMMM, yyyy}");
