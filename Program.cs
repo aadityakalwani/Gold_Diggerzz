@@ -15,7 +15,6 @@
     /* to-do ideas
      * add pearl
      * more 'crime' options
-        * a black market trade that doubles selling prices but has a 50% chance of getting caught and your resources sold for $0  
      * better understand what to do with morale - right now its just a multiplier for efficiency that is recalculated every 10 days
      * convert to proper traditional OOP via getters and setters
      * prettify firing workers
@@ -76,12 +75,6 @@
         public static Achievements achievement18 = new(17, "$10000 total earned");
         public static Achievements achievement19 = new(18, "10 employees hired");
         public static Achievements achievement20 = new(19, "100 employees hired");
-
-        public List<Achievements> achievementsList = new()
-        {
-            achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9, achievement10,
-            achievement11, achievement12, achievement13, achievement14, achievement15, achievement16, achievement17, achievement18, achievement19, achievement20
-        };
         
         public double minePercentageFullness = 100;
         public double _currentWageRate = 10;
@@ -271,8 +264,9 @@
             Thread.Sleep(1000);
             Console.WriteLine("Note that this is a work in progress and I'm constantly updating it");
             Console.WriteLine("Periodically re-download the game file to get the latest version of the game");
-            Console.WriteLine("If you have any suggestions or feedback, please let me know");
-            Console.WriteLine("\n____________________________________________________________________________________________\n");
+            Console.WriteLine("If you have any suggestions or feedback, please let me know\n");
+            Console.WriteLine("Tip: zoom the window such that the below line is as big as it can be without running over into two lines - this is the width that the game requires to play:");
+            Console.WriteLine("______________________________________________________________________________________________________________________________________________________________________\n");
             Thread.Sleep(1000);
 
             Console.WriteLine("Welcome, the aim of the game is to survive for as long as possible before bankruptcy");
@@ -307,13 +301,13 @@
                         DisplayStuff.QuitGame(this);
                         break;
                     case 1:
-                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
+                        miningOperation.Dig(1, this, dayToDayOperations);
                         break;
                     case 2:
                         Console.WriteLine("\n  __  __           _   _     _           _             _____                       _____    _         \n |  \\/  |         | | | |   (_)         | |           |  __ \\                     |  __ \\  (_)        \n | \\  / |  _   _  | | | |_   _   _ __   | |   ___     | |  | |   __ _   _   _     | |  | |  _    __ _ \n | |\\/| | | | | | | | | __| | | | '_ \\  | |  / _ \\    | |  | |  / _` | | | | |    | |  | | | |  / _` |\n | |  | | | |_| | | | | |_  | | | |_) | | | |  __/    | |__| | | (_| | | |_| |    | |__| | | | | (_| |\n |_|  |_|  \\__,_| |_|  \\__| |_| | .__/  |_|  \\___|    |_____/   \\__,_|  \\__, |    |_____/  |_|  \\__, |\n                                | |                                      __/ |                   __/ |\n                                |_|                                     |___/                   |___/ \n");
                         Console.WriteLine("Enter number of days to dig in one go (upto 30)");
                         int daysToDig = GetValidInt(0, 30);
-                        miningOperation.Dig(daysToDig, this, dayToDayOperations, achievementsList);
+                        miningOperation.Dig(daysToDig, this, dayToDayOperations);
                         break;
                     case 3:
                         marketOperation.GoToMarket(this);
@@ -368,7 +362,7 @@
                         DisplayStuff.DisplayStats(this);
                         break;
                     case 12:
-                        DisplayStuff.DisplayAchievements(achievementsList, 1);
+                        DisplayStuff.DisplayAchievements(1);
                         break;
                     case 23:
                         RunTutorial();
@@ -510,7 +504,7 @@
                             $"You have been charged ${skipDay.Price} for the costs of skipping a day");
                         dollars.Quantity -= skipDay.Price;
                         skipDay.skipDayOrNot = true;
-                        miningOperation.Dig(1, this, dayToDayOperations, achievementsList);
+                        miningOperation.Dig(1, this, dayToDayOperations);
                         DisplayStuff.DisplayResources(this);
                         break;
                     case 21:
@@ -524,7 +518,7 @@
                         Specialist.SpecialistHiringScreen(this);
                         break;
                     case 13:
-                        DisplayStuff.DisplayAchievements(achievementsList, 2);
+                        DisplayStuff.DisplayAchievements(2);
                         break;
                     default:
                         Console.WriteLine("Please enter a valid option");
@@ -551,7 +545,7 @@
                 Console.WriteLine("3 - Go to market        |   8 - Train employees         |   13 - Incomplete achievements  |                              |   19 - Load game state                |");
                 Console.WriteLine("4 - Go to Trader        |   9 - Boost employee morale   |   23 - Display tutorial         |   21 - Move to a new mine    |   20 - Skip one day                   |");
                 Console.WriteLine("                        |   22 - Hire specialist        |                                 |                              |                                       |");
-                Console.WriteLine("\nEnter your choice:");
+                Console.WriteLine("Enter your choice:");
 
                 int userOption = GetValidInt(0, 22);
                 Console.Clear();
@@ -586,9 +580,9 @@
                 Thread.Sleep(2000);
                 Console.Clear();
                 Console.WriteLine("\n  _______           _                    _           _ \n |__   __|         | |                  (_)         | |\n    | |     _   _  | |_    ___    _ __   _    __ _  | |\n    | |    | | | | | __|  / _ \\  | '__| | |  / _` | | |\n    | |    | |_| | | |_  | (_) | | |    | | | (_| | | |\n    |_|     \\__,_|  \\__|  \\___/  |_|    |_|  \\__,_| |_|\n");
-                Console.WriteLine("Welcome to the tutorial!");
-                Thread.Sleep(3000);
+                Thread.Sleep(2000);
                 Console.WriteLine("You are now the manager of a new gold digging business.");
+                Console.WriteLine("_________________________________________________________________________________________________________________________________________________________________");
                 Console.WriteLine("Your aim is to survive for as long as possible before bankruptcy, thereby proving your worth to your father.");
                 Console.WriteLine("He gives you $100 to start with, along with one of his most unbelievably average employees, 'Bob Smith The OG Worker'.");
                 Thread.Sleep(3500);
@@ -601,6 +595,7 @@
                 Console.WriteLine("Whenever you see fit, enter '3' in the main menu to go to the market and sell your resources...and so your snowballing growth begins   |");
                 Console.WriteLine("As you begin to get more fluent and learn the ways of the game, try out more and more menu options                                     |");
                 Console.WriteLine("________________________________________________________________________________________________________________________________________");
+                Console.WriteLine("\nRemember that employee wages are automatically paid daily, and if you can't afford to pay them, you will be in debt. This is bad.");
                 Thread.Sleep(3500);
                 Console.WriteLine("\n[ENTER] ");
                 Console.ReadLine();
@@ -816,7 +811,7 @@
 
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
                     _noWageDaysLeft = 10;
-                    miningOperation.Dig(5, this, dayToDayOperations, achievementsList);
+                    miningOperation.Dig(5, this, dayToDayOperations);
                     if (timeMachine.Quantity > 0)
                     {
                         timeMachine.Quantity -= 1;
@@ -1618,17 +1613,26 @@
         public bool AchievementUnlocked;
         public string AchievementDescription;
 
+        private static List<Achievements> achievementsList = new();
+
         public Achievements(int achievementNumber, string achievementDescription)
         {
             AchievementNumber = achievementNumber;
             AchievementUnlocked = false;
             AchievementDescription = achievementDescription;
+            achievementsList.Add(this);
         }
+        
+        public static List<Achievements> getAchievements()
+        { 
+            return achievementsList;
+        }
+        
     }
 
     class MiningOperation
     {
-        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations, List<Achievements> achievements)
+        public void Dig(int daysToDig, Program _program, DayToDayOperations _DayToDayOperations)
         {
 
             bool multipleDayDig = daysToDig > 1;
@@ -2042,7 +2046,7 @@
                 Console.WriteLine($"You found {Math.Round(newDiamond, 2)}kg of diamond");
             }
 
-            _DayToDayOperations.CheckAchievements(achievements, _program);
+            _DayToDayOperations.CheckAchievements(_program);
 
             Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine($"Here are your updated resources:");
@@ -2905,8 +2909,10 @@
 
         }
 
-        public void CheckAchievements(List<Achievements> achievements, Program _program)
+        public void CheckAchievements(Program _program)
         {
+            
+            List<Achievements> achievements = Achievements.getAchievements();
             
             if (_program.coal.TotalFound >= 100 && !achievements[0].AchievementUnlocked)
             {
@@ -3147,7 +3153,7 @@
                 
                 emptinessString += "|\n";
 
-                Console.WriteLine($"Currently this mine is {_program.minePercentageFullness}% full:\n{emptinessString}");
+                Console.WriteLine($"Currently this mine is {Math.Round(_program.minePercentageFullness, 2)}% full:\n{emptinessString}");
             }
 
             // reduce the mine emptiness by 1% for every day dug
@@ -3234,7 +3240,7 @@
                 { "timeMachine", _program.timeMachine },
                 { "ancientArtefact", _program.ancientArtefact },
                 { "marketMaster", _program.marketMaster },
-                { "achievementsList", _program.achievementsList },
+                // { "achievementsList", _program.achievementsList },
                 { "currentWageRate", _program._currentWageRate },
                 { "currentDate", _program._currentDate },
                 { "crashDate", _program._crashDate }
@@ -3416,7 +3422,7 @@
                         _program.marketMaster = (PowerUp)entry.Value;
                         break;
                     case "achievementsList":
-                        _program.achievementsList = (List<Achievements>)entry.Value;
+                        //_program.achievementsList = (List<Achievements>)entry.Value;
                         break;
                     case "currentWageRate":
                         _program._currentWageRate = (double)entry.Value;
@@ -3746,12 +3752,16 @@
             Console.WriteLine("__________________________________________________________________________");
         }
 
-        public static void DisplayAchievements(List<Achievements> achievements, int subChoice)
+        public static void DisplayAchievements(int subChoice)
         {
+            List<Achievements> achievements = Achievements.getAchievements();
+            
             Console.WriteLine("\n                    _       _                                                    _         \n     /\\            | |     (_)                                                  | |        \n    /  \\      ___  | |__    _    ___  __   __   ___   _ __ ___     ___   _ __   | |_   ___ \n   / /\\ \\    / __| | '_ \\  | |  / _ \\ \\ \\ / /  / _ \\ | '_ ` _ \\   / _ \\ | '_ \\  | __| / __|\n  / ____ \\  | (__  | | | | | | |  __/  \\ V /  |  __/ | | | | | | |  __/ | | | | | |_  \\__ \\\n /_/    \\_\\  \\___| |_| |_| |_|  \\___|   \\_/    \\___| |_| |_| |_|  \\___| |_| |_|  \\__| |___/\n                                                                                           \n");
             if (subChoice == 1)
             {
                 Console.WriteLine("Here are your completed achievements:\n");
+
+                Achievements.getAchievements();
 
                 foreach (Achievements achievement in achievements)
                 {
