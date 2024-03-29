@@ -1,4 +1,10 @@
-Because you're on a Mac, we have to bypass the fact that MacOS doesn't like you running an executable file that isn't from an identified developer.
+If you're on a Windows device, simply download the file called 'Download This Zip File First', extract and open it and navigate to the windows section.
+Then double click the .exe file within and thats it, the game should fire up in your command line.
+
+
+
+
+If you're on a Mac, we have to bypass the fact that MacOS doesn't like you running an executable file that isn't from an identified developer.
 
 (You only have to do this once each time you download the game)
 
