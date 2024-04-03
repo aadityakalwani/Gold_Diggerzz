@@ -1,0 +1,6 @@
+This is a game that I have made where you assume the position of a manager within a digging company; it is a digging simulator game
+
+
+To get started, read the 'Read This Second' file.
+This has instructions on how to run the game on any MacBook or Windows device.
+

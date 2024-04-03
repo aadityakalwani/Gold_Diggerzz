@@ -1,7 +1,7 @@
 ﻿namespace Gold_Diggerzz
 {
-    // as of sunday 18feb 1pm, 27hours 45 minutes spent on digging sim as of google calendar
-    // now probably closer to 45, will recalculate soon
+    // as of Wednesday 3rd April 2024, 71 hours and 15 minutes of tracked gcal time has been spent on this program
+    
     // initial inspiration: https://replit.com/@AadityaKalwani/Digging-Simulator-1#main.py
 
     /* current issues
