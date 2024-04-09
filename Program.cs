@@ -13,6 +13,8 @@
      */
 
     /* to-do ideas
+     * use a constructor to remake a gamestate from the text file that takes in a different number of parameters
+     * when you try to build something, it is added to the building list and the daysleft are decremented every day. once it is buuild, remove it from the building list and change it to IsBuilt = true; within the activerealestate list
      * more 'crime' options
      * un-globalise various workers' lists
      * better understand what to do with morale - right now its just a multiplier for efficiency that is recalculated every 10 days
@@ -108,10 +110,10 @@
         public Dollars dollars = new("Dollars", 100);
         
         public MinedResources coal = new("Coal", 75, 2, 0, 0, 10);
-        public MinedResources stone = new("Stone", 65, 5, 0, 0, 10);
-        public MinedResources iron = new("Iron", 50, 12, 0, 0, 10);
-        public MinedResources gold = new("Gold", 17, 60, 0, 0, 10);
-        public MinedResources diamond = new("Diamond", 8, 90, 0, 0, 10);
+        public MinedResources stone = new("Stone", 65, 4, 0, 0, 10);
+        public MinedResources iron = new("Iron", 50, 10, 0, 0, 10);
+        public MinedResources gold = new("Gold", 17, 55, 0, 0, 10);
+        public MinedResources diamond = new("Diamond", 8, 80, 0, 0, 10);
         
         public PowerUp magicTokens;
         public PowerUp timeMachine;
@@ -801,8 +803,7 @@
                 case 2:
 
                     Console.WriteLine("You have chosen to use the Time Machine powerup");
-                    _noWageDaysLeft = 10;
-                    miningOperation.Dig(5, this, dayToDayOperations);
+                    miningOperation.Dig(4, this, dayToDayOperations);
                     if (timeMachine.Quantity > 0)
                     {
                         timeMachine.Quantity -= 1;
@@ -812,15 +813,14 @@
 
                 case 3:
                     Console.WriteLine("Applying the Market Master power up...");
-                    Console.WriteLine(
-                        "The selling price of all resources has increased by 50% for the next 5 days");
+                    Console.WriteLine("The selling price of all resources has increased by 40% for the next 5 days");
                     _marketMasterDaysLeft = 5;
 
-                    coal.Price *= 1.5;
-                    stone.Price *= 1.5;
-                    iron.Price *= 1.5;
-                    gold.Price *= 1.5;
-                    diamond.Price *= 1.5;
+                    coal.Price *= 1.4;
+                    stone.Price *= 1.4;
+                    iron.Price *= 1.4;
+                    gold.Price *= 1.4;
+                    diamond.Price *= 1.4;
 
                     if (marketMaster.Quantity > 0)
                     {
@@ -1833,7 +1833,7 @@
                                 Console.WriteLine("__________________________________________________________");
                                 Console.WriteLine("\ud83e\uddf2 You found the Market Master power up \ud83e\uddf2");
                                 Console.WriteLine("Choose an option:");
-                                Console.WriteLine("1 - Use now --> Increase the selling price of all resources by 50% for the next 5 days");
+                                Console.WriteLine("1 - Use now --> Increase the selling price of all resources by 40% for the next 5 days");
                                 Console.WriteLine($"2 - Save for later (max {_program.marketMaster.MaxQuantity})");
                                 int userInput = _program.GetValidInt(1, 2);
 
@@ -3282,10 +3282,10 @@
                 program.coal, program.stone, program.iron, program.gold, program.diamond
             };
 
-            program.magicTokens = new(0, 6, 3);
-            program.timeMachine = new(0, 7, 3);
-            program.ancientArtefact = new(0, 9, 3);
-            program.marketMaster = new(0, 9, 3);
+            program.magicTokens = new(0, 5, 3);
+            program.timeMachine = new(0, 6, 3);
+            program.ancientArtefact = new(0, 8, 3);
+            program.marketMaster = new(0, 8, 3);
             program.stockMarketCrash = new(100, 1);
             program.skipDay = new(50, 1);
             program.bribe = new(200, 1);
