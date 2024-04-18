@@ -540,7 +540,7 @@
                 Console.WriteLine("                        |   22 - Hire specialist        |                                 |                              |                                       |");
                 Console.WriteLine("Enter your choice:");
 
-                int userOption = GetValidInt(0, 22);
+                int userOption = GetValidInt(0, 23);
                 Console.Clear();
                 return userOption;
             }
@@ -1759,7 +1759,7 @@
                                 Console.WriteLine("1 - Get a guaranteed 50% chance of finding gold for the next five days");
                                 Console.WriteLine("2 - $200 instantly");
                                 Console.WriteLine($"3 - Save for later (max {_program.ancientArtefact.MaxQuantity})");
-                                int userInput = _program.GetValidInt(1, 2);
+                                int userInput = _program.GetValidInt(1, 3);
 
                                 switch (userInput)
                                 {
@@ -3510,6 +3510,12 @@
            }
            
             int choice = _program.GetValidInt(0, 6);
+            
+            if (choice == 0)
+            {
+                Console.WriteLine("Cancelled");
+                return;
+            }
             
             RealEstate realEstateToBuild = activeRealEstate[choice - 1];
             
